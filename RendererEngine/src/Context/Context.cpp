@@ -23,7 +23,7 @@ void RenderEngine::Core::Context::Setup()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	m_window = glfwCreateWindow(m_width, m_height, "Render Engine V0.1.3", nullptr, nullptr);
+	m_window = glfwCreateWindow(m_width, m_height, "Render Engine V0.1.4", nullptr, nullptr);
 	if (!m_window)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

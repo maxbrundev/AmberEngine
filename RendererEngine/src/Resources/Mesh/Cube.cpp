@@ -6,7 +6,13 @@ RenderEngine::PrimitiveMesh::Cube::Cube() : m_vbo(m_vertices.cubeVertices, sizeo
 {
 }
 
-void RenderEngine::PrimitiveMesh::Cube::Init()
+RenderEngine::PrimitiveMesh::Cube::~Cube()
+{
+	m_vao.Unbind();
+	m_vbo.Unbind();
+}
+
+void RenderEngine::PrimitiveMesh::Cube::InitSimpleCube()
 {
 	m_layout.PushFloat(3);
 	m_layout.PushFloat(3);
@@ -16,7 +22,18 @@ void RenderEngine::PrimitiveMesh::Cube::Init()
 	m_vbo.Unbind();
 }
 
-void RenderEngine::PrimitiveMesh::Cube::Bind() const
+void RenderEngine::PrimitiveMesh::Cube::InitTexturedCube()
+{
+	m_layout.PushFloat(3);
+	m_layout.PushFloat(3);
+	m_layout.PushFloat(2);
+	m_vao.AddBuffer(m_vbo, m_layout);
+
+	m_vao.Unbind();
+	m_vbo.Unbind();
+}
+
+void RenderEngine::PrimitiveMesh::Cube::Draw() const
 {
 	m_vao.Bind();
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));

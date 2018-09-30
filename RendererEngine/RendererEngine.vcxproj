@@ -111,7 +111,8 @@
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)Dependencies\glfw\$(Platform)\lib\glfw3.dll $(OutDir)
+      <Command>del "$(OutDir)*.dll"
+copy $(SolutionDir)Dependencies\glfw\$(Platform)\lib\glfw3.dll $(OutDir)
 copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -132,7 +133,8 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)Dependencies\glfw\$(Platform)\lib\glfw3.dll $(OutDir)
+      <Command>del "$(OutDir)*.dll"
+copy $(SolutionDir)Dependencies\glfw\$(Platform)\lib\glfw3.dll $(OutDir)
 copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -157,7 +159,8 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)Dependencies\glfw\$(Platform)\lib\glfw3.dll $(OutDir)
+      <Command>del "$(OutDir)*.dll"
+copy $(SolutionDir)Dependencies\glfw\$(Platform)\lib\glfw3.dll $(OutDir)
 copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -243,6 +246,7 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
     <ClCompile Include="src\Utils\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="imgui.ini" />
     <None Include="resources\shaders\lamp.glsl" />
     <None Include="resources\shaders\light.glsl" />
     <None Include="res\shaders\basic_lighting_viewspace.fs" />
@@ -255,8 +259,18 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
     <None Include="res\shaders\lamp.glsl" />
     <None Include="res\shaders\lamp.vs" />
     <None Include="res\shaders\light.glsl" />
+    <None Include="res\shaders\lighting_maps.fs" />
+    <None Include="res\shaders\lighting_maps.vs" />
     <None Include="res\shaders\material.fs" />
     <None Include="res\shaders\material.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\abs.jpg" />
+    <Image Include="res\textures\abs_spec.jpg" />
+    <Image Include="res\textures\container2.png" />
+    <Image Include="res\textures\container2_specular.png" />
+    <Image Include="res\textures\Tiles.jpg" />
+    <Image Include="res\textures\Tiles_spec.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

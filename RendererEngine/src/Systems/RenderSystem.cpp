@@ -2,6 +2,7 @@
 
 #include "Systems/RenderSystem.h"
 #include "Resources/Mesh/Cube.h"
+#include "Resources/Texture.h"
 
 RenderEngine::Systems::RenderSystem::RenderSystem()
 {
@@ -42,12 +43,19 @@ void RenderEngine::Systems::RenderSystem::InitOpenGL()
 void RenderEngine::Systems::RenderSystem::Run()
 {
 	PrimitiveMesh::Cube cube;
-	cube.Init();
+	cube.InitTexturedCube();
 
 	m_camera = std::make_unique<LowRenderer::Camera>(m_context, glm::vec3(0.0f, 0.0f, 3.0f));
 
-	RenderEngine::Resources::Shader lightingShader("res/shaders/material.vs", "res/shaders/material.fs");
-	RenderEngine::Resources::Shader lampShader("res/shaders/lamp.vs", "res/shaders/lamp.fs");
+	Resources::Shader lightingShader("res/shaders/lighting_maps.vs", "res/shaders/lighting_maps.fs");
+	Resources::Shader lampShader("res/shaders/lamp.vs", "res/shaders/lamp.fs");
+
+	Resources::Texture diffuseMap("res/textures/crystal.jpg");;
+	Resources::Texture specularMap("res/textures/crystal_spec.jpg");;
+
+	lightingShader.Bind();
+	lightingShader.SetUniform1i("material.diffuse", 0);
+	lightingShader.SetUniform1i("material.specular", 1);
 
 	ImGui::CreateContext();
 	ImGui_ImplGlfwGL3_Init(m_context.GetContextWindow(), true);
@@ -71,14 +79,11 @@ void RenderEngine::Systems::RenderSystem::Run()
 			lightingShader.SetUniformVec3("light.position", glm::vec3(1.2f, 1.0f, 2.0f));
 			lightingShader.SetUniformVec3("viewPos", m_camera->m_position);
 
-			lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
-			lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+			lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+			lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.1f, 0.1f, 0.1f));
 			lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
-			lightingShader.SetUniformVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-			lightingShader.SetUniformVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-			lightingShader.SetUniformVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-			lightingShader.SetUniform1f("material.shininess", 32.0f);
+			lightingShader.SetUniform1f("material.shininess", 20.0f);
 		}
 		
 		glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetCameraZoom()), static_cast<float>(m_context.GetWidthWindow()) / static_cast<float>(m_context.GetHeightWindow()), 0.1f, 100.0f);
@@ -89,7 +94,10 @@ void RenderEngine::Systems::RenderSystem::Run()
 		glm::mat4 model = glm::mat4(1.0f);
 		lightingShader.SetUniformMat4("model", model);
 
-		cube.Bind();
+		diffuseMap.Bind();
+		specularMap.Bind(1);
+
+		cube.Draw();
 		++m_drawCallCount;
 
 		lampShader.Bind();
@@ -100,7 +108,7 @@ void RenderEngine::Systems::RenderSystem::Run()
 		model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 		lampShader.SetUniformMat4("model", model);
 
-		GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
+		cube.Draw();
 		++m_drawCallCount;
 
 		{

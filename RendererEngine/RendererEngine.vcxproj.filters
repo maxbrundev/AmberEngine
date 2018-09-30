@@ -171,5 +171,28 @@
     <None Include="res\shaders\basic_lighting_viewspace.fs" />
     <None Include="res\shaders\material.vs" />
     <None Include="res\shaders\material.fs" />
+    <None Include="imgui.ini" />
+    <None Include="res\shaders\lighting_maps.fs" />
+    <None Include="res\shaders\lighting_maps.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\container2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\abs.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\abs_spec.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\Tiles_spec.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\Tiles.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

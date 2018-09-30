@@ -7,25 +7,21 @@ namespace RenderEngine
 		class Texture
 		{
 		private:
-			unsigned int m_RendererID;
+			unsigned int m_textureId;
+			std::string m_type;
+			std::string m_path;
 
-			int m_Width;
-			int m_Height; 
-			int m_BPP;
-
-			unsigned char* m_LocalBuffer;
-
-			std::string m_FilePath;
+			int m_width;
+			int m_height;
+			int m_bitsPerPixel;
 
 		public:
-			Texture(const std::string& path);
+			Texture() = default;
+			Texture(const std::string& p_filePath);
 			~Texture();
 
-			void Bind(unsigned int slot = 0) const;
+			void Bind(const unsigned int& p_slot = 0) const;
 			void Unbind() const;
-
-			inline int GetWidth() const { return m_Width; }
-			inline int GetHeight() const { return m_Height; }
 		};
 	}
 }
