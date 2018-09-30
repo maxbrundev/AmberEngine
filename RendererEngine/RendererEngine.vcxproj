@@ -214,6 +214,7 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
     <ClInclude Include="include\Resources\Texture.h" />
     <ClInclude Include="include\Systems\RenderSystem.h" />
     <ClInclude Include="include\Systems\SceneSystem.h" />
+    <ClInclude Include="include\UI\UISystem.h" />
     <ClInclude Include="include\Utils\Time.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -243,6 +244,7 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
     <ClCompile Include="src\Resources\Texture.cpp" />
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\SceneSystem.cpp" />
+    <ClCompile Include="src\UI\UISystem.cpp" />
     <ClCompile Include="src\Utils\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +271,8 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
     <Image Include="res\textures\abs_spec.jpg" />
     <Image Include="res\textures\container2.png" />
     <Image Include="res\textures\container2_specular.png" />
+    <Image Include="res\textures\crystal.jpg" />
+    <Image Include="res\textures\crystal_spec.jpg" />
     <Image Include="res\textures\Tiles.jpg" />
     <Image Include="res\textures\Tiles_spec.jpg" />
   </ItemGroup>

@@ -12,7 +12,7 @@ RenderEngine::PrimitiveMesh::Cube::~Cube()
 	m_vbo.Unbind();
 }
 
-void RenderEngine::PrimitiveMesh::Cube::InitSimpleCube()
+void RenderEngine::PrimitiveMesh::Cube::BindSimpleCube()
 {
 	m_layout.PushFloat(3);
 	m_layout.PushFloat(3);
@@ -22,7 +22,7 @@ void RenderEngine::PrimitiveMesh::Cube::InitSimpleCube()
 	m_vbo.Unbind();
 }
 
-void RenderEngine::PrimitiveMesh::Cube::InitTexturedCube()
+void RenderEngine::PrimitiveMesh::Cube::BindTexturedCube()
 {
 	m_layout.PushFloat(3);
 	m_layout.PushFloat(3);

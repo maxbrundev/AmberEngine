@@ -63,8 +63,8 @@ namespace RenderEngine
 			Cube();
 			~Cube();
 
-			void InitSimpleCube();
-			void InitTexturedCube();
+			void BindSimpleCube();
+			void BindTexturedCube();
 			
 			void Draw() const;
 		};
