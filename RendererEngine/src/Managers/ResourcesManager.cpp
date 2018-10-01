@@ -16,6 +16,16 @@ RenderEngine::Resources::Shader& RenderEngine::Managers::ResourcesManager::LoadS
 	return *res.first->second.get();
 }
 
+RenderEngine::Resources::Shader& RenderEngine::Managers::ResourcesManager::LoadShaderFiles(const std::string& p_name,
+	const std::string& p_VertexFileName, const std::string& p_FragmentFileName)
+{
+	if (m_shaderResources.find(p_name) != m_shaderResources.end())
+		return *m_shaderResources[p_name].get();
+
+	const auto res = m_shaderResources.emplace(p_name, std::make_unique<Resources::Shader>(m_shaderRootDir + p_VertexFileName, m_shaderRootDir + p_FragmentFileName));
+	return *res.first->second.get();
+}
+
 RenderEngine::Resources::Shader& RenderEngine::Managers::ResourcesManager::GetShader(const std::string& p_name)
 {
 	return *m_shaderResources.at(p_name);

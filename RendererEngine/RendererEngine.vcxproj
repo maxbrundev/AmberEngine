@@ -249,8 +249,6 @@ copy $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(OutDir
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="resources\shaders\lamp.glsl" />
-    <None Include="resources\shaders\light.glsl" />
     <None Include="res\shaders\basic_lighting_viewspace.fs" />
     <None Include="res\shaders\basic_lighting_viewspace.vs" />
     <None Include="res\shaders\basic_lighting_worldspace.fs" />

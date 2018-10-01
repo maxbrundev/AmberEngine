@@ -28,7 +28,7 @@ namespace  RenderEngine
 
 		public:
 			Context();
-			~Context() = default;
+			~Context();
 
 			void Setup() override;
 			void Close() override;

@@ -163,8 +163,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\lamp.glsl" />
-    <None Include="resources\shaders\light.glsl" />
     <None Include="res\shaders\colors.fs" />
     <None Include="res\shaders\colors.vs" />
     <None Include="res\shaders\lamp.fs" />

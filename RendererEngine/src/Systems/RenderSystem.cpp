@@ -6,12 +6,13 @@
 
 RenderEngine::Systems::RenderSystem::RenderSystem()
 {
+	m_context = std::make_unique<Core::Context>();
 	InitOpenGL();
 }
 
 RenderEngine::Systems::RenderSystem::~RenderSystem()
 {
-	m_context.Close();
+	m_context->Close();
 }
 
 void RenderEngine::Systems::RenderSystem::InitOpenGL()
@@ -45,10 +46,10 @@ void RenderEngine::Systems::RenderSystem::Run()
 	PrimitiveMesh::Cube cube;
 	cube.BindTexturedCube();
 
-	m_camera = std::make_unique<LowRenderer::Camera>(m_context, glm::vec3(0.0f, 0.0f, 3.0f));
+	m_camera = std::make_unique<LowRenderer::Camera>(*m_context, glm::vec3(0.0f, 0.0f, 3.0f));
 	
 	Resources::Shader lightingShader("res/shaders/lighting_maps.vs", "res/shaders/lighting_maps.fs");
-	Resources::Shader lampShader("res/shaders/lamp.vs", "res/shaders/lamp.fs");
+	Resources::Shader lampShader = m_resourcesManager.LoadShaderFiles("lamp", "lamp.vs", "lamp.fs");
 
 	Resources::Texture diffuseMap("res/textures/crystal.jpg");;
 	Resources::Texture specularMap("res/textures/crystal_spec.jpg");;
@@ -57,9 +58,9 @@ void RenderEngine::Systems::RenderSystem::Run()
 	lightingShader.SetUniform1i("material.diffuse", 0);
 	lightingShader.SetUniform1i("material.specular", 1);
 
-	m_uiSystem = std::make_unique<UISystem>(m_context);
+	m_uiSystem = std::make_unique<UISystem>(*m_context);
 
-	while (!glfwWindowShouldClose(m_context.GetContextWindow()))
+	while (!glfwWindowShouldClose(m_context->GetContextWindow()))
 	{
 		GLdouble currentTime = glfwGetTime();
 		m_deltaTime = currentTime - m_lastTime;
@@ -81,7 +82,7 @@ void RenderEngine::Systems::RenderSystem::Run()
 			lightingShader.SetUniform1f("material.shininess", 20.0f);
 		
 		
-			glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetCameraZoom()), static_cast<float>(m_context.GetWidthWindow()) / static_cast<float>(m_context.GetHeightWindow()), 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetCameraZoom()), static_cast<float>(m_context->GetWidthWindow()) / static_cast<float>(m_context->GetHeightWindow()), 0.1f, 100.0f);
 			glm::mat4 view = m_camera->GetViewMatrix();
 			lightingShader.SetUniformMat4("projection", projection);
 			lightingShader.SetUniformMat4("view", view);
@@ -124,11 +125,11 @@ void RenderEngine::Systems::RenderSystem::PreUpdate()
 
 void RenderEngine::Systems::RenderSystem::Update()
 {
-	m_context.Update();
+	m_context->Update();
 	m_camera->Update(m_deltaTime);
 	m_uiSystem->Update(m_drawCallCount, *m_camera);
 
-	if (glfwGetKey(m_context.GetContextWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	if (glfwGetKey(m_context->GetContextWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -138,6 +139,6 @@ void RenderEngine::Systems::RenderSystem::PostUpdate()
 {
 	m_uiSystem->PostUpdate();
 
-	glfwSwapBuffers(m_context.GetContextWindow());
+	glfwSwapBuffers(m_context->GetContextWindow());
 	glfwPollEvents();
 }

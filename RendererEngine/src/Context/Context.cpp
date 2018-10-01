@@ -11,6 +11,12 @@ RenderEngine::Core::Context::Context()
 	Context::Setup();
 }
 
+RenderEngine::Core::Context::~Context()
+{
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
+}
+
 void RenderEngine::Core::Context::Setup()
 {
 	if (!glfwInit())
@@ -42,9 +48,7 @@ void RenderEngine::Core::Context::Setup()
 
 void RenderEngine::Core::Context::Close()
 {
-	m_state = State::CLOSE;
-	glfwDestroyWindow(m_window);
-	glfwTerminate();
+	glfwSetWindowShouldClose(m_window, true);
 }
 
 bool RenderEngine::Core::Context::IsActive()
@@ -72,8 +76,8 @@ void RenderEngine::Core::Context::HandleInput()
 
 void RenderEngine::Core::Context::HandleState()
 {
-	if(m_state == State::CLOSE)
-		glfwSetWindowShouldClose(m_window, true);
+	if (m_state == State::CLOSE)
+		Close();
 }
 
 void RenderEngine::Core::Context::framebuffer_size_callback(GLFWwindow* window, int width, int height)

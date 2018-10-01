@@ -14,11 +14,10 @@ namespace RenderEngine
 		class RenderSystem
 		{
 		private:
-			Core::Context m_context;
-
-			std::unique_ptr <UISystem> m_uiSystem;
+			std::unique_ptr < Core::Context> m_context;
 			std::unique_ptr<LowRenderer::Camera> m_camera;
-
+			std::unique_ptr <UISystem> m_uiSystem;
+			
 			Managers::ResourcesManager m_resourcesManager;
 			
 			GLdouble m_deltaTime = 0.0f;

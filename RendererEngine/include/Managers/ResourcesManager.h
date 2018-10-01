@@ -18,6 +18,7 @@ namespace RenderEngine
 			~ResourcesManager() = default;
 
 			Resources::Shader& LoadShader(const std::string& p_name, const std::string& p_fileName);
+			Resources::Shader& LoadShaderFiles(const std::string& p_name, const std::string& p_VertexFileName, const std::string& p_FragmentFileName);
 
 			Resources::Shader& GetShader(const std::string& p_name);
 			void SetShaderRootDir(const std::string& p_directory);
