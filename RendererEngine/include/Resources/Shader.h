@@ -14,7 +14,7 @@ namespace RenderEngine
 		{
 		private:
 			std::unordered_map<std::string, int> m_uniformLocationCache;
-
+			std::queue<std::string> m_errors;
 			std::string m_vertexFilePath;
 			std::string m_geometryFilePath;
 			std::string m_fragmentFilePath;

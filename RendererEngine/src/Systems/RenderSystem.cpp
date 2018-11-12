@@ -2,143 +2,106 @@
 
 #include "Systems/RenderSystem.h"
 #include "Resources/Mesh/Cube.h"
-#include "Resources/Texture.h"
 
 RenderEngine::Systems::RenderSystem::RenderSystem()
 {
-	m_context = std::make_unique<Core::Context>();
-	InitOpenGL();
-}
-
-RenderEngine::Systems::RenderSystem::~RenderSystem()
-{
-	m_context->Close();
-}
-
-void RenderEngine::Systems::RenderSystem::InitOpenGL()
-{
-	GLCall(const GLenum error = glewInit());
-	if (error != GLEW_OK)
-	{
-		std::cout << "Error Init GLEW: " << glewGetErrorString(error) << std::endl;
-	}
-
-	std::cout << "Using GLEW: " << glewGetString(GLEW_VERSION) << std::endl;
-
-	std::cout << glGetString(GL_VERSION) << std::endl;
-	std::cout << glGetString(GL_VENDOR) << std::endl;
-	std::cout << glGetString(GL_RENDERER) << std::endl;
-	std::cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-
-	GLCall(glEnable(GL_DEBUG_OUTPUT));
-
-	GLCall(glEnable(GL_DEPTH_TEST));
-
-	GLCall(glEnable(GL_BLEND));
-	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-	/*glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);*/
+	m_renderingManager = std::make_unique<Managers::RenderingManager>();
+	m_resourcesManager = std::make_unique<Managers::ResourcesManager>();
 }
 
 void RenderEngine::Systems::RenderSystem::Run()
 {
-	PrimitiveMesh::Cube cube;
-	cube.BindTexturedCube();
+	PrimitiveMesh::Cube::Setup();
+	auto& vertices = PrimitiveMesh::Cube::GetVertices();
 
-	m_camera = std::make_unique<LowRenderer::Camera>(*m_context, glm::vec3(0.0f, 0.0f, 3.0f));
+	GLuint vao;
+	GLuint vbo;
 	
-	Resources::Shader lightingShader("res/shaders/lighting_maps.vs", "res/shaders/lighting_maps.fs");
-	Resources::Shader lampShader = m_resourcesManager.LoadShaderFiles("lamp", "lamp.vs", "lamp.fs");
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-	Resources::Texture diffuseMap("res/textures/crystal.jpg");;
-	Resources::Texture specularMap("res/textures/crystal_spec.jpg");;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(PrimitiveMesh::Vertex), vertices.data(), GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(PrimitiveMesh::Vertex), nullptr);
+	
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(PrimitiveMesh::Vertex), reinterpret_cast<void*>(offsetof(PrimitiveMesh::Vertex, normals)));
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(PrimitiveMesh::Vertex), reinterpret_cast<void*>(offsetof(PrimitiveMesh::Vertex, textureCoord)));
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	Resources::Shader lightingShader("res/shaders/lighting_maps.vs", "res/shaders/lighting_maps.fs");
+	Resources::Shader lampShader = m_resourcesManager->LoadShaderFiles("lamp", "lamp.vs", "lamp.fs");
+
+	Resources::Texture diffuseMap("res/textures/abs.jpg");
+	Resources::Texture specularMap("res/textures/abs_spec.jpg");
+	Resources::Texture emissionMap("res/textures/matrix_emissive.jpg");
 
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("material.diffuse", 0);
 	lightingShader.SetUniform1i("material.specular", 1);
+	lightingShader.SetUniform1i("material.emission", 2);
+	lightingShader.Unbind();
 
-	m_uiSystem = std::make_unique<UISystem>(*m_context);
+	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
-	while (!glfwWindowShouldClose(m_context->GetContextWindow()))
+	while (m_renderingManager->IsRunning())
 	{
-		GLdouble currentTime = glfwGetTime();
-		m_deltaTime = currentTime - m_lastTime;
-		m_lastTime = currentTime;
+		m_renderingManager->PreUpdate();
+		m_renderingManager->Update();
 
-		PreUpdate();
-		Update();
+		//lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+		//lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
-		{
-			lightingShader.Bind();
+		glm::mat4 projectionMatrix = m_renderingManager->CalculateProjectionMatrix();
+		glm::mat4 viewMatrix = m_renderingManager->CalculateViewMatrix();
+		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
-			lightingShader.SetUniformVec3("light.position", glm::vec3(1.2f, 1.0f, 2.0f));
-			lightingShader.SetUniformVec3("viewPos", m_camera->m_position);
+		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
 
-			lightingShader.SetUniformVec3("light.ambient", glm::vec3(1.0f, 1.0f, 1.0f));
-			lightingShader.SetUniformVec3("light.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-			lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		lightingShader.Bind();
+		lightingShader.SetUniformMat4("projection", projectionMatrix);
+		lightingShader.SetUniformMat4("view", viewMatrix);
+		lightingShader.SetUniformMat4("model", modelMatrix);
+		lightingShader.SetUniformVec3("viewPos", m_renderingManager->GetCamera()->GetPosition());
 
-			lightingShader.SetUniform1f("material.shininess", 20.0f);
-		
-		
-			glm::mat4 projection = glm::perspective(glm::radians(m_camera->GetCameraZoom()), static_cast<float>(m_context->GetWidthWindow()) / static_cast<float>(m_context->GetHeightWindow()), 0.1f, 100.0f);
-			glm::mat4 view = m_camera->GetViewMatrix();
-			lightingShader.SetUniformMat4("projection", projection);
-			lightingShader.SetUniformMat4("view", view);
+		lightingShader.SetUniformVec3("light.position", lightPos);
+		lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+		lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
+		lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		lightingShader.SetUniform1f("material.shininess", 5.0f);
+		lightingShader.SetUniform1f("time", glfwGetTime());
 
-			glm::mat4 model = glm::mat4(1.0f);
-			lightingShader.SetUniformMat4("model", model);
+		diffuseMap.Bind();
+		specularMap.Bind(1);
+		emissionMap.Bind(2);
 
-			diffuseMap.Bind();
-			specularMap.Bind(1);
+		glBindVertexArray(vao);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
-			cube.Draw();
-			++m_drawCallCount;
+		modelMatrix = glm::mat4(1.0f);
+		modelMatrix = glm::translate(modelMatrix, lightPos);
+		modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f)); // a smaller cube
 
-			lampShader.Bind();
-			lampShader.SetUniformMat4("projection", projection);
-			lampShader.SetUniformMat4("view", view);
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(1.2f, 1.0f, 2.0f));
-			model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-			lampShader.SetUniformMat4("model", model);
+		lampShader.Bind();
+		lampShader.SetUniformMat4("projection", projectionMatrix);
+		lampShader.SetUniformMat4("view", viewMatrix);
+		lampShader.SetUniformMat4("model", modelMatrix);
 
-			cube.Draw();
-			++m_drawCallCount;
-		}
+		glBindVertexArray(vao);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
-		PostUpdate();
+		ImGui::Text("Specular Texture");
+		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(specularMap.GetTextureId())), ImVec2(256, 256));
+
+		m_renderingManager->PostUpdate();
 	}
-
-	m_uiSystem->Close();
-}
-
-void RenderEngine::Systems::RenderSystem::PreUpdate()
-{
-	GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	m_drawCallCount = 0;
-
-	m_uiSystem->PreUpdate();
-}
-
-void RenderEngine::Systems::RenderSystem::Update()
-{
-	m_context->Update();
-	m_camera->Update(m_deltaTime);
-	m_uiSystem->Update(m_drawCallCount, *m_camera);
-
-	if (glfwGetKey(m_context->GetContextWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void RenderEngine::Systems::RenderSystem::PostUpdate()
-{
-	m_uiSystem->PostUpdate();
-
-	glfwSwapBuffers(m_context->GetContextWindow());
-	glfwPollEvents();
 }

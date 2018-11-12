@@ -8,13 +8,7 @@ namespace  RenderEngine
 {
 	namespace Core
 	{
-		enum class State
-		{
-			INIT,
-			CLOSE
-		};
-
-		class Context : public IContext
+		class Device : public IContext
 		{
 		private:
 			GLFWwindow* m_window{};
@@ -22,29 +16,38 @@ namespace  RenderEngine
 			static uint16_t m_width;
 			static uint16_t m_height;
 
-			State m_state;
-
-			bool m_isActive;
+			////std::queue<std::string> m_errors;
 
 		public:
-			Context();
-			~Context();
+			Device() = default;
+			~Device();
 
 			void Setup() override;
 			void Close() override;
-			void Update() override;
-
 			bool IsActive() override;
 
+			void InitGLFW();
+			void InitWindow();
+
+			void Update();
 			void HandleInput();
-			void HandleState();
 
 			static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
+			
 			GLFWwindow* GetContextWindow() const;
 
-			uint16_t GetWidthWindow() const;
-			uint16_t GetHeightWindow() const;
+			uint16_t GetWindowWidth() const;
+			uint16_t GetWindowHeight() const;
+
+			int GetKey(const int p_key) const;
+
+			void LockCursor();
+			void FreeCursor();
+
+			int GetPressState();
+			int GetReleaseState();
+
+			//void DisplayErrors();
 		};
 	}
 }

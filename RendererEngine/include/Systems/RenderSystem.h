@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Context/Context.h"
+#include "Managers/RenderingManager.h"
 #include "LowRenderer/Camera.h"
-#include "Resources/Shader.h"
 
 #include "Managers/ResourcesManager.h"
-#include "UI/UISystem.h"
 
 namespace RenderEngine
 {
@@ -14,27 +12,14 @@ namespace RenderEngine
 		class RenderSystem
 		{
 		private:
-			std::unique_ptr<Core::Context> m_context;
-			std::unique_ptr<LowRenderer::Camera> m_camera;
-			std::unique_ptr<UISystem> m_uiSystem;
-			
-			Managers::ResourcesManager m_resourcesManager;
-			
-			GLdouble m_deltaTime = 0.0f;
-			GLdouble m_lastTime = 0.0f;
-
-			unsigned int m_drawCallCount{0};
+			std::unique_ptr<Managers::RenderingManager> m_renderingManager;
+			std::unique_ptr<Managers::ResourcesManager> m_resourcesManager;
 
 		public:
 			RenderSystem();
-			~RenderSystem();
+			~RenderSystem() =default;
 
-			void InitOpenGL();
 			void Run();
-
-			void PreUpdate();
-			void Update();
-			void PostUpdate();
 		};
 	}
 }

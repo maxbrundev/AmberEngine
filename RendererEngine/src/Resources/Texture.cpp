@@ -58,3 +58,18 @@ void RenderEngine::Resources::Texture::Unbind() const
 {
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
+
+GLuint& RenderEngine::Resources::Texture::GetTextureId()
+{
+	return m_textureId;
+}
+
+int RenderEngine::Resources::Texture::GetTextureWidth()
+{
+	return m_width;
+}
+
+int RenderEngine::Resources::Texture::GetTextureHeight()
+{
+	return m_height;
+}

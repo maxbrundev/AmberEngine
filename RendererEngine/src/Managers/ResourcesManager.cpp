@@ -2,7 +2,7 @@
 
 #include "Managers/ResourcesManager.h"
 
-RenderEngine::Managers::ResourcesManager::ResourcesManager() : m_shaderRootDir("res/shaders/")
+RenderEngine::Managers::ResourcesManager::ResourcesManager() : m_shaderRootDir("res/shaders/"), m_textureRootDir("res/textures/")
 {
 }
 

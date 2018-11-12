@@ -5,6 +5,7 @@
 RenderEngine::Resources::Material::Material(Resources::Shader* p_shader, Resources::Texture* p_texture) : m_shader(p_shader), m_texture(p_texture),
 m_ambient(1.0f, 1.0f, 1.0f), m_diffuse(1.0f, 1.0f, 1.0f), m_specular(1.0f, 1.0f, 1.0f), m_shininess(32.0f)
 {
+	m_shader->Bind();
 	m_shader->SetUniformVec3("material.ambient", m_ambient);
 	m_shader->SetUniformVec3("material.diffuse", m_diffuse);
 	m_shader->SetUniformVec3("material.specular", m_specular);
@@ -12,6 +13,6 @@ m_ambient(1.0f, 1.0f, 1.0f), m_diffuse(1.0f, 1.0f, 1.0f), m_specular(1.0f, 1.0f,
 
 	if (m_texture)
 	{
-		//TODO
+		m_shader->SetUniform1i("u_texture", 0);
 	}
 }

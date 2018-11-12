@@ -15,8 +15,8 @@ namespace RenderEngine
 			glm::vec3 m_specular;
 			float m_shininess;
 
-			RenderEngine::Resources::Shader* m_shader;
-			RenderEngine::Resources::Texture* m_texture;
+			Shader* m_shader;
+			Texture* m_texture;
 		public:
 			Material(Resources::Shader* p_shader, Resources::Texture* p_texture = nullptr);
 			~Material() = default;
