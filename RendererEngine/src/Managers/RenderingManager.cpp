@@ -5,7 +5,6 @@
 RenderEngine::Managers::RenderingManager::RenderingManager()
 {
 	m_windowManager = std::make_unique<WindowManager>();
-	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f));
 	m_uiManager = std::make_unique<UIManager>(m_windowManager->GetDevice());
 
 	isRunning = true;
@@ -14,6 +13,11 @@ RenderEngine::Managers::RenderingManager::RenderingManager()
 RenderEngine::Managers::RenderingManager::~RenderingManager()
 {
 	m_uiManager->Close();
+}
+
+void RenderEngine::Managers::RenderingManager::SetCamera(const glm::vec3 p_position)
+{
+	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), p_position);
 }
 
 void RenderEngine::Managers::RenderingManager::PreUpdate()
@@ -70,6 +74,11 @@ glm::mat4 RenderEngine::Managers::RenderingManager::CalculateProjectionMatrix() 
 glm::mat4 RenderEngine::Managers::RenderingManager::CalculateViewMatrix() const
 {
 	return m_camera->GetViewMatrix();
+}
+
+glm::mat4 RenderEngine::Managers::RenderingManager::CalculateModelMatrix() const
+{
+	return glm::mat4(1.0f);
 }
 
 const std::unique_ptr<RenderEngine::LowRenderer::Camera>& RenderEngine::Managers::RenderingManager::GetCamera() const

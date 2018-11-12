@@ -9,16 +9,20 @@ namespace RenderEngine
 {
 	namespace Systems
 	{
-		class RenderSystem
+		class AmberRenderer
 		{
 		private:
 			std::unique_ptr<Managers::RenderingManager> m_renderingManager;
 			std::unique_ptr<Managers::ResourcesManager> m_resourcesManager;
 
-		public:
-			RenderSystem();
-			~RenderSystem() =default;
+			glm::vec3 m_lightPos;
 
+			GLuint m_vao;
+			GLuint m_vbo;
+		public:
+			AmberRenderer();
+			~AmberRenderer() =default;
+			void Setup();
 			void Run();
 		};
 	}

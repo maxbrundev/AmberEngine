@@ -24,6 +24,8 @@ namespace RenderEngine
 			RenderingManager();
 			~RenderingManager();
 
+			void SetCamera(const glm::vec3 p_position);
+
 			void PreUpdate();
 			void Update();
 			void PostUpdate();
@@ -33,6 +35,7 @@ namespace RenderEngine
 
 			glm::mat4 CalculateProjectionMatrix() const;
 			glm::mat4 CalculateViewMatrix() const;
+			glm::mat4 CalculateModelMatrix() const;
 
 			const std::unique_ptr<LowRenderer::Camera>& GetCamera() const;
 			const std::unique_ptr<WindowManager>& GetWindowManager() const;

@@ -212,7 +212,7 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <ClInclude Include="include\Resources\Mesh\Cube.h" />
     <ClInclude Include="include\Resources\Shader.h" />
     <ClInclude Include="include\Resources\Texture.h" />
-    <ClInclude Include="include\Systems\RenderSystem.h" />
+    <ClInclude Include="include\Systems\AmberRenderer.h" />
     <ClInclude Include="include\Utils\Time.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="include\Managers\UIManager.h" />
@@ -246,7 +246,7 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <ClCompile Include="src\Resources\Mesh\Cube.cpp" />
     <ClCompile Include="src\Resources\Shader.cpp" />
     <ClCompile Include="src\Resources\Texture.cpp" />
-    <ClCompile Include="src\Systems\RenderSystem.cpp" />
+    <ClCompile Include="src\Systems\AmberRenderer.cpp" />
     <ClCompile Include="src\Utils\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
