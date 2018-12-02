@@ -28,7 +28,7 @@ void RenderEngine::Systems::Application::Setup()
 
 void RenderEngine::Systems::Application::Run()
 {
-	Resources::Mesh model("res/Mesh/monkey3.obj");
+	Resources::Mesh model("res/Mesh/suzanne.obj");
 
 	glm::vec3 cubePositions[] = {
 	   glm::vec3(0.0f,  0.0f,  0.0f),
