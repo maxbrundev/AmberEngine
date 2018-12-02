@@ -23,7 +23,7 @@ namespace RenderEngine
 			void Bind(const unsigned int& p_slot = 0) const;
 			void Unbind() const;
 
-			unsigned int& GetTextureId();
+			unsigned int GetTextureId();
 			int GetTextureWidth();
 			int GetTextureHeight();
 

@@ -27,7 +27,7 @@ void RenderEngine::Core::Device::Setup()
 		return;
 	}
 
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);  
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -83,7 +83,7 @@ void RenderEngine::Core::Device::InitGLFW()
 
 void RenderEngine::Core::Device::InitWindow()
 {
-	m_window = glfwCreateWindow(m_width, m_height, "Render Engine V0.1.4", nullptr, nullptr);
+	m_window = glfwCreateWindow(m_width, m_height, "AmberEngine V0.1.5", nullptr, nullptr);
 	if (!m_window)
 	{
 		throw std::runtime_error("Failed to create GLFW window");

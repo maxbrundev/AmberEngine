@@ -59,7 +59,7 @@ void RenderEngine::Resources::Texture::Unbind() const
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-GLuint& RenderEngine::Resources::Texture::GetTextureId()
+GLuint RenderEngine::Resources::Texture::GetTextureId()
 {
 	return m_textureId;
 }

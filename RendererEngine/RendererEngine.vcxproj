@@ -23,7 +23,7 @@
     <ProjectGuid>{E43FAF32-EDA9-45C8-B768-65DD91FBFEAF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>RendererEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -209,17 +209,18 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <ClInclude Include="include\Managers\WindowManager.h" />
     <ClInclude Include="include\Maths\MathGLM.h" />
     <ClInclude Include="include\Resources\Material.h" />
+    <ClInclude Include="include\Resources\Mesh.h" />
     <ClInclude Include="include\Resources\Mesh\Cube.h" />
+    <ClInclude Include="include\Resources\ObjLoader.h" />
     <ClInclude Include="include\Resources\Shader.h" />
     <ClInclude Include="include\Resources\Texture.h" />
-    <ClInclude Include="include\Systems\AmberRenderer.h" />
+    <ClInclude Include="include\Systems\Application.h" />
     <ClInclude Include="include\Utils\Time.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="include\Managers\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImGui\imgui.cpp" />
-    <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="pch.cpp">
@@ -243,10 +244,12 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <ClCompile Include="src\Managers\UIManager.cpp" />
     <ClCompile Include="src\Managers\WindowManager.cpp" />
     <ClCompile Include="src\Resources\Material.cpp" />
+    <ClCompile Include="src\Resources\Mesh.cpp" />
     <ClCompile Include="src\Resources\Mesh\Cube.cpp" />
+    <ClCompile Include="src\Resources\ObjLoader.cpp" />
     <ClCompile Include="src\Resources\Shader.cpp" />
     <ClCompile Include="src\Resources\Texture.cpp" />
-    <ClCompile Include="src\Systems\AmberRenderer.cpp" />
+    <ClCompile Include="src\Systems\Application.cpp" />
     <ClCompile Include="src\Utils\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +260,8 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <None Include="res\shaders\basic_lighting_worldspace.vs" />
     <None Include="res\shaders\colors.fs" />
     <None Include="res\shaders\colors.vs" />
+    <None Include="res\shaders\directional_lighting.fs" />
+    <None Include="res\shaders\directional_lighting.vs" />
     <None Include="res\shaders\lamp.fs" />
     <None Include="res\shaders\lamp.glsl" />
     <None Include="res\shaders\lamp.vs" />
@@ -270,8 +275,6 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\abs.jpg" />
-    <Image Include="res\textures\Abstract.jpg" />
-    <Image Include="res\textures\abstract_spec.jpg" />
     <Image Include="res\textures\abs_spec.jpg" />
     <Image Include="res\textures\box.png" />
     <Image Include="res\textures\box_specular.png" />
@@ -279,12 +282,13 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <Image Include="res\textures\container2_specular.png" />
     <Image Include="res\textures\crystal.jpg" />
     <Image Include="res\textures\crystal_spec.jpg" />
+    <Image Include="res\textures\gems.jpg" />
+    <Image Include="res\textures\gems2.jpg" />
+    <Image Include="res\textures\gems_spec.jpg" />
     <Image Include="res\textures\matrix_emissive.jpg" />
-    <Image Include="res\textures\red.jpg" />
-    <Image Include="res\textures\rock.jpg" />
+    <Image Include="res\textures\metal.jpg" />
+    <Image Include="res\textures\metal_spec.jpg" />
     <Image Include="res\textures\tile.jpg" />
-    <Image Include="res\textures\Tiles.jpg" />
-    <Image Include="res\textures\Tiles_spec.jpg" />
     <Image Include="res\textures\tile_spec.jpg" />
     <Image Include="res\textures\wood.jpg" />
   </ItemGroup>

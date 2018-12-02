@@ -44,8 +44,8 @@ namespace  RenderEngine
 			void LockCursor();
 			void FreeCursor();
 
-			int GetPressState();
-			int GetReleaseState();
+			static int GetPressState();
+			static int GetReleaseState();
 
 			//void DisplayErrors();
 		};

@@ -100,6 +100,11 @@ void RenderEngine::Resources::Shader::SetUniformVec3(const std::string& p_name, 
 	GLCall(glUniform3f(GetUniformLocation(p_name), p_vec3.x, p_vec3.y, p_vec3.z));
 }
 
+void RenderEngine::Resources::Shader::SetUniformVec4(const std::string& p_name, const glm::vec4& p_vec4)
+{
+	GLCall(glUniform4f(GetUniformLocation(p_name), p_vec4.x, p_vec4.y, p_vec4.z, p_vec4.w));
+}
+
 void RenderEngine::Resources::Shader::SetUniformMat4(const std::string& p_name, const glm::mat4& p_mat4)
 {
 	GLCall(glUniformMatrix4fv(GetUniformLocation(p_name), 1, GL_FALSE, &p_mat4[0][0]));

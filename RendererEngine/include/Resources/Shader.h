@@ -43,6 +43,7 @@ namespace RenderEngine
 			void SetUniform1f(const std::string& p_name, const float p_value);
 			void SetUniform4f(const std::string& p_name, const float p_v0, const float p_v1, const float p_v2, const float p_v3);
 			void SetUniformVec3(const std::string& p_name, const glm::vec3& p_vec3);
+			void SetUniformVec4(const std::string& p_name, const glm::vec4& p_vec4);
 			void SetUniformMat4(const std::string& p_name, const glm::mat4& p_mat4);
 
 			inline unsigned int GetRendererID() const { return m_rendererID; }

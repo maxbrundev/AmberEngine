@@ -126,7 +126,7 @@ void RenderEngine::LowRenderer::Camera::HandleMouse()
 	}
 }
 
-glm::vec3& RenderEngine::LowRenderer::Camera::GetPosition()
+glm::vec3 RenderEngine::LowRenderer::Camera::GetPosition() const
 {
 	return m_position;
 }
@@ -141,7 +141,7 @@ glm::mat4 RenderEngine::LowRenderer::Camera::GetViewMatrix() const
 	return glm::lookAt(m_position, m_position + m_forward, m_up);;
 }
 
-const float& RenderEngine::LowRenderer::Camera::GetCameraFov() const
+float RenderEngine::LowRenderer::Camera::GetCameraFov() const
 {
 	return m_fov;
 }

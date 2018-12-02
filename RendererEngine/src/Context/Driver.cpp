@@ -16,8 +16,6 @@ void RenderEngine::Core::Driver::Setup()
 
 	m_isActive = true;
 
-	DisplayDriverInfo();
-
 	GLCall(glEnable(GL_DEBUG_OUTPUT));
 	GLCall(glEnable(GL_DEPTH_TEST));
 	GLCall(glEnable(GL_BLEND));
@@ -34,6 +32,8 @@ void RenderEngine::Core::Driver::Setup()
 		glDebugMessageCallback(Debug::GLDebug::GLDebugMessageCallback, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}
+
+	DisplayDriverInfo();
 }
 
 bool RenderEngine::Core::Driver::IsActive()

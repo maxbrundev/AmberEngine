@@ -66,9 +66,6 @@
     <ClInclude Include="ImGui\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_glfw_gl3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\imgui_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,7 +96,16 @@
     <ClInclude Include="include\Managers\RenderingManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Systems\AmberRenderer.h">
+    <ClInclude Include="include\Systems\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resources\ObjLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resources\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_glfw_gl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,13 +155,7 @@
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\InputManager.cpp">
@@ -176,7 +176,16 @@
     <ClCompile Include="src\Managers\RenderingManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Systems\AmberRenderer.cpp">
+    <ClCompile Include="src\Systems\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\ObjLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -198,6 +207,8 @@
     <None Include="res\shaders\lighting_maps.vs" />
     <None Include="res\shaders\texture.fs" />
     <None Include="res\shaders\texture.vs" />
+    <None Include="res\shaders\directional_lighting.fs" />
+    <None Include="res\shaders\directional_lighting.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container2.png">
@@ -212,12 +223,6 @@
     <Image Include="res\textures\abs_spec.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\Tiles_spec.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\Tiles.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\textures\crystal_spec.jpg">
       <Filter>Resource Files</Filter>
     </Image>
@@ -230,28 +235,31 @@
     <Image Include="res\textures\tile_spec.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\Abstract.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\abstract_spec.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\textures\wood.jpg">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\matrix_emissive.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\red.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\rock.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\textures\box_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\box.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\metal_spec.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\metal.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\gems2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\gems_spec.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\gems.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

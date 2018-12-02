@@ -2,11 +2,16 @@
 
 #include "Managers/UIManager.h"
 
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_glfw_gl3.h"
+
 RenderEngine::Managers::UIManager::UIManager(Core::Device& p_context) : m_device(p_context), m_clearColor{ 0.1f, 0.1f, 0.1f, 1.0f }
 {
 	ImGui::CreateContext();
 	ImGui_ImplGlfwGL3_Init(m_device.GetContextWindow(), true);
 	ImGui::StyleColorsDark();
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.FrameRounding = 12.0f;
 }
 
 void RenderEngine::Managers::UIManager::PreUpdate()
@@ -18,12 +23,12 @@ void RenderEngine::Managers::UIManager::PreUpdate()
 
 void RenderEngine::Managers::UIManager::Update(LowRenderer::Camera& p_camera)
 {
-	ImGui::Text("Scene");
+	DisplayMenuBar();
+	ImGui::Begin("Scene");
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	ImGui::Bullet();
-	ImGui::Text("Camera Transform \nPosition X: %f Y: %f Z: %f", p_camera.GetPosition().x, p_camera.GetPosition().y, p_camera.GetPosition().z);
-
+	ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", p_camera.GetPosition().x, p_camera.GetPosition().y, p_camera.GetPosition().z);
 	ImGui::ColorEdit4("Clear Color", m_clearColor);
+	ImGui::End();
 }
 
 void RenderEngine::Managers::UIManager::PostUpdate()
@@ -32,13 +37,24 @@ void RenderEngine::Managers::UIManager::PostUpdate()
 	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void RenderEngine::Managers::UIManager::DisplayMenuBar()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+			if(ImGui::MenuItem("Quit"))
+			{
+				m_device.Close();
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+}
+
 void RenderEngine::Managers::UIManager::Close()
 {
 	ImGui_ImplGlfwGL3_Shutdown();
 	ImGui::DestroyContext();
-}
-
-void RenderEngine::Managers::UIManager::DisplayTexture(Resources::Texture p_texture)
-{
-	ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(p_texture.GetTextureId())), ImVec2(p_texture.GetTextureWidth(), p_texture.GetTextureHeight()));
 }

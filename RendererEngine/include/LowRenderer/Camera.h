@@ -8,7 +8,7 @@ namespace RenderEngine
 	{
 		const float YAW = -90.0f;
 		const float PITCH = 0.0f;
-		const float SPEED = 2.5f;
+		const float SPEED = 5.5f;
 		const float SENSITIVITY = 0.1f;
 		const float FOV = 45.0f;
 
@@ -57,11 +57,12 @@ namespace RenderEngine
 			void HandleInput(float p_deltaTime);
 			void HandleMouse();
 
-			glm::vec3& GetPosition();
+			float GetCameraFov() const;
+
+			glm::vec3 GetPosition() const;
 			glm::mat4 GetProjectionMatrix() const;
 			glm::mat4 GetViewMatrix() const;
-			const float& GetCameraFov() const;
-				
+			
 		private:
 			void UpdateCameraVectors();
 		};

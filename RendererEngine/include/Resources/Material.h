@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Shader.h"
-#include "Texture.h"
-
 namespace RenderEngine
 {
 	namespace Resources
@@ -10,16 +7,19 @@ namespace RenderEngine
 		class Material
 		{
 		private:
-			glm::vec3 m_ambient;
-			glm::vec3 m_diffuse;
-			glm::vec3 m_specular;
+			glm::vec3 m_ambient{};
+			glm::vec3 m_diffuse{};
+			glm::vec3 m_specular{};
+			GLuint m_diffuseMap{};
+			GLuint m_specularMap{};
+			GLuint m_emissiveMap{};
 			float m_shininess;
 
-			Shader* m_shader;
-			Texture* m_texture;
 		public:
-			Material(Resources::Shader* p_shader, Resources::Texture* p_texture = nullptr);
+			Material(glm::vec3& p_ambient, glm::vec3& p_diffuse, glm::vec3& p_specular, float p_shininess, GLuint p_diffuseMap, GLuint p_specularMap, GLuint p_emissive);
 			~Material() = default;
+
+			void SendToShader(class Shader& p_shader);
 		};
 	}
 }

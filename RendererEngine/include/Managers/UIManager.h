@@ -3,10 +3,6 @@
 #include "Context/Device.h"
 #include "LowRenderer/Camera.h"
 
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_glfw_gl3.h"
-#include "Resources/Texture.h"
-
 namespace  RenderEngine
 {
 	namespace Managers
@@ -24,9 +20,8 @@ namespace  RenderEngine
 			void PreUpdate();
 			void Update(LowRenderer::Camera& p_camera);
 			void PostUpdate();
+			void DisplayMenuBar();
 			void Close();
-
-			void DisplayTexture(Resources::Texture p_texture);
 		};
 	}
 }
