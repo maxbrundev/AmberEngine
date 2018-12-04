@@ -270,6 +270,9 @@ copy /Y $(SolutionDir)Dependencies\glew\bin\Release\$(Platform)\glew32.dll $(Out
     <None Include="res\shaders\lighting_maps.vs" />
     <None Include="res\shaders\material.fs" />
     <None Include="res\shaders\material.vs" />
+    <None Include="res\shaders\normal_debug.fs" />
+    <None Include="res\shaders\normal_debug.gs" />
+    <None Include="res\shaders\normal_debug.vs" />
     <None Include="res\shaders\texture.fs" />
     <None Include="res\shaders\texture.vs" />
   </ItemGroup>

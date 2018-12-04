@@ -18,7 +18,7 @@ namespace  RenderEngine
 			~UIManager() = default;
 
 			void PreUpdate();
-			void Update(LowRenderer::Camera& p_camera);
+			void Update();
 			void PostUpdate();
 			void DisplayMenuBar();
 			void Close();

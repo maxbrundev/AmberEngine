@@ -36,6 +36,11 @@ void RenderEngine::Core::Driver::Setup()
 	DisplayDriverInfo();
 }
 
+void RenderEngine::Core::Driver::Close()
+{
+	//TODO LOG DRIVER CLOSED
+}
+
 bool RenderEngine::Core::Driver::IsActive()
 {
 	return m_isActive;

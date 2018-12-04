@@ -162,7 +162,7 @@ namespace RenderEngine
 
 			InputManager() = default;
 			~InputManager() = default;
-
+			//static bool GetKeyDown(GLFWwindow* p_window, const Key p_key);
 			//TODO
 		};
 	}

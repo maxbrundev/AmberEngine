@@ -209,6 +209,9 @@
     <None Include="res\shaders\texture.vs" />
     <None Include="res\shaders\directional_lighting.fs" />
     <None Include="res\shaders\directional_lighting.vs" />
+    <None Include="res\shaders\normal_debug.vs" />
+    <None Include="res\shaders\normal_debug.fs" />
+    <None Include="res\shaders\normal_debug.gs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container2.png">

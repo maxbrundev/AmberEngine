@@ -21,12 +21,11 @@ void RenderEngine::Managers::UIManager::PreUpdate()
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
-void RenderEngine::Managers::UIManager::Update(LowRenderer::Camera& p_camera)
+void RenderEngine::Managers::UIManager::Update()
 {
 	DisplayMenuBar();
 	ImGui::Begin("Scene");
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", p_camera.GetPosition().x, p_camera.GetPosition().y, p_camera.GetPosition().z);
 	ImGui::ColorEdit4("Clear Color", m_clearColor);
 	ImGui::End();
 }

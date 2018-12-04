@@ -16,7 +16,7 @@ namespace  RenderEngine
 			~Driver() = default;
 
 			void Setup() override;
-			void Close() override {};
+			void Close() override;
 			bool IsActive() override;
 
 			void DisplayDriverInfo();

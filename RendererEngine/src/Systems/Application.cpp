@@ -51,6 +51,7 @@ void RenderEngine::Systems::Application::Run()
 		m_renderingManager->Update();
 
 		ImGui::Begin("Scene");
+		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", m_renderingManager->GetCamera()->GetPosition().x, m_renderingManager->GetCamera()->GetPosition().y, m_renderingManager->GetCamera()->GetPosition().z);
 		ImGui::SliderFloat("Light Direction X", &lighDir.x, -10.0f, 10.0f, "X: %.1f");
 		ImGui::SliderFloat("Light Direction Y", &lighDir.y, -10.0f, 10.0f, "Y: %.1f");
 		ImGui::SliderFloat("Light Direction Z", &lighDir.z, -10.0f, 10.0f, "Z: %.1f");

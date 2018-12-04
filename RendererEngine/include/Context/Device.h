@@ -44,6 +44,9 @@ namespace  RenderEngine
 			void LockCursor();
 			void FreeCursor();
 
+			void SwapBuffers();
+			void PollEvents();
+
 			static int GetPressState();
 			static int GetReleaseState();
 

@@ -34,14 +34,14 @@ void RenderEngine::Managers::RenderingManager::Update()
 	UpdateDeltaTime();
 	UpdateRenderMode();
 	m_camera->Update(m_deltaTime);
-	m_uiManager->Update(*m_camera);
+	m_uiManager->Update();
 }
 
 void RenderEngine::Managers::RenderingManager::SwapBuffers()
 {
 	m_uiManager->PostUpdate();
-	glfwSwapBuffers(m_windowManager->GetDevice().GetContextWindow());
-	glfwPollEvents();
+	m_windowManager->GetDevice().SwapBuffers();
+	m_windowManager->GetDevice().PollEvents();
 }
 
 bool RenderEngine::Managers::RenderingManager::IsRunning()

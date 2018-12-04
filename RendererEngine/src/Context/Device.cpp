@@ -144,6 +144,17 @@ void RenderEngine::Core::Device::FreeCursor()
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
+void RenderEngine::Core::Device::SwapBuffers()
+{
+	glfwSwapBuffers(m_window);
+	
+}
+
+void RenderEngine::Core::Device::PollEvents()
+{
+	glfwPollEvents();
+}
+
 int RenderEngine::Core::Device::GetPressState()
 {
 	return GLFW_PRESS;
