@@ -8,6 +8,7 @@ RenderEngine::Managers::RenderingManager::RenderingManager() : isWireFrame(false
 	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f));
 	m_resourcesManager = std::make_unique<ResourcesManager>();
 	m_uiManager = std::make_unique<UIManager>(m_windowManager->GetDevice());
+	m_inputManager = std::make_unique<InputManager>();
 	isRunning = true;
 }
 
@@ -35,6 +36,7 @@ void RenderEngine::Managers::RenderingManager::Update()
 	UpdateRenderMode();
 	m_camera->Update(m_deltaTime);
 	m_uiManager->Update();
+	m_inputManager->Update();
 }
 
 void RenderEngine::Managers::RenderingManager::SwapBuffers()
@@ -51,14 +53,10 @@ bool RenderEngine::Managers::RenderingManager::IsRunning()
 
 void RenderEngine::Managers::RenderingManager::UpdateRenderMode()
 {
-	static int oldState = Core::Device::GetPressState();
-	const int newState = glfwGetKey(m_windowManager->GetDevice().GetContextWindow(), GLFW_KEY_LEFT_SHIFT);
-
-	if (newState == Core::Device::GetPressState() && oldState == Core::Device::GetReleaseState()) 
+	if (m_inputManager->IsKeyEventOccured('A'))
 	{
 		isWireFrame = !isWireFrame;
 	}
-	oldState = newState;
 
 	if (isWireFrame)
 		PolygonModeLine();

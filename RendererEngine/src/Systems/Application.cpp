@@ -28,9 +28,11 @@ void RenderEngine::Systems::Application::Setup()
 
 void RenderEngine::Systems::Application::Run()
 {
-	Resources::Mesh model("res/Mesh/suzanne.obj");
+	Resources::Mesh model("res/Mesh/Primitive/SuzanneLow.obj");
 
-	glm::vec3 cubePositions[] = {
+	float		alphaOBJ = 1.0f;
+	glm::vec3	lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
+	glm::vec3	cubePositions[] = {
 	   glm::vec3(0.0f,  0.0f,  0.0f),
 	   glm::vec3(2.0f,  3.0f, -8.0f),
 	   glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -43,8 +45,6 @@ void RenderEngine::Systems::Application::Run()
 	   glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-	glm::vec3 lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
-
 	while (m_renderingManager->IsRunning())
 	{
 		m_renderingManager->Clear();
@@ -55,6 +55,7 @@ void RenderEngine::Systems::Application::Run()
 		ImGui::SliderFloat("Light Direction X", &lighDir.x, -10.0f, 10.0f, "X: %.1f");
 		ImGui::SliderFloat("Light Direction Y", &lighDir.y, -10.0f, 10.0f, "Y: %.1f");
 		ImGui::SliderFloat("Light Direction Z", &lighDir.z, -10.0f, 10.0f, "Z: %.1f");
+		ImGui::SliderFloat("Alpha value", &alphaOBJ, 0.0f, 1.0f);
 		ImGui::End();
 
 		glm::mat4 projectionMatrix = m_renderingManager->CalculateProjectionMatrix();
@@ -67,7 +68,7 @@ void RenderEngine::Systems::Application::Run()
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformMat4("model", modelMatrix);
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformVec3("viewPos", m_renderingManager->GetCamera()->GetPosition());
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
-
+		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("alpha", alphaOBJ);
 		m_renderingManager->GetResourcesManager()->GetTexture("diffuse").Bind();
 		m_renderingManager->GetResourcesManager()->GetTexture("specular").Bind(1);
 

@@ -4,6 +4,7 @@
 #include "LowRenderer/Camera.h"
 #include "UIManager.h"
 #include "ResourcesManager.h"
+#include "InputManager.h"
 
 namespace RenderEngine
 {
@@ -16,6 +17,7 @@ namespace RenderEngine
 			std::unique_ptr<LowRenderer::Camera> m_camera;
 			std::unique_ptr<ResourcesManager> m_resourcesManager;
 			std::unique_ptr<UIManager> m_uiManager;
+			std::unique_ptr<InputManager> m_inputManager;
 
 			GLdouble m_deltaTime = 0.0f;
 			GLdouble m_lastTime = 0.0f;
