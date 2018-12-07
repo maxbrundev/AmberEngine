@@ -56,7 +56,8 @@ namespace RenderEngine
 
 			void HandleInput(float p_deltaTime);
 			void HandleMouse();
-
+			void Lock();
+			void Unlock();
 			float GetCameraFov() const;
 
 			glm::vec3 GetPosition() const;

@@ -13,24 +13,25 @@ void RenderEngine::Systems::Application::Setup()
 {
 	Resources::Shader& lightingShader = m_renderingManager->GetResourcesManager()->LoadShaderFiles("DirectionalLight", "directional_lighting.vs", "directional_lighting.fs");
 	
-	Resources::Texture& diffuseMap = m_renderingManager->GetResourcesManager()->LoadTexture("diffuse", "crystal.jpg");
-	Resources::Texture& specularMap = m_renderingManager->GetResourcesManager()->LoadTexture("specular", "crystal_spec.jpg");
+	Resources::Texture& diffuseMap = m_renderingManager->GetResourcesManager()->LoadTexture("diffuse", "uv.png");
+	//Resources::Texture& specularMap = m_renderingManager->GetResourcesManager()->LoadTexture("specular", "gems_spec.jpg");
 
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("material.diffuse", 0);
-	lightingShader.SetUniform1i("material.specular", 1);
+	//lightingShader.SetUniform1i("material.specular", 1);
 	lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
 	lightingShader.SetUniformVec3("light.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
 	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	lightingShader.SetUniform1f("material.shininess", 10.0f);
+	lightingShader.SetUniform1f("material.shininess", 30.0f);
 	lightingShader.Unbind();
 }
 
 void RenderEngine::Systems::Application::Run()
 {
-	Resources::Mesh model("res/Mesh/Primitive/SuzanneLow.obj");
+	Resources::Mesh model("res/Mesh/Suzanne.obj");
 
-	float		alphaOBJ = 1.0f;
+	float UvX = 6.0f;
+	float UvY = 6.0f;
 	glm::vec3	lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
 	glm::vec3	cubePositions[] = {
 	   glm::vec3(0.0f,  0.0f,  0.0f),
@@ -55,7 +56,8 @@ void RenderEngine::Systems::Application::Run()
 		ImGui::SliderFloat("Light Direction X", &lighDir.x, -10.0f, 10.0f, "X: %.1f");
 		ImGui::SliderFloat("Light Direction Y", &lighDir.y, -10.0f, 10.0f, "Y: %.1f");
 		ImGui::SliderFloat("Light Direction Z", &lighDir.z, -10.0f, 10.0f, "Z: %.1f");
-		ImGui::SliderFloat("Alpha value", &alphaOBJ, 0.0f, 1.0f);
+		ImGui::SliderFloat("Texture Tiling", &UvX, 1.0f, 10.0f, "X");
+		ImGui::SliderFloat("Texture Tiling", &UvY, 1.0f, 10.0f, "Y");
 		ImGui::End();
 
 		glm::mat4 projectionMatrix = m_renderingManager->CalculateProjectionMatrix();
@@ -68,9 +70,10 @@ void RenderEngine::Systems::Application::Run()
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformMat4("model", modelMatrix);
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformVec3("viewPos", m_renderingManager->GetCamera()->GetPosition());
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
-		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("alpha", alphaOBJ);
+		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvXValue", UvX);
+		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
 		m_renderingManager->GetResourcesManager()->GetTexture("diffuse").Bind();
-		m_renderingManager->GetResourcesManager()->GetTexture("specular").Bind(1);
+		//m_renderingManager->GetResourcesManager()->GetTexture("specular").Bind(1);
 
 		for (unsigned int i = 0; i < 10; i++)
 		{

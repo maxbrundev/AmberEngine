@@ -2,7 +2,7 @@
 
 #include "Managers/RenderingManager.h"
 
-RenderEngine::Managers::RenderingManager::RenderingManager() : isWireFrame(false)
+RenderEngine::Managers::RenderingManager::RenderingManager() : isWireFrame(false), isCameraFree(true)
 {
 	m_windowManager = std::make_unique<WindowManager>();
 	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f));
@@ -53,15 +53,30 @@ bool RenderEngine::Managers::RenderingManager::IsRunning()
 
 void RenderEngine::Managers::RenderingManager::UpdateRenderMode()
 {
-	if (m_inputManager->IsKeyEventOccured('A'))
+	if (m_inputManager->IsKeyEventOccured(0x10))
 	{
 		isWireFrame = !isWireFrame;
+	}
+	if (m_inputManager->IsKeyEventOccured(0x12))
+	{
+		isCameraFree = !isCameraFree;
 	}
 
 	if (isWireFrame)
 		PolygonModeLine();
 	else
 		PolygonModeFill();
+
+	if (isCameraFree)
+	{
+		m_camera->Unlock();
+		m_windowManager->GetDevice().LockCursor();
+	}
+	else
+	{
+		m_windowManager->GetDevice().FreeCursor();
+		m_camera->Lock();
+	}
 }
 
 void RenderEngine::Managers::RenderingManager::UpdateDeltaTime()

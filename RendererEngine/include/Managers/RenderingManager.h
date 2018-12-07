@@ -24,6 +24,7 @@ namespace RenderEngine
 
 			bool isRunning;
 			bool isWireFrame;
+			bool isCameraFree;
 
 		public:
 			RenderingManager();

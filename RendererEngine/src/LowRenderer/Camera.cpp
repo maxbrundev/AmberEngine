@@ -79,13 +79,13 @@ void RenderEngine::LowRenderer::Camera::Update(float p_deltaTime)
 
 void RenderEngine::LowRenderer::Camera::HandleInput(float p_deltaTime)
 {
-	if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_LEFT_ALT))
+	/*if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_LEFT_ALT))
 	{
 		m_isLock = true;
 		m_isFirstMouse = true;
 	}
 	else
-		m_isLock = false;
+		m_isLock = false;*/
 
 	if(!m_isLock)
 	{
@@ -124,6 +124,17 @@ void RenderEngine::LowRenderer::Camera::HandleMouse()
 
 		ProcessMouseMovement(xoffset, yoffset);
 	}
+}
+
+void RenderEngine::LowRenderer::Camera::Lock()
+{
+	m_isLock = true;
+	m_isFirstMouse = true;
+}
+
+void RenderEngine::LowRenderer::Camera::Unlock()
+{
+	m_isLock = false;
 }
 
 glm::vec3 RenderEngine::LowRenderer::Camera::GetPosition() const
