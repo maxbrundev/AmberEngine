@@ -1,18 +1,16 @@
 #pragma once
 
-#include "Resources/Shader.h"
-
 namespace RenderEngine
 {
 	namespace Resources
 	{
 		struct Vertex 
 		{
-			glm::vec3 Position;
-			glm::vec3 Normal;
-			glm::vec2 TexCoords;
-			glm::vec3 Tangent;
-			glm::vec3 Bitangent;
+			glm::vec3 position;
+			glm::vec3 normal;
+			glm::vec2 texCoords;
+			glm::vec3 tangent;
+			glm::vec3 bitangent;
 		};
 
 		struct TextureData 
@@ -25,22 +23,22 @@ namespace RenderEngine
 		class AssimpMesh
 		{
 		private:
-			unsigned int VBO;
-			unsigned int EBO;
+			std::vector<Vertex> m_vertices;
+			std::vector<TextureData> m_textures;
+			std::vector<unsigned int> m_indices;
+
+			unsigned int m_vao;
+			unsigned int m_vbo;
+			unsigned int m_ebo;
 
 		public:
-			std::vector<Vertex> vertices;
-			std::vector<unsigned int> indices;
-			std::vector<TextureData> textures;
-			unsigned int VAO;
-
-		public:
-			AssimpMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<TextureData> textures);
-			void Draw(Shader& shader);
+			AssimpMesh(std::vector<Vertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<TextureData> p_textures);
 			~AssimpMesh() = default;
+			void BindBuffers();
+			void DeleteBuffers();
 
 		private:
-			void setupMesh();
+			void InitBuffers();
 		};
 	}
 }

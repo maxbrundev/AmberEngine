@@ -2,15 +2,20 @@
 
 #include "Resources/AssimpModel.h"
 
-unsigned int RenderEngine::Resources::TextureFromFile(const std::string& p_path, const std::string& directory)
+unsigned int RenderEngine::Resources::AssimpModel::LoadTexture(const std::string& p_filePath, const std::string& p_directory)
 {
-	std::string filename = p_path;
-	filename = directory + '/' + filename;
-
 	unsigned int textureId;
+
+	int width;
+	int height;
+	int bitsPerPixel;
+
+	std::string filename = p_filePath;
+
+	filename = p_directory + '/' + filename;
+
 	glGenTextures(1, &textureId);
 
-	int width, height, bitsPerPixel;
 	unsigned char* dataBuffer = stbi_load(filename.c_str(), &width, &height, &bitsPerPixel, 0);
 
 	if (dataBuffer)
@@ -36,137 +41,145 @@ unsigned int RenderEngine::Resources::TextureFromFile(const std::string& p_path,
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << p_path << std::endl;
+		std::cout << "Texture failed to load at path: " << p_filePath << std::endl;
 		stbi_image_free(dataBuffer);
 	}
 
 	return textureId;
 }
 
-RenderEngine::Resources::AssimpModel::AssimpModel(const std::string& path)
+RenderEngine::Resources::AssimpModel::AssimpModel(const std::string& p_filePath)
 {
-	loadModel(path);
+	LoadModel(p_filePath);
 }
 
-void RenderEngine::Resources::AssimpModel::Draw(Shader& shader)
+void RenderEngine::Resources::AssimpModel::Draw()
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw(shader);
+	for (int i = 0; i < m_meshes.size(); i++)
+		m_meshes[i].BindBuffers();
 }
 
-void RenderEngine::Resources::AssimpModel::loadModel(const std::string& path)
+RenderEngine::Resources::AssimpModel::~AssimpModel()
+{
+	for (int i = 0; i < m_meshes.size(); ++i)
+	{
+		m_meshes[i].DeleteBuffers();
+	}
+}
+
+void RenderEngine::Resources::AssimpModel::LoadModel(const std::string& p_filePath)
 {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-	// check for errors
+	const aiScene* scene = importer.ReadFile(p_filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
 		return;
 	}
 
-	directory = path.substr(0, path.find_last_of('/'));
+	m_directory = p_filePath.substr(0, p_filePath.find_last_of('/'));
 
-	processNode(scene->mRootNode, scene);
+	ProcessNode(scene->mRootNode, scene);
 }
 
-void RenderEngine::Resources::AssimpModel::processNode(aiNode* node, const aiScene* scene)
+void RenderEngine::Resources::AssimpModel::ProcessNode(aiNode* p_node, const aiScene* p_scene)
 {
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	for (int i = 0; i < p_node->mNumMeshes; i++)
 	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(processMesh(mesh, scene));
+		aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
+		m_meshes.push_back(ProcessMesh(mesh, p_scene));
 	}
 
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	for (int i = 0; i < p_node->mNumChildren; i++)
 	{
-		processNode(node->mChildren[i], scene);
+		ProcessNode(p_node->mChildren[i], p_scene);
 	}
 }
 
-RenderEngine::Resources::AssimpMesh RenderEngine::Resources::AssimpModel::processMesh(aiMesh* mesh, const aiScene* scene)
+RenderEngine::Resources::AssimpMesh RenderEngine::Resources::AssimpModel::ProcessMesh(aiMesh* p_mesh, const aiScene* p_scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<TextureData> textures;
 
-	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+	for (int i = 0; i < p_mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
 		glm::vec3 vector;
 
-		vector.x = mesh->mVertices[i].x;
-		vector.y = mesh->mVertices[i].y;
-		vector.z = mesh->mVertices[i].z;
-		vertex.Position = vector;
+		vector.x = p_mesh->mVertices[i].x;
+		vector.y = p_mesh->mVertices[i].y;
+		vector.z = p_mesh->mVertices[i].z;
+		vertex.position = vector;
 
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.Normal = vector;
+		vector.x = p_mesh->mNormals[i].x;
+		vector.y = p_mesh->mNormals[i].y;
+		vector.z = p_mesh->mNormals[i].z;
+		vertex.normal = vector;
 
-		if (mesh->mTextureCoords[0])
+		if (p_mesh->mTextureCoords[0])
 		{
 			glm::vec2 vec;
 		
-			vec.x = mesh->mTextureCoords[0][i].x;
-			vec.y = mesh->mTextureCoords[0][i].y;
-			vertex.TexCoords = vec;
+			vec.x = p_mesh->mTextureCoords[0][i].x;
+			vec.y = p_mesh->mTextureCoords[0][i].y;
+			vertex.texCoords = vec;
 		}
 		else
-			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+			vertex.texCoords = glm::vec2(0.0f, 0.0f);
 		
-		vector.x = mesh->mTangents[i].x;
-		vector.y = mesh->mTangents[i].y;
-		vector.z = mesh->mTangents[i].z;
-		vertex.Tangent = vector;
+		vector.x = p_mesh->mTangents[i].x;
+		vector.y = p_mesh->mTangents[i].y;
+		vector.z = p_mesh->mTangents[i].z;
+		vertex.tangent = vector;
 		
-		vector.x = mesh->mBitangents[i].x;
-		vector.y = mesh->mBitangents[i].y;
-		vector.z = mesh->mBitangents[i].z;
-		vertex.Bitangent = vector;
+		vector.x = p_mesh->mBitangents[i].x;
+		vector.y = p_mesh->mBitangents[i].y;
+		vector.z = p_mesh->mBitangents[i].z;
+		vertex.bitangent = vector;
 		vertices.push_back(vertex);
 	}
 	
-	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	for (int i = 0; i < p_mesh->mNumFaces; i++)
 	{
-		aiFace face = mesh->mFaces[i];
+		aiFace face = p_mesh->mFaces[i];
 		
-		for (unsigned int j = 0; j < face.mNumIndices; j++)
+		for (int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
 	
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	std::vector<TextureData> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<TextureData> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	
-	std::vector<TextureData> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<TextureData> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	
-	std::vector<TextureData> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+	std::vector<TextureData> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	
-	std::vector<TextureData> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+	std::vector<TextureData> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	return AssimpMesh(vertices, indices, textures);
 }
 
-std::vector<RenderEngine::Resources::TextureData> RenderEngine::Resources::AssimpModel::loadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName)
+std::vector<RenderEngine::Resources::TextureData> RenderEngine::Resources::AssimpModel::LoadMaterial(aiMaterial* mat, aiTextureType type, const std::string& typeName)
 {
 	std::vector<TextureData> textures;
-	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	for (int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		
 		bool skip = false;
-		for (unsigned int j = 0; j < textures_loaded.size(); j++)
+		for (int j = 0; j < m_loadedTextures.size(); j++)
 		{
-			if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+			if (std::strcmp(m_loadedTextures[j].path.data(), str.C_Str()) == 0)
 			{
-				textures.push_back(textures_loaded[j]);
+				textures.push_back(m_loadedTextures[j]);
 				skip = true;
 				break;
 			}
@@ -174,11 +187,11 @@ std::vector<RenderEngine::Resources::TextureData> RenderEngine::Resources::Assim
 		if (!skip)
 		{
 			TextureData texture;
-			texture.id = TextureFromFile(str.C_Str(), this->directory);
+			texture.id = LoadTexture(str.C_Str(), m_directory);
 			texture.type = typeName;
 			texture.path = str.C_Str();
 			textures.push_back(texture);
-			textures_loaded.push_back(texture);
+			m_loadedTextures.push_back(texture);
 		}
 	}
 	return textures;

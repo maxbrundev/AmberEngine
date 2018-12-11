@@ -60,7 +60,7 @@ void RenderEngine::Systems::Application::Run()
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
 		//m_renderingManager->GetResourcesManager()->GetTexture("uvChecker").Bind();
 
-		model.Draw(m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight"));
+		model.Draw();
 		
 		m_renderingManager->SwapBuffers();
 	}
