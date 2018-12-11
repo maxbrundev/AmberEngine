@@ -34,6 +34,7 @@ namespace RenderEngine
 		public:
 			AssimpMesh(std::vector<Vertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<TextureData> p_textures);
 			~AssimpMesh() = default;
+
 			void BindBuffers();
 			void DeleteBuffers();
 

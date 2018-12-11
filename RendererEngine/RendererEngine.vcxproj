@@ -214,7 +214,6 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClInclude Include="include\Maths\MathGLM.h" />
     <ClInclude Include="include\Resources\AssimpMesh.h" />
     <ClInclude Include="include\Resources\AssimpModel.h" />
-    <ClInclude Include="include\Resources\Material.h" />
     <ClInclude Include="include\Resources\Mesh.h" />
     <ClInclude Include="include\Resources\Mesh\Cube.h" />
     <ClInclude Include="include\Resources\ObjLoader.h" />
@@ -251,7 +250,6 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClCompile Include="src\Managers\WindowManager.cpp" />
     <ClCompile Include="src\Resources\AssimpMesh.cpp" />
     <ClCompile Include="src\Resources\AssimpModel.cpp" />
-    <ClCompile Include="src\Resources\Material.cpp" />
     <ClCompile Include="src\Resources\Mesh.cpp" />
     <ClCompile Include="src\Resources\Mesh\Cube.cpp" />
     <ClCompile Include="src\Resources\ObjLoader.cpp" />

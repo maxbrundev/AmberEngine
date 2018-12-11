@@ -1,6 +1,5 @@
 #pragma once
-#include "Buffers/VertexArray.h"
-#include "Buffers/VertexBufferLayout.h"
+
 namespace RenderEngine
 {
 	namespace PrimitiveMesh
@@ -41,8 +40,6 @@ namespace RenderEngine
 			static void CreateTriangle(uint8_t pos1, uint8_t pos2, uint8_t pos3, uint8_t text1, uint8_t text2, uint8_t text3, uint8_t p_normals);
 
 			static std::vector<PrimitiveMesh::Vertex>& GetVertices();
-
-			void Draw() const;
 		};
 	}
 }
