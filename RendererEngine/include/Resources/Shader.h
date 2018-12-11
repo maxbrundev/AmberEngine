@@ -21,9 +21,10 @@ namespace RenderEngine
 			
 			std::string m_sourceFile;
 
-			unsigned int m_rendererID;
+			
 
 		public:
+			unsigned int m_rendererID;
 			Shader() = default;
 			Shader(const std::string& p_filePath);
 			Shader(const std::string& p_vertexShader, const std::string& p_fragmentShader);

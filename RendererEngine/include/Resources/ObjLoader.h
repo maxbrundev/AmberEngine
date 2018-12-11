@@ -20,8 +20,6 @@ namespace RenderEngine
 			std::vector<glm::vec2> texCoordsIndices;
 			std::vector<glm::vec3> normalsIndices;
 			std::vector<unsigned int> indices;
-
-			void CalculateNormals();
 		};
 
 		class ObjLoader
@@ -43,7 +41,7 @@ namespace RenderEngine
 
 		private:
 			void CreateObjFace(const std::string& p_line);
-
+			void CalculateNormals(Model& p_model);
 			IndexData ParseObjIndex(const std::string& p_source);
 			glm::vec2 ParseObjVec2(const std::string& p_line);
 			glm::vec3 ParseObjVec3(const std::string& p_line);

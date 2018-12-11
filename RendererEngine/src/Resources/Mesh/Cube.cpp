@@ -22,14 +22,14 @@ void RenderEngine::PrimitiveMesh::Cube::Setup()
 
 void RenderEngine::PrimitiveMesh::Cube::InitCubePositions()
 {
-	m_positions[0] = glm::vec3(-0.5, +0.5, -0.5); // A,V,O
-	m_positions[1] = glm::vec3(-0.5, +0.5, +0.5); // C,X,E
-	m_positions[2] = glm::vec3(+0.5, +0.5, +0.5); // D,S,F
-	m_positions[3] = glm::vec3(+0.5, +0.5, -0.5); // B,Q,P
-	m_positions[4] = glm::vec3(-0.5, -0.5, -0.5); // U,K,M
-	m_positions[5] = glm::vec3(-0.5, -0.5, +0.5); // W,G,I
-	m_positions[6] = glm::vec3(+0.5, -0.5, +0.5); // T,H,J
-	m_positions[7] = glm::vec3(+0.5, -0.5, -0.5); // R,L,N
+	m_positions[0] = glm::vec3(-0.5, +0.5, -0.5);
+	m_positions[1] = glm::vec3(-0.5, +0.5, +0.5);
+	m_positions[2] = glm::vec3(+0.5, +0.5, +0.5);
+	m_positions[3] = glm::vec3(+0.5, +0.5, -0.5);
+	m_positions[4] = glm::vec3(-0.5, -0.5, -0.5);
+	m_positions[5] = glm::vec3(-0.5, -0.5, +0.5);
+	m_positions[6] = glm::vec3(+0.5, -0.5, +0.5);
+	m_positions[7] = glm::vec3(+0.5, -0.5, -0.5);
 }
 
 void RenderEngine::PrimitiveMesh::Cube::InitCubeTextureCoordinates()
@@ -52,27 +52,21 @@ void RenderEngine::PrimitiveMesh::Cube::InitCubeNormals()
 
 void RenderEngine::PrimitiveMesh::Cube::InitCubeVertices()
 {
-	// Top
 	CreateTriangle(3, 1, 2, 3, 0, 2, 3);
 	CreateTriangle(3, 0, 1, 3, 1, 0, 3);
 
-	// Front
 	CreateTriangle(2, 5, 6, 3, 0, 2, 5);
 	CreateTriangle(2, 1, 5, 3, 1, 0, 5);
 
-	// Bottom
 	CreateTriangle(4, 6, 5, 3, 0, 2, 2);
 	CreateTriangle(4, 7, 6, 3, 1, 0, 2);
 
-	// Back
 	CreateTriangle(0, 7, 4, 3, 0, 2, 4);
 	CreateTriangle(0, 3, 7, 3, 1, 0, 4);
 
-	// Left
 	CreateTriangle(1, 4, 5, 3, 0, 2, 0);
 	CreateTriangle(1, 0, 4, 3, 1, 0, 0);
 
-	// Right
 	CreateTriangle(3, 6, 7, 3, 0, 2, 1);
 	CreateTriangle(3, 2, 6, 3, 1, 0, 1);
 }

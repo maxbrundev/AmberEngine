@@ -4,15 +4,15 @@
 
 RenderEngine::Resources::Shader::Shader(const std::string& p_filePath) : m_sourceFile(p_filePath), m_rendererID(0)
 {
-	ShaderProgramSource source = ParseShader(std::move(p_filePath));
+	ShaderProgramSource source = ParseShader(p_filePath);
 	m_rendererID = CreateShader(source.vertexSource, source.fragmentSource);
 }
 
 RenderEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const std::string& p_fragmentShader)
 	: m_vertexFilePath(p_vertexShader), m_fragmentFilePath(p_fragmentShader), m_rendererID(0)
 {
-	const std::string vertexShaderSource = Parse(std::move(p_vertexShader));
-	const std::string fragmentShaderSource = Parse(std::move(p_fragmentShader));
+	const std::string vertexShaderSource = Parse(p_vertexShader);
+	const std::string fragmentShaderSource = Parse(p_fragmentShader);
 
 	m_rendererID = CreateShader(vertexShaderSource, fragmentShaderSource);
 }
@@ -20,9 +20,9 @@ RenderEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const
 RenderEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const std::string& p_geometryShader, const std::string& p_fragmentShader)
 	:m_vertexFilePath(p_vertexShader), m_geometryFilePath(p_geometryShader), m_fragmentFilePath(p_fragmentShader), m_rendererID(0)
 {
-	const std::string vertexShaderSource = Parse(std::move(p_vertexShader));
-	const std::string geometryShaderSource = Parse(std::move(p_geometryShader));
-	const std::string fragmentShaderSource = Parse(std::move(p_fragmentShader));
+	const std::string vertexShaderSource = Parse(p_vertexShader);
+	const std::string geometryShaderSource = Parse(p_geometryShader);
+	const std::string fragmentShaderSource = Parse(p_fragmentShader);
 	
 	GLCall(const unsigned int program = glCreateProgram());
 
@@ -225,7 +225,7 @@ void RenderEngine::Resources::Shader::Recompile()
 void RenderEngine::Resources::Shader::LoadFromFile(const std::string& p_path)
 {
 	m_sourceFile = p_path;
-	ShaderProgramSource source = ParseShader(std::move(p_path));
+	ShaderProgramSource source = ParseShader(p_path);
 	m_rendererID = CreateShader(source.vertexSource, source.fragmentSource);
 }
 

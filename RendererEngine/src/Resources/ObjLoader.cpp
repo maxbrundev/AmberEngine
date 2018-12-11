@@ -2,28 +2,6 @@
 
 #include "Resources/ObjLoader.h"
 
-void RenderEngine::Resources::Model::CalculateNormals()
-{
-	for (int i = 0; i < indices.size(); i += 3)
-	{
-		const int i0 = indices[i];
-		const int i1 = indices[i + 1];
-		const int i2 = indices[i + 2];
-
-		glm::vec3 v1 = positionsIndices[i1] - positionsIndices[i0];
-		glm::vec3 v2 = positionsIndices[i2] - positionsIndices[i0];
-
-		const glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
-
-		normalsIndices[i0] += normal;
-		normalsIndices[i1] += normal;
-		normalsIndices[i2] += normal;
-	}
-
-	for (int i = 0; i < positionsIndices.size(); i++)
-		normalsIndices[i] = glm::normalize(normalsIndices[i]);
-}
-
 RenderEngine::Resources::ObjLoader::ObjLoader(const std::string& p_filePath) : hasUVs(false), hasNormals(false)
 {
 	ParseFile(p_filePath);
@@ -144,7 +122,7 @@ RenderEngine::Resources::Model RenderEngine::Resources::ObjLoader::LoadModel()
 
 	if (!hasNormals)
 	{
-		normalModel.CalculateNormals();
+		CalculateNormals(normalModel);
 
 		for (int i = 0; i < finalModel.positionsIndices.size(); i++)
 			finalModel.normalsIndices[i] = normalModel.normalsIndices[indexMap[i]];
@@ -180,28 +158,17 @@ float RenderEngine::Resources::ObjLoader::ParseObjFloatValue(const std::string& 
 
 std::vector<std::string> RenderEngine::Resources::ObjLoader::ParseString(const std::string& p_source, char p_character)
 {
-	std::vector<std::string> data;
+	std::vector<std::string> result;
 
-	const char* source = p_source.c_str();
-	const unsigned int strLength = p_source.length();
-	unsigned int start = 0;
-	unsigned int end = 0;
+	std::stringstream ss(p_source);
+	std::string data;
 
-	while (end <= strLength)
+	while (std::getline(ss, data, p_character))
 	{
-		while (end <= strLength)
-		{
-			if (source[end] == p_character)
-				break;
-			end++;
-		}
-
-		data.push_back(p_source.substr(start, end - start));
-		start = end + 1;
-		end = start;
+		result.push_back(data);
 	}
 
-	return data;
+	return result;
 }
 
 unsigned int RenderEngine::Resources::ObjLoader::FindLastVertexIndex(const std::vector<IndexData*>& p_indexLookup, const IndexData* p_currentIndex, const Model& p_result)
@@ -295,6 +262,28 @@ void RenderEngine::Resources::ObjLoader::CreateObjFace(const std::string& p_line
 		this->m_indices.push_back(ParseObjIndex(data[3]));
 		this->m_indices.push_back(ParseObjIndex(data[4]));
 	}
+}
+
+void RenderEngine::Resources::ObjLoader::CalculateNormals(Model & p_model)
+{
+	for (int i = 0; i < p_model.indices.size(); i += 3)
+	{
+		const int i0 = p_model.indices[i];
+		const int i1 = p_model.indices[i + 1];
+		const int i2 = p_model.indices[i + 2];
+
+		glm::vec3 v1 = p_model.positionsIndices[i1] - p_model.positionsIndices[i0];
+		glm::vec3 v2 = p_model.positionsIndices[i2] - p_model.positionsIndices[i0];
+
+		const glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+
+		p_model.normalsIndices[i0] += normal;
+		p_model.normalsIndices[i1] += normal;
+		p_model.normalsIndices[i2] += normal;
+	}
+
+	for (int i = 0; i < p_model.positionsIndices.size(); i++)
+		p_model.normalsIndices[i] = glm::normalize(p_model.normalsIndices[i]);
 }
 
 glm::vec2 RenderEngine::Resources::ObjLoader::ParseObjVec2(const std::string& p_line)

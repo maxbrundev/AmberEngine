@@ -108,6 +108,12 @@
     <ClInclude Include="ImGui\imgui_impl_glfw_gl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Resources\AssimpMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resources\AssimpModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -188,6 +194,12 @@
     <ClCompile Include="ImGui\imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Resources\AssimpMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\AssimpModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\colors.fs" />
@@ -212,6 +224,9 @@
     <None Include="res\shaders\normal_debug.vs" />
     <None Include="res\shaders\normal_debug.fs" />
     <None Include="res\shaders\normal_debug.gs" />
+    <None Include="res\shaders\instancing.fs" />
+    <None Include="res\shaders\instancing.vs" />
+    <None Include="res\shaders\lambert.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container2.png">
