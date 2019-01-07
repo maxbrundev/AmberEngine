@@ -12,7 +12,7 @@ RenderEngine::Systems::Application::Application()
 void RenderEngine::Systems::Application::Setup()
 {
 	Resources::Shader& lightingShader = m_renderingManager->GetResourcesManager()->LoadShaderFiles("DirectionalLight", "directional_lighting.vs", "directional_lighting.fs");
-	Resources::Texture& diffuseMap = m_renderingManager->GetResourcesManager()->LoadTexture("uvChecker", "Primitive/default.png");
+	//Resources::Texture& diffuseMap = m_renderingManager->GetResourcesManager()->LoadTexture("uvChecker", "Primitive/default.png");
 
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("material.texture_diffuse1", 0);
@@ -30,7 +30,7 @@ void RenderEngine::Systems::Application::Run()
 	float UvY = 1.0f;
 	glm::vec3	lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
 
-	Resources::AssimpModel model("res/Mesh/CornellBox/CornellBox-Glossy-Floor.obj");
+	Resources::AssimpModel model("res/Mesh/nanosuit/nanosuit.obj");
 
 	while (m_renderingManager->IsRunning())
 	{
@@ -58,7 +58,7 @@ void RenderEngine::Systems::Application::Run()
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvXValue", UvX);
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
-		m_renderingManager->GetResourcesManager()->GetTexture("uvChecker").Bind();
+		//m_renderingManager->GetResourcesManager()->GetTexture("uvChecker").Bind();
 
 		model.Draw();
 		
