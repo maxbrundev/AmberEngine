@@ -5,14 +5,26 @@
 
 #define CHUNK_SIZE 16
 #define CHUNK_ELEMENTS_COUNT CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE
+
 namespace AmberCraft
 {
 	class Chunk
 	{
+		struct ChunksNeighbors
+		{
+			Chunk* left		= nullptr;
+			Chunk* right	= nullptr;
+			Chunk* bot		= nullptr;
+			Chunk* top		= nullptr;
+			Chunk* back		= nullptr;
+			Chunk* front	= nullptr;
+		};
+
 	public:
-		ChunkBuffers chunkBuffers;
-		BlockData blocks[CHUNK_ELEMENTS_COUNT];
-		
+		BlockData m_blocks[CHUNK_ELEMENTS_COUNT];
+		ChunkBuffers m_chunkBuffers;
+		ChunksNeighbors m_chunksNeighbors;
+
 	private:
 		uint16_t m_blocksToRenderCount;
 		
@@ -24,6 +36,8 @@ namespace AmberCraft
 		void FillChunkRandomly(BlockType p_blockType = BlockType::DIRT);
 		void Update();
 		void Draw();
+
+		void SetChunksNeighbors(Chunk* p_left, Chunk* p_right, Chunk* p_top, Chunk* p_bot, Chunk* p_front, Chunk* p_back);
 
 		bool IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z);
 		bool IsInChunk(uint8_t p_index);

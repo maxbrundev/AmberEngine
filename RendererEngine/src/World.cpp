@@ -26,8 +26,8 @@ void AmberCraft::World::Draw(RenderEngine::Managers::RenderingManager& p_renderi
 	
 	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
 	{
-		auto coordinates = From1Dto3D(i);
-		chunkShader.SetUniformMat4("model", glm::translate(glm::mat4(1.0f), glm::vec3(coordinates[0] * CHUNK_SIZE, coordinates[1] * CHUNK_SIZE, coordinates[2] * CHUNK_SIZE)));
+		auto chunkCoordinates = From1Dto3D(i);
+		chunkShader.SetUniformMat4("model", glm::translate(glm::mat4(1.0f), glm::vec3(chunkCoordinates[0] * CHUNK_SIZE, chunkCoordinates[1] * CHUNK_SIZE, chunkCoordinates[2] * CHUNK_SIZE)));
 		m_chunks[i].Draw();
 	}
 }
@@ -40,4 +40,9 @@ std::array<uint8_t, 3> AmberCraft::World::From1Dto3D(uint16_t p_index)
 	result[1] = p_index / WORLD_SIZE;
 	result[0] = p_index % WORLD_SIZE;
 	return result;
+}
+
+uint16_t AmberCraft::World::From3Dto1D(uint8_t p_x, uint8_t p_y, uint8_t p_z)
+{
+	return p_x + p_y * WORLD_SIZE + p_z * WORLD_SIZE * WORLD_SIZE;
 }

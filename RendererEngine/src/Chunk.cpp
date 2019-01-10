@@ -11,7 +11,7 @@ void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 {
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		blocks[i].type = p_blockType;
+		m_blocks[i].type = p_blockType;
 	}
 }
 
@@ -22,21 +22,31 @@ void AmberCraft::Chunk::FillChunkRandomly(BlockType p_blockType)
 
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		blocks[i].type = static_cast<BlockType>(distribution(generator));
+		m_blocks[i].type = static_cast<BlockType>(distribution(generator));
 	}
 }
 
 void AmberCraft::Chunk::Update()
 {
 	std::vector<GLuint> blocksToRender = FillBlocksToRender();
-	chunkBuffers.SendBlocksToGPU(blocksToRender);
+	m_chunkBuffers.SendBlocksToGPU(blocksToRender);
 
 	m_blocksToRenderCount = static_cast<uint16_t>(blocksToRender.size());
 }
 
 void AmberCraft::Chunk::Draw()
 {
-	chunkBuffers.DrawChunk(m_blocksToRenderCount);
+	m_chunkBuffers.DrawChunk(m_blocksToRenderCount);
+}
+
+void AmberCraft::Chunk::SetChunksNeighbors(Chunk* p_left, Chunk* p_right, Chunk* p_top, Chunk* p_bot, Chunk* p_front, Chunk* p_back)
+{
+	m_chunksNeighbors.left	= p_left;
+	m_chunksNeighbors.right = p_right;
+	m_chunksNeighbors.top	= p_top;
+	m_chunksNeighbors.bot	= p_bot;
+	m_chunksNeighbors.front = p_front;
+	m_chunksNeighbors.back	= p_back;
 }
 
 std::vector<GLuint> AmberCraft::Chunk::FillBlocksToRender()
@@ -60,7 +70,7 @@ std::vector<GLuint> AmberCraft::Chunk::FillBlocksToRender()
 
 		if (!IsBlockOccluded(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2]))
 		{
-			blockData.bytes[3] = static_cast<uint8_t>(blocks[From3Dto1D(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2])].type);
+			blockData.bytes[3] = static_cast<uint8_t>(m_blocks[From3Dto1D(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2])].type);
 			blocksToRender.push_back(blockData.data);
 		}
 	}
@@ -68,15 +78,14 @@ std::vector<GLuint> AmberCraft::Chunk::FillBlocksToRender()
 	return blocksToRender;
 }
 
-
 bool AmberCraft::Chunk::IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z)
 {
-	bool HasRightNeighboor	= IsInChunk(p_x + 1) && blocks[From3Dto1D(p_x + 1, p_y + 0, p_z + 0)].type != BlockType::AIR;
-	bool HasLeftNeighboor	= IsInChunk(p_x - 1) && blocks[From3Dto1D(p_x - 1, p_y + 0, p_z + 0)].type != BlockType::AIR;
-	bool HasTopNeighboor	= IsInChunk(p_y + 1) && blocks[From3Dto1D(p_x + 0, p_y + 1, p_z + 0)].type != BlockType::AIR;
-	bool HasBottomNeighboor = IsInChunk(p_y - 1) && blocks[From3Dto1D(p_x + 0, p_y - 1, p_z + 0)].type != BlockType::AIR;
-	bool HasFrontNeighboor	= IsInChunk(p_z + 1) && blocks[From3Dto1D(p_x + 0, p_y + 0, p_z + 1)].type != BlockType::AIR;
-	bool HasBackNeighboor	= IsInChunk(p_z - 1) && blocks[From3Dto1D(p_x + 0, p_y + 0, p_z - 1)].type != BlockType::AIR;
+	bool HasRightNeighboor	= IsInChunk(p_x + 1) && m_blocks[From3Dto1D(p_x + 1, p_y + 0, p_z + 0)].type != BlockType::AIR;
+	bool HasLeftNeighboor	= IsInChunk(p_x - 1) && m_blocks[From3Dto1D(p_x - 1, p_y + 0, p_z + 0)].type != BlockType::AIR;
+	bool HasTopNeighboor	= IsInChunk(p_y + 1) && m_blocks[From3Dto1D(p_x + 0, p_y + 1, p_z + 0)].type != BlockType::AIR;
+	bool HasBottomNeighboor = IsInChunk(p_y - 1) && m_blocks[From3Dto1D(p_x + 0, p_y - 1, p_z + 0)].type != BlockType::AIR;
+	bool HasFrontNeighboor	= IsInChunk(p_z + 1) && m_blocks[From3Dto1D(p_x + 0, p_y + 0, p_z + 1)].type != BlockType::AIR;
+	bool HasBackNeighboor	= IsInChunk(p_z - 1) && m_blocks[From3Dto1D(p_x + 0, p_y + 0, p_z - 1)].type != BlockType::AIR;
 
 	return (HasRightNeighboor && HasLeftNeighboor && HasTopNeighboor && HasBottomNeighboor && HasFrontNeighboor && HasBackNeighboor);
 }

@@ -5,9 +5,9 @@ namespace AmberCraft
 	class ChunkBuffers
 	{
 	private:
-		GLuint vao{};
-		GLuint vbo{};
-		GLuint ssbo{};
+		GLuint m_vao{};
+		GLuint m_vbo{};
+		GLuint m_ssbo{};
 
 	public:
 		ChunkBuffers();
