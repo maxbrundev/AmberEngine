@@ -111,6 +111,24 @@
     <ClInclude Include="include\Resources\AssimpModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\BlockData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BlockGeometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BlockType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Chunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ChunkBuffers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -194,6 +212,18 @@
     <ClCompile Include="src\Resources\AssimpModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BlockGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ChunkBuffers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\colors.fs" />
@@ -221,6 +251,8 @@
     <None Include="res\shaders\instancing.fs" />
     <None Include="res\shaders\instancing.vs" />
     <None Include="res\shaders\lambert.glsl" />
+    <None Include="res\shaders\chunk.vs" />
+    <None Include="res\shaders\chunk.fs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container2.png">

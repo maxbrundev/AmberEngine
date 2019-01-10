@@ -198,10 +198,15 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClInclude Include="ImGui\stb_rect_pack.h" />
     <ClInclude Include="ImGui\stb_textedit.h" />
     <ClInclude Include="ImGui\stb_truetype.h" />
+    <ClInclude Include="include\BlockData.h" />
+    <ClInclude Include="include\BlockGeometry.h" />
+    <ClInclude Include="include\BlockType.h" />
     <ClInclude Include="include\Buffers\IndexBuffer.h" />
     <ClInclude Include="include\Buffers\VertexArray.h" />
     <ClInclude Include="include\Buffers\VertexBuffer.h" />
     <ClInclude Include="include\Buffers\VertexBufferLayout.h" />
+    <ClInclude Include="include\Chunk.h" />
+    <ClInclude Include="include\ChunkBuffers.h" />
     <ClInclude Include="include\Context\Device.h" />
     <ClInclude Include="include\Context\Driver.h" />
     <ClInclude Include="include\Context\Icontext.h" />
@@ -221,6 +226,7 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClInclude Include="include\Resources\Texture.h" />
     <ClInclude Include="include\Systems\Application.h" />
     <ClInclude Include="include\Utils\Time.h" />
+    <ClInclude Include="include\World.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="include\Managers\UIManager.h" />
   </ItemGroup>
@@ -235,10 +241,13 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RendererEngine.cpp" />
+    <ClCompile Include="src\BlockGeometry.cpp" />
     <ClCompile Include="src\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Buffers\VertexBufferLayout.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\ChunkBuffers.cpp" />
     <ClCompile Include="src\Context\Device.cpp" />
     <ClCompile Include="src\Context\Driver.cpp" />
     <ClCompile Include="src\Debug\GLDebug.cpp" />
@@ -257,6 +266,7 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClCompile Include="src\Resources\Texture.cpp" />
     <ClCompile Include="src\Systems\Application.cpp" />
     <ClCompile Include="src\Utils\Time.cpp" />
+    <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -264,6 +274,8 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <None Include="res\shaders\basic_lighting_viewspace.vs" />
     <None Include="res\shaders\basic_lighting_worldspace.fs" />
     <None Include="res\shaders\basic_lighting_worldspace.vs" />
+    <None Include="res\shaders\chunk.fs" />
+    <None Include="res\shaders\chunk.vs" />
     <None Include="res\shaders\colors.fs" />
     <None Include="res\shaders\colors.vs" />
     <None Include="res\shaders\directional_lighting.fs" />
