@@ -12,6 +12,8 @@ out vec3 FragPos;
 out vec2 TexCoord;
 out vec3 Normal;
 
+out flat uint blockType;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -31,6 +33,7 @@ vec3 CalculateBlockOffset()
 
 void main()
 {
+	blockType = (data[gl_InstanceID] >> 24) % 16;
 	BlockOffset = CalculateBlockOffset();
 	FragPos = vec3(model * vec4(aPos + BlockOffset - chunkHalfSize, 1.0));
 
