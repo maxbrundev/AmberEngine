@@ -10,7 +10,17 @@ namespace AmberCraft
 {
 	class Chunk
 	{
-		struct ChunksNeighbors
+		enum class ChunkSides
+		{
+			LEFT,
+			RIGHT,
+			BOT,
+			TOP,
+			BACK,
+			FRONT
+		};
+
+		struct ChunkNeighbors
 		{
 			Chunk* left		= nullptr;
 			Chunk* right	= nullptr;
@@ -21,19 +31,27 @@ namespace AmberCraft
 		};
 
 	public:
-		BlockData m_blocks[CHUNK_ELEMENTS_COUNT];
-		ChunkBuffers m_chunkBuffers;
-		ChunksNeighbors m_chunksNeighbors;
-
-	private:
-		uint16_t m_blocksToRenderCount;
+		BlockData blocks[CHUNK_ELEMENTS_COUNT];
 		
+	private:
+		ChunkBuffers m_chunkBuffers;
+		ChunkNeighbors m_chunksNeighbors;
+		uint16_t m_blocksToRenderCount;
+		bool m_isOccluded;
+
 	public:
 		Chunk();
 		~Chunk() = default;
 
 		void FillChunk(BlockType p_blockType = BlockType::DIRT);
 		void FillChunkRandomly(BlockType p_blockType = BlockType::DIRT);
+
+		//Verify if chunk must be rendered
+		void CheckNeighbors();
+		bool IsOccluded();
+
+		BlockData* GetBlock(uint8_t p_x, uint8_t p_y, uint8_t p_z, ChunkSides p_chunkSide);
+
 		void Update();
 		void Draw();
 

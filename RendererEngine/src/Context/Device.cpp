@@ -55,7 +55,7 @@ void RenderEngine::Core::Device::Setup()
 	glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 	glfwMakeContextCurrent(m_window);
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSwapInterval(0);
+	glfwSwapInterval(0);
 
 	//if (!m_errors.empty())
 		//m_state = State::INIT;

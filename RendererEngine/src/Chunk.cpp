@@ -11,7 +11,11 @@ void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 {
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		m_blocks[i].type = p_blockType;
+		/*auto chunksCoordinates = From1Dto3D(i);
+		bool isAir = chunksCoordinates[0] > chunksCoordinates[1];
+		m_blocks[i].type = static_cast<BlockType>(isAir ? 0 : 1);*/
+
+		blocks[i].type = p_blockType;
 	}
 }
 
@@ -22,7 +26,64 @@ void AmberCraft::Chunk::FillChunkRandomly(BlockType p_blockType)
 
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		m_blocks[i].type = static_cast<BlockType>(distribution(generator));
+		blocks[i].type = static_cast<BlockType>(distribution(generator));
+	}
+}
+
+void AmberCraft::Chunk::CheckNeighbors()
+{
+	m_isOccluded = (m_chunksNeighbors.left
+		&& m_chunksNeighbors.right
+		&& m_chunksNeighbors.bot
+		&& m_chunksNeighbors.top
+		&& m_chunksNeighbors.back
+		&&  m_chunksNeighbors.front);
+}
+
+bool AmberCraft::Chunk::IsOccluded()
+{
+	return m_isOccluded;
+}
+
+AmberCraft::BlockData* AmberCraft::Chunk::GetBlock(uint8_t p_x, uint8_t p_y, uint8_t p_z, ChunkSides p_chunkSide)
+{
+	const int min = 0;
+	const int max = CHUNK_SIZE - 1;
+
+	switch (p_chunkSide)
+	{
+	case ChunkSides::LEFT:
+		return (int(p_x - 1) >= min)
+		? &blocks[From3Dto1D(p_x - 1, p_y, p_z)] 
+		: (m_chunksNeighbors.left ? &m_chunksNeighbors.left->blocks[From3Dto1D(max, p_y, p_z)] : nullptr);
+
+	case ChunkSides::RIGHT:
+		return (int(p_x + 1) <= max)
+		? &blocks[From3Dto1D(p_x + 1, p_y, p_z)]
+		: (m_chunksNeighbors.right ? &m_chunksNeighbors.right->blocks[From3Dto1D(min, p_y, p_z)] : nullptr);
+
+	case ChunkSides::BOT:
+		return (int(p_y - 1) >= min)
+		? &blocks[From3Dto1D(p_x, p_y - 1, p_z)]
+		: (m_chunksNeighbors.bot ? &m_chunksNeighbors.bot->blocks[From3Dto1D(p_x, max, p_z)] : nullptr);
+
+	case ChunkSides::TOP:
+		return (int(p_y + 1) <= max)
+			? &blocks[From3Dto1D(p_x, p_y + 1, p_z)]
+			: (m_chunksNeighbors.top ? &m_chunksNeighbors.top->blocks[From3Dto1D(p_x, min, p_z)] : nullptr);
+
+	case ChunkSides::BACK:
+		return (int(p_z - 1) >= min)
+			? &blocks[From3Dto1D(p_x, p_y, p_z - 1)]
+			: (m_chunksNeighbors.back ? &m_chunksNeighbors.back->blocks[From3Dto1D(p_x, p_y, max)] : nullptr);
+
+	case ChunkSides::FRONT:
+		return (int(p_z + 1) <= max)
+			? &blocks[From3Dto1D(p_x, p_y, p_z + 1)]
+			: (m_chunksNeighbors.front ? &m_chunksNeighbors.front->blocks[From3Dto1D(p_x, p_y, min)] : nullptr);
+
+	default:
+		return nullptr;
 	}
 }
 
@@ -30,8 +91,9 @@ void AmberCraft::Chunk::Update()
 {
 	std::vector<GLuint> blocksToRender = FillBlocksToRender();
 	m_chunkBuffers.SendBlocksToGPU(blocksToRender);
-
 	m_blocksToRenderCount = static_cast<uint16_t>(blocksToRender.size());
+
+	CheckNeighbors();
 }
 
 void AmberCraft::Chunk::Draw()
@@ -70,8 +132,10 @@ std::vector<GLuint> AmberCraft::Chunk::FillBlocksToRender()
 
 		if (!IsBlockOccluded(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2]))
 		{
-			blockData.bytes[3] = static_cast<uint8_t>(m_blocks[From3Dto1D(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2])].type);
-			blocksToRender.push_back(blockData.data);
+			blockData.bytes[3] = static_cast<uint8_t>(blocks[From3Dto1D(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2])].type);
+
+			if (blockData.bytes[3] != 0)
+				blocksToRender.push_back(blockData.data);
 		}
 	}
 
@@ -80,14 +144,19 @@ std::vector<GLuint> AmberCraft::Chunk::FillBlocksToRender()
 
 bool AmberCraft::Chunk::IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z)
 {
-	bool HasRightNeighboor	= IsInChunk(p_x + 1) && m_blocks[From3Dto1D(p_x + 1, p_y + 0, p_z + 0)].type != BlockType::AIR;
-	bool HasLeftNeighboor	= IsInChunk(p_x - 1) && m_blocks[From3Dto1D(p_x - 1, p_y + 0, p_z + 0)].type != BlockType::AIR;
-	bool HasTopNeighboor	= IsInChunk(p_y + 1) && m_blocks[From3Dto1D(p_x + 0, p_y + 1, p_z + 0)].type != BlockType::AIR;
-	bool HasBottomNeighboor = IsInChunk(p_y - 1) && m_blocks[From3Dto1D(p_x + 0, p_y - 1, p_z + 0)].type != BlockType::AIR;
-	bool HasFrontNeighboor	= IsInChunk(p_z + 1) && m_blocks[From3Dto1D(p_x + 0, p_y + 0, p_z + 1)].type != BlockType::AIR;
-	bool HasBackNeighboor	= IsInChunk(p_z - 1) && m_blocks[From3Dto1D(p_x + 0, p_y + 0, p_z - 1)].type != BlockType::AIR;
+	BlockData* left		= GetBlock(p_x, p_y, p_z, ChunkSides::LEFT);
+	BlockData* right	= GetBlock(p_x, p_y, p_z, ChunkSides::RIGHT);
+	BlockData* top		= GetBlock(p_x, p_y, p_z, ChunkSides::TOP);
+	BlockData* bot		= GetBlock(p_x, p_y, p_z, ChunkSides::BOT);
+	BlockData* front	= GetBlock(p_x, p_y, p_z, ChunkSides::FRONT);
+	BlockData* back		= GetBlock(p_x, p_y, p_z, ChunkSides::BACK);
 
-	return (HasRightNeighboor && HasLeftNeighboor && HasTopNeighboor && HasBottomNeighboor && HasFrontNeighboor && HasBackNeighboor);
+	return (left &&  left->type		!= BlockType::AIR
+		&& right &&  right->type	!= BlockType::AIR
+		&& top &&  top->type		!= BlockType::AIR
+		&& bot &&  bot->type		!= BlockType::AIR
+		&& front &&  front->type	!= BlockType::AIR
+		&& back &&  back->type		!= BlockType::AIR);
 }
 
 bool AmberCraft::Chunk::IsInChunk(uint8_t p_index)
