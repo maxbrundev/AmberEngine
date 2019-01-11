@@ -22,7 +22,7 @@ void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 	{
 		for (uint16_t z = 0; z < CHUNK_SIZE; ++z)
 		{
-			double heightScale = 8 + noise.GetPerlin(x * 10, z * 10) * 8;
+			double heightScale = 8 + noise.GetPerlin(x * 17, z * 11) * 8;
 
 			//std::cout << "Height: " << heightScale << std::endl;
 			for (uint16_t y = heightScale; y > 0; --y)
