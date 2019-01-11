@@ -1,22 +1,45 @@
 #include "pch.h"
 
 #include "Chunk.h"
+#include "Perlin.h"
 
 AmberCraft::Chunk::Chunk()
 {
-	FillChunk();
 }
 
 void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 {
+	//temporary perlin
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		/*auto chunksCoordinates = From1Dto3D(i);
+		blocks[i].type = BlockType::AIR;
+	}
+
+	FastNoise noise;
+	noise.SetSeed(428);
+
+	for (uint16_t x = 0; x < CHUNK_SIZE; ++x)
+	{
+		for (uint16_t z = 0; z < CHUNK_SIZE; ++z)
+		{
+			double heightScale = 8 + noise.GetPerlin(x * 10, z * 10) * 8;
+
+			//std::cout << "Height: " << heightScale << std::endl;
+			for (uint16_t y = heightScale; y > 0; --y)
+			{
+				blocks[From3Dto1D(x, y, z)].type = p_blockType;
+			}
+		}
+	}
+
+	/*for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
+	{
+		auto chunksCoordinates = From1Dto3D(i);
 		bool isAir = chunksCoordinates[0] > chunksCoordinates[1];
-		m_blocks[i].type = static_cast<BlockType>(isAir ? 0 : 1);*/
+		m_blocks[i].type = static_cast<BlockType>(isAir ? 0 : 1);
 
 		blocks[i].type = p_blockType;
-	}
+	}*/
 }
 
 void AmberCraft::Chunk::FillChunkRandomly(BlockType p_blockType)
@@ -93,7 +116,7 @@ void AmberCraft::Chunk::Update()
 	m_chunkBuffers.SendBlocksToGPU(blocksToRender);
 	m_blocksToRenderCount = static_cast<uint16_t>(blocksToRender.size());
 
-	CheckNeighbors();
+	//CheckNeighbors();
 }
 
 void AmberCraft::Chunk::Draw()
@@ -129,13 +152,11 @@ std::vector<GLuint> AmberCraft::Chunk::FillBlocksToRender()
 		blockData.bytes[0] = static_cast<uint8_t>(i % CHUNK_SIZE);
 		blockData.bytes[1] = static_cast<uint8_t>((i / CHUNK_SIZE) % CHUNK_SIZE);
 		blockData.bytes[2] = static_cast<uint8_t>(i / (CHUNK_SIZE * CHUNK_SIZE));
+		blockData.bytes[3] = static_cast<uint8_t>(blocks[From3Dto1D(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2])].type);
 
-		if (!IsBlockOccluded(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2]))
+		if (!IsBlockOccluded(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2]) && blockData.bytes[3] != 0)
 		{
-			blockData.bytes[3] = static_cast<uint8_t>(blocks[From3Dto1D(blockCoordinates[0], blockCoordinates[1], blockCoordinates[2])].type);
-
-			if (blockData.bytes[3] != 0)
-				blocksToRender.push_back(blockData.data);
+			blocksToRender.push_back(blockData.data);
 		}
 	}
 
@@ -151,12 +172,20 @@ bool AmberCraft::Chunk::IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z)
 	BlockData* front	= GetBlock(p_x, p_y, p_z, ChunkSides::FRONT);
 	BlockData* back		= GetBlock(p_x, p_y, p_z, ChunkSides::BACK);
 
-	return (left &&  left->type		!= BlockType::AIR
+	return (!left ||  left->type != BlockType::AIR)
+		&& (!right || right->type != BlockType::AIR)
+		&& (!top || top->type != BlockType::AIR)
+		&& (!bot || bot->type != BlockType::AIR)
+		&& (!front || front->type != BlockType::AIR)
+		&& (!back || back->type != BlockType::AIR);
+
+	//DRAW WORLD WITH BOUNDS
+	/*return (left &&  left->type		!= BlockType::AIR
 		&& right &&  right->type	!= BlockType::AIR
 		&& top &&  top->type		!= BlockType::AIR
 		&& bot &&  bot->type		!= BlockType::AIR
 		&& front &&  front->type	!= BlockType::AIR
-		&& back &&  back->type		!= BlockType::AIR);
+		&& back &&  back->type		!= BlockType::AIR);*/
 }
 
 bool AmberCraft::Chunk::IsInChunk(uint8_t p_index)

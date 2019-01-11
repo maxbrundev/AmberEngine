@@ -217,6 +217,7 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClInclude Include="include\Managers\ResourcesManager.h" />
     <ClInclude Include="include\Managers\WindowManager.h" />
     <ClInclude Include="include\Maths\MathGLM.h" />
+    <ClInclude Include="include\Perlin.h" />
     <ClInclude Include="include\Resources\AssimpMesh.h" />
     <ClInclude Include="include\Resources\AssimpModel.h" />
     <ClInclude Include="include\Resources\Mesh.h" />
@@ -257,6 +258,7 @@ copy /Y $(SolutionDir)Dependencies\assimp\bin\$(Platform)\assimp-vc140-mt.dll $(
     <ClCompile Include="src\Managers\ResourcesManager.cpp" />
     <ClCompile Include="src\Managers\UIManager.cpp" />
     <ClCompile Include="src\Managers\WindowManager.cpp" />
+    <ClCompile Include="src\Perlin.cpp" />
     <ClCompile Include="src\Resources\AssimpMesh.cpp" />
     <ClCompile Include="src\Resources\AssimpModel.cpp" />
     <ClCompile Include="src\Resources\Mesh.cpp" />

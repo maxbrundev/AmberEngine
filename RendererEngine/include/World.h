@@ -22,6 +22,7 @@ namespace AmberCraft
 		bool IsChunkOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z);
 		bool IsInWorld(uint8_t p_index);
 
+		void GenerateWorld();
 		void Draw(RenderEngine::Managers::RenderingManager& p_renderingManager);
 
 		std::array<uint8_t, 3> From1Dto3D(uint16_t p_index);
