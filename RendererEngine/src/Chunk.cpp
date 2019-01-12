@@ -10,7 +10,7 @@ AmberCraft::Chunk::Chunk()
 void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 {
 	//temporary perlin
-	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
+	/*for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
 		blocks[i].type = BlockType::AIR;
 	}
@@ -30,16 +30,16 @@ void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 				blocks[From3Dto1D(x, y, z)].type = p_blockType;
 			}
 		}
-	}
+	}*/
 
-	/*for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
+	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		auto chunksCoordinates = From1Dto3D(i);
+		/*auto chunksCoordinates = From1Dto3D(i);
 		bool isAir = chunksCoordinates[0] > chunksCoordinates[1];
-		m_blocks[i].type = static_cast<BlockType>(isAir ? 0 : 1);
+		blocks[i].type = static_cast<BlockType>(isAir ? 0 : 1);*/
 
 		blocks[i].type = p_blockType;
-	}*/
+	}
 }
 
 void AmberCraft::Chunk::FillChunkRandomly(BlockType p_blockType)
@@ -186,11 +186,6 @@ bool AmberCraft::Chunk::IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z)
 		&& bot &&  bot->type		!= BlockType::AIR
 		&& front &&  front->type	!= BlockType::AIR
 		&& back &&  back->type		!= BlockType::AIR);*/
-}
-
-bool AmberCraft::Chunk::IsInChunk(uint8_t p_index)
-{
-	return p_index >= 0 && p_index <= CHUNK_SIZE - 1;
 }
 
 std::array<uint8_t, 3> AmberCraft::Chunk::From1Dto3D(uint16_t p_index)

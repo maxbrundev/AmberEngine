@@ -4,8 +4,8 @@
 
 AmberCraft::World::World() : m_chunks(WORLD_ELEMENTS_COUNT)
 {
-	GenerateWorld();
 	SetNeighbors();
+	GenerateWorld();
 
 	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
 	{
@@ -30,18 +30,6 @@ void AmberCraft::World::SetNeighbors()
 	}
 }
 
-bool AmberCraft::World::IsChunkOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z)
-{
-	bool HasRightNeighbor	= IsInWorld(p_x + 1) && m_chunks[From3Dto1D(p_x + 1, p_y + 0, p_z + 0)].blocks->type != BlockType::AIR;
-	bool HasLeftNeighbor	= IsInWorld(p_x - 1) && m_chunks[From3Dto1D(p_x - 1, p_y + 0, p_z + 0)].blocks->type != BlockType::AIR;
-	bool HasTopNeighbor		= IsInWorld(p_y + 1) && m_chunks[From3Dto1D(p_x + 0, p_y + 1, p_z + 0)].blocks->type != BlockType::AIR;
-	bool HasBottomNeighbor	= IsInWorld(p_y - 1) && m_chunks[From3Dto1D(p_x + 0, p_y - 1, p_z + 0)].blocks->type != BlockType::AIR;
-	bool HasFrontNeighbor	= IsInWorld(p_z + 1) && m_chunks[From3Dto1D(p_x + 0, p_y + 0, p_z + 1)].blocks->type != BlockType::AIR;
-	bool HasBackNeighbor	= IsInWorld(p_z - 1) && m_chunks[From3Dto1D(p_x + 0, p_y + 0, p_z - 1)].blocks->type != BlockType::AIR;
-
-	return (HasRightNeighbor && HasLeftNeighbor && HasTopNeighbor && HasBottomNeighbor && HasFrontNeighbor && HasBackNeighbor);
-}
-
 bool AmberCraft::World::IsInWorld(uint8_t p_index)
 {
 	return p_index >= 0 && p_index <= WORLD_SIZE - 1;
@@ -49,18 +37,6 @@ bool AmberCraft::World::IsInWorld(uint8_t p_index)
 
 void AmberCraft::World::GenerateWorld()
 {
-	//PerlinNoise perlin;
-
-	/*for (uint16_t x = 0; x < WORLD_SIZE; ++x)
-	{
-		for (uint16_t z = 0; z < WORLD_SIZE; ++z)
-		{
-			double heightScale = perlin.noise(x, z, 0);
-
-			
-		}
-	}*/
-
 	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
 	{
 		auto[x, y, z] = From1Dto3D(i);
@@ -85,14 +61,6 @@ void AmberCraft::World::Draw(RenderEngine::Managers::RenderingManager& p_renderi
 	
 	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
 	{
-		/*if(!m_chunks[i].IsOccluded())
-		{
-			auto chunkCoordinates = From1Dto3D(i);
-
-			chunkShader.SetUniformMat4("model", glm::translate(glm::mat4(1.0f), glm::vec3(chunkCoordinates[0] * CHUNK_SIZE, chunkCoordinates[1] * CHUNK_SIZE, chunkCoordinates[2] * CHUNK_SIZE)));
-			m_chunks[i].Draw();
-		}*/
-
 		auto [x, y, z] = From1Dto3D(i);
 
 		glm::vec3 chunkPosition(x * CHUNK_SIZE, y * CHUNK_SIZE, z * CHUNK_SIZE);

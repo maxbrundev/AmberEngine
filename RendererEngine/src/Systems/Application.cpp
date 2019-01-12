@@ -13,7 +13,7 @@ RenderEngine::Systems::Application::Application()
 void RenderEngine::Systems::Application::Setup()
 {
 	Resources::Shader& chunkShader = m_renderingManager->GetResourcesManager()->LoadShaderFiles("chunk", "chunk.vs", "chunk.fs");
-	Resources::Texture& texture = m_renderingManager->GetResourcesManager()->LoadTexture("dirt", "planks_oak.png");
+	Resources::Texture& texture = m_renderingManager->GetResourcesManager()->LoadTexture("dirt", "dirt.png");
 }
 
 void RenderEngine::Systems::Application::Run()

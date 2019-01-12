@@ -45,9 +45,10 @@ void AmberCraft::ChunkBuffers::SendBlocksToGPU(const std::vector<GLuint>& p_bloc
 {
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, p_blocksToRender.size() * sizeof(GLuint), p_blocksToRender.data(), GL_DYNAMIC_DRAW);
-	GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
-	memcpy(p, p_blocksToRender.data(), p_blocksToRender.size() * sizeof(GLuint));
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	//GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
+	//memcpy(p, p_blocksToRender.data(), p_blocksToRender.size() * sizeof(GLuint));
+	//glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
 void AmberCraft::ChunkBuffers::DrawChunk(uint16_t p_blocksToRenderCount)

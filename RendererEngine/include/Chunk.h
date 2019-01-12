@@ -58,7 +58,7 @@ namespace AmberCraft
 		void SetChunksNeighbors(Chunk* p_left, Chunk* p_right, Chunk* p_top, Chunk* p_bot, Chunk* p_front, Chunk* p_back);
 
 		bool IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z);
-		bool IsInChunk(uint8_t p_index);
+		
 		std::vector<GLuint> FillBlocksToRender();
 
 		std::array<uint8_t, 3> From1Dto3D(uint16_t p_index);

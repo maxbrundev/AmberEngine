@@ -3,7 +3,7 @@
 #include "Chunk.h"
 #include "Managers/RenderingManager.h"
 
-#define WORLD_SIZE 5
+#define WORLD_SIZE 3
 #define WORLD_ELEMENTS_COUNT WORLD_SIZE * WORLD_SIZE * WORLD_SIZE
 
 namespace AmberCraft
@@ -19,7 +19,6 @@ namespace AmberCraft
 
 		void SetNeighbors();
 
-		bool IsChunkOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z);
 		bool IsInWorld(uint8_t p_index);
 
 		void GenerateWorld();
