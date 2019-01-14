@@ -1,5 +1,3 @@
-#pragma once
-
 // FastNoise.h
 //
 // MIT License
@@ -94,7 +92,7 @@ public:
 
 	// Returns octave count for all fractal noise types
 	int GetFractalOctaves() const { return m_octaves; }
-
+	
 	// Sets octave lacunarity for all fractal noise types
 	// Default: 2.0
 	void SetFractalLacunarity(FN_DECIMAL lacunarity) { m_lacunarity = lacunarity; }

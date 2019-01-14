@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "Chunk.h"
-#include "Perlin.h"
+#include "FastNoise.h"
 
 AmberCraft::Chunk::Chunk()
 {
@@ -9,36 +9,9 @@ AmberCraft::Chunk::Chunk()
 
 void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 {
-	//temporary perlin
-	/*for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
-	{
-		blocks[i].type = BlockType::AIR;
-	}
-
-	FastNoise noise;
-	noise.SetSeed(428);
-
-	for (uint16_t x = 0; x < CHUNK_SIZE; ++x)
-	{
-		for (uint16_t z = 0; z < CHUNK_SIZE; ++z)
-		{
-			double heightScale = 8 + noise.GetPerlin(x * 17, z * 11) * 8;
-
-			//std::cout << "Height: " << heightScale << std::endl;
-			for (uint16_t y = heightScale; y > 0; --y)
-			{
-				blocks[From3Dto1D(x, y, z)].type = p_blockType;
-			}
-		}
-	}*/
-
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		/*auto chunksCoordinates = From1Dto3D(i);
-		bool isAir = chunksCoordinates[0] > chunksCoordinates[1];
-		blocks[i].type = static_cast<BlockType>(isAir ? 0 : 1);*/
-
-		blocks[i].type = p_blockType;
+		blocks[i].type = BlockType::AIR;
 	}
 }
 
@@ -51,21 +24,6 @@ void AmberCraft::Chunk::FillChunkRandomly(BlockType p_blockType)
 	{
 		blocks[i].type = static_cast<BlockType>(distribution(generator));
 	}
-}
-
-void AmberCraft::Chunk::CheckNeighbors()
-{
-	m_isOccluded = (m_chunksNeighbors.left
-		&& m_chunksNeighbors.right
-		&& m_chunksNeighbors.bot
-		&& m_chunksNeighbors.top
-		&& m_chunksNeighbors.back
-		&&  m_chunksNeighbors.front);
-}
-
-bool AmberCraft::Chunk::IsOccluded()
-{
-	return m_isOccluded;
 }
 
 AmberCraft::BlockData* AmberCraft::Chunk::GetBlock(uint8_t p_x, uint8_t p_y, uint8_t p_z, ChunkSides p_chunkSide)
@@ -115,8 +73,6 @@ void AmberCraft::Chunk::Update()
 	std::vector<GLuint> blocksToRender = FillBlocksToRender();
 	m_chunkBuffers.SendBlocksToGPU(blocksToRender);
 	m_blocksToRenderCount = static_cast<uint16_t>(blocksToRender.size());
-
-	//CheckNeighbors();
 }
 
 void AmberCraft::Chunk::Draw()

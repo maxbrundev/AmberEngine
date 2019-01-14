@@ -41,7 +41,8 @@ void AmberCraft::World::GenerateWorld()
 	{
 		auto[x, y, z] = From1Dto3D(i);
 
-		m_chunks[i].FillChunk(y > WORLD_SIZE / 2 ? BlockType::AIR : BlockType::DIRT);
+		//m_chunks[i].FillChunk(y > WORLD_SIZE / 2 ? BlockType::AIR : BlockType::DIRT);
+		m_chunks[i].FillChunk();
 	}
 }
 
@@ -71,6 +72,16 @@ void AmberCraft::World::Draw(RenderEngine::Managers::RenderingManager& p_renderi
 			m_chunks[i].Draw();
 		}
 	}
+}
+
+AmberCraft::BlockData AmberCraft::World::GetBlock(uint64_t p_x, uint64_t p_y, uint64_t p_z)
+{
+	return m_chunks[From3Dto1D(p_x / CHUNK_SIZE, p_y / CHUNK_SIZE, p_z / CHUNK_SIZE)].blocks[From3Dto1D(p_x % CHUNK_SIZE, p_y % CHUNK_SIZE, p_z % CHUNK_SIZE)];
+}
+
+void AmberCraft::World::SetBlock(uint64_t p_x, uint64_t p_y, uint64_t p_z, BlockData p_blockData)
+{
+	m_chunks[From3Dto1D(p_x / CHUNK_SIZE, p_y / CHUNK_SIZE, p_z / CHUNK_SIZE)].blocks[From3Dto1D(p_x % CHUNK_SIZE, p_y % CHUNK_SIZE, p_z % CHUNK_SIZE)] = p_blockData;
 }
 
 std::array<uint8_t, 3> AmberCraft::World::From1Dto3D(uint16_t p_index)

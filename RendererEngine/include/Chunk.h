@@ -46,10 +46,6 @@ namespace AmberCraft
 		void FillChunk(BlockType p_blockType = BlockType::DIRT);
 		void FillChunkRandomly(BlockType p_blockType = BlockType::DIRT);
 
-		//Verify if chunk must be rendered
-		void CheckNeighbors();
-		bool IsOccluded();
-
 		BlockData* GetBlock(uint8_t p_x, uint8_t p_y, uint8_t p_z, ChunkSides p_chunkSide);
 
 		void Update();
