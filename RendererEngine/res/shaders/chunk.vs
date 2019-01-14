@@ -32,7 +32,7 @@ vec3 CalculateBlockOffset()
 void main()
 {
 	BlockOffset = CalculateBlockOffset();
-	FragPos = vec3(model * vec4(aPos + BlockOffset - chunkHalfSize - vec3(0.0f, 8 * 3, 0 ), 1.0));
+	FragPos = vec3(model * vec4(aPos + BlockOffset, 1.0));
 
 	Normal = mat3(transpose(inverse(model))) * aNormal;  
 	TexCoord = aTexCoord;

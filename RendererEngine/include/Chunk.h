@@ -56,7 +56,7 @@ namespace AmberCraft
 		
 		std::vector<GLuint> FillBlocksToRender();
 
-		std::array<uint8_t, 3> From1Dto3D(uint16_t p_index);
-		uint16_t From3Dto1D(uint8_t p_x, uint8_t p_y, uint8_t p_z);
+		static std::array<uint8_t, 3> From1Dto3D(uint16_t p_index);
+		static uint16_t From3Dto1D(uint8_t p_x, uint8_t p_y, uint8_t p_z);
 	};
 }

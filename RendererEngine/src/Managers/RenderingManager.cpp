@@ -5,7 +5,7 @@
 RenderEngine::Managers::RenderingManager::RenderingManager() : isWireFrame(false), isCameraFree(true)
 {
 	m_windowManager = std::make_unique<WindowManager>();
-	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f));
+	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), glm::vec3(0.0f, 0.0f, 0.0f));
 	m_resourcesManager = std::make_unique<ResourcesManager>();
 	m_uiManager = std::make_unique<UIManager>(m_windowManager->GetDevice());
 	m_inputManager = std::make_unique<InputManager>();

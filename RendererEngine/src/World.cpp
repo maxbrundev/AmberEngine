@@ -36,29 +36,41 @@ void AmberCraft::World::GenerateTerrain()
 	{
 		auto[x, y, z] = From1Dto3D(i);
 
-		m_chunks[i].FillChunk(BlockType::DIRT);
+		m_chunks[i].FillChunk(BlockType::AIR);
 	}
 
-	/*FastNoise perlinNoise;
+	FastNoise perlinNoise;
 	perlinNoise.SetSeed(747);
 
 	uint64_t surfaceLength = WORLD_SIZE * CHUNK_SIZE;
+	const float frequency = 5.0f; // Higher frequency implies abrupt terrain
+	const float amplitude = 20;
+	const float minimumHeight = 64;
 
-	for (uint64_t x = 0; x < surfaceLength; ++x)
+	for (uint64_t z = 0; z < surfaceLength; ++z)
 	{
-		for (uint64_t z = 0; z < surfaceLength; ++z)
+		for (uint64_t x = 0; x < surfaceLength; ++x)
 		{
-			float perlinValue = perlinNoise.GetPerlin(x * 10, z * 10);
-			perlinValue += 1;
-			perlinValue *= 10;
-			perlinValue += 50;
+			float perlinValue = (((perlinNoise.GetPerlin(x * frequency, z * frequency) + 1.0f) / 2.0f) * amplitude) + minimumHeight - amplitude * 0.5f;
+
+			uint8_t layer = 0;
 
 			for(int16_t currentHeight = static_cast<int16_t>(perlinValue); currentHeight >= 0; --currentHeight)
 			{
-				SetBlock(x, currentHeight, z, BlockData{ BlockType::DIRT });
+				BlockData newBlock;
+
+				if (layer == 0)
+					newBlock.type = BlockType::GRASS;
+				else if (layer <= 2)
+					newBlock.type = BlockType::DIRT;
+				else
+					newBlock.type = BlockType::ROCK;
+
+				SetBlock(static_cast<uint64_t>(x), static_cast<uint64_t>(currentHeight), static_cast<uint64_t>(z), newBlock);
+				++layer;
 			}
 		}
-	}*/
+	}
 
 }
 
@@ -100,12 +112,12 @@ void AmberCraft::World::Draw(RenderEngine::Managers::RenderingManager& p_renderi
 
 AmberCraft::BlockData AmberCraft::World::GetBlock(uint64_t p_x, uint64_t p_y, uint64_t p_z)
 {
-	return m_chunks[From3Dto1D(p_x / CHUNK_SIZE, p_y / CHUNK_SIZE, p_z / CHUNK_SIZE)].blocks[From3Dto1D(p_x % CHUNK_SIZE, p_y % CHUNK_SIZE, p_z % CHUNK_SIZE)];
+	return m_chunks[From3Dto1D(p_x / CHUNK_SIZE, p_y / CHUNK_SIZE, p_z / CHUNK_SIZE)].blocks[Chunk::From3Dto1D(p_x % CHUNK_SIZE, p_y % CHUNK_SIZE, p_z % CHUNK_SIZE)];
 }
 
 void AmberCraft::World::SetBlock(uint64_t p_x, uint64_t p_y, uint64_t p_z, BlockData p_blockData)
 {
-	m_chunks[From3Dto1D(p_x / CHUNK_SIZE, p_y / CHUNK_SIZE, p_z / CHUNK_SIZE)].blocks[From3Dto1D(p_x % CHUNK_SIZE, p_y % CHUNK_SIZE, p_z % CHUNK_SIZE)] = p_blockData;
+	m_chunks[From3Dto1D(p_x / CHUNK_SIZE, p_y / CHUNK_SIZE, p_z / CHUNK_SIZE)].blocks[Chunk::From3Dto1D(p_x % CHUNK_SIZE, p_y % CHUNK_SIZE, p_z % CHUNK_SIZE)] = p_blockData;
 }
 
 std::array<uint8_t, 3> AmberCraft::World::From1Dto3D(uint16_t p_index)

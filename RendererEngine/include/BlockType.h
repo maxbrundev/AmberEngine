@@ -7,6 +7,8 @@ namespace AmberCraft
 	enum class BlockType : uint8_t
 	{
 		AIR,
-		DIRT
+		GRASS,
+		DIRT,
+		ROCK
 	};
 }
