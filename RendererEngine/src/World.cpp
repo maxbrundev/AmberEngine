@@ -1,16 +1,11 @@
 #include "pch.h"
 
 #include "World.h"
+#include "FastNoise.h"
 
 AmberCraft::World::World() : m_chunks(WORLD_ELEMENTS_COUNT)
 {
 	SetNeighbors();
-	GenerateWorld();
-
-	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
-	{
-		m_chunks[i].Update();
-	}
 }
 
 void AmberCraft::World::SetNeighbors()
@@ -35,14 +30,43 @@ bool AmberCraft::World::IsInWorld(uint8_t p_index)
 	return p_index >= 0 && p_index <= WORLD_SIZE - 1;
 }
 
-void AmberCraft::World::GenerateWorld()
+void AmberCraft::World::GenerateTerrain()
 {
 	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
 	{
 		auto[x, y, z] = From1Dto3D(i);
 
-		//m_chunks[i].FillChunk(y > WORLD_SIZE / 2 ? BlockType::AIR : BlockType::DIRT);
-		m_chunks[i].FillChunk();
+		m_chunks[i].FillChunk(BlockType::DIRT);
+	}
+
+	/*FastNoise perlinNoise;
+	perlinNoise.SetSeed(747);
+
+	uint64_t surfaceLength = WORLD_SIZE * CHUNK_SIZE;
+
+	for (uint64_t x = 0; x < surfaceLength; ++x)
+	{
+		for (uint64_t z = 0; z < surfaceLength; ++z)
+		{
+			float perlinValue = perlinNoise.GetPerlin(x * 10, z * 10);
+			perlinValue += 1;
+			perlinValue *= 10;
+			perlinValue += 50;
+
+			for(int16_t currentHeight = static_cast<int16_t>(perlinValue); currentHeight >= 0; --currentHeight)
+			{
+				SetBlock(x, currentHeight, z, BlockData{ BlockType::DIRT });
+			}
+		}
+	}*/
+
+}
+
+void AmberCraft::World::Update()
+{
+	for (uint16_t i = 0; i < WORLD_ELEMENTS_COUNT; ++i)
+	{
+		m_chunks[i].Update();
 	}
 }
 

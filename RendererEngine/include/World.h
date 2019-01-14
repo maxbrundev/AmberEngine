@@ -21,7 +21,10 @@ namespace AmberCraft
 
 		bool IsInWorld(uint8_t p_index);
 
-		void GenerateWorld();
+		void GenerateTerrain();
+
+		// UpdateWorld Calculate Surface Culling and send data to GPU
+		void Update();
 		void Draw(RenderEngine::Managers::RenderingManager& p_renderingManager);
 
 		BlockData GetBlock(uint64_t p_x, uint64_t p_y, uint64_t p_z);

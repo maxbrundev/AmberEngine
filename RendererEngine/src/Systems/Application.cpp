@@ -19,6 +19,8 @@ void RenderEngine::Systems::Application::Setup()
 void RenderEngine::Systems::Application::Run()
 {
 	AmberCraft::World world;
+	world.GenerateTerrain();
+	world.Update();
 
 	while (m_renderingManager->IsRunning())
 	{

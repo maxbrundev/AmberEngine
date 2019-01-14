@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "Chunk.h"
-#include "FastNoise.h"
 
 AmberCraft::Chunk::Chunk()
 {
@@ -11,18 +10,7 @@ void AmberCraft::Chunk::FillChunk(BlockType p_blockType)
 {
 	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
 	{
-		blocks[i].type = BlockType::AIR;
-	}
-}
-
-void AmberCraft::Chunk::FillChunkRandomly(BlockType p_blockType)
-{
-	std::random_device generator;
-	const std::uniform_int_distribution<int> distribution(0, 1);
-
-	for (uint16_t i = 0; i < CHUNK_ELEMENTS_COUNT; ++i)
-	{
-		blocks[i].type = static_cast<BlockType>(distribution(generator));
+		blocks[i].type = p_blockType;
 	}
 }
 
@@ -134,14 +122,6 @@ bool AmberCraft::Chunk::IsBlockOccluded(uint8_t p_x, uint8_t p_y, uint8_t p_z)
 		&& (!bot || bot->type != BlockType::AIR)
 		&& (!front || front->type != BlockType::AIR)
 		&& (!back || back->type != BlockType::AIR);
-
-	//DRAW WORLD WITH BOUNDS
-	/*return (left &&  left->type		!= BlockType::AIR
-		&& right &&  right->type	!= BlockType::AIR
-		&& top &&  top->type		!= BlockType::AIR
-		&& bot &&  bot->type		!= BlockType::AIR
-		&& front &&  front->type	!= BlockType::AIR
-		&& back &&  back->type		!= BlockType::AIR);*/
 }
 
 std::array<uint8_t, 3> AmberCraft::Chunk::From1Dto3D(uint16_t p_index)

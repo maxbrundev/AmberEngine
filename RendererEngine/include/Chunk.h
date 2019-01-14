@@ -44,7 +44,6 @@ namespace AmberCraft
 		~Chunk() = default;
 
 		void FillChunk(BlockType p_blockType = BlockType::DIRT);
-		void FillChunkRandomly(BlockType p_blockType = BlockType::DIRT);
 
 		BlockData* GetBlock(uint8_t p_x, uint8_t p_y, uint8_t p_z, ChunkSides p_chunkSide);
 
