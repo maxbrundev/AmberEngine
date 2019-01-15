@@ -29,9 +29,6 @@ namespace  AmberEngine
 			void InitGLFW();
 			void InitWindow();
 
-			void Update();
-			void HandleInput();
-
 			static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 			
 			GLFWwindow* GetContextWindow() const;

@@ -43,9 +43,16 @@ namespace AmberEngine
 
 			void UpdateRenderMode();
 			void UpdateDeltaTime();
+			void UpdateInput();
 
 			void PolygonModeLine();
 			void PolygonModeFill();
+
+			void ToggleWireFrame();
+
+			void FreeCamera();
+			void LockCamera();
+			void ToggleCamera();
 
 			glm::mat4 CalculateProjectionMatrix() const;
 			glm::mat4 CalculateViewMatrix() const;
@@ -54,6 +61,7 @@ namespace AmberEngine
 			const std::unique_ptr<LowRenderer::Camera>& GetCamera() const;
 			const std::unique_ptr<WindowManager>& GetWindowManager() const;
 			const std::unique_ptr<ResourcesManager>& GetResourcesManager() const;
+			const std::unique_ptr<InputManager>& GetInputManager() const;
 		};
 	}
 }

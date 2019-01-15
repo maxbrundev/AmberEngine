@@ -1,3 +1,5 @@
+#include <Windows.h>
+
 #include "AmberEngine/Managers/RenderingManager.h"
 
 AmberEngine::Managers::RenderingManager::RenderingManager() : isWireFrame(false), isCameraFree(true)
@@ -29,12 +31,11 @@ void AmberEngine::Managers::RenderingManager::Clear()
 
 void AmberEngine::Managers::RenderingManager::Update()
 {
-	m_windowManager->Update();
 	UpdateDeltaTime();
 	UpdateRenderMode();
 	m_camera->Update(m_deltaTime);
 	m_uiManager->Update();
-	m_inputManager->Update();
+	UpdateInput();
 }
 
 void AmberEngine::Managers::RenderingManager::SwapBuffers()
@@ -51,30 +52,16 @@ bool AmberEngine::Managers::RenderingManager::IsRunning()
 
 void AmberEngine::Managers::RenderingManager::UpdateRenderMode()
 {
-	if (m_inputManager->IsKeyEventOccured(0x10))
-	{
-		isWireFrame = !isWireFrame;
-	}
-	if (m_inputManager->IsKeyEventOccured(0x12))
-	{
-		isCameraFree = !isCameraFree;
-	}
-
 	if (isWireFrame)
 		PolygonModeLine();
 	else
 		PolygonModeFill();
 
 	if (isCameraFree)
-	{
-		m_camera->Unlock();
-		m_windowManager->GetDevice().LockCursor();
-	}
+		FreeCamera();
 	else
-	{
-		m_windowManager->GetDevice().FreeCursor();
-		m_camera->Lock();
-	}
+		LockCamera();
+	
 }
 
 void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
@@ -82,6 +69,23 @@ void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
 	GLdouble currentTime = glfwGetTime();
 	m_deltaTime = currentTime - m_lastTime;
 	m_lastTime = currentTime;
+}
+
+void AmberEngine::Managers::RenderingManager::UpdateInput()
+{
+	m_inputManager->Update();
+
+	if (m_inputManager->IsKeyEventOccured(VK_SHIFT))
+	{
+		ToggleWireFrame();
+	}
+	if (m_inputManager->IsKeyEventOccured(VK_LMENU))
+	{
+		ToggleCamera();
+	}
+
+	if (m_inputManager->IsKeyPressed(VK_ESCAPE))
+		m_windowManager->GetDevice().Close();
 }
 
 void AmberEngine::Managers::RenderingManager::PolygonModeLine()
@@ -94,6 +98,28 @@ void AmberEngine::Managers::RenderingManager::PolygonModeFill()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void AmberEngine::Managers::RenderingManager::ToggleWireFrame()
+{
+	isWireFrame = !isWireFrame;
+}
+
+void AmberEngine::Managers::RenderingManager::FreeCamera()
+{
+	m_camera->Unlock();
+	m_windowManager->GetDevice().LockCursor();
+}
+
+void AmberEngine::Managers::RenderingManager::LockCamera()
+{
+	m_camera->Lock();
+	m_windowManager->GetDevice().FreeCursor();
+}
+
+void AmberEngine::Managers::RenderingManager::ToggleCamera()
+{
+	isCameraFree = !isCameraFree;
+}
+
 const std::unique_ptr<AmberEngine::Managers::WindowManager>& AmberEngine::Managers::RenderingManager::GetWindowManager() const
 {
 	return m_windowManager;
@@ -103,6 +129,12 @@ const std::unique_ptr<AmberEngine::Managers::ResourcesManager>& AmberEngine::Man
 GetResourcesManager() const
 {
 	return m_resourcesManager;
+}
+
+const std::unique_ptr<AmberEngine::Managers::InputManager>& AmberEngine::Managers::RenderingManager::
+GetInputManager() const
+{
+	return m_inputManager;
 }
 
 glm::mat4 AmberEngine::Managers::RenderingManager::CalculateProjectionMatrix() const

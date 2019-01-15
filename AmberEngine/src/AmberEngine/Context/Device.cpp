@@ -91,22 +91,6 @@ void AmberEngine::Core::Device::InitWindow()
 	}
 }
 
-void AmberEngine::Core::Device::Update()
-{
-	HandleInput();
-}
-
-void AmberEngine::Core::Device::HandleInput()
-{
-	if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		Close();
-
-	/*if (glfwGetKey(m_window, GLFW_KEY_LEFT_ALT))
-		FreeCursor();
-	else
-		LockCursor();*/
-}
-
 void AmberEngine::Core::Device::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	m_height = height;

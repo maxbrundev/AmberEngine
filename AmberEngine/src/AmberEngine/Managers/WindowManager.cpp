@@ -19,11 +19,6 @@ void AmberEngine::Managers::WindowManager::Setup()
 	m_driver->Setup();
 }
 
-void AmberEngine::Managers::WindowManager::Update()
-{
-	m_device->Update();
-}
-
 bool AmberEngine::Managers::WindowManager::IsOpen() const
 {
 	return m_device->IsActive();

@@ -22,7 +22,6 @@ namespace AmberEngine
 			~WindowManager();
 
 			void Setup();
-			void Update();
 
 			bool IsOpen() const;
 
