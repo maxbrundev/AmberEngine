@@ -13,7 +13,7 @@ RenderEngine::Systems::Application::Application()
 void RenderEngine::Systems::Application::Setup()
 {
 	Resources::Shader& chunkShader = m_renderingManager->GetResourcesManager()->LoadShaderFiles("chunk", "chunk.vs", "chunk.fs");
-	Resources::Texture& texture = m_renderingManager->GetResourcesManager()->LoadTexture("dirt", "dirt.png");
+	Resources::Texture& texture = m_renderingManager->GetResourcesManager()->LoadTexture("dirt", "blocks.png");
 }
 
 void RenderEngine::Systems::Application::Run()
@@ -35,7 +35,7 @@ void RenderEngine::Systems::Application::Run()
 
 		ImGui::Begin("Scene");
 		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", playerPos.x, playerPos.y, playerPos.z);
-		ImGui::Text("Overlapped Block %.1u", world.GetBlock(playerRoundedPos[0], playerRoundedPos[1], playerRoundedPos[2]));
+		//ImGui::Text("Overlapped Block %.1u", world.GetBlock(playerRoundedPos[0], playerRoundedPos[1], playerRoundedPos[2]));
 		ImGui::End();
 
 		world.Draw(*m_renderingManager);
