@@ -14,6 +14,11 @@ AmberEngine::Managers::UIManager::UIManager(Core::Device& p_context) : m_device(
 	style.FrameRounding = 12.0f;
 }
 
+AmberEngine::Managers::UIManager::~UIManager()
+{
+	Close();
+}
+
 void AmberEngine::Managers::UIManager::PreUpdate()
 {
 	ImGui_ImplGlfwGL3_NewFrame();

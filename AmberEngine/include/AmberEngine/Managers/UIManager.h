@@ -17,7 +17,7 @@ namespace  AmberEngine
 
 		public:
 			UIManager(Core::Device& p_context);
-			~UIManager() = default;
+			~UIManager();
 
 			void PreUpdate();
 			void Update();
