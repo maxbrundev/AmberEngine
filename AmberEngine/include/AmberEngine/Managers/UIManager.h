@@ -1,0 +1,29 @@
+#pragma once
+
+#include "AmberEngine/Context/Device.h"
+#include "AmberEngine/LowRenderer/Camera.h"
+
+#include "AmberEngine/API/Export.h"
+
+namespace  AmberEngine
+{
+	namespace Managers
+	{
+		class API_AMBERENGINE UIManager
+		{
+		private:
+			Core::Device& m_device;
+			float m_clearColor[4];
+
+		public:
+			UIManager(Core::Device& p_context);
+			~UIManager() = default;
+
+			void PreUpdate();
+			void Update();
+			void PostUpdate();
+			void DisplayMenuBar();
+			void Close();
+		};
+	}
+}
