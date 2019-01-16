@@ -5,12 +5,11 @@ Personal OpenGL C++ Game Engine Project
 - Reworking Inputs System
 - Reworking Managers
 - Reworking UI
-- Reworking Buffers class and usage / Adding Shader Storage Buffer and Uniform Buffer
-- Adding Primitives meshes
+- Reworking Buffers class and usage / Adding Shader Storage Buffers and Uniform Buffers
+- Adding Primitives Mesh
 - Instancing
-- Multiples Lights
+- Multiple Lights
 - Shadows
-- Instancing
 - Normal Maps
 - Transform class
 - Physically Based Rendering
