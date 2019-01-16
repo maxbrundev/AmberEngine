@@ -24,6 +24,8 @@ Personal OpenGL C++ Game Engine Project
 # AmberEngine RendererV0.1.5
 - Updating AmberEngine as DLL
 - Directional Light
+- Texture Tiling Shader
+- Lambert Shader
 ![alt text](Screens/AmberRendererV0.1.5.png?raw=true "AmberEngine")
 
 # AmberEngine RendererV0.1.4
