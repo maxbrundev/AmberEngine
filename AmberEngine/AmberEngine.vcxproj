@@ -125,7 +125,9 @@ xcopy "$(SolutionDir)..\Dependencies\stb_image\include" "$(SolutionDir)..\Build\
 
 xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
     <Link>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -159,7 +161,9 @@ xcopy "$(SolutionDir)..\Dependencies\stb_image\include" "$(SolutionDir)..\Build\
 
 xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
     <Link>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -200,7 +204,9 @@ xcopy "$(SolutionDir)..\Dependencies\stb_image\include" "$(SolutionDir)..\Build\
 
 xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -238,7 +244,9 @@ xcopy "$(SolutionDir)..\Dependencies\stb_image\include" "$(SolutionDir)..\Build\
 
 xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
