@@ -2,24 +2,21 @@
 
 #include "AmberEngine/Context/Icontext.h"
 
-namespace  AmberEngine
+namespace  AmberEngine::Core
 {
-	namespace Core
+	class Driver : public IContext
 	{
-		class Driver : public IContext
-		{
-		private:
-			bool m_isActive;
+	private:
+		bool m_isActive;
 
-		public:
-			Driver();
-			~Driver() = default;
+	public:
+		Driver();
+		~Driver() = default;
 
-			void Setup() override;
-			void Close() override;
-			bool IsActive() override;
+		void Setup() override;
+		void Close() override;
+		bool IsActive() override;
 
-			void DisplayDriverInfo();
-		};
-	}
+		void DisplayDriverInfo();
+	};
 }

@@ -6,10 +6,8 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine
+namespace AmberEngine::Resources
 {
-	namespace Resources
-	{
 		struct API_AMBERENGINE Vertex 
 		{
 			glm::vec3 position;
@@ -47,5 +45,4 @@ namespace AmberEngine
 		private:
 			void InitBuffers();
 		};
-	}
 }

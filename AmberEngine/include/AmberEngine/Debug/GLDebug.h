@@ -9,18 +9,15 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine
+namespace AmberEngine::Debug
 {
-	namespace Debug
+	class API_AMBERENGINE GLDebug
 	{
-		class API_AMBERENGINE GLDebug
-		{
-		public:
-			static void GLClearError();
-			static bool GLLogCall(const char* function, const char* file, int line);
-			static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type,
-				GLuint id, GLenum severity, GLsizei length,
-				const GLchar *message, const void *userParam);
-		};
-	}
+	public:
+		static void GLClearError();
+		static bool GLLogCall(const char* function, const char* file, int line);
+		static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type,
+			GLuint id, GLenum severity, GLsizei length,
+			const GLchar *message, const void *userParam);
+	};
 }

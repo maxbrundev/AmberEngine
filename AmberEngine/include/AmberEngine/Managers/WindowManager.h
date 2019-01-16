@@ -7,26 +7,23 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine
+namespace AmberEngine::Managers
 {
-	namespace Managers
+	class API_AMBERENGINE WindowManager
 	{
-		class API_AMBERENGINE WindowManager
-		{
-		private:
-			std::unique_ptr<Core::Device> m_device;
-			std::unique_ptr<Core::Driver> m_driver;
+	private:
+		std::unique_ptr<Core::Device> m_device;
+		std::unique_ptr<Core::Driver> m_driver;
 
-		public:
-			WindowManager();
-			~WindowManager();
+	public:
+		WindowManager();
+		~WindowManager();
 
-			void Setup();
+		void Setup();
 
-			bool IsOpen() const;
+		bool IsOpen() const;
 
-			Core::Device& GetDevice() const;
-			Core::Driver& GetDriver() const;
-		};
-	}
+		Core::Device& GetDevice() const;
+		Core::Driver& GetDriver() const;
+	};
 }

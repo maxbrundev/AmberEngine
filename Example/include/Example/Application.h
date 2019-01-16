@@ -11,6 +11,7 @@ namespace Example
 	public:
 		Application();
 		~Application() = default;
+
 		void Setup();
 		void Run();
 	};

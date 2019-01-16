@@ -5,23 +5,20 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine
+namespace AmberEngine::Managers
 {
-	namespace Managers
+	class API_AMBERENGINE InputManager
 	{
-		class API_AMBERENGINE InputManager
-		{
-		public:
-			InputManager() = default;
-			~InputManager() = default;
+	public:
+		InputManager() = default;
+		~InputManager() = default;
 
-			void Update();
+		void Update();
 
-			bool IsKeyPressed(char p_key);
-			bool IsKeyEventOccured(char p_key);
+		bool IsKeyPressed(char p_key);
+		bool IsKeyEventOccured(char p_key);
 
-			std::unordered_map<char, bool> m_keyEvents;
-			std::unordered_map<char, bool> m_keyStates;
-		};
-	}
+		std::unordered_map<char, bool> m_keyEvents;
+		std::unordered_map<char, bool> m_keyStates;
+	};
 }

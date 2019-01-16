@@ -11,7 +11,6 @@ Example::Application::Application()
 void Example::Application::Setup()
 {
 	AmberEngine::Resources::Shader& lightingShader = m_renderingManager->GetResourcesManager()->LoadShaderFiles("DirectionalLight", "directional_lighting.vs", "directional_lighting.fs");
-	//Resources::Texture& diffuseMap = m_renderingManager->GetResourcesManager()->LoadTexture("uvChecker", "Primitive/default.png");
 
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("material.texture_diffuse1", 0);
@@ -57,7 +56,6 @@ void Example::Application::Run()
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvXValue", UvX);
 		m_renderingManager->GetResourcesManager()->GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
-		//m_renderingManager->GetResourcesManager()->GetTexture("uvChecker").Bind();
 
 		model.Draw();
 

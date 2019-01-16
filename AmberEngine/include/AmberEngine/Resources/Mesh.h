@@ -8,24 +8,21 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine
+namespace AmberEngine::Resources
 {
-	namespace Resources
+	class API_AMBERENGINE Mesh
 	{
-		class API_AMBERENGINE Mesh
-		{
-		private:
-			GLuint m_vao;
-			GLuint m_vbo[4];
-			GLsizei m_numIndices;
-			std::string m_sourceFile;
+	private:
+		GLuint m_vao;
+		GLuint m_vbo[4];
+		GLsizei m_numIndices;
+		std::string m_sourceFile;
 
-		public:
-			Mesh(const std::string& p_filePath);
-			~Mesh();
+	public:
+		Mesh(const std::string& p_filePath);
+		~Mesh();
 
-			void Draw();
-			void InitBuffers(const Model& p_model);
-		};
-	}
+		void Draw();
+		void InitBuffers(const Model& p_model);
+	};
 }

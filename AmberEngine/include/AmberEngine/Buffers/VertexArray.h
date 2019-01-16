@@ -5,22 +5,19 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine
+namespace AmberEngine::Buffers
 {
-	namespace Buffers
+	class API_AMBERENGINE VertexArray
 	{
-		class API_AMBERENGINE VertexArray
-		{
-		private:
-			unsigned int m_rendererID;
-		public:
-			VertexArray();
-			~VertexArray();
+	private:
+		unsigned int m_rendererID;
+	public:
+		VertexArray();
+		~VertexArray();
 
-			void AddBuffer(const VertexBuffer& p_vbo, const VertexBufferLayout& p_layout);
+		void AddBuffer(const VertexBuffer& p_vbo, const VertexBufferLayout& p_layout);
 
-			void Bind() const;
-			void Unbind() const;
-		};
-	}
+		void Bind() const;
+		void Unbind() const;
+	};
 }

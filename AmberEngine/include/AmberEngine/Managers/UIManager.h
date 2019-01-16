@@ -5,25 +5,22 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace  AmberEngine
+namespace  AmberEngine::Managers
 {
-	namespace Managers
+	class API_AMBERENGINE UIManager
 	{
-		class API_AMBERENGINE UIManager
-		{
-		private:
-			Core::Device& m_device;
-			float m_clearColor[4];
+	private:
+		Core::Device& m_device;
+		float m_clearColor[4];
 
-		public:
-			UIManager(Core::Device& p_context);
-			~UIManager();
+	public:
+		UIManager(Core::Device& p_context);
+		~UIManager();
 
-			void PreUpdate();
-			void Update();
-			void PostUpdate();
-			void DisplayMenuBar();
-			void Close();
-		};
-	}
+		void PreUpdate();
+		void Update();
+		void PostUpdate();
+		void DisplayMenuBar();
+		void Close();
+	};
 }
