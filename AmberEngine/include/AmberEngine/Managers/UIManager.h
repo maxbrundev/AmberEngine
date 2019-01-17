@@ -1,7 +1,6 @@
 #pragma once
 
 #include "AmberEngine/Context/Device.h"
-#include "AmberEngine/LowRenderer/Camera.h"
 
 #include "AmberEngine/API/Export.h"
 

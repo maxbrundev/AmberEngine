@@ -2,13 +2,9 @@
 
 #include "AmberEngine/Managers/RenderingManager.h"
 
-AmberEngine::Managers::RenderingManager::RenderingManager() : isWireFrame(false), isCameraFree(true)
+AmberEngine::Managers::RenderingManager::RenderingManager() 
+	: m_uiManager(m_windowManager.GetDevice()), m_camera(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
 {
-	m_windowManager = std::make_unique<WindowManager>();
-	m_camera = std::make_unique<LowRenderer::Camera>(m_windowManager->GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f));
-	m_resourcesManager = std::make_unique<ResourcesManager>();
-	m_uiManager = std::make_unique<UIManager>(m_windowManager->GetDevice());
-	m_inputManager = std::make_unique<InputManager>();
 	isRunning = true;
 }
 
@@ -26,28 +22,28 @@ void AmberEngine::Managers::RenderingManager::Clear()
 {
 	//GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
 	//GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	m_uiManager->PreUpdate();
+	m_uiManager.PreUpdate();
 }
 
 void AmberEngine::Managers::RenderingManager::Update()
 {
 	UpdateDeltaTime();
 	UpdateRenderMode();
-	m_camera->Update(m_deltaTime);
-	m_uiManager->Update();
+	m_camera.Update(m_deltaTime);
+	m_uiManager.Update();
 	UpdateInput();
 }
 
 void AmberEngine::Managers::RenderingManager::SwapBuffers()
 {
-	m_uiManager->PostUpdate();
-	m_windowManager->GetDevice().SwapBuffers();
-	m_windowManager->GetDevice().PollEvents();
+	m_uiManager.PostUpdate();
+	m_windowManager.GetDevice().SwapBuffers();
+	m_windowManager.GetDevice().PollEvents();
 }
 
 bool AmberEngine::Managers::RenderingManager::IsRunning()
 {
-	return isRunning && m_windowManager->IsOpen();
+	return isRunning && m_windowManager.IsOpen();
 }
 
 void AmberEngine::Managers::RenderingManager::UpdateRenderMode()
@@ -73,19 +69,19 @@ void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
 
 void AmberEngine::Managers::RenderingManager::UpdateInput()
 {
-	m_inputManager->Update();
+	m_inputManager.Update();
 
-	if (m_inputManager->IsKeyEventOccured(VK_SHIFT))
+	if (m_inputManager.IsKeyEventOccured(VK_SHIFT))
 	{
 		ToggleWireFrame();
 	}
-	if (m_inputManager->IsKeyEventOccured(VK_LMENU))
+	if (m_inputManager.IsKeyEventOccured(VK_LMENU))
 	{
 		ToggleCamera();
 	}
 
-	if (m_inputManager->IsKeyPressed(VK_ESCAPE))
-		m_windowManager->GetDevice().Close();
+	if (m_inputManager.IsKeyPressed(VK_ESCAPE))
+		m_windowManager.GetDevice().Close();
 }
 
 void AmberEngine::Managers::RenderingManager::PolygonModeLine()
@@ -105,14 +101,14 @@ void AmberEngine::Managers::RenderingManager::ToggleWireFrame()
 
 void AmberEngine::Managers::RenderingManager::FreeCamera()
 {
-	m_camera->Unlock();
-	m_windowManager->GetDevice().LockCursor();
+	m_camera.Unlock();
+	m_windowManager.GetDevice().LockCursor();
 }
 
 void AmberEngine::Managers::RenderingManager::LockCamera()
 {
-	m_camera->Lock();
-	m_windowManager->GetDevice().FreeCursor();
+	m_camera.Lock();
+	m_windowManager.GetDevice().FreeCursor();
 }
 
 void AmberEngine::Managers::RenderingManager::ToggleCamera()
@@ -120,31 +116,31 @@ void AmberEngine::Managers::RenderingManager::ToggleCamera()
 	isCameraFree = !isCameraFree;
 }
 
-const std::unique_ptr<AmberEngine::Managers::WindowManager>& AmberEngine::Managers::RenderingManager::GetWindowManager() const
+AmberEngine::Managers::WindowManager& AmberEngine::Managers::RenderingManager::GetWindowManager()
 {
 	return m_windowManager;
 }
 
-const std::unique_ptr<AmberEngine::Managers::ResourcesManager>& AmberEngine::Managers::RenderingManager::
-GetResourcesManager() const
+AmberEngine::Managers::ResourcesManager& AmberEngine::Managers::RenderingManager::
+GetResourcesManager()
 {
 	return m_resourcesManager;
 }
 
-const std::unique_ptr<AmberEngine::Managers::InputManager>& AmberEngine::Managers::RenderingManager::
-GetInputManager() const
+AmberEngine::Managers::InputManager& AmberEngine::Managers::RenderingManager::
+GetInputManager()
 {
 	return m_inputManager;
 }
 
 glm::mat4 AmberEngine::Managers::RenderingManager::CalculateProjectionMatrix() const
 {
-	return m_camera->GetProjectionMatrix();
+	return m_camera.GetProjectionMatrix();
 }
 
 glm::mat4 AmberEngine::Managers::RenderingManager::CalculateViewMatrix() const
 {
-	return m_camera->GetViewMatrix();
+	return m_camera.GetViewMatrix();
 }
 
 glm::mat4 AmberEngine::Managers::RenderingManager::GetModelMatrix() const
@@ -152,7 +148,7 @@ glm::mat4 AmberEngine::Managers::RenderingManager::GetModelMatrix() const
 	return glm::mat4(1.0f);
 }
 
-const std::unique_ptr<AmberEngine::LowRenderer::Camera>& AmberEngine::Managers::RenderingManager::GetCamera() const
+AmberEngine::LowRenderer::Camera& AmberEngine::Managers::RenderingManager::GetCamera()
 {
 	return m_camera;
 }

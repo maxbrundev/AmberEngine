@@ -60,11 +60,15 @@ namespace AmberEngine::LowRenderer
 		void HandleMouse();
 		void Lock();
 		void Unlock();
+
 		float GetCameraFov() const;
 
 		glm::vec3 GetPosition() const;
+		glm::vec3 GetForward() const;
 		glm::mat4 GetProjectionMatrix() const;
 		glm::mat4 GetViewMatrix() const;
+
+		void SetPosition(float pos_x, float pos_y, float pos_z);
 			
 	private:
 		void UpdateCameraVectors();

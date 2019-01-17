@@ -142,6 +142,11 @@ glm::vec3 AmberEngine::LowRenderer::Camera::GetPosition() const
 	return m_position;
 }
 
+glm::vec3 AmberEngine::LowRenderer::Camera::GetForward() const
+{
+	return m_forward;
+}
+
 glm::mat4 AmberEngine::LowRenderer::Camera::GetProjectionMatrix() const
 {
 	return glm::perspective(glm::radians(m_fov), static_cast<float>(m_device.GetWindowWidth()) / static_cast<float>(m_device.GetWindowHeight()), 0.1f, 300.0f);;
@@ -150,6 +155,11 @@ glm::mat4 AmberEngine::LowRenderer::Camera::GetProjectionMatrix() const
 glm::mat4 AmberEngine::LowRenderer::Camera::GetViewMatrix() const
 {
 	return glm::lookAt(m_position, m_position + m_forward, m_up);;
+}
+
+void AmberEngine::LowRenderer::Camera::SetPosition(float pos_x, float pos_y, float pos_z)
+{
+	m_position = glm::vec3(pos_x, pos_y, pos_z);
 }
 
 float AmberEngine::LowRenderer::Camera::GetCameraFov() const

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "AmberEngine/Managers/WindowManager.h"
-#include "AmberEngine/LowRenderer/Camera.h"
-#include "AmberEngine/Managers/UIManager.h"
 #include "AmberEngine/Managers/ResourcesManager.h"
 #include "AmberEngine/Managers/InputManager.h"
+#include "AmberEngine/Managers/UIManager.h"
+#include "AmberEngine/LowRenderer/Camera.h"
 
 #include "AmberEngine/API/Export.h"
 
@@ -13,12 +13,13 @@ namespace AmberEngine::Managers
 	class API_AMBERENGINE RenderingManager
 	{
 	private:
-		std::unique_ptr<WindowManager> m_windowManager;
-		std::unique_ptr<LowRenderer::Camera> m_camera;
-		std::unique_ptr<ResourcesManager> m_resourcesManager;
-		std::unique_ptr<UIManager> m_uiManager;
-		std::unique_ptr<InputManager> m_inputManager;
+		WindowManager m_windowManager;
+		ResourcesManager m_resourcesManager;
+		InputManager m_inputManager;
+		UIManager m_uiManager;
 
+		LowRenderer::Camera m_camera;
+		
 		GLdouble m_deltaTime = 0.0f;
 		GLdouble m_lastTime = 0.0f;
 
@@ -56,9 +57,9 @@ namespace AmberEngine::Managers
 		glm::mat4 CalculateViewMatrix() const;
 		glm::mat4 GetModelMatrix() const;
 
-		const std::unique_ptr<LowRenderer::Camera>& GetCamera() const;
-		const std::unique_ptr<WindowManager>& GetWindowManager() const;
-		const std::unique_ptr<ResourcesManager>& GetResourcesManager() const;
-		const std::unique_ptr<InputManager>& GetInputManager() const;
+		WindowManager& GetWindowManager();
+		ResourcesManager& GetResourcesManager();
+		InputManager& GetInputManager();
+		LowRenderer::Camera& GetCamera();
 	};
 }
