@@ -144,7 +144,7 @@ glm::vec3 AmberEngine::LowRenderer::Camera::GetPosition() const
 
 glm::mat4 AmberEngine::LowRenderer::Camera::GetProjectionMatrix() const
 {
-	return glm::perspective(glm::radians(m_fov), static_cast<float>(m_device.GetWindowWidth()) / static_cast<float>(m_device.GetWindowHeight()), 0.1f, 100.0f);;
+	return glm::perspective(glm::radians(m_fov), static_cast<float>(m_device.GetWindowWidth()) / static_cast<float>(m_device.GetWindowHeight()), 0.1f, 300.0f);;
 }
 
 glm::mat4 AmberEngine::LowRenderer::Camera::GetViewMatrix() const
