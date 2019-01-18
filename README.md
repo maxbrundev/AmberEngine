@@ -6,6 +6,7 @@ Personal OpenGL C++ Game Engine Project
 - Reworking Managers
 - Reworking UI
 - Reworking Buffers class and usage / Adding Shader Storage Buffers and Uniform Buffers
+- Camera Controller class
 - Adding Primitives Mesh
 - Instancing
 - Multiple Lights
