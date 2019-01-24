@@ -25,7 +25,7 @@ AmberEngine::Core::Device::Device(const DeviceSettings& p_settings)
 	glfwMakeContextCurrent(m_window);
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	glfwSwapInterval(p_settings.enableVsync);
+	glfwSwapInterval(p_settings.enableVsync ? 1 : 0);
 }
 
 AmberEngine::Core::Device::~Device()

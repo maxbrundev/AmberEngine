@@ -45,15 +45,6 @@ AmberEngine::Core::Driver::Driver(const DriverSettings& p_settings)
 		}
 	}
 
-	GLint flags;
-	glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-	if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
-	{
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(Debug::GLDebug::GLDebugMessageCallback, nullptr);
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-	}
-
 	DisplayDriverInfo();
 }
 
