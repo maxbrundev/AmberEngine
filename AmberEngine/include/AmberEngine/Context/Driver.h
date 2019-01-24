@@ -1,22 +1,32 @@
 #pragma once
 
-#include "AmberEngine/Context/Icontext.h"
+#include <queue>
+
+#include "AmberEngine/API/Export.h"
 
 namespace  AmberEngine::Core
 {
-	class Driver : public IContext
+	struct API_AMBERENGINE DriverSettings
+	{
+		bool enableDepthTest;
+		bool enableBlend;
+		bool enableBackFaceCulling;
+		bool enableMultisample;
+		bool enableDebugCallback;
+	};
+
+	class Driver
 	{
 	private:
-		bool m_isActive;
+		std::queue<std::string> m_errors;
 
 	public:
-		Driver();
+		Driver(const DriverSettings& p_settings);
 		~Driver() = default;
 
-		void Setup() override;
-		void Close() override;
-		bool IsActive() override;
-
+		void DisplayErrors();
 		void DisplayDriverInfo();
+
+		const std::queue<std::string>& GetQueueErros();
 	};
 }

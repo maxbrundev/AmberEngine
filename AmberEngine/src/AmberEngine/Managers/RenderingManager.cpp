@@ -2,8 +2,8 @@
 
 #include "AmberEngine/Managers/RenderingManager.h"
 
-AmberEngine::Managers::RenderingManager::RenderingManager() 
-	: m_uiManager(m_windowManager.GetDevice()), m_camera(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
+AmberEngine::Managers::RenderingManager::RenderingManager(const RenderingSettings& p_settings)
+	: m_windowManager(p_settings.deviceSettings, p_settings.driverSettings), m_uiManager(m_windowManager.GetDevice()), m_camera(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
 {
 	isRunning = true;
 }

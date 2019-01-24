@@ -9,7 +9,7 @@ namespace Example
 	private:
 		AmberEngine::Managers::RenderingManager m_renderingManager;
 	public:
-		Application();
+		Application(const AmberEngine::Managers::RenderingSettings& p_settings);
 		~Application() = default;
 
 		void Setup();

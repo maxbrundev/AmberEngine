@@ -12,18 +12,16 @@ namespace AmberEngine::Managers
 	class API_AMBERENGINE WindowManager
 	{
 	private:
-		std::unique_ptr<Core::Device> m_device;
-		std::unique_ptr<Core::Driver> m_driver;
+		Core::Device m_device;
+		Core::Driver m_driver;
 
 	public:
-		WindowManager();
+		WindowManager(const Core::DeviceSettings& p_deviceSettings, const Core::DriverSettings& p_driverSettings);
 		~WindowManager();
 
-		void Setup();
+		bool IsOpen();
 
-		bool IsOpen() const;
-
-		Core::Device& GetDevice() const;
-		Core::Driver& GetDriver() const;
+		Core::Device& GetDevice();
+		Core::Driver& GetDriver();
 	};
 }

@@ -5,7 +5,7 @@
 #include "AmberEngine/Resources/AssimpModel.h"
 #include "AmberEngine/ImGui/imgui.h"
 
-Example::Application::Application()
+Example::Application::Application(const AmberEngine::Managers::RenderingSettings& p_settings) : m_renderingManager(p_settings)
 {
 }
 

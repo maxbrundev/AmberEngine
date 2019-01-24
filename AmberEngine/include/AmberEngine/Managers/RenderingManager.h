@@ -10,6 +10,12 @@
 
 namespace AmberEngine::Managers
 {
+	struct API_AMBERENGINE RenderingSettings
+	{
+		Core::DeviceSettings deviceSettings;
+		Core::DriverSettings driverSettings;
+	};
+
 	class API_AMBERENGINE RenderingManager
 	{
 	private:
@@ -28,7 +34,7 @@ namespace AmberEngine::Managers
 		bool isCameraFree;
 
 	public:
-		RenderingManager();
+		RenderingManager(const RenderingSettings& p_settings);
 		~RenderingManager() = default;
 
 		void SetWindow(uint16_t p_width, uint16_t p_height);

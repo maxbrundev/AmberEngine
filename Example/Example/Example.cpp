@@ -7,7 +7,31 @@
 
 int main()
 {
-	Example::Application app;
+	AmberEngine::Core::DeviceSettings deviceSettings{};
+
+	deviceSettings.title = "AmberEngineV0.1.5";
+	deviceSettings.contextVersionMajor = 4;
+	deviceSettings.contextVersionMinor = 4;
+	deviceSettings.enableResizable = true;
+	deviceSettings.enableDebugContext = true;
+	deviceSettings.enableVsync = true;
+	deviceSettings.enableDebugCallback = true;
+	deviceSettings.enableFrameBufferSizeCallback = true;
+
+	AmberEngine::Core::DriverSettings driverSettings{};
+
+	driverSettings.enableDepthTest = true;
+	driverSettings.enableBlend = true;
+	driverSettings.enableBackFaceCulling = true;
+	driverSettings.enableMultisample = true;
+	driverSettings.enableDebugCallback = true;
+
+	AmberEngine::Managers::RenderingSettings renderSettings{};
+
+	renderSettings.deviceSettings = deviceSettings;
+	renderSettings.driverSettings = driverSettings;
+	
+	Example::Application app(renderSettings);
 	app.Setup();
 	app.Run();
 }

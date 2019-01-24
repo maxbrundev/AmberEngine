@@ -1,35 +1,25 @@
 #include "AmberEngine/Managers/WindowManager.h"
 
-AmberEngine::Managers::WindowManager::WindowManager()
+AmberEngine::Managers::WindowManager::WindowManager(const Core::DeviceSettings& p_deviceSettings, const Core::DriverSettings& p_driverSettings) : m_device(p_deviceSettings), m_driver(p_driverSettings)
 {
-	m_device = std::make_unique<Core::Device>();
-	m_driver = std::make_unique<Core::Driver>();
-
-	Setup();
 }
 
 AmberEngine::Managers::WindowManager::~WindowManager()
 {
-	m_device->Close();
+	m_device.Close();
 }
 
-void AmberEngine::Managers::WindowManager::Setup()
+bool AmberEngine::Managers::WindowManager::IsOpen()
 {
-	m_device->Setup();
-	m_driver->Setup();
+	return m_device.IsActive();
 }
 
-bool AmberEngine::Managers::WindowManager::IsOpen() const
+AmberEngine::Core::Device& AmberEngine::Managers::WindowManager::GetDevice()
 {
-	return m_device->IsActive();
+	return m_device;
 }
 
-AmberEngine::Core::Device& AmberEngine::Managers::WindowManager::GetDevice() const
+AmberEngine::Core::Driver& AmberEngine::Managers::WindowManager::GetDriver()
 {
-	return *m_device;
-}
-
-AmberEngine::Core::Driver& AmberEngine::Managers::WindowManager::GetDriver() const
-{
-	return *m_driver;
+	return m_driver;
 }
