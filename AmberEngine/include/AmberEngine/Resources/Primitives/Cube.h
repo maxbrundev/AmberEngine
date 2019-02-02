@@ -6,7 +6,7 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine::PrimitiveMesh
+namespace AmberEngine::PrimitivesShapes
 {
 	struct API_AMBERENGINE Vertex
 	{
@@ -26,7 +26,7 @@ namespace AmberEngine::PrimitiveMesh
 	class API_AMBERENGINE Cube
 	{
 	private:
-		static std::vector<PrimitiveMesh::Vertex> m_vertices;
+		static std::vector<Vertex> m_vertices;
 		static glm::vec3 m_positions[8];
 		static glm::vec3 m_normals[6];
 		static glm::vec2 m_textureCoordinates[4];
@@ -43,6 +43,6 @@ namespace AmberEngine::PrimitiveMesh
 		static void InitCubeVertices();
 		static void CreateTriangle(uint8_t pos1, uint8_t pos2, uint8_t pos3, uint8_t text1, uint8_t text2, uint8_t text3, uint8_t p_normals);
 
-		static std::vector<PrimitiveMesh::Vertex>& GetVertices();
+		static std::vector<Vertex>& GetVertices();
 	};
 }

@@ -78,9 +78,6 @@
     <ClInclude Include="include\AmberEngine\Maths\MathGLM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Resources\Mesh\Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\AmberEngine\Resources\AssimpMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -135,6 +132,12 @@
     <ClInclude Include="include\AmberEngine\Settings\RenderingSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\Resources\Primitives\Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Geometry\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\AmberEngine\LowRenderer\CameraController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -176,9 +179,6 @@
     <ClCompile Include="src\AmberEngine\Managers\WindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\Resources\Mesh\Cube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AmberEngine\Resources\AssimpMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -212,7 +212,7 @@
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\LowRenderer\CameraController.cpp">
+    <ClCompile Include="src\AmberEngine\Resources\Primitives\Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

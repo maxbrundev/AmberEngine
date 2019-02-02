@@ -18,7 +18,7 @@ void AmberEngine::Resources::Mesh::Draw()
 	glBindVertexArray(0);
 }
 
-void AmberEngine::Resources::Mesh::InitBuffers(const Model& p_model)
+void AmberEngine::Resources::Mesh::InitBuffers(const ObjModel& p_model)
 {
 	m_numIndices = p_model.indices.size();
 

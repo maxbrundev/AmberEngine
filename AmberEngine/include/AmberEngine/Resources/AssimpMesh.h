@@ -8,7 +8,7 @@
 
 namespace AmberEngine::Resources
 {
-		struct API_AMBERENGINE Vertex 
+		struct API_AMBERENGINE AssimpVertex
 		{
 			glm::vec3 position;
 			glm::vec3 normal;
@@ -17,7 +17,7 @@ namespace AmberEngine::Resources
 			glm::vec3 bitangent;
 		};
 
-		struct API_AMBERENGINE TextureData 
+		struct API_AMBERENGINE AssimpTextureData
 		{
 			unsigned int id;
 			std::string type;
@@ -27,8 +27,8 @@ namespace AmberEngine::Resources
 		class API_AMBERENGINE AssimpMesh
 		{
 		private:
-			std::vector<Vertex> m_vertices;
-			std::vector<TextureData> m_textures;
+			std::vector<AssimpVertex> m_vertices;
+			std::vector<AssimpTextureData> m_textures;
 			std::vector<unsigned int> m_indices;
 
 			unsigned int m_vao;
@@ -36,7 +36,7 @@ namespace AmberEngine::Resources
 			unsigned int m_ebo;
 
 		public:
-			AssimpMesh(std::vector<Vertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<TextureData> p_textures);
+			AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<AssimpTextureData> p_textures);
 			~AssimpMesh() = default;
 
 			void BindBuffers();

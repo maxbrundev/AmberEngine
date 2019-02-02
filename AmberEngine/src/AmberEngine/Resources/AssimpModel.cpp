@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include <GL/glew.h>
+#include <assimp/postprocess.h>
+#include <stb_image.h>
 
 #include "AmberEngine/Resources/AssimpModel.h"
 
@@ -101,13 +103,13 @@ void AmberEngine::Resources::AssimpModel::ProcessNode(aiNode* p_node, const aiSc
 
 AmberEngine::Resources::AssimpMesh AmberEngine::Resources::AssimpModel::ProcessMesh(aiMesh* p_mesh, const aiScene* p_scene)
 {
-	std::vector<Vertex> vertices;
+	std::vector<AssimpVertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<TextureData> textures;
+	std::vector<AssimpTextureData> textures;
 
 	for (int i = 0; i < p_mesh->mNumVertices; i++)
 	{
-		Vertex vertex;
+		AssimpVertex vertex;
 		glm::vec3 vector;
 
 		vector.x = p_mesh->mVertices[i].x;
@@ -153,24 +155,24 @@ AmberEngine::Resources::AssimpMesh AmberEngine::Resources::AssimpModel::ProcessM
 	
 	aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	std::vector<TextureData> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<AssimpTextureData> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	
-	std::vector<TextureData> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<AssimpTextureData> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	
-	std::vector<TextureData> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
+	std::vector<AssimpTextureData> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	
-	std::vector<TextureData> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
+	std::vector<AssimpTextureData> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	return AssimpMesh(vertices, indices, textures);
 }
 
-std::vector<AmberEngine::Resources::TextureData> AmberEngine::Resources::AssimpModel::LoadMaterial(aiMaterial* mat, aiTextureType type, const std::string& typeName)
+std::vector<AmberEngine::Resources::AssimpTextureData> AmberEngine::Resources::AssimpModel::LoadMaterial(aiMaterial* mat, aiTextureType type, const std::string& typeName)
 {
-	std::vector<TextureData> textures;
+	std::vector<AssimpTextureData> textures;
 	for (int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -188,7 +190,7 @@ std::vector<AmberEngine::Resources::TextureData> AmberEngine::Resources::AssimpM
 		}
 		if (!skip)
 		{
-			TextureData texture;
+			AssimpTextureData texture;
 			texture.id = LoadTexture(str.C_Str(), m_directory);
 			texture.type = typeName;
 			texture.path = str.C_Str();

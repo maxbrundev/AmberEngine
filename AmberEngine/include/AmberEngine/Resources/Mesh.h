@@ -23,6 +23,6 @@ namespace AmberEngine::Resources
 		~Mesh();
 
 		void Draw();
-		void InitBuffers(const Model& p_model);
+		void InitBuffers(const ObjModel& p_model);
 	};
 }

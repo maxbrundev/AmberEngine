@@ -56,26 +56,26 @@ void AmberEngine::Resources::ObjLoader::ParseFile(const std::string& p_filePath)
 	}
 }
 
-AmberEngine::Resources::Model AmberEngine::Resources::ObjLoader::LoadModel()
+AmberEngine::Resources::ObjModel AmberEngine::Resources::ObjLoader::LoadModel()
 {
-	Model finalModel;
-	Model normalModel;
+	ObjModel finalModel;
+	ObjModel normalModel;
 
 	const auto numIndices = m_indices.size();
 
-	std::vector<IndexData*> indexLookup;
+	std::vector<ObjIndexData*> indexLookup;
 
 	for (int i = 0; i < numIndices; i++)
 		indexLookup.push_back(&m_indices[i]);
 
 	std::sort(indexLookup.begin(), indexLookup.end());
 
-	std::map<IndexData, unsigned int> normalModelIndexMap;
+	std::map<ObjIndexData, unsigned int> normalModelIndexMap;
 	std::map<unsigned int, unsigned int> indexMap;
 
 	for (int i = 0; i < numIndices; i++)
 	{
-		IndexData* currentIndex = &m_indices[i];
+		ObjIndexData* currentIndex = &m_indices[i];
 
 		glm::vec3 currentPosition = m_vertices[currentIndex->vertexIndex];
 		glm::vec2 currentTexCoord;
@@ -94,12 +94,12 @@ AmberEngine::Resources::Model AmberEngine::Resources::ObjLoader::LoadModel()
 		unsigned int normalModelIndex;
 		unsigned int resultModelIndex;
 
-		std::map<IndexData, unsigned int>::iterator it = normalModelIndexMap.find(*currentIndex);
+		std::map<ObjIndexData, unsigned int>::iterator it = normalModelIndexMap.find(*currentIndex);
 		if (it == normalModelIndexMap.end())
 		{
 			normalModelIndex = normalModel.positionsIndices.size();
 
-			normalModelIndexMap.insert(std::pair<IndexData, unsigned int>(*currentIndex, normalModelIndex));
+			normalModelIndexMap.insert(std::pair<ObjIndexData, unsigned int>(*currentIndex, normalModelIndex));
 			normalModel.positionsIndices.push_back(currentPosition);
 			normalModel.texCoordsIndices.push_back(currentTexCoord);
 			normalModel.normalsIndices.push_back(currentNormal);
@@ -176,7 +176,7 @@ std::vector<std::string> AmberEngine::Resources::ObjLoader::ParseString(const st
 	return result;
 }
 
-unsigned int AmberEngine::Resources::ObjLoader::FindLastVertexIndex(const std::vector<IndexData*>& p_indexLookup, const IndexData* p_currentIndex, const Model& p_result)
+unsigned int AmberEngine::Resources::ObjLoader::FindLastVertexIndex(const std::vector<ObjIndexData*>& p_indexLookup, const ObjIndexData* p_currentIndex, const ObjModel& p_result)
 {
 	unsigned int start = 0;
 	auto end = p_indexLookup.size();
@@ -185,7 +185,7 @@ unsigned int AmberEngine::Resources::ObjLoader::FindLastVertexIndex(const std::v
 
 	while (current != previous)
 	{
-		IndexData* testIndex = p_indexLookup[current];
+		ObjIndexData* testIndex = p_indexLookup[current];
 
 		if (testIndex->vertexIndex == p_currentIndex->vertexIndex)
 		{
@@ -193,7 +193,7 @@ unsigned int AmberEngine::Resources::ObjLoader::FindLastVertexIndex(const std::v
 
 			for (int i = 0; i < current; i++)
 			{
-				IndexData* possibleIndex = p_indexLookup[current - i];
+				ObjIndexData* possibleIndex = p_indexLookup[current - i];
 
 				if (possibleIndex == p_currentIndex)
 					continue;
@@ -205,7 +205,7 @@ unsigned int AmberEngine::Resources::ObjLoader::FindLastVertexIndex(const std::v
 
 			for (int i = countStart; i < p_indexLookup.size() - countStart; i++)
 			{
-				IndexData* possibleIndex = p_indexLookup[current + i];
+				ObjIndexData* possibleIndex = p_indexLookup[current + i];
 
 				if (possibleIndex == p_currentIndex)
 					continue;
@@ -269,7 +269,7 @@ void AmberEngine::Resources::ObjLoader::CreateObjFace(const std::string& p_line)
 	}
 }
 
-void AmberEngine::Resources::ObjLoader::CalculateNormals(Model & p_model)
+void AmberEngine::Resources::ObjLoader::CalculateNormals(ObjModel & p_model)
 {
 	for (int i = 0; i < p_model.indices.size(); i += 3)
 	{
@@ -348,7 +348,7 @@ glm::vec3 AmberEngine::Resources::ObjLoader::ParseObjVec3(const std::string& p_l
 	return glm::vec3(xValue, yValue, zValue);
 }
 
-AmberEngine::Resources::IndexData AmberEngine::Resources::ObjLoader::ParseObjIndex(const std::string& p_source)
+AmberEngine::Resources::ObjIndexData AmberEngine::Resources::ObjLoader::ParseObjIndex(const std::string& p_source)
 {
 	const auto sourceLength = p_source.length();
 	const char* source = p_source.c_str();
@@ -356,7 +356,7 @@ AmberEngine::Resources::IndexData AmberEngine::Resources::ObjLoader::ParseObjInd
 	unsigned int vertIndexStart = 0;
 	unsigned int vertIndexEnd = FindNextChar(vertIndexStart, source, sourceLength, '/');
 
-	IndexData result;
+	ObjIndexData result;
 	result.vertexIndex = ParseObjIndexValue(p_source, vertIndexStart, vertIndexEnd);
 	result.uvIndex = 0;
 	result.normalIndex = 0;
