@@ -127,6 +127,7 @@ xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDi
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
+xcopy "$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
     <Link>
@@ -163,6 +164,7 @@ xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDi
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
+xcopy "$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
     <Link>
@@ -206,6 +208,7 @@ xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDi
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
+xcopy "$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -246,6 +249,7 @@ xcopy "$(SolutionDir)..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDi
 xcopy "$(SolutionDir)..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
+xcopy "$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

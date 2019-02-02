@@ -5,6 +5,11 @@
 uint16_t AmberEngine::Context::Device::m_width = 1280;
 uint16_t AmberEngine::Context::Device::m_height = 720;
 
+void AmberEngine::Context::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	std::cout << key << std::endl;
+}
+
 AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_settings)
 {
 	InitGLFW();
@@ -17,15 +22,22 @@ AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_settings)
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	if(p_settings.enableDebugCallback)
+	{
 		glfwSetErrorCallback(error_callback);
+	}
 
 	InitWindow(p_settings.title);
 
 	if(p_settings.enableFrameBufferSizeCallback)
+	{
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-
+	}
+		
 	glfwMakeContextCurrent(m_window);
+
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	glfwSetKeyCallback(m_window, key_callback);
 
 	glfwSwapInterval(p_settings.enableVsync ? 1 : 0);
 }

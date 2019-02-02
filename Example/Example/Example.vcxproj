@@ -75,7 +75,7 @@
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir);$(ProjectDir)include\;$(SolutionDir)..\Build\AmberEngine\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <SourcePath>$(ProjectDir);$(ProjectDir)src\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -83,7 +83,7 @@
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir);$(ProjectDir)include\;$(SolutionDir)..\Build\AmberEngine\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <SourcePath>$(ProjectDir);$(ProjectDir)src\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,7 +91,7 @@
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir);$(ProjectDir)include\;$(SolutionDir)..\Build\AmberEngine\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <SourcePath>$(ProjectDir);$(ProjectDir)src\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -99,7 +99,7 @@
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir);$(ProjectDir)include\;$(SolutionDir)..\Build\AmberEngine\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Build\AmberEngine\lib\$(Platform)\$(Configuration)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <SourcePath>$(ProjectDir);$(ProjectDir)src\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AmberEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AmberEngine.lib;opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>del "$(OutDir)*.dll"
@@ -137,7 +137,7 @@ xcopy "$(SolutionDir)..\Build\AmberEngine\bin\$(Platform)\$(Configuration)\*.dll
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AmberEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AmberEngine.lib;opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>del "$(OutDir)*.dll"
@@ -162,7 +162,7 @@ xcopy "$(SolutionDir)..\Build\AmberEngine\bin\$(Platform)\$(Configuration)\*.dll
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AmberEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AmberEngine.lib;opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>del "$(OutDir)*.dll"
@@ -187,7 +187,7 @@ xcopy "$(SolutionDir)..\Build\AmberEngine\bin\$(Platform)\$(Configuration)\*.dll
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AmberEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AmberEngine.lib;opengl32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>del "$(OutDir)*.dll"

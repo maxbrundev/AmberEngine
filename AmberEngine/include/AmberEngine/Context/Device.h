@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <queue>
 
 #include <GLFW/glfw3.h>
@@ -9,7 +8,9 @@
 
 namespace AmberEngine::Context
 {
-	class Device
+	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+	class API_AMBERENGINE Device
 	{
 	private:
 		GLFWwindow* m_window{};
@@ -34,12 +35,12 @@ namespace AmberEngine::Context
 
 		void SwapBuffers();
 		void PollEvents();
-
+		//void SetCallBack();
 		void DisplayErrors();
 
 		static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 		static void error_callback(int error, const char* description);
-
+		
 		GLFWwindow* GetContextWindow() const;
 
 		uint16_t GetWindowWidth() const;
