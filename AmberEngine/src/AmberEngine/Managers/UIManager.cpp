@@ -1,11 +1,9 @@
-#include "AmberEngine/Debug/GLDebug.h"
 #include "AmberEngine/Managers/UIManager.h"
 
+#include "AmberEngine/ImGUI/imgui.h"
+#include "AmberEngine/ImGUI/imgui_impl_glfw_gl3.h"
 
-#include "AmberEngine/ImGui/imgui.h"
-#include "AmberEngine/ImGui/imgui_impl_glfw_gl3.h"
-
-AmberEngine::Managers::UIManager::UIManager(Core::Device& p_context) : m_device(p_context), m_clearColor{ 0.1f, 0.1f, 0.1f, 1.0f }
+AmberEngine::Managers::UIManager::UIManager(Context::Device& p_device) : m_device(p_device)
 {
 	ImGui::CreateContext();
 	ImGui_ImplGlfwGL3_Init(m_device.GetContextWindow(), true);
@@ -16,49 +14,38 @@ AmberEngine::Managers::UIManager::UIManager(Core::Device& p_context) : m_device(
 
 AmberEngine::Managers::UIManager::~UIManager()
 {
-	Close();
+	ImGui_ImplGlfwGL3_Shutdown();
+	ImGui::DestroyContext();
 }
 
-void AmberEngine::Managers::UIManager::PreUpdate()
+void AmberEngine::Managers::UIManager::BeginFrame()
 {
 	ImGui_ImplGlfwGL3_NewFrame();
-	GLCall(glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], m_clearColor[3]));
-	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
-void AmberEngine::Managers::UIManager::Update()
+void AmberEngine::Managers::UIManager::EndFrame()
 {
-	DisplayMenuBar();
-	ImGui::Begin("Scene");
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	ImGui::ColorEdit4("Clear Color", m_clearColor);
+	ImGui::Render();
+}
+
+void AmberEngine::Managers::UIManager::BeginWindow(const std::string& p_title)
+{
+	ImGui::Begin(p_title.c_str());
+}
+
+void AmberEngine::Managers::UIManager::EndWindow()
+{
 	ImGui::End();
 }
 
-void AmberEngine::Managers::UIManager::PostUpdate()
+void AmberEngine::Managers::UIManager::Render()
 {
-	ImGui::Render();
 	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void AmberEngine::Managers::UIManager::DisplayMenuBar()
+void AmberEngine::Managers::UIManager::DisplayDeviceInfos()
 {
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("Menu"))
-		{
-			if(ImGui::MenuItem("Quit"))
-			{
-				m_device.Close();
-			}
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
-	}
-}
-
-void AmberEngine::Managers::UIManager::Close()
-{
-	ImGui_ImplGlfwGL3_Shutdown();
-	ImGui::DestroyContext();
+	ImGui::Begin("Device");
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::End();
 }

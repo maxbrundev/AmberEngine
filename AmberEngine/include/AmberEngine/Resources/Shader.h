@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <unordered_map>
+
 #include <glm/glm.hpp>
 
 #include "AmberEngine/API/Export.h"
@@ -18,17 +19,16 @@ namespace AmberEngine::Resources
 	{
 	private:
 		std::unordered_map<std::string, int> m_uniformLocationCache;
-		std::queue<std::string> m_errors;
+
 		std::string m_vertexFilePath;
 		std::string m_geometryFilePath;
 		std::string m_fragmentFilePath;
 			
 		std::string m_sourceFile;
 
-			
+		unsigned int m_rendererID;
 
 	public:
-		unsigned int m_rendererID;
 		Shader() = default;
 		Shader(const std::string& p_filePath);
 		Shader(const std::string& p_vertexShader, const std::string& p_fragmentShader);

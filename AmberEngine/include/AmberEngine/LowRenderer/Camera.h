@@ -25,7 +25,7 @@ namespace AmberEngine::LowRenderer
 			RIGHT
 		};
 
-		Core::Device& m_device;
+		Context::Device& m_device;
 
 		glm::vec3 m_forward;
 		glm::vec3 m_up;
@@ -47,8 +47,8 @@ namespace AmberEngine::LowRenderer
 		bool m_isLock;
 
 	public:
-		Camera(Core::Device& p_context, glm::vec3 p_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_up = glm::vec3(0.0f, 1.0f, 0.0f), float p_yaw = YAW, float p_pitch = PITCH);
-		Camera(Core::Device& p_context, float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch);
+		Camera(Context::Device& p_context, glm::vec3 p_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_up = glm::vec3(0.0f, 1.0f, 0.0f), float p_yaw = YAW, float p_pitch = PITCH);
+		Camera(Context::Device& p_context, float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch);
 
 		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);
 		void ProcessMouseMovement(float p_xoffset, float p_yoffset, bool p_isConstrainPitch = true);

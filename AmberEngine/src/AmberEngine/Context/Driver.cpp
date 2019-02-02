@@ -3,7 +3,7 @@
 #include "AmberEngine/Context/Driver.h"
 #include "AmberEngine/Debug/GLDebug.h"
 
-AmberEngine::Core::Driver::Driver(const DriverSettings& p_settings)
+AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_settings)
 {
 	GLCall(const GLenum error = glewInit());
 	if (error != GLEW_OK)
@@ -17,16 +17,16 @@ AmberEngine::Core::Driver::Driver(const DriverSettings& p_settings)
 	if (p_settings.enableDepthTest)
 		glEnable(GL_DEPTH_TEST);
 
+	if (p_settings.enableBackFaceCulling)
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+
 	if (p_settings.enableBlend)
 	{
 		GLCall(glEnable(GL_BLEND));
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	}
-
-	if(p_settings.enableBackFaceCulling)
-	{
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
 	}
 
 	if(p_settings.enableMultisample)
@@ -48,7 +48,7 @@ AmberEngine::Core::Driver::Driver(const DriverSettings& p_settings)
 	DisplayDriverInfo();
 }
 
-void AmberEngine::Core::Driver::DisplayErrors()
+void AmberEngine::Context::Driver::DisplayErrors()
 {
 	while (!m_errors.empty())
 	{
@@ -57,7 +57,7 @@ void AmberEngine::Core::Driver::DisplayErrors()
 	}
 }
 
-void AmberEngine::Core::Driver::DisplayDriverInfo()
+void AmberEngine::Context::Driver::DisplayDriverInfo()
 {
 	std::cout << "Using GLEW: " << glewGetString(GLEW_VERSION) << std::endl;
 
@@ -67,7 +67,7 @@ void AmberEngine::Core::Driver::DisplayDriverInfo()
 	std::cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 }
 
-const std::queue<std::string>& AmberEngine::Core::Driver::GetQueueErros()
+const std::queue<std::string>& AmberEngine::Context::Driver::GetQueueErros()
 {
 	return m_errors;
 }

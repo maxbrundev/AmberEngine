@@ -1,30 +1,14 @@
 #pragma once
 
-#include <iostream>
+
 #include <queue>
 
 #include <GLFW/glfw3.h>
 
-#include "AmberEngine/Context/IContext.h"
+#include "AmberEngine/Settings/DeviceSettings.h"
 
-#include "AmberEngine/API/Export.h"
-
-namespace AmberEngine::Core
+namespace AmberEngine::Context
 {
-	struct API_AMBERENGINE DeviceSettings
-	{
-		const char* title;
-
-		int contextVersionMajor;
-		int contextVersionMinor;
-
-		bool enableResizable;
-		bool enableDebugContext;
-		bool enableVsync;
-		bool enableDebugCallback;
-		bool enableFrameBufferSizeCallback;
-	};
-
 	class Device
 	{
 	private:
@@ -36,7 +20,7 @@ namespace AmberEngine::Core
 		std::queue<std::string> m_errors;
 
 	public:
-		Device(const DeviceSettings& p_settings);
+		Device(const Settings::DeviceSettings& p_settings);
 		~Device();
 
 		void Close();

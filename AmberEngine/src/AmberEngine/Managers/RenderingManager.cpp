@@ -2,8 +2,8 @@
 
 #include "AmberEngine/Managers/RenderingManager.h"
 
-AmberEngine::Managers::RenderingManager::RenderingManager(const RenderingSettings& p_settings)
-	: m_windowManager(p_settings.deviceSettings, p_settings.driverSettings), m_uiManager(m_windowManager.GetDevice()), m_camera(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
+AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::RenderingSettings& p_settings)
+	: m_windowManager(p_settings.deviceSettings, p_settings.driverSettings), m_camera(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
 {
 	isRunning = true;
 }
@@ -18,11 +18,10 @@ void AmberEngine::Managers::RenderingManager::SetCamera(const glm::vec3& p_posit
 	//TODO
 }
 
-void AmberEngine::Managers::RenderingManager::Clear()
+void AmberEngine::Managers::RenderingManager::Clear(float p_red, float p_green, float p_blue, float p_alpha)
 {
-	//GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-	//GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	m_uiManager.PreUpdate();
+	glClearColor(p_red, p_green, p_blue, p_alpha);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void AmberEngine::Managers::RenderingManager::Update()
@@ -30,13 +29,11 @@ void AmberEngine::Managers::RenderingManager::Update()
 	UpdateDeltaTime();
 	UpdateRenderMode();
 	m_camera.Update(m_deltaTime);
-	m_uiManager.Update();
 	UpdateInput();
 }
 
 void AmberEngine::Managers::RenderingManager::SwapBuffers()
 {
-	m_uiManager.PostUpdate();
 	m_windowManager.GetDevice().SwapBuffers();
 	m_windowManager.GetDevice().PollEvents();
 }
@@ -121,14 +118,12 @@ AmberEngine::Managers::WindowManager& AmberEngine::Managers::RenderingManager::G
 	return m_windowManager;
 }
 
-AmberEngine::Managers::ResourcesManager& AmberEngine::Managers::RenderingManager::
-GetResourcesManager()
+AmberEngine::Managers::ResourcesManager& AmberEngine::Managers::RenderingManager::GetResourcesManager()
 {
 	return m_resourcesManager;
 }
 
-AmberEngine::Managers::InputManager& AmberEngine::Managers::RenderingManager::
-GetInputManager()
+AmberEngine::Managers::InputManager& AmberEngine::Managers::RenderingManager::GetInputManager()
 {
 	return m_inputManager;
 }
@@ -143,7 +138,7 @@ glm::mat4 AmberEngine::Managers::RenderingManager::CalculateViewMatrix() const
 	return m_camera.GetViewMatrix();
 }
 
-glm::mat4 AmberEngine::Managers::RenderingManager::GetModelMatrix() const
+glm::mat4 AmberEngine::Managers::RenderingManager::GetUnitModelMatrix() const
 {
 	return glm::mat4(1.0f);
 }

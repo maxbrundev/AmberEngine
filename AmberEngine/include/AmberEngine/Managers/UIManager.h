@@ -9,17 +9,18 @@ namespace  AmberEngine::Managers
 	class API_AMBERENGINE UIManager
 	{
 	private:
-		Core::Device& m_device;
-		float m_clearColor[4];
+		Context::Device& m_device;
 
 	public:
-		UIManager(Core::Device& p_context);
+		UIManager(Context::Device& p_device);
 		~UIManager();
 
-		void PreUpdate();
-		void Update();
-		void PostUpdate();
-		void DisplayMenuBar();
-		void Close();
+		void BeginFrame();
+		void EndFrame();
+		void BeginWindow(const std::string& p_title);
+		void EndWindow();
+		void Render();
+
+		void DisplayDeviceInfos();
 	};
 }

@@ -2,10 +2,11 @@
 
 #include "Application.h"
 
-#include "AmberEngine/Resources/AssimpModel.h"
-#include "AmberEngine/ImGui/imgui.h"
+#include <AmberEngine/Resources/AssimpModel.h>
+#include <AmberEngine/Managers/UIManager.h>
+#include <AmberEngine/ImGUI/imgui.h>
 
-Example::Application::Application(const AmberEngine::Managers::RenderingSettings& p_settings) : m_renderingManager(p_settings)
+Example::Application::Application(const AmberEngine::Settings::RenderingSettings& p_settings) : m_renderingManager(p_settings)
 {
 }
 
@@ -31,23 +32,29 @@ void Example::Application::Run()
 
 	AmberEngine::Resources::AssimpModel model("res/Mesh/nanosuit/nanosuit.obj");
 
+	AmberEngine::Managers::UIManager ui(m_renderingManager.GetWindowManager().GetDevice());
+
 	while (m_renderingManager.IsRunning())
 	{
-		m_renderingManager.Clear();
+		m_renderingManager.Clear(0.1f, 0.1f, 0.1f);
 		m_renderingManager.Update();
 
-		ImGui::Begin("Scene");
+		ui.BeginFrame();
+
+		ui.DisplayDeviceInfos();
+
+		ui.BeginWindow("Scene");
 		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", m_renderingManager.GetCamera().GetPosition().x, m_renderingManager.GetCamera().GetPosition().y, m_renderingManager.GetCamera().GetPosition().z);
 		ImGui::SliderFloat("Light Direction X", &lighDir.x, -10.0f, 10.0f, "X: %.1f");
 		ImGui::SliderFloat("Light Direction Y", &lighDir.y, -10.0f, 10.0f, "Y: %.1f");
 		ImGui::SliderFloat("Light Direction Z", &lighDir.z, -10.0f, 10.0f, "Z: %.1f");
 		ImGui::SliderFloat("Texture Tiling", &UvX, -10.0f, 10.0f, "X");
 		ImGui::SliderFloat("Texture Tiling", &UvY, -10.0f, 10.0f, "Y");
-		ImGui::End();
+		ui.EndWindow();
 
 		glm::mat4 projectionMatrix = m_renderingManager.CalculateProjectionMatrix();
 		glm::mat4 viewMatrix = m_renderingManager.CalculateViewMatrix();
-		glm::mat4 modelMatrix = m_renderingManager.GetModelMatrix();
+		glm::mat4 modelMatrix = m_renderingManager.GetUnitModelMatrix();
 
 		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").Bind();
 		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("projection", projectionMatrix);
@@ -59,6 +66,9 @@ void Example::Application::Run()
 		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
 
 		model.Draw();
+
+		ui.EndFrame();
+		ui.Render();
 
 		m_renderingManager.SwapBuffers();
 	}

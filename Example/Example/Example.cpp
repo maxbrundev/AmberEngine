@@ -7,7 +7,7 @@
 
 int main()
 {
-	AmberEngine::Core::DeviceSettings deviceSettings{};
+	AmberEngine::Settings::DeviceSettings deviceSettings{};
 
 	deviceSettings.title = "AmberEngineV0.1.5";
 	deviceSettings.contextVersionMajor = 4;
@@ -18,7 +18,7 @@ int main()
 	deviceSettings.enableDebugCallback = true;
 	deviceSettings.enableFrameBufferSizeCallback = true;
 
-	AmberEngine::Core::DriverSettings driverSettings{};
+	AmberEngine::Settings::DriverSettings driverSettings{};
 
 	driverSettings.enableDepthTest = true;
 	driverSettings.enableBlend = true;
@@ -26,7 +26,7 @@ int main()
 	driverSettings.enableMultisample = true;
 	driverSettings.enableDebugCallback = true;
 
-	AmberEngine::Managers::RenderingSettings renderSettings{};
+	AmberEngine::Settings::RenderingSettings renderSettings{};
 
 	renderSettings.deviceSettings = deviceSettings;
 	renderSettings.driverSettings = driverSettings;

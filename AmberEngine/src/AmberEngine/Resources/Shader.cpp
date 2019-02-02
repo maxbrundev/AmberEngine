@@ -1,3 +1,5 @@
+#include "AmberEngine/Resources/Shader.h"
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -6,8 +8,6 @@
 #include <glm/glm.hpp>
 
 #include "AmberEngine/Debug/GLDebug.h"
-
-#include "AmberEngine/Resources/Shader.h"
 
 AmberEngine::Resources::Shader::Shader(const std::string& p_filePath) : m_sourceFile(p_filePath), m_rendererID(0)
 {
@@ -49,7 +49,7 @@ AmberEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const 
 	{
 		int length;
 		GLCall(glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length));
-		char* message = (char*)alloca(length * sizeof(char));
+		char* message = static_cast<char*>(alloca(length * sizeof(char)));
 		GLCall(glGetProgramInfoLog(program, length, &length, message));
 		std::cout << "Failed to link shader!" << std::endl;
 		std::cout << message << std::endl;
@@ -158,7 +158,7 @@ AmberEngine::Resources::ShaderProgramSource AmberEngine::Resources::Shader::Pars
 		}
 		else
 		{
-			ss[(int)type] << line << '\n';
+			ss[static_cast<int>(type)] << line << '\n';
 		}
 	}
 

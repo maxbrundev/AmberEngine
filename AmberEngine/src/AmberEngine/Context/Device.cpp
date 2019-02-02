@@ -1,9 +1,11 @@
 #include "AmberEngine/Context/Device.h"
 
-uint16_t AmberEngine::Core::Device::m_width = 1280;
-uint16_t AmberEngine::Core::Device::m_height = 720;
+#include <iostream>
 
-AmberEngine::Core::Device::Device(const DeviceSettings& p_settings)
+uint16_t AmberEngine::Context::Device::m_width = 1280;
+uint16_t AmberEngine::Context::Device::m_height = 720;
+
+AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_settings)
 {
 	InitGLFW();
 
@@ -28,23 +30,23 @@ AmberEngine::Core::Device::Device(const DeviceSettings& p_settings)
 	glfwSwapInterval(p_settings.enableVsync ? 1 : 0);
 }
 
-AmberEngine::Core::Device::~Device()
+AmberEngine::Context::Device::~Device()
 {
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }
 
-void AmberEngine::Core::Device::Close()
+void AmberEngine::Context::Device::Close()
 {
 	glfwSetWindowShouldClose(m_window, true);
 }
 
-bool AmberEngine::Core::Device::IsActive()
+bool AmberEngine::Context::Device::IsActive()
 {
 	return !glfwWindowShouldClose(m_window);
 }
 
-void AmberEngine::Core::Device::InitGLFW()
+void AmberEngine::Context::Device::InitGLFW()
 {
 	if (!glfwInit())
 	{
@@ -52,7 +54,7 @@ void AmberEngine::Core::Device::InitGLFW()
 	}
 }
 
-void AmberEngine::Core::Device::InitWindow(const char* p_title)
+void AmberEngine::Context::Device::InitWindow(const char* p_title)
 {
 	m_window = glfwCreateWindow(m_width, m_height, p_title, nullptr, nullptr);
 	if (!m_window)
@@ -62,27 +64,27 @@ void AmberEngine::Core::Device::InitWindow(const char* p_title)
 	}
 }
 
-void AmberEngine::Core::Device::LockCursor()
+void AmberEngine::Context::Device::LockCursor()
 {
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void AmberEngine::Core::Device::FreeCursor()
+void AmberEngine::Context::Device::FreeCursor()
 {
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void AmberEngine::Core::Device::SwapBuffers()
+void AmberEngine::Context::Device::SwapBuffers()
 {
 	glfwSwapBuffers(m_window);
 }
 
-void AmberEngine::Core::Device::PollEvents()
+void AmberEngine::Context::Device::PollEvents()
 {
 	glfwPollEvents();
 }
 
-void AmberEngine::Core::Device::DisplayErrors()
+void AmberEngine::Context::Device::DisplayErrors()
 {
 	while (!m_errors.empty())
 	{
@@ -91,7 +93,7 @@ void AmberEngine::Core::Device::DisplayErrors()
 	}
 }
 
-void AmberEngine::Core::Device::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void AmberEngine::Context::Device::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	m_height = height;
 	m_width = width;
@@ -99,37 +101,42 @@ void AmberEngine::Core::Device::framebuffer_size_callback(GLFWwindow* window, in
 	glViewport(0, 0, m_width, m_height);
 }
 
-void AmberEngine::Core::Device::error_callback(int error, const char* description)
+void AmberEngine::Context::Device::error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Error: %s\n", description);
 }
 
-GLFWwindow* AmberEngine::Core::Device::GetContextWindow() const
+GLFWwindow* AmberEngine::Context::Device::GetContextWindow() const
 {
 	return m_window;
 }
 
-uint16_t AmberEngine::Core::Device::GetWindowWidth() const
+uint16_t AmberEngine::Context::Device::GetWindowWidth() const
 {
 	return m_width;
 }
 
-uint16_t AmberEngine::Core::Device::GetWindowHeight() const
+uint16_t AmberEngine::Context::Device::GetWindowHeight() const
 {
 	return m_height;
 }
 
-int AmberEngine::Core::Device::GetKey(const int p_key) const
+int AmberEngine::Context::Device::GetKey(const int p_key) const
 {
 	return glfwGetKey(m_window, p_key);
 }
 
-int AmberEngine::Core::Device::GetPressState()
+int AmberEngine::Context::Device::GetPressState()
 {
 	return GLFW_PRESS;
 }
 
-int AmberEngine::Core::Device::GetReleaseState()
+int AmberEngine::Context::Device::GetReleaseState()
 {
 	return GLFW_RELEASE;
+}
+
+const std::queue<std::string>& AmberEngine::Context::Device::GetQueueErros()
+{
+	return m_errors;
 }

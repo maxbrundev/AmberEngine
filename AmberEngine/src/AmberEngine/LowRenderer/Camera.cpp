@@ -2,7 +2,7 @@
 
 #include "AmberEngine/LowRenderer/Camera.h"
 
-AmberEngine::LowRenderer::Camera::Camera(Core::Device& p_context, glm::vec3 p_position, glm::vec3 p_up, float p_yaw, float p_pitch)
+AmberEngine::LowRenderer::Camera::Camera(Context::Device& p_context, glm::vec3 p_position, glm::vec3 p_up, float p_yaw, float p_pitch)
 	: m_device(p_context), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_fov(FOV), m_isFirstMouse(true), m_isLock(false)
 {
 	m_position = p_position;
@@ -16,7 +16,7 @@ AmberEngine::LowRenderer::Camera::Camera(Core::Device& p_context, glm::vec3 p_po
 	m_lastMousePosY = m_device.GetWindowHeight() / 2.0f;
 }
 
-AmberEngine::LowRenderer::Camera::Camera(Core::Device& p_context, float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch)
+AmberEngine::LowRenderer::Camera::Camera(Context::Device& p_context, float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch)
 	: m_device(p_context), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_fov(FOV), m_isFirstMouse(true), m_isLock(false)
 {
 	m_position = glm::vec3(p_posX, p_posY, p_posZ);
