@@ -21,6 +21,7 @@ namespace  AmberEngine::Managers
 		void EndWindow();
 		void Render();
 
+		void DisplayMenu();
 		void DisplayDeviceInfos();
 	};
 }

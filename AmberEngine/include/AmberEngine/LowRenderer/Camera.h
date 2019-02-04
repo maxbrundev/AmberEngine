@@ -2,75 +2,49 @@
 
 #include <glm/glm.hpp>
 
-#include "AmberEngine/Context/Device.h"
-
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::LowRenderer
 {
-	const float YAW = -90.0f;
-	const float PITCH = 0.0f;
-	const float SPEED = 10.5f;
-	const float SENSITIVITY = 0.1f;
-	const float FOV = 45.0f;
-
 	class API_AMBERENGINE Camera
 	{
 	private:
-		enum class cameraMovement
-		{
-			FORWARD,
-			BACKWARD,
-			LEFT,
-			RIGHT
-		};
+		const float PITCH = 0.0f;
+		const float YAW = -90.0f;
+		const float FOV = 45.0f;
 
-		Context::Device& m_device;
-
+		glm::vec3 m_position;
 		glm::vec3 m_forward;
 		glm::vec3 m_up;
 		glm::vec3 m_right;
-		glm::vec3 m_worldUp;
 
-		glm::vec3 m_position;
+		glm::vec3 m_worldUp;
 
 		float m_yaw;
 		float m_pitch;
 		float m_fov;
 
-		GLdouble m_lastMousePosX;
-		GLdouble m_lastMousePosY;
-		float m_movementSpeed;
-		float m_mouseSensitivity;
-
-		bool m_isFirstMouse;
-		bool m_isLock;
-
 	public:
-		Camera(Context::Device& p_context, glm::vec3 p_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_up = glm::vec3(0.0f, 1.0f, 0.0f), float p_yaw = YAW, float p_pitch = PITCH);
-		Camera(Context::Device& p_context, float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch);
+		Camera(glm::vec3 p_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_up = glm::vec3(0.0f, 1.0f, 0.0f));
+		//Camera(float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch);
 
-		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);
-		void ProcessMouseMovement(float p_xoffset, float p_yoffset, bool p_isConstrainPitch = true);
-		void ProcessMouseScroll(float p_yoffset);
-
-		void Update(float p_deltaTime);
-
-		void HandleInput(float p_deltaTime);
-		void HandleMouse();
-		void Lock();
-		void Unlock();
-
-		float GetCameraFov() const;
-
-		glm::vec3 GetPosition() const;
-		glm::vec3 GetForward() const;
-		glm::mat4 GetProjectionMatrix() const;
 		glm::mat4 GetViewMatrix() const;
 
+		glm::vec3& GetPosition();
+
+		float& GetYaw();
+		float& GetPitch();
+
+		const glm::vec3& GetForward() const;
+		const glm::vec3& GetRight() const;
+		const glm::vec3& GetUp() const;
+
+		float& GetCameraFov();
+
+		void SetPosition(glm::vec3 p_pos);
 		void SetPosition(float pos_x, float pos_y, float pos_z);
-			
-	private:
+		void SetFov(float p_value);
+
 		void UpdateCameraVectors();
 	};
 }

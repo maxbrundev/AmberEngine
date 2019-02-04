@@ -1,14 +1,10 @@
 #include "AmberEngine/Context/Device.h"
 
 #include <iostream>
+#include "AmberEngine/Managers/InputManager.h"
 
 uint16_t AmberEngine::Context::Device::m_width = 1280;
 uint16_t AmberEngine::Context::Device::m_height = 720;
-
-void AmberEngine::Context::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	std::cout << key << std::endl;
-}
 
 AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_settings)
 {
@@ -35,9 +31,9 @@ AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_settings)
 		
 	glfwMakeContextCurrent(m_window);
 
+	glfwSetKeyCallback(m_window, Managers::InputManager::key_callback);
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	glfwSetKeyCallback(m_window, key_callback);
+	glfwSetCursorPosCallback(m_window, Managers::InputManager::cursor_position_callback);
 
 	glfwSwapInterval(p_settings.enableVsync ? 1 : 0);
 }

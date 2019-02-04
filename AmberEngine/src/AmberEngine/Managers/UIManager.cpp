@@ -6,7 +6,7 @@
 AmberEngine::Managers::UIManager::UIManager(Context::Device& p_device) : m_device(p_device)
 {
 	ImGui::CreateContext();
-	ImGui_ImplGlfwGL3_Init(m_device.GetContextWindow(), true);
+	ImGui_ImplGlfwGL3_Init(m_device.GetContextWindow(), false);
 	ImGui::StyleColorsDark();
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.FrameRounding = 12.0f;
@@ -41,6 +41,22 @@ void AmberEngine::Managers::UIManager::EndWindow()
 void AmberEngine::Managers::UIManager::Render()
 {
 	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void AmberEngine::Managers::UIManager::DisplayMenu()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+			if (ImGui::MenuItem("Quit"))
+			{
+				m_device.Close();
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
 }
 
 void AmberEngine::Managers::UIManager::DisplayDeviceInfos()

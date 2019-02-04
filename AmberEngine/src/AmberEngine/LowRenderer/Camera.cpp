@@ -1,23 +1,15 @@
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "AmberEngine/LowRenderer/Camera.h"
 
-AmberEngine::LowRenderer::Camera::Camera(Context::Device& p_context, glm::vec3 p_position, glm::vec3 p_up, float p_yaw, float p_pitch)
-	: m_device(p_context), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_fov(FOV), m_isFirstMouse(true), m_isLock(false)
+#include <glm/gtc/matrix_transform.hpp>
+
+AmberEngine::LowRenderer::Camera::Camera(glm::vec3 p_position, glm::vec3 p_up)
+	: m_yaw(YAW), m_pitch(PITCH), m_fov(FOV), m_position(p_position), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_worldUp(p_up)
 {
-	m_position = p_position;
-	m_worldUp = p_up;
-	m_yaw = p_yaw;
-	m_pitch = p_pitch;
-
 	UpdateCameraVectors();
-
-	m_lastMousePosX = m_device.GetWindowWidth() / 2.0f;
-	m_lastMousePosY = m_device.GetWindowHeight() / 2.0f;
 }
 
-AmberEngine::LowRenderer::Camera::Camera(Context::Device& p_context, float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch)
-	: m_device(p_context), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_fov(FOV), m_isFirstMouse(true), m_isLock(false)
+/*AmberEngine::LowRenderer::Camera::Camera(float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch)
+	: m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_fov(FOV)
 {
 	m_position = glm::vec3(p_posX, p_posY, p_posZ);
 	m_worldUp = glm::vec3(p_upX, p_upY, p_upZ);
@@ -25,136 +17,36 @@ AmberEngine::LowRenderer::Camera::Camera(Context::Device& p_context, float p_pos
 	m_pitch = p_pitch;
 
 	UpdateCameraVectors();
-}
+}*/
 
-void AmberEngine::LowRenderer::Camera::ProcessKeyboard(cameraMovement p_direction, float p_deltaTime)
+glm::mat4 AmberEngine::LowRenderer::Camera::GetViewMatrix() const
 {
-	float velocity = m_movementSpeed * p_deltaTime;
-
-	if (p_direction == cameraMovement::FORWARD)
-		m_position += m_forward * velocity;
-	if (p_direction == cameraMovement::BACKWARD)
-		m_position -= m_forward * velocity;
-	if (p_direction == cameraMovement::LEFT)
-		m_position -= m_right * velocity;
-	if (p_direction == cameraMovement::RIGHT)
-		m_position += m_right * velocity;
+	return glm::lookAt(m_position, m_position + m_forward, m_up);
 }
 
-void AmberEngine::LowRenderer::Camera::ProcessMouseMovement(float p_xoffset, float p_yoffset, bool p_isConstrainPitch)
-{
-	p_xoffset *= m_mouseSensitivity;
-	p_yoffset *= m_mouseSensitivity;
-
-	m_yaw += p_xoffset;
-	m_pitch += p_yoffset;
-
-	if (p_isConstrainPitch)
-	{
-		if (m_pitch > 89.0f)
-			m_pitch = 89.0f;
-
-		if (m_pitch < -89.0f)
-			m_pitch = -89.0f;
-	}
-
-	UpdateCameraVectors();
-}
-
-void AmberEngine::LowRenderer::Camera::ProcessMouseScroll(float p_yoffset)
-{
-	if (m_fov >= 1.0f && m_fov <= 45.0f)
-		m_fov -= p_yoffset;
-	if (m_fov <= 1.0f)
-		m_fov = 1.0f;
-	if (m_fov >= 45.0f)
-		m_fov = 45.0f;
-}
-
-void AmberEngine::LowRenderer::Camera::Update(float p_deltaTime)
-{
-	HandleInput(p_deltaTime);
-	HandleMouse();
-}
-
-void AmberEngine::LowRenderer::Camera::HandleInput(float p_deltaTime)
-{
-	/*if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_LEFT_ALT))
-	{
-		m_isLock = true;
-		m_isFirstMouse = true;
-	}
-	else
-		m_isLock = false;*/
-
-	if(!m_isLock)
-	{
-		if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_W) == GLFW_PRESS)
-			ProcessKeyboard(cameraMovement::FORWARD, p_deltaTime);
-		if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_S) == GLFW_PRESS)
-			ProcessKeyboard(cameraMovement::BACKWARD, p_deltaTime);
-		if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_A) == GLFW_PRESS)
-			ProcessKeyboard(cameraMovement::LEFT, p_deltaTime);
-		if (glfwGetKey(m_device.GetContextWindow(), GLFW_KEY_D) == GLFW_PRESS)
-			ProcessKeyboard(cameraMovement::RIGHT, p_deltaTime);
-	}
-}
-
-void AmberEngine::LowRenderer::Camera::HandleMouse()
-{
-	if (!m_isLock)
-	{
-		GLdouble xPos;
-		GLdouble yPos;
-
-		glfwGetCursorPos(m_device.GetContextWindow(), &xPos, &yPos);
-
-		if (m_isFirstMouse)
-		{
-			m_lastMousePosX = xPos;
-			m_lastMousePosY = yPos;
-			m_isFirstMouse = false;
-		}
-
-		GLdouble xoffset = xPos - m_lastMousePosX;
-		GLdouble yoffset = m_lastMousePosY - yPos;
-
-		m_lastMousePosX = xPos;
-		m_lastMousePosY = yPos;
-
-		ProcessMouseMovement(xoffset, yoffset);
-	}
-}
-
-void AmberEngine::LowRenderer::Camera::Lock()
-{
-	m_isLock = true;
-	m_isFirstMouse = true;
-}
-
-void AmberEngine::LowRenderer::Camera::Unlock()
-{
-	m_isLock = false;
-}
-
-glm::vec3 AmberEngine::LowRenderer::Camera::GetPosition() const
-{
-	return m_position;
-}
-
-glm::vec3 AmberEngine::LowRenderer::Camera::GetForward() const
+const glm::vec3& AmberEngine::LowRenderer::Camera::GetForward() const
 {
 	return m_forward;
 }
 
-glm::mat4 AmberEngine::LowRenderer::Camera::GetProjectionMatrix() const
+glm::vec3& AmberEngine::LowRenderer::Camera::GetPosition()
 {
-	return glm::perspective(glm::radians(m_fov), static_cast<float>(m_device.GetWindowWidth()) / static_cast<float>(m_device.GetWindowHeight()), 0.1f, 300.0f);;
+	return m_position;
 }
 
-glm::mat4 AmberEngine::LowRenderer::Camera::GetViewMatrix() const
+const glm::vec3& AmberEngine::LowRenderer::Camera::GetRight() const
 {
-	return glm::lookAt(m_position, m_position + m_forward, m_up);;
+	return m_right;
+}
+
+const glm::vec3& AmberEngine::LowRenderer::Camera::GetUp() const
+{
+	return m_up;
+}
+
+void AmberEngine::LowRenderer::Camera::SetPosition(glm::vec3 p_pos)
+{
+	m_position = p_pos;
 }
 
 void AmberEngine::LowRenderer::Camera::SetPosition(float pos_x, float pos_y, float pos_z)
@@ -162,9 +54,24 @@ void AmberEngine::LowRenderer::Camera::SetPosition(float pos_x, float pos_y, flo
 	m_position = glm::vec3(pos_x, pos_y, pos_z);
 }
 
-float AmberEngine::LowRenderer::Camera::GetCameraFov() const
+void AmberEngine::LowRenderer::Camera::SetFov(float p_value)
+{
+	m_fov = p_value;
+}
+
+float& AmberEngine::LowRenderer::Camera::GetCameraFov()
 {
 	return m_fov;
+}
+
+float& AmberEngine::LowRenderer::Camera::GetYaw()
+{
+	return m_yaw;
+}
+
+float& AmberEngine::LowRenderer::Camera::GetPitch()
+{
+	return m_pitch;
 }
 
 void AmberEngine::LowRenderer::Camera::UpdateCameraVectors()

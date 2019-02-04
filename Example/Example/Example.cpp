@@ -5,6 +5,7 @@
 
 #include "Application.h"
 
+
 int main()
 {
 	AmberEngine::Settings::DeviceSettings deviceSettings{};

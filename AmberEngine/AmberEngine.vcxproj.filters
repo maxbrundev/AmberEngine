@@ -215,5 +215,8 @@
     <ClCompile Include="src\AmberEngine\Resources\Primitives\Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AmberEngine\LowRenderer\CameraController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

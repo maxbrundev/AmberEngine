@@ -2,17 +2,18 @@
 
 #include "Application.h"
 
+#include <AmberEngine/Resources/Shader.h>
 #include <AmberEngine/Resources/AssimpModel.h>
 #include <AmberEngine/Managers/UIManager.h>
 #include <AmberEngine/ImGUI/imgui.h>
 
-Example::Application::Application(const AmberEngine::Settings::RenderingSettings& p_settings) : m_renderingManager(p_settings)
+Example::Application::Application(const AmberEngine::Settings::RenderingSettings& p_settings) : m_renderer(p_settings)
 {
 }
 
 void Example::Application::Setup()
 {
-	AmberEngine::Resources::Shader& lightingShader = m_renderingManager.GetResourcesManager().LoadShaderFiles("DirectionalLight", "directional_lighting.vs", "directional_lighting.fs");
+	AmberEngine::Resources::Shader& lightingShader = m_renderer.GetResourcesManager().LoadShaderFiles("DirectionalLight", "directional_lighting.vs", "directional_lighting.fs");
 
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("material.texture_diffuse1", 0);
@@ -28,48 +29,51 @@ void Example::Application::Run()
 {
 	float UvX = 1.0f;
 	float UvY = 1.0f;
-	glm::vec3	lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
+	glm::vec3 lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
 
 	AmberEngine::Resources::AssimpModel model("res/Mesh/nanosuit/nanosuit.obj");
 
-	AmberEngine::Managers::UIManager ui(m_renderingManager.GetWindowManager().GetDevice());
+	AmberEngine::Managers::UIManager ui(m_renderer.GetWindowManager().GetDevice());
 
-	while (m_renderingManager.IsRunning())
+	while (m_renderer.IsRunning())
 	{
-		m_renderingManager.Clear(0.1f, 0.1f, 0.1f);
-		m_renderingManager.Update();
+		m_renderer.Clear(0.1f, 0.1f, 0.1f);
+		m_renderer.Update();
+
+		glm::vec3 cameraPosition = m_renderer.GetCameraController().GetCamera().GetPosition();
 
 		ui.BeginFrame();
 
 		ui.DisplayDeviceInfos();
-
+		ui.DisplayMenu();
 		ui.BeginWindow("Scene");
-		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", m_renderingManager.GetCamera().GetPosition().x, m_renderingManager.GetCamera().GetPosition().y, m_renderingManager.GetCamera().GetPosition().z);
+		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", cameraPosition.x, cameraPosition.y, cameraPosition.z);
 		ImGui::SliderFloat("Light Direction X", &lighDir.x, -10.0f, 10.0f, "X: %.1f");
 		ImGui::SliderFloat("Light Direction Y", &lighDir.y, -10.0f, 10.0f, "Y: %.1f");
+		
 		ImGui::SliderFloat("Light Direction Z", &lighDir.z, -10.0f, 10.0f, "Z: %.1f");
 		ImGui::SliderFloat("Texture Tiling", &UvX, -10.0f, 10.0f, "X");
 		ImGui::SliderFloat("Texture Tiling", &UvY, -10.0f, 10.0f, "Y");
 		ui.EndWindow();
 
-		glm::mat4 projectionMatrix = m_renderingManager.CalculateProjectionMatrix();
-		glm::mat4 viewMatrix = m_renderingManager.CalculateViewMatrix();
-		glm::mat4 modelMatrix = m_renderingManager.GetUnitModelMatrix();
+		glm::mat4 projectionMatrix = m_renderer.CalculateProjectionMatrix();
+		glm::mat4 viewMatrix = m_renderer.CalculateViewMatrix();
+		glm::mat4 modelMatrix = m_renderer.GetUnitModelMatrix();
 
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").Bind();
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("projection", projectionMatrix);
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("view", viewMatrix);
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("model", modelMatrix);
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniformVec3("viewPos", m_renderingManager.GetCamera().GetPosition());
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvXValue", UvX);
-		m_renderingManager.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").Bind();
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("projection", projectionMatrix);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("view", viewMatrix);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("model", modelMatrix);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformVec3("viewPos", cameraPosition);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvXValue", UvX);
+		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
 
 		model.Draw();
 
 		ui.EndFrame();
 		ui.Render();
 
-		m_renderingManager.SwapBuffers();
+		m_renderer.SwapBuffers();
 	}
 }

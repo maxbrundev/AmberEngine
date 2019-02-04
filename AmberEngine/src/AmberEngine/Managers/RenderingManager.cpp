@@ -1,9 +1,8 @@
-#include <Windows.h>
-
 #include "AmberEngine/Managers/RenderingManager.h"
+#include "AmberEngine/Managers/InputManager.h"
 
 AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::RenderingSettings& p_settings)
-	: m_windowManager(p_settings.deviceSettings, p_settings.driverSettings), m_camera(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
+	: m_windowManager(p_settings.deviceSettings, p_settings.driverSettings), m_cameraController(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
 {
 	isRunning = true;
 }
@@ -13,9 +12,9 @@ void AmberEngine::Managers::RenderingManager::SetWindow(uint16_t p_width, uint16
 	//TODO
 }
 
-void AmberEngine::Managers::RenderingManager::SetCamera(const glm::vec3& p_position)
+void AmberEngine::Managers::RenderingManager::SetCameraPosition(const glm::vec3& p_position)
 {
-	//TODO
+	m_cameraController.GetCamera().SetPosition(p_position);
 }
 
 void AmberEngine::Managers::RenderingManager::Clear(float p_red, float p_green, float p_blue, float p_alpha)
@@ -28,8 +27,9 @@ void AmberEngine::Managers::RenderingManager::Update()
 {
 	UpdateDeltaTime();
 	UpdateRenderMode();
-	m_camera.Update(m_deltaTime);
+	m_cameraController.Update(m_deltaTime);
 	UpdateInput();
+	InputManager::Update();
 }
 
 void AmberEngine::Managers::RenderingManager::SwapBuffers()
@@ -54,7 +54,6 @@ void AmberEngine::Managers::RenderingManager::UpdateRenderMode()
 		FreeCamera();
 	else
 		LockCamera();
-	
 }
 
 void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
@@ -66,18 +65,13 @@ void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
 
 void AmberEngine::Managers::RenderingManager::UpdateInput()
 {
-	m_inputManager.Update();
-
-	if (m_inputManager.IsKeyEventOccured(VK_SHIFT))
-	{
+	if (InputManager::GetKeyDown(InputManager::Key::KEY_LEFT_SHIFT))
 		ToggleWireFrame();
-	}
-	if (m_inputManager.IsKeyEventOccured(VK_LMENU))
-	{
+	
+	if (InputManager::GetKeyDown(InputManager::Key::KEY_LEFT_ALT))
 		ToggleCamera();
-	}
-
-	if (m_inputManager.IsKeyPressed(VK_ESCAPE))
+	
+	if (InputManager::GetKeyDown(InputManager::Key::KEY_ESCAPE))
 		m_windowManager.GetDevice().Close();
 }
 
@@ -98,13 +92,13 @@ void AmberEngine::Managers::RenderingManager::ToggleWireFrame()
 
 void AmberEngine::Managers::RenderingManager::FreeCamera()
 {
-	m_camera.Unlock();
+	m_cameraController.Unlock();
 	m_windowManager.GetDevice().LockCursor();
 }
 
 void AmberEngine::Managers::RenderingManager::LockCamera()
 {
-	m_camera.Lock();
+	m_cameraController.Lock();
 	m_windowManager.GetDevice().FreeCursor();
 }
 
@@ -123,27 +117,22 @@ AmberEngine::Managers::ResourcesManager& AmberEngine::Managers::RenderingManager
 	return m_resourcesManager;
 }
 
-AmberEngine::Managers::InputManager& AmberEngine::Managers::RenderingManager::GetInputManager()
+glm::mat4 AmberEngine::Managers::RenderingManager::CalculateProjectionMatrix()
 {
-	return m_inputManager;
+	return m_cameraController.GetProjectionMatrix();
 }
 
-glm::mat4 AmberEngine::Managers::RenderingManager::CalculateProjectionMatrix() const
+glm::mat4 AmberEngine::Managers::RenderingManager::CalculateViewMatrix()
 {
-	return m_camera.GetProjectionMatrix();
+	return m_cameraController.GetCamera().GetViewMatrix();
 }
 
-glm::mat4 AmberEngine::Managers::RenderingManager::CalculateViewMatrix() const
-{
-	return m_camera.GetViewMatrix();
-}
-
-glm::mat4 AmberEngine::Managers::RenderingManager::GetUnitModelMatrix() const
+glm::mat4 AmberEngine::Managers::RenderingManager::GetUnitModelMatrix()
 {
 	return glm::mat4(1.0f);
 }
 
-AmberEngine::LowRenderer::Camera& AmberEngine::Managers::RenderingManager::GetCamera()
+AmberEngine::LowRenderer::CameraController& AmberEngine::Managers::RenderingManager::GetCameraController()
 {
-	return m_camera;
+	return m_cameraController;
 }

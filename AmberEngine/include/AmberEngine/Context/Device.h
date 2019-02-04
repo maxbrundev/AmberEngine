@@ -8,8 +8,6 @@
 
 namespace AmberEngine::Context
 {
-	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
 	class API_AMBERENGINE Device
 	{
 	private:
@@ -35,7 +33,7 @@ namespace AmberEngine::Context
 
 		void SwapBuffers();
 		void PollEvents();
-		//void SetCallBack();
+
 		void DisplayErrors();
 
 		static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -47,6 +45,7 @@ namespace AmberEngine::Context
 		uint16_t GetWindowHeight() const;
 
 		int GetKey(const int p_key) const;
+
 		static int GetPressState();
 		static int GetReleaseState();
 

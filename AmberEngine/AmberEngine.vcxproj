@@ -309,6 +309,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_draw.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="src\AmberEngine\LowRenderer\Camera.cpp" />
+    <ClCompile Include="src\AmberEngine\LowRenderer\CameraController.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\InputManager.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\RenderingManager.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
