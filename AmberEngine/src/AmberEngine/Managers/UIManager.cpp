@@ -1,12 +1,14 @@
 #include "AmberEngine/Managers/UIManager.h"
 
 #include "AmberEngine/ImGUI/imgui.h"
-#include "AmberEngine/ImGUI/imgui_impl_glfw_gl3.h"
+#include "AmberEngine/ImGUI/imgui_impl_glfw.h"
+#include "AmberEngine/ImGUI/imgui_impl_opengl3.h"
 
 AmberEngine::Managers::UIManager::UIManager(Context::Device& p_device) : m_device(p_device)
 {
 	ImGui::CreateContext();
-	ImGui_ImplGlfwGL3_Init(m_device.GetContextWindow(), false);
+	ImGui_ImplGlfw_InitForOpenGL(m_device.GetContextWindow(), true);
+	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui::StyleColorsDark();
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.FrameRounding = 12.0f;
@@ -14,13 +16,16 @@ AmberEngine::Managers::UIManager::UIManager(Context::Device& p_device) : m_devic
 
 AmberEngine::Managers::UIManager::~UIManager()
 {
-	ImGui_ImplGlfwGL3_Shutdown();
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 
 void AmberEngine::Managers::UIManager::BeginFrame()
 {
-	ImGui_ImplGlfwGL3_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
 }
 
 void AmberEngine::Managers::UIManager::EndFrame()
@@ -40,7 +45,7 @@ void AmberEngine::Managers::UIManager::EndWindow()
 
 void AmberEngine::Managers::UIManager::Render()
 {
-	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void AmberEngine::Managers::UIManager::DisplayMenu()
@@ -61,6 +66,12 @@ void AmberEngine::Managers::UIManager::DisplayMenu()
 
 void AmberEngine::Managers::UIManager::DisplayDeviceInfos()
 {
+	/*ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoResize;
+	window_flags |= ImGuiWindowFlags_NoBackground;*/
+
 	ImGui::Begin("Device");
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();

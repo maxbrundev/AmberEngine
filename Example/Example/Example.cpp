@@ -12,7 +12,7 @@ int main()
 
 	deviceSettings.title = "AmberEngineV0.1.5";
 	deviceSettings.contextVersionMajor = 4;
-	deviceSettings.contextVersionMinor = 4;
+	deviceSettings.contextVersionMinor = 5;
 	deviceSettings.enableResizable = true;
 	deviceSettings.enableDebugContext = true;
 	deviceSettings.enableVsync = true;
