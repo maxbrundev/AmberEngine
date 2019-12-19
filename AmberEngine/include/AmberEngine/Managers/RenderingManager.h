@@ -17,8 +17,8 @@ namespace AmberEngine::Managers
 		LowRenderer::CameraController m_cameraController;
 		ResourcesManager m_resourcesManager;
 		
-		GLdouble m_deltaTime = 0.0f;
-		GLdouble m_lastTime = 0.0f;
+		float m_deltaTime = 0.0f;
+		float m_lastTime = 0.0f;
 
 		bool isRunning;
 		bool isWireFrame;
@@ -28,11 +28,11 @@ namespace AmberEngine::Managers
 		RenderingManager(const Settings::RenderingSettings& p_settings);
 		~RenderingManager() = default;
 
-		void SetWindow(uint16_t p_width, uint16_t p_height);
-
 		void SetCameraPosition(const glm::vec3& p_position);
 
-		void Clear(float p_red, float p_green, float p_blue, float p_alpha = 1.0f);
+		void SetClearColor(float p_red, float p_green, float p_blue, float p_alpha = 1.0f);
+		void Clear(bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer);
+		void Clear(LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer);
 		void Update();
 		void SwapBuffers();
 

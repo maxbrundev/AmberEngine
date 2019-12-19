@@ -15,7 +15,7 @@ namespace AmberEngine::Resources
 	private:
 		GLuint m_vao;
 		GLuint m_vbo[4];
-		GLsizei m_numIndices;
+		unsigned int m_numIndices;
 		std::string m_sourceFile;
 
 	public:

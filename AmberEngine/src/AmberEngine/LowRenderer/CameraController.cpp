@@ -105,8 +105,8 @@ void AmberEngine::LowRenderer::CameraController::HandleMouse()
 		m_isFirstMouse = false;
 	}
 
-	double xoffset = xPos - m_lastMousePosX;
-	double yoffset = m_lastMousePosY - yPos;
+	float xoffset = xPos - m_lastMousePosX;
+	float yoffset = m_lastMousePosY - yPos;
 
 	m_lastMousePosX = xPos;
 	m_lastMousePosY = yPos;

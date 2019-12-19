@@ -144,6 +144,9 @@
     <ClInclude Include="include\AmberEngine\ImGUI\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\Eventing\Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -230,5 +233,10 @@
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\AmberEngine\Eventing\Event.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

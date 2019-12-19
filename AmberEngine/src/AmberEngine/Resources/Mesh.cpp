@@ -20,7 +20,7 @@ void AmberEngine::Resources::Mesh::Draw()
 
 void AmberEngine::Resources::Mesh::InitBuffers(const ObjModel& p_model)
 {
-	m_numIndices = p_model.indices.size();
+	m_numIndices = static_cast<unsigned int>(p_model.indices.size());
 
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);

@@ -262,6 +262,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Context\Device.h" />
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
+    <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
     <ClInclude Include="include\AmberEngine\ImGUI\imconfig.h" />
     <ClInclude Include="include\AmberEngine\ImGUI\imgui.h" />
@@ -327,6 +328,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Resources\Shader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
     <ClCompile Include="src\AmberEngine\Utils\Time.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\AmberEngine\Eventing\Event.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

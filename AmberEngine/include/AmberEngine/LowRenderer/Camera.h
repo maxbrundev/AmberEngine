@@ -19,7 +19,8 @@ namespace AmberEngine::LowRenderer
 		glm::vec3 m_right;
 
 		glm::vec3 m_worldUp;
-
+		glm::vec3 m_clearColor;
+		
 		float m_yaw;
 		float m_pitch;
 		float m_fov;
@@ -46,5 +47,7 @@ namespace AmberEngine::LowRenderer
 		void SetFov(float p_value);
 
 		void UpdateCameraVectors();
+
+		const glm::vec3& GetClearColor() const;
 	};
 }

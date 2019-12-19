@@ -21,7 +21,7 @@ void AmberEngine::Buffers::VertexArray::AddBuffer(const VertexBuffer& p_vbo, con
 	{
 		const auto& element = elements[i];
 		GLCall(glEnableVertexAttribArray(i));
-		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, p_layout.GetStride(), reinterpret_cast<const void*>(offset)));
+		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, p_layout.GetStride(), reinterpret_cast<const GLvoid*>(offset)));
 		offset += element.count * sizeof(element.type);
 	}
 }

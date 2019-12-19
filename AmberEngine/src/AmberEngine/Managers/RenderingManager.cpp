@@ -7,20 +7,39 @@ AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::Render
 	isRunning = true;
 }
 
-void AmberEngine::Managers::RenderingManager::SetWindow(uint16_t p_width, uint16_t p_height)
-{
-	//TODO
-}
-
 void AmberEngine::Managers::RenderingManager::SetCameraPosition(const glm::vec3& p_position)
 {
 	m_cameraController.GetCamera().SetPosition(p_position);
 }
 
-void AmberEngine::Managers::RenderingManager::Clear(float p_red, float p_green, float p_blue, float p_alpha)
+void AmberEngine::Managers::RenderingManager::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha)
 {
 	glClearColor(p_red, p_green, p_blue, p_alpha);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void AmberEngine::Managers::RenderingManager::Clear(bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer)
+{
+	glClear
+	(
+		(p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0) |
+		(p_depthBuffer ? GL_DEPTH_BUFFER_BIT : 0) |
+		(p_stencilBuffer ? GL_STENCIL_BUFFER_BIT : 0)
+	);
+}
+
+void AmberEngine::Managers::RenderingManager::Clear(LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer)
+{
+	/* Backup the previous OpenGL clear color */
+	GLfloat previousClearColor[4];
+	glGetFloatv(GL_COLOR_CLEAR_VALUE, previousClearColor);
+
+	/* Clear the screen using the camera clear color */
+	const glm::vec3& cameraClearColor = p_camera.GetClearColor();
+	SetClearColor(cameraClearColor.x, cameraClearColor.y, cameraClearColor.z, 1.0f);
+	Clear(p_colorBuffer, p_depthBuffer, p_stencilBuffer);
+
+	/* Reset the OpenGL clear color to the previous clear color (Backuped one) */
+	SetClearColor(previousClearColor[0], previousClearColor[1], previousClearColor[2], previousClearColor[3]);
 }
 
 void AmberEngine::Managers::RenderingManager::Update()
@@ -58,7 +77,7 @@ void AmberEngine::Managers::RenderingManager::UpdateRenderMode()
 
 void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
 {
-	GLdouble currentTime = glfwGetTime();
+	float currentTime = glfwGetTime();
 	m_deltaTime = currentTime - m_lastTime;
 	m_lastTime = currentTime;
 }
