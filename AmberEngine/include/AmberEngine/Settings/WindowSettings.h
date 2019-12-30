@@ -13,9 +13,9 @@ namespace AmberEngine::Settings
 		uint16_t width;
 		uint16_t height;
 		
-		bool enableResizable = true;
-		bool enableVsync = true;
-		bool enableDebugCallback = true;
+		bool resizable = true;
+		bool fullScreen	= true;
+		bool vsync = true;
 		bool enableFrameBufferSizeCallback = true;
 
 		uint8_t samples = 4;

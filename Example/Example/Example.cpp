@@ -8,18 +8,19 @@
 int main()
 {
 	AmberEngine::Settings::DeviceSettings deviceSettings;
+	
+	deviceSettings.contextVersionMajor = 4;
+	deviceSettings.contextVersionMinor = 3;
+	deviceSettings.debugProfile = true;
+	
 	AmberEngine::Settings::WindowSettings windowSettings;
 
 	windowSettings.title = "AmberEngineV0.1.5";
-	deviceSettings.contextVersionMajor = 4;
-	deviceSettings.contextVersionMinor = 3;
 	windowSettings.width = 1280;
 	windowSettings.height = 720;
-
-	windowSettings.enableResizable = true;
-	windowSettings.enableVsync = true;
-	windowSettings.enableDebugCallback = true;
-	windowSettings.enableFrameBufferSizeCallback = true;
+	windowSettings.resizable = true;
+	windowSettings.vsync = true;
+	windowSettings.samples = 4;
 
 	AmberEngine::Settings::DriverSettings driverSettings;
 

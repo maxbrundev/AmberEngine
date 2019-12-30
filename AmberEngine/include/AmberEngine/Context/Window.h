@@ -12,7 +12,7 @@ namespace AmberEngine::Context
 	class API_AMBERENGINE Window
 	{
 	private:
-		const Device& m_device;
+		Context::Device& m_device;
 		GLFWwindow* m_glfwWindow;
 
 		std::string m_title;
@@ -21,7 +21,7 @@ namespace AmberEngine::Context
 		std::queue<std::string> m_errors;
 		
 	public:
-		Window(const Context::Device& p_device, const Settings::WindowSettings& p_windowSettings);
+		Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings);
 		~Window();
 
 		void Close();

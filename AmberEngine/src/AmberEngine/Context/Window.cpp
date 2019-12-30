@@ -2,10 +2,10 @@
 #include "AmberEngine/Managers/InputManager.h"
 #include <iostream>
 
-AmberEngine::Context::Window::Window(const Context::Device& p_device, const Settings::WindowSettings& p_windowSettings)
+AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings)
 : m_device(p_device), m_title(p_windowSettings.title), m_size{ p_windowSettings.width, p_windowSettings.height }
 {
-	glfwWindowHint(GLFW_RESIZABLE, p_windowSettings.enableResizable);
+	glfwWindowHint(GLFW_RESIZABLE, p_windowSettings.resizable);
 	glfwWindowHint(GLFW_SAMPLES, p_windowSettings.samples);
 	
 	InitWindow();
@@ -21,7 +21,7 @@ AmberEngine::Context::Window::Window(const Context::Device& p_device, const Sett
 	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(m_glfwWindow, Managers::InputManager::cursor_position_callback);
 
-	//m_device.SetVsync(p_windowSettings.enableVsync);
+	m_device.SetVsync(p_windowSettings.vsync);
 }
 
 AmberEngine::Context::Window::~Window()
