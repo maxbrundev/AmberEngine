@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AmberEngine/Context/Device.h"
+#include "AmberEngine/Context/Window.h"
 #include "AmberEngine/LowRenderer/Camera.h"
 
 #include "AmberEngine/API/Export.h"
@@ -13,11 +13,11 @@ namespace AmberEngine::LowRenderer
 		const float SPEED = 10.5f;
 		const float SENSITIVITY = 0.1f;
 
-		Context::Device& m_device;
+		Context::Window& m_window;
 		Camera m_camera;
 
-		double m_lastMousePosX{};
-		double m_lastMousePosY{};
+		double m_lastMousePosX;
+		double m_lastMousePosY;
 		float m_movementSpeed;
 		float m_mouseSensitivity;
 
@@ -35,7 +35,7 @@ namespace AmberEngine::LowRenderer
 		};
 
 	public:
-		CameraController(Context::Device& p_device, glm::vec3 p_position);
+		CameraController(Context::Window& p_window, glm::vec3 p_position);
 		~CameraController() = default;
 
 		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);

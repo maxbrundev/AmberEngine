@@ -4,10 +4,10 @@
 #include "AmberEngine/ImGUI/imgui_impl_glfw.h"
 #include "AmberEngine/ImGUI/imgui_impl_opengl3.h"
 
-AmberEngine::Managers::UIManager::UIManager(Context::Device& p_device) : m_device(p_device)
+AmberEngine::Managers::UIManager::UIManager(Context::Window& p_window) : m_window(p_window)
 {
 	ImGui::CreateContext();
-	ImGui_ImplGlfw_InitForOpenGL(m_device.GetContextWindow(), true);
+	ImGui_ImplGlfw_InitForOpenGL(m_window.GetContextWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui::StyleColorsDark();
 	ImGuiStyle& style = ImGui::GetStyle();
@@ -56,7 +56,7 @@ void AmberEngine::Managers::UIManager::DisplayMenu()
 		{
 			if (ImGui::MenuItem("Quit"))
 			{
-				m_device.Close();
+				m_window.Close();
 			}
 			ImGui::EndMenu();
 		}

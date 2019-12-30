@@ -2,7 +2,7 @@
 #include "AmberEngine/Managers/InputManager.h"
 
 AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::RenderingSettings& p_settings)
-	: m_windowManager(p_settings.deviceSettings, p_settings.driverSettings), m_cameraController(m_windowManager.GetDevice(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
+	: m_windowManager(p_settings.deviceSettings, p_settings.windowSettings, p_settings.driverSettings), m_cameraController(m_windowManager.GetWindow(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
 {
 	isRunning = true;
 }
@@ -53,7 +53,7 @@ void AmberEngine::Managers::RenderingManager::Update()
 
 void AmberEngine::Managers::RenderingManager::SwapBuffers()
 {
-	m_windowManager.GetDevice().SwapBuffers();
+	m_windowManager.GetWindow().SwapBuffers();
 	m_windowManager.GetDevice().PollEvents();
 }
 
@@ -91,7 +91,7 @@ void AmberEngine::Managers::RenderingManager::UpdateInput()
 		ToggleCamera();
 	
 	if (InputManager::GetKeyDown(InputManager::Key::KEY_ESCAPE))
-		m_windowManager.GetDevice().Close();
+		m_windowManager.GetWindow().Close();
 }
 
 void AmberEngine::Managers::RenderingManager::PolygonModeLine()
@@ -112,13 +112,13 @@ void AmberEngine::Managers::RenderingManager::ToggleWireFrame()
 void AmberEngine::Managers::RenderingManager::FreeCamera()
 {
 	m_cameraController.Unlock();
-	m_windowManager.GetDevice().LockCursor();
+	m_windowManager.GetWindow().LockCursor();
 }
 
 void AmberEngine::Managers::RenderingManager::LockCamera()
 {
 	m_cameraController.Lock();
-	m_windowManager.GetDevice().FreeCursor();
+	m_windowManager.GetWindow().FreeCursor();
 }
 
 void AmberEngine::Managers::RenderingManager::ToggleCamera()

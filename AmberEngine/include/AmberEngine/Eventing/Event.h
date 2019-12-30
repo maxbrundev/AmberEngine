@@ -2,13 +2,15 @@
 
 #include <functional>
 
-namespace AmberEngine::Enventing
+#include "AmberEngine/API/Export.h"
+
+namespace AmberEngine::Eventing
 {
 	template<class... ArgTypes>
 	class Event
 	{
 	private:
-		std::unodered_map<uint64_t, std::function<void(ArgTypes...)>>	m_callbacks;
+		std::unordered_map<uint64_t, std::function<void(ArgTypes...)>>	m_callbacks;
 		uint64_t														m_availableListenerID = 0;
 
 	public:
@@ -25,3 +27,5 @@ namespace AmberEngine::Enventing
 		void Invoke(ArgTypes... p_args);
 	};
 }
+
+#include "AmberEngine/Eventing/Event.inl"

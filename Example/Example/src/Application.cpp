@@ -33,7 +33,7 @@ void Example::Application::Run()
 
 	AmberEngine::Resources::AssimpModel model("res/Mesh/nanosuit/nanosuit.obj");
 
-	AmberEngine::Managers::UIManager ui(m_renderer.GetWindowManager().GetDevice());
+	AmberEngine::Managers::UIManager ui(m_renderer.GetWindowManager().GetWindow());
 
 	while (m_renderer.IsRunning())
 	{

@@ -7,6 +7,10 @@
 
 namespace AmberEngine::Managers
 {
+	/**
+	* Temporary class
+	*/
+	
 	class API_AMBERENGINE InputManager
 	{
 	public:

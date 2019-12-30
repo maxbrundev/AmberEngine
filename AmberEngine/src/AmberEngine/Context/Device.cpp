@@ -1,150 +1,73 @@
 #include "AmberEngine/Context/Device.h"
 
 #include <iostream>
-#include "AmberEngine/Managers/InputManager.h"
 
-uint16_t AmberEngine::Context::Device::m_width = 1280;
-uint16_t AmberEngine::Context::Device::m_height = 720;
-
-AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_settings)
+AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_deviceSettings)
 {
 	InitGLFW();
 
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, p_settings.enableDebugContext);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, p_settings.contextVersionMajor);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, p_settings.contextVersionMinor);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, p_deviceSettings.debugProfile);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, p_deviceSettings.contextVersionMajor);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, p_deviceSettings.contextVersionMinor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, p_settings.enableResizable);
-	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	if(p_settings.enableDebugCallback)
-	{
-		glfwSetErrorCallback(error_callback);
-	}
+	//if (p_deviceSettings.debugProfile)
+		//BindErrorCallback();
+	
+	m_isAlive = true;
 
-	InitWindow(p_settings.title);
-
-	if(p_settings.enableFrameBufferSizeCallback)
-	{
-		glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-	}
-		
-	glfwMakeContextCurrent(m_window);
-
-	glfwSetKeyCallback(m_window, Managers::InputManager::key_callback);
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(m_window, Managers::InputManager::cursor_position_callback);
-
-	glfwSwapInterval(p_settings.enableVsync ? 1 : 0);
+	//m_errorDeviceListener = ErrorEvent.AddListener(std::bind(&Device::OnError, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 AmberEngine::Context::Device::~Device()
 {
-	glfwDestroyWindow(m_window);
-	glfwTerminate();
-}
+	if(m_isAlive)
+		glfwTerminate();
 
-void AmberEngine::Context::Device::Close()
-{
-	glfwSetWindowShouldClose(m_window, true);
-}
-
-bool AmberEngine::Context::Device::IsActive()
-{
-	return !glfwWindowShouldClose(m_window);
+	//ErrorEvent.RemoveListener(m_errorDeviceListener);
 }
 
 void AmberEngine::Context::Device::InitGLFW()
 {
 	if (!glfwInit())
 	{
-		m_errors.push("Failed to Init GLFW");
-	}
-}
-
-void AmberEngine::Context::Device::InitWindow(const char* p_title)
-{
-	m_window = glfwCreateWindow(m_width, m_height, p_title, nullptr, nullptr);
-	if (!m_window)
-	{
-		m_errors.push("Failed to create GLFW window");
 		glfwTerminate();
+		throw std::runtime_error("Failed to Init GLFW");
 	}
 }
 
-void AmberEngine::Context::Device::LockCursor()
+void AmberEngine::Context::Device::SetVsync(bool p_value)
 {
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSwapInterval(p_value ? 1 : 0);
+	m_vsync = p_value;
 }
 
-void AmberEngine::Context::Device::FreeCursor()
-{
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-}
-
-void AmberEngine::Context::Device::SwapBuffers()
-{
-	glfwSwapBuffers(m_window);
-}
-
-void AmberEngine::Context::Device::PollEvents()
+void AmberEngine::Context::Device::PollEvents() const
 {
 	glfwPollEvents();
 }
 
-void AmberEngine::Context::Device::DisplayErrors()
+bool AmberEngine::Context::Device::HasVsync() const
 {
-	while (!m_errors.empty())
+	return m_vsync;
+}
+
+float AmberEngine::Context::Device::GetElapsedTime() const
+{
+	return static_cast<float>(glfwGetTime());
+}
+
+void AmberEngine::Context::Device::OnError(EDeviceError p_error, std::string p_message)
+{
+	std::cout << p_message.c_str() << std::endl;
+}
+
+void AmberEngine::Context::Device::BindErrorCallback()
+{
+	auto errorCallback = [](int p_code, const char* p_description)
 	{
-		std::cout << m_errors.front().c_str() << std::endl;
-		m_errors.pop();
-	}
-}
+		//ErrorEvent.Invoke(static_cast<EDeviceError>(p_code), p_description);
+	};
 
-void AmberEngine::Context::Device::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	m_height = height;
-	m_width = width;
-
-	glViewport(0, 0, m_width, m_height);
-}
-
-void AmberEngine::Context::Device::error_callback(int error, const char* description)
-{
-	fprintf(stderr, "Error: %s\n", description);
-}
-
-GLFWwindow* AmberEngine::Context::Device::GetContextWindow() const
-{
-	return m_window;
-}
-
-uint16_t AmberEngine::Context::Device::GetWindowWidth() const
-{
-	return m_width;
-}
-
-uint16_t AmberEngine::Context::Device::GetWindowHeight() const
-{
-	return m_height;
-}
-
-int AmberEngine::Context::Device::GetKey(const int p_key) const
-{
-	return glfwGetKey(m_window, p_key);
-}
-
-int AmberEngine::Context::Device::GetPressState()
-{
-	return GLFW_PRESS;
-}
-
-int AmberEngine::Context::Device::GetReleaseState()
-{
-	return GLFW_RELEASE;
-}
-
-const std::queue<std::string>& AmberEngine::Context::Device::GetQueueErros()
-{
-	return m_errors;
+	//glfwSetErrorCallback(errorCallback);
 }

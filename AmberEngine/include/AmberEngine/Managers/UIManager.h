@@ -1,18 +1,22 @@
 #pragma once
 
-#include "AmberEngine/Context/Device.h"
+#include "AmberEngine/Context/Window.h"
 
 #include "AmberEngine/API/Export.h"
 
 namespace  AmberEngine::Managers
 {
+	/**
+	* Temporary class
+	*/
+	
 	class API_AMBERENGINE UIManager
 	{
 	private:
-		Context::Device& m_device;
+		Context::Window& m_window;
 
 	public:
-		UIManager(Context::Device& p_device);
+		UIManager(Context::Window& p_window);
 		~UIManager();
 
 		void BeginFrame();

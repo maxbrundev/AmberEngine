@@ -1,20 +1,15 @@
 #pragma once
 
+#include <cstdint>
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::Settings
 {
 	struct API_AMBERENGINE DeviceSettings
 	{
-		const char* title;
+		uint8_t contextVersionMajor = 4;
+		uint8_t contextVersionMinor = 3;
 
-		int contextVersionMajor = 4;
-		int contextVersionMinor = 4;
-
-		bool enableResizable = true;
-		bool enableDebugContext = true;
-		bool enableVsync = true;
-		bool enableDebugCallback = true;
-		bool enableFrameBufferSizeCallback = true;
+		bool debugProfile = true;
 	};
 }

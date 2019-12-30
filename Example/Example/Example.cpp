@@ -5,21 +5,23 @@
 
 #include "Application.h"
 
-
 int main()
 {
-	AmberEngine::Settings::DeviceSettings deviceSettings{};
+	AmberEngine::Settings::DeviceSettings deviceSettings;
+	AmberEngine::Settings::WindowSettings windowSettings;
 
-	deviceSettings.title = "AmberEngineV0.1.5";
+	windowSettings.title = "AmberEngineV0.1.5";
 	deviceSettings.contextVersionMajor = 4;
-	deviceSettings.contextVersionMinor = 5;
-	deviceSettings.enableResizable = true;
-	deviceSettings.enableDebugContext = true;
-	deviceSettings.enableVsync = true;
-	deviceSettings.enableDebugCallback = true;
-	deviceSettings.enableFrameBufferSizeCallback = true;
+	deviceSettings.contextVersionMinor = 3;
+	windowSettings.width = 1280;
+	windowSettings.height = 720;
 
-	AmberEngine::Settings::DriverSettings driverSettings{};
+	windowSettings.enableResizable = true;
+	windowSettings.enableVsync = true;
+	windowSettings.enableDebugCallback = true;
+	windowSettings.enableFrameBufferSizeCallback = true;
+
+	AmberEngine::Settings::DriverSettings driverSettings;
 
 	driverSettings.enableDepthTest = true;
 	driverSettings.enableBlend = true;
@@ -27,10 +29,11 @@ int main()
 	driverSettings.enableMultisample = true;
 	driverSettings.enableDebugCallback = true;
 
-	AmberEngine::Settings::RenderingSettings renderSettings{};
+	AmberEngine::Settings::RenderingSettings renderSettings;
 
 	renderSettings.deviceSettings = deviceSettings;
 	renderSettings.driverSettings = driverSettings;
+	renderSettings.windowSettings = windowSettings;
 	
 	Example::Application app(renderSettings);
 	app.Setup();

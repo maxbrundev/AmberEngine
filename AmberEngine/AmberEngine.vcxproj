@@ -261,6 +261,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Buffers\VertexBufferLayout.h" />
     <ClInclude Include="include\AmberEngine\Context\Device.h" />
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
+    <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
+    <ClInclude Include="include\AmberEngine\Context\Window.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
@@ -290,7 +292,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Settings\DeviceSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\RenderingSettings.h" />
-    <ClInclude Include="include\AmberEngine\Utils\Time.h" />
+    <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
     <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
@@ -306,6 +308,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Buffers\VertexBufferLayout.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Device.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Driver.cpp" />
+    <ClCompile Include="src\AmberEngine\Context\Window.cpp" />
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />
@@ -327,7 +330,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Resources\ObjLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Shader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
-    <ClCompile Include="src\AmberEngine\Utils\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl" />

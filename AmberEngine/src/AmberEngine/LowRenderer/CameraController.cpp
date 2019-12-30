@@ -3,8 +3,8 @@
 #include "AmberEngine/Managers/InputManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-AmberEngine::LowRenderer::CameraController::CameraController(Context::Device& p_device, glm::vec3 p_position) 
-: m_device(p_device), m_camera(p_position), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_isFirstMouse(true), m_isLock(false)
+AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, glm::vec3 p_position)
+: m_window(p_window), m_camera(p_position), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_isFirstMouse(true), m_isLock(false)
 {
 }
 
@@ -96,7 +96,7 @@ void AmberEngine::LowRenderer::CameraController::HandleMouse()
 	double xPos;
 	double yPos;
 
-	glfwGetCursorPos(m_device.GetContextWindow(), &xPos, &yPos);
+	glfwGetCursorPos(m_window.GetContextWindow(), &xPos, &yPos);
 
 	if (m_isFirstMouse)
 	{
@@ -127,7 +127,7 @@ void AmberEngine::LowRenderer::CameraController::Unlock()
 
 glm::mat4 AmberEngine::LowRenderer::CameraController::GetProjectionMatrix()
 {
-	return glm::perspective(glm::radians(m_camera.GetCameraFov()), static_cast<float>(m_device.GetWindowWidth()) / static_cast<float>(m_device.GetWindowHeight()), 0.1f, 300.0f);
+	return glm::perspective(glm::radians(m_camera.GetCameraFov()), static_cast<float>(m_window.GetWindowWidth()) / static_cast<float>(m_window.GetWindowHeight()), 0.1f, 300.0f);
 }
 
 AmberEngine::LowRenderer::Camera& AmberEngine::LowRenderer::CameraController::GetCamera()

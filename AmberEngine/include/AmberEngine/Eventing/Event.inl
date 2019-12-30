@@ -2,13 +2,13 @@
 
 #include "AmberEngine/Eventing/Event.h"
 
-namespace AmberEngine::Enventing
+namespace AmberEngine::Eventing
 {
 	template<class... ArgTypes>
 	uint64_t Event<ArgTypes...>::AddListener(std::function<void(ArgTypes...)> p_callback)
 	{
 		uint64_t listenerID = m_availableListenerID++;
-		m_callbacks.emplace(uint64_t, p_callback);
+		m_callbacks.emplace(listenerID, p_callback);
 
 		return listenerID;
 	}
