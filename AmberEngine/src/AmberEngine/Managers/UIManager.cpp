@@ -7,7 +7,7 @@
 AmberEngine::Managers::UIManager::UIManager(Context::Window& p_window) : m_window(p_window)
 {
 	ImGui::CreateContext();
-	ImGui_ImplGlfw_InitForOpenGL(m_window.GetContextWindow(), true);
+	ImGui_ImplGlfw_InitForOpenGL(m_window.GetGlfwWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
 	ImGui::StyleColorsDark();
 	ImGuiStyle& style = ImGui::GetStyle();

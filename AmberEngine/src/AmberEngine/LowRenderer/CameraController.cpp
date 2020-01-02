@@ -96,7 +96,7 @@ void AmberEngine::LowRenderer::CameraController::HandleMouse()
 	double xPos;
 	double yPos;
 
-	glfwGetCursorPos(m_window.GetContextWindow(), &xPos, &yPos);
+	glfwGetCursorPos(m_window.GetGlfwWindow(), &xPos, &yPos);
 
 	if (m_isFirstMouse)
 	{
@@ -127,7 +127,7 @@ void AmberEngine::LowRenderer::CameraController::Unlock()
 
 glm::mat4 AmberEngine::LowRenderer::CameraController::GetProjectionMatrix()
 {
-	return glm::perspective(glm::radians(m_camera.GetCameraFov()), static_cast<float>(m_window.GetWindowWidth()) / static_cast<float>(m_window.GetWindowHeight()), 0.1f, 300.0f);
+	return glm::perspective(glm::radians(m_camera.GetCameraFov()), static_cast<float>(m_window.GetSize().first) / static_cast<float>(m_window.GetSize().second), 0.1f, 300.0f);
 }
 
 AmberEngine::LowRenderer::Camera& AmberEngine::LowRenderer::CameraController::GetCamera()
