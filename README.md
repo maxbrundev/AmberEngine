@@ -1,26 +1,26 @@
 # AmberEngine
 Personal OpenGL C++ Game Engine Project
 
-# Short-term Goals 
-- Reworking Inputs System
-- Reworking Managers
-- Reworking UI
-- Reworking Buffers class and usage / Adding Shader Storage Buffers and Uniform Buffers
-- Camera Controller class
-- Adding Primitives Mesh
-- Instancing
-- Multiple Lights
-- Shadows
-- Normal Maps
-- Transform class
-- Physically Based Rendering
-- Adding Tools
+# Planned Updates
+- New Maths classes and wrappers (Transform, Vectors / Matrices tools...)
+- New Resources System (Shader Loader / Manager, Model Loader...)
+- New Renderer (SSBO, UBO, FBO...)
+- New Input System
+- ImGui docking
+- Implementing an Entity Component System (Transform, Material, Mesh... Components)
+- Scene System (Actors Management)
+- Implementing the Editor (Create Primitives, Create Shaders, Import obj)
+- Rendering Improvements (Shadows, PBR, Animations...)
+- Extract the Context and Inputs from AmberEngine as DLLs
 
 # Long-term Goals
-- Global Illumination
-- Animation
-- Extract the Context and Inputs from AmberEngine
-- Exploit AmberEngine as Rendering in a Core Game Engine
+- Voxel Cone Tracing
+
+# Libraries used
+- OpenGL with GLEW (Graphics API)
+- GLFW (Windowing and Inputs)
+- Assimp (3D model loader)
+- imGui (GUI)
 
 # AmberEngine RendererV0.1.5
 - Updating AmberEngine as DLL
