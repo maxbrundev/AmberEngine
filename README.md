@@ -4,7 +4,7 @@ Personal OpenGL C++ Game Engine Project
 # Planned Updates
 - New Maths classes and wrappers (Transform, Vectors / Matrices tools...)
 - New Resources System (Shader Loader / Manager, Model Loader...)
-- New Renderer (SSBO, UBO, FBO...)
+- New Renderer (SSBO, UBO, FBO, Batch Rendering...)
 - New Input System
 - ImGui docking
 - Implementing an Entity Component System (Transform, Material, Mesh... Components)
