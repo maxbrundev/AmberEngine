@@ -2,6 +2,7 @@
 
 #include "AmberEngine/Context/Window.h"
 #include "AmberEngine/LowRenderer/Camera.h"
+#include "AmberEngine/Inputs/InputManager.h"
 
 #include "AmberEngine/API/Export.h"
 
@@ -14,6 +15,7 @@ namespace AmberEngine::LowRenderer
 		const float SENSITIVITY = 0.1f;
 
 		Context::Window& m_window;
+		Inputs::InputManager& inputManager;
 		Camera m_camera;
 
 		double m_lastMousePosX;
@@ -35,7 +37,7 @@ namespace AmberEngine::LowRenderer
 		};
 
 	public:
-		CameraController(Context::Window& p_window, glm::vec3 p_position);
+		CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position);
 		~CameraController() = default;
 
 		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);

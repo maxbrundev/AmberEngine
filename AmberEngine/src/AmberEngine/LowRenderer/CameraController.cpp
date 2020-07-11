@@ -1,10 +1,9 @@
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-#include "AmberEngine/Managers/InputManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, glm::vec3 p_position)
-: m_window(p_window), m_camera(p_position), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_isFirstMouse(true), m_isLock(false)
+AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position)
+: m_window(p_window), inputManager(p_inputManager), m_camera(p_position), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_isFirstMouse(true), m_isLock(false)
 {
 }
 
@@ -77,17 +76,17 @@ void AmberEngine::LowRenderer::CameraController::Update(float p_deltaTime)
 
 void AmberEngine::LowRenderer::CameraController::HandleInput(float p_deltaTime)
 {
-	if (Managers::InputManager::GetKey(Managers::InputManager::Key::KEY_W))
+	if (inputManager.GetKey(Inputs::EKey::KEY_W) == Inputs::EKeyState::KEY_DOWN)
 		ProcessKeyboard(cameraMovement::FORWARD, p_deltaTime);
-	if (Managers::InputManager::GetKey(Managers::InputManager::Key::KEY_S))
+	if (inputManager.GetKey(Inputs::EKey::KEY_S) == Inputs::EKeyState::KEY_DOWN)
 		ProcessKeyboard(cameraMovement::BACKWARD, p_deltaTime);
-	if (Managers::InputManager::GetKey(Managers::InputManager::Key::KEY_A))
+	if (inputManager.GetKey(Inputs::EKey::KEY_A) == Inputs::EKeyState::KEY_DOWN)
 		ProcessKeyboard(cameraMovement::LEFT, p_deltaTime);
-	if (Managers::InputManager::GetKey(Managers::InputManager::Key::KEY_D))
+	if (inputManager.GetKey(Inputs::EKey::KEY_D) == Inputs::EKeyState::KEY_DOWN)
 		ProcessKeyboard(cameraMovement::RIGHT, p_deltaTime);
-	if (Managers::InputManager::GetKey(Managers::InputManager::Key::KEY_SPACE))
+	if (inputManager.GetKey(Inputs::EKey::KEY_SPACE) == Inputs::EKeyState::KEY_DOWN)
 		ProcessKeyboard(cameraMovement::UP, p_deltaTime);
-	if (Managers::InputManager::GetKey(Managers::InputManager::Key::KEY_LEFT_CONTROL))
+	if (inputManager.GetKey(Inputs::EKey::KEY_LEFT_CONTROL) == Inputs::EKeyState::KEY_DOWN)
 		ProcessKeyboard(cameraMovement::DOWN, p_deltaTime);
 }
 

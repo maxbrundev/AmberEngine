@@ -1,15 +1,22 @@
 #include "AmberEngine/Managers/RenderingManager.h"
-#include "AmberEngine/Managers/InputManager.h"
 
-AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::RenderingSettings& p_settings)
-	: m_windowManager(p_settings.deviceSettings, p_settings.windowSettings, p_settings.driverSettings), m_cameraController(m_windowManager.GetWindow(), glm::vec3(0.0f, 0.0f, 3.0f)) ,isWireFrame(false), isCameraFree(true)
+AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::DeviceSettings& p_deviceSettings, const Settings::WindowSettings& p_windowSettings, const Settings::DriverSettings& p_driverSettings)
+	: isWireFrame(false), isCameraFree(true)
 {
+	m_device = std::make_unique<Context::Device>(p_deviceSettings);
+	m_window = std::make_unique<Context::Window>(*m_device, p_windowSettings);
+	m_driver = std::make_unique<Context::Driver>(p_driverSettings);
+
+	m_inputManager = std::make_unique<Inputs::InputManager>(*m_window);
+
+	m_cameraController = std::make_shared<LowRenderer::CameraController>(*m_window, *m_inputManager, glm::vec3(0.0f, 0.0f, 3.0f));
+	
 	isRunning = true;
 }
 
 void AmberEngine::Managers::RenderingManager::SetCameraPosition(const glm::vec3& p_position)
 {
-	m_cameraController.GetCamera().SetPosition(p_position);
+	m_cameraController->GetCamera().SetPosition(p_position);
 }
 
 void AmberEngine::Managers::RenderingManager::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha)
@@ -46,20 +53,20 @@ void AmberEngine::Managers::RenderingManager::Update()
 {
 	UpdateDeltaTime();
 	UpdateRenderMode();
-	m_cameraController.Update(m_deltaTime);
+	m_cameraController->Update(m_deltaTime);
 	UpdateInput();
-	InputManager::Update();
+	m_inputManager->clearEvents();
 }
 
 void AmberEngine::Managers::RenderingManager::SwapBuffers()
 {
-	m_windowManager.GetWindow().SwapBuffers();
-	m_windowManager.GetDevice().PollEvents();
+	m_window->SwapBuffers();
+	m_device->PollEvents();
 }
 
 bool AmberEngine::Managers::RenderingManager::IsRunning()
 {
-	return isRunning && m_windowManager.IsOpen();
+	return isRunning && m_window->IsActive();
 }
 
 void AmberEngine::Managers::RenderingManager::UpdateRenderMode()
@@ -84,14 +91,14 @@ void AmberEngine::Managers::RenderingManager::UpdateDeltaTime()
 
 void AmberEngine::Managers::RenderingManager::UpdateInput()
 {
-	if (InputManager::GetKeyDown(InputManager::Key::KEY_LEFT_SHIFT))
+	if (m_inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_SHIFT))
 		ToggleWireFrame();
 	
-	if (InputManager::GetKeyDown(InputManager::Key::KEY_LEFT_ALT))
+	if (m_inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_ALT))
 		ToggleCamera();
 	
-	if (InputManager::GetKeyDown(InputManager::Key::KEY_ESCAPE))
-		m_windowManager.GetWindow().Close();
+	if (m_inputManager->IsKeyPressed(Inputs::EKey::KEY_ESCAPE))
+		m_window->SetShouldClose(true);
 }
 
 void AmberEngine::Managers::RenderingManager::PolygonModeLine()
@@ -111,14 +118,14 @@ void AmberEngine::Managers::RenderingManager::ToggleWireFrame()
 
 void AmberEngine::Managers::RenderingManager::FreeCamera()
 {
-	m_cameraController.Unlock();
-	m_windowManager.GetWindow().LockCursor();
+	m_cameraController->Unlock();
+	m_window->SetCursorModeLock();
 }
 
 void AmberEngine::Managers::RenderingManager::LockCamera()
 {
-	m_cameraController.Lock();
-	m_windowManager.GetWindow().FreeCursor();
+	m_cameraController->Lock();
+	m_window->SetCursorModeFree();
 }
 
 void AmberEngine::Managers::RenderingManager::ToggleCamera()
@@ -126,9 +133,9 @@ void AmberEngine::Managers::RenderingManager::ToggleCamera()
 	isCameraFree = !isCameraFree;
 }
 
-AmberEngine::Managers::WindowManager& AmberEngine::Managers::RenderingManager::GetWindowManager()
+AmberEngine::Context::Window& AmberEngine::Managers::RenderingManager::GetWindow()
 {
-	return m_windowManager;
+	return *m_window;
 }
 
 AmberEngine::Managers::ResourcesManager& AmberEngine::Managers::RenderingManager::GetResourcesManager()
@@ -138,12 +145,12 @@ AmberEngine::Managers::ResourcesManager& AmberEngine::Managers::RenderingManager
 
 glm::mat4 AmberEngine::Managers::RenderingManager::CalculateProjectionMatrix()
 {
-	return m_cameraController.GetProjectionMatrix();
+	return m_cameraController->GetProjectionMatrix();
 }
 
 glm::mat4 AmberEngine::Managers::RenderingManager::CalculateViewMatrix()
 {
-	return m_cameraController.GetCamera().GetViewMatrix();
+	return m_cameraController->GetCamera().GetViewMatrix();
 }
 
 glm::mat4 AmberEngine::Managers::RenderingManager::GetUnitModelMatrix()
@@ -153,5 +160,5 @@ glm::mat4 AmberEngine::Managers::RenderingManager::GetUnitModelMatrix()
 
 AmberEngine::LowRenderer::CameraController& AmberEngine::Managers::RenderingManager::GetCameraController()
 {
-	return m_cameraController;
+	return *m_cameraController;
 }

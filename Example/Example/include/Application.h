@@ -1,6 +1,5 @@
 #pragma once
 
-#include <AmberEngine/Settings/RenderingSettings.h>
 #include <AmberEngine/Managers/RenderingManager.h>
 
 namespace Example
@@ -10,7 +9,7 @@ namespace Example
 	private:
 		AmberEngine::Managers::RenderingManager m_renderer;
 	public:
-		Application(const AmberEngine::Settings::RenderingSettings& p_settings);
+		Application(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings);
 		~Application() = default;
 
 		void Setup();

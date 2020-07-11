@@ -7,7 +7,7 @@
 #include <AmberEngine/Managers/UIManager.h>
 #include <AmberEngine/ImGUI/imgui.h>
 
-Example::Application::Application(const AmberEngine::Settings::RenderingSettings& p_settings) : m_renderer(p_settings)
+Example::Application::Application(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) : m_renderer(p_deviceSettings, p_windowSettings, p_driverSettings)
 {
 }
 
@@ -33,7 +33,7 @@ void Example::Application::Run()
 
 	AmberEngine::Resources::AssimpModel model("res/Mesh/nanosuit/nanosuit.obj");
 
-	AmberEngine::Managers::UIManager ui(m_renderer.GetWindowManager().GetWindow());
+	AmberEngine::Managers::UIManager ui(m_renderer.GetWindow());
 
 	while (m_renderer.IsRunning())
 	{

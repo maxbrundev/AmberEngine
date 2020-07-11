@@ -1,15 +1,15 @@
 #pragma once
 
-#include "AmberEngine/API/Export.h"
+#include <string>
 
 namespace  AmberEngine::Settings
 {
-	struct API_AMBERENGINE DriverSettings
+	struct DriverSettings
 	{
-		bool enableDepthTest = true;
-		bool enableBackFaceCulling = true;
-		bool enableBlend = true;
-		bool enableMultisample = true;
-		bool enableDebugCallback = true;
+		bool enableDepthTest		= true;
+		bool enableBackFaceCulling	= true;
+		bool enableBlend			= true;
+		bool enableMultisample		= true;
+		bool enableDebugCallback	= true;
 	};
 }

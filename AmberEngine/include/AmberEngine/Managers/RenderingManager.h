@@ -1,35 +1,41 @@
 #pragma once
 
-#include "AmberEngine/Managers/WindowManager.h"
 #include "AmberEngine/LowRenderer/CameraController.h"
 #include "AmberEngine/Managers/ResourcesManager.h"
-
-#include "AmberEngine/Settings/RenderingSettings.h"
+#include "AmberEngine/Inputs/InputManager.h"
+#include "AmberEngine/Context/Driver.h"
 
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::Managers
 {
 	/**
-	* Temporary class
+	* Temporary / WIP class
 	*/
 	
 	class API_AMBERENGINE RenderingManager
 	{
-	private:
-		WindowManager m_windowManager;
-		LowRenderer::CameraController m_cameraController;
+	public:
+		std::unique_ptr<Context::Device> m_device;
+		std::unique_ptr<Context::Window> m_window;
+		std::unique_ptr<Context::Driver> m_driver;
+		
+		std::unique_ptr<Inputs::InputManager> m_inputManager;
+		
+		std::shared_ptr<LowRenderer::CameraController> m_cameraController;
+		
 		ResourcesManager m_resourcesManager;
 		
+	private:
 		float m_deltaTime = 0.0f;
-		float m_lastTime = 0.0f;
+		float m_lastTime  = 0.0f;
 
 		bool isRunning;
 		bool isWireFrame;
 		bool isCameraFree;
 
 	public:
-		RenderingManager(const Settings::RenderingSettings& p_settings);
+		RenderingManager(const Settings::DeviceSettings& p_deviceSettings, const Settings::WindowSettings& p_windowSettings, const Settings::DriverSettings& p_driverSettings);
 		~RenderingManager() = default;
 
 		void SetCameraPosition(const glm::vec3& p_position);
@@ -59,7 +65,7 @@ namespace AmberEngine::Managers
 		glm::mat4 CalculateViewMatrix();
 		glm::mat4 GetUnitModelMatrix();
 
-		WindowManager& GetWindowManager();
+		Context::Window& GetWindow();
 		LowRenderer::CameraController& GetCameraController();
 		ResourcesManager& GetResourcesManager();
 	};

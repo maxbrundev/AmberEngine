@@ -1,11 +1,10 @@
 #pragma once
 
-#include <cstdint>
-#include "AmberEngine/API/Export.h"
+#include <string>
 
 namespace AmberEngine::Settings
 {
-	struct API_AMBERENGINE DeviceSettings
+	struct DeviceSettings
 	{
 		uint8_t contextVersionMajor = 4;
 		uint8_t contextVersionMinor = 3;

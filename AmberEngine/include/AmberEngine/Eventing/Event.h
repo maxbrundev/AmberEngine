@@ -2,8 +2,6 @@
 
 #include <functional>
 
-#include "AmberEngine/API/Export.h"
-
 namespace AmberEngine::Eventing
 {
 	template<class... ArgTypes>

@@ -60,9 +60,6 @@
     <ClInclude Include="include\AmberEngine\LowRenderer\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Managers\InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\AmberEngine\Managers\RenderingManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,12 +67,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AmberEngine\Managers\UIManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AmberEngine\Managers\WindowManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AmberEngine\Maths\MathGLM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AmberEngine\Resources\AssimpMesh.h">
@@ -103,9 +94,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AmberEngine\Settings\RenderingSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AmberEngine\Resources\Primitives\Cube.h">
@@ -153,6 +141,21 @@
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\Inputs\EKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Inputs\EKeyState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Inputs\EMouseButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Inputs\EMouseButtonState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Inputs\InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -176,9 +179,6 @@
     <ClCompile Include="src\AmberEngine\LowRenderer\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\Managers\InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AmberEngine\Managers\RenderingManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -186,9 +186,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Managers\UIManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AmberEngine\Managers\WindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Resources\AssimpMesh.cpp">
@@ -237,6 +234,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Context\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

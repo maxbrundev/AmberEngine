@@ -56,7 +56,7 @@ void AmberEngine::Managers::UIManager::DisplayMenu()
 		{
 			if (ImGui::MenuItem("Quit"))
 			{
-				m_window.Close();
+				m_window.SetShouldClose(true);
 			}
 			ImGui::EndMenu();
 		}

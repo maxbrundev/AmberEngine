@@ -1,8 +1,8 @@
 #pragma once
 
-#include <queue>
-
 #include <GLFW/glfw3.h>
+
+#include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Settings/WindowSettings.h"
 #include "AmberEngine/Context/Device.h"
@@ -12,38 +12,46 @@ namespace AmberEngine::Context
 	class API_AMBERENGINE Window
 	{
 	private:
-		Context::Device& m_device;
+		static std::unordered_map<GLFWwindow*, Window*> __WINDOWS_MAP;
+		
+		Device& m_device;
 		GLFWwindow* m_glfwWindow;
 
 		std::string m_title;
 		std::pair<uint16_t, uint16_t> m_size;
 		bool m_fullscreen;
-
-		std::queue<std::string> m_errors;
-		
-		static std::unordered_map<GLFWwindow*, Window*> __WINDOWS_MAP;
 		
 	public:
+		Eventing::Event<int> KeyPressedEvent;
+		Eventing::Event<int> KeyReleasedEvent;
+		Eventing::Event<int> MouseButtonPressedEvent;
+		Eventing::Event<int> MouseButtonReleasedEvent;
+		
+		Eventing::Event<uint16_t, uint16_t> ResizeEvent;
 		Eventing::Event<uint16_t, uint16_t> FramebufferResizeEvent;
 		
 	public:
+		static Window* FindInstance(GLFWwindow* p_glfwWindow);
+		
 		Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings);
 		~Window();
 
-		void InitWindow();
+		void SetWindowUserPointer();
 		void MakeCurrentContext() const;
-		void Close() const;
 		void SwapBuffers() const;
+		void Restore() const;
+		void Hide() const;
+		void SetShouldClose(bool p_value) const;
+		void SetCursorModeLock() const;
+		void SetCursorModeFree() const;
 
-		static Window* FindInstance(GLFWwindow* p_glfwWindow);
-		
-		void LockCursor() const;
-		void FreeCursor() const;
+		void SetViewport(int p_width, int p_height) const;
 
-		bool IsActive() const;
+		void SetSize(uint16_t p_width, uint16_t p_height);
+
+		bool ShouldClose() const;
+		bool IsActive()		const;
 		bool isFullscreen() const;
-		
-		void DisplayErrors();
 		
 		GLFWwindow* GetGlfwWindow() const;
 
@@ -51,15 +59,15 @@ namespace AmberEngine::Context
 
 		int GetKey(const int p_key) const;
 
-		const std::queue<std::string>& GetQueueErros();
-
-		static int GetPressState();
-		static int GetReleaseState();
-		
-
 	private:
+		void CreateGlfwWindow();
+
+		void BindKeyCallback() const;
+		void BindMouseCallback() const;
+		void BindResizeCallback() const;
 		void BindFramebufferResizeCallback() const;
 		
-		void OnResize(uint16_t p_width, uint16_t p_height);
+		void OnResizeWindow(uint16_t p_width, uint16_t p_height);
+		void OnResizeFramebuffer(uint16_t p_width, uint16_t p_height);
 	};
 }

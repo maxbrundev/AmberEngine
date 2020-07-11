@@ -1,21 +1,19 @@
 #pragma once
 
-#include <cstdint>
-
-#include "AmberEngine/API/Export.h"
+#include <string>
 
 namespace AmberEngine::Settings
 {
-	struct API_AMBERENGINE WindowSettings
+	struct WindowSettings
 	{
 		const char* title;
 		
 		uint16_t width;
 		uint16_t height;
 		
-		bool fullScreen	= false;
-		bool resizable = true;
-		bool vsync = true;
+		bool fullScreen = false;
+		bool resizable	= true;
+		bool vsync		= true;
 
 		uint8_t samples = 4;
 	};
