@@ -47,15 +47,16 @@ void Example::Application::Run()
 		ui.DisplayDeviceInfos();
 		ui.DisplayMenu();
 		ui.BeginWindow("Scene");
+		
 		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", cameraPosition.x, cameraPosition.y, cameraPosition.z);
 		ImGui::DragFloat("Light Direction X", &lighDir.x, 0.005f, 0.0f, 0.0f, "X: %.1f");
 		ImGui::DragFloat("Light Direction Y", &lighDir.y, 0.005f, 0.0f, 0.0f, "Y: %.1f");
 		ImGui::DragFloat("Light Direction Z", &lighDir.z, 0.005f, 0.0f, 0.0f, "Z: %.1f");
-
+		
 		ImGui::SliderFloat("Texture Tiling", &UvX, -10.0f, 10.0f, "X");
 		ImGui::SliderFloat("Texture Tiling", &UvY, -10.0f, 10.0f, "Y");
 		ui.EndWindow();
-		//ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();
 		glm::mat4 projectionMatrix = m_renderer.CalculateProjectionMatrix();
 		glm::mat4 viewMatrix = m_renderer.CalculateViewMatrix();
 		glm::mat4 modelMatrix = m_renderer.GetUnitModelMatrix();

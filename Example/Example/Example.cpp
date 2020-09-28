@@ -5,6 +5,10 @@
 
 #include "Application.h"
 
+#include <AmberEngine/Utils/Defines.h>
+
+FORCE_DEDICATED_GPU
+
 int main()
 {
 	AmberEngine::Settings::DeviceSettings deviceSettings;

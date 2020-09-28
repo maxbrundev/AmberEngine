@@ -4,7 +4,7 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace  AmberEngine::Managers
+namespace AmberEngine::Managers
 {
 	/**
 	* Temporary class

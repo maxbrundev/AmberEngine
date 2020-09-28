@@ -12,6 +12,8 @@ AmberEngine::Managers::UIManager::UIManager(Context::Window& p_window) : m_windo
 	ImGui::StyleColorsDark();
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.FrameRounding = 12.0f;
+
+	//ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
 AmberEngine::Managers::UIManager::~UIManager()
