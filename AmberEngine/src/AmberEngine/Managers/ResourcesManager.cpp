@@ -1,4 +1,4 @@
-#include <memory>
+#include "Amberpch.h"
 
 #include "AmberEngine/Managers/ResourcesManager.h"
 

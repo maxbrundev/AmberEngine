@@ -1,8 +1,6 @@
-#include "AmberEngine/Managers/UIManager.h"
+#include "Amberpch.h"
 
-#include "AmberEngine/ImGUI/imgui.h"
-#include "AmberEngine/ImGUI/imgui_impl_glfw.h"
-#include "AmberEngine/ImGUI/imgui_impl_opengl3.h"
+#include "AmberEngine/Managers/UIManager.h"
 
 AmberEngine::Managers::UIManager::UIManager(Context::Window& p_window) : m_window(p_window)
 {

@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Context/Window.h"
 
 std::unordered_map<GLFWwindow*, AmberEngine::Context::Window*>  AmberEngine::Context::Window::__WINDOWS_MAP;

@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Context/Device.h"
 
 AmberEngine::Eventing::Event<AmberEngine::Context::EDeviceError, std::string> AmberEngine::Context::Device::ErrorEvent;
@@ -20,7 +22,9 @@ AmberEngine::Context::Device::Device(const Settings::DeviceSettings& p_deviceSet
 AmberEngine::Context::Device::~Device()
 {
 	if(m_isAlive)
+	{
 		glfwTerminate();
+	}
 }
 
 void AmberEngine::Context::Device::InitGLFW()

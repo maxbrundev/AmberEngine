@@ -1,7 +1,5 @@
 #pragma once
 
-#include <queue>
-
 #include "AmberEngine/Settings/DriverSettings.h"
 
 namespace  AmberEngine::Context
@@ -10,7 +8,6 @@ namespace  AmberEngine::Context
 	{
 	private:
 		bool isActive;
-		std::queue<std::string> m_errors;
 
 	public:
 		Driver(const Settings::DriverSettings& p_driverSettings);
@@ -18,9 +15,6 @@ namespace  AmberEngine::Context
 
 		void DisplayDriverInfo();
 		
-		void DisplayErrors();
-		const std::queue<std::string>& GetQueueErros();
-
 	private:
 		void InitGlew();
 	};

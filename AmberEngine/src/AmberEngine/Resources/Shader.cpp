@@ -1,11 +1,6 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Resources/Shader.h"
-
-#include <sstream>
-#include <fstream>
-#include <iostream>
-#include <string>
-
-#include <glm/glm.hpp>
 
 #include "AmberEngine/Debug/GLDebug.h"
 

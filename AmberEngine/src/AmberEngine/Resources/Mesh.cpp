@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Resources/Mesh.h"
 
 AmberEngine::Resources::Mesh::Mesh(const std::string& p_filePath) : m_sourceFile(p_filePath)

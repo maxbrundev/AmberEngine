@@ -1,6 +1,6 @@
-#include "AmberEngine/LowRenderer/CameraController.h"
+#include "Amberpch.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "AmberEngine/LowRenderer/CameraController.h"
 
 AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position)
 : m_window(p_window), inputManager(p_inputManager), m_camera(p_position), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_isFirstMouse(true), m_isLock(false)

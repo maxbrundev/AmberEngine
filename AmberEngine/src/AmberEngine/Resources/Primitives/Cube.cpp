@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Resources/Primitives/Cube.h"
 
 std::vector<AmberEngine::PrimitivesShapes::Vertex> AmberEngine::PrimitivesShapes::Cube::m_vertices;

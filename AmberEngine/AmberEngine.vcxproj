@@ -72,28 +72,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
     <LibraryPath>$(SolutionDir)..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
     <LibraryPath>$(SolutionDir)..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
     <LibraryPath>$(SolutionDir)..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)..\Bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\Bin-Int\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\Dependencies\assimp\include\;$(SolutionDir)..\Dependencies\glew\include\;$(SolutionDir)..\Dependencies\glfw\include\;$(SolutionDir)..\Dependencies\glm\include\;$(SolutionDir)..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
     <LibraryPath>$(SolutionDir)..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -105,9 +105,8 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
     </ClCompile>
     <PostBuildEvent>
       <Command>RD /S /Q "$(SolutionDir)..\Build\$(ProjectName)\include"
@@ -142,9 +141,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
     </ClCompile>
     <PostBuildEvent>
       <Command>RD /S /Q "$(SolutionDir)..\Build\$(ProjectName)\include"
@@ -181,9 +179,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -222,9 +219,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -254,6 +250,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Amberpch.h" />
     <ClInclude Include="include\AmberEngine\API\Export.h" />
     <ClInclude Include="include\AmberEngine\Buffers\IndexBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexArray.h" />
@@ -304,6 +301,16 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\ImGUI\stb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Amberpch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Amberpch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Amberpch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Amberpch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Amberpch.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexBuffer.cpp" />

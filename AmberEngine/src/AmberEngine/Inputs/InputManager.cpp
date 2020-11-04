@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Inputs/InputManager.h"
 
 AmberEngine::Inputs::InputManager::InputManager(Context::Window& p_window) : m_window(p_window)

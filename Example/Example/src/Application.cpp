@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "Application.h"
-
+#include <glm/gtc/matrix_transform.hpp>
 #include <AmberEngine/Resources/Shader.h>
 #include <AmberEngine/Resources/AssimpModel.h>
 #include <AmberEngine/Managers/UIManager.h>
@@ -13,15 +13,13 @@ Example::Application::Application(const AmberEngine::Settings::DeviceSettings& p
 
 void Example::Application::Setup()
 {
-	AmberEngine::Resources::Shader& lightingShader = m_renderer.GetResourcesManager().LoadShaderFiles("DirectionalLight", "directional_lighting.vs", "directional_lighting.fs");
+	AmberEngine::Resources::Shader& lightingShader = m_renderer.GetResourcesManager().LoadShader("StandardLighting", "StandardLighting.glsl");
 
 	lightingShader.Bind();
-	lightingShader.SetUniform1i("material.texture_diffuse1", 0);
-	lightingShader.SetUniform1i("material.texture_specular1", 1);
+	lightingShader.SetUniform1i("u_DiffuseMap", 0);
 	lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 	lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
 	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	lightingShader.SetUniform1f("material.shininess", 30.0f);
 	lightingShader.Unbind();
 }
 
@@ -31,7 +29,7 @@ void Example::Application::Run()
 	float UvY = 1.0f;
 	glm::vec3 lighDir = glm::vec3(-0.2f, -1.0f, -0.3f);
 
-	AmberEngine::Resources::AssimpModel model("res/Mesh/nanosuit/nanosuit.obj");
+	AmberEngine::Resources::AssimpModel model("res/Mesh/sponza.obj");
 
 	AmberEngine::Managers::UIManager ui(m_renderer.GetWindow());
 
@@ -60,15 +58,15 @@ void Example::Application::Run()
 		glm::mat4 projectionMatrix = m_renderer.CalculateProjectionMatrix();
 		glm::mat4 viewMatrix = m_renderer.CalculateViewMatrix();
 		glm::mat4 modelMatrix = m_renderer.GetUnitModelMatrix();
-
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").Bind();
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("projection", projectionMatrix);
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("view", viewMatrix);
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformMat4("model", modelMatrix);
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformVec3("viewPos", cameraPosition);
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniformVec3("light.direction", lighDir);
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvXValue", UvX);
-		m_renderer.GetResourcesManager().GetShader("DirectionalLight").SetUniform1f("UvYValue", UvY);
+		modelMatrix = glm::scale(modelMatrix, glm::vec3(0.03f, 0.03f, 0.03f));
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").Bind();
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniformMat4("projection", projectionMatrix);
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniformMat4("view", viewMatrix);
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniformMat4("model", modelMatrix);
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniformVec3("viewPos", cameraPosition);
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniformVec3("light.direction", lighDir);
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniform1f("UvXValue", UvX);
+		m_renderer.GetResourcesManager().GetShader("StandardLighting").SetUniform1f("UvYValue", UvY);
 
 		model.Draw();
 

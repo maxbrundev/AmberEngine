@@ -1,9 +1,4 @@
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <map>
-#include <algorithm>
-#include <sstream>
+#include "Amberpch.h"
 
 #include "AmberEngine/Resources/ObjLoader.h"
 

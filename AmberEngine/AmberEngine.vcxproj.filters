@@ -159,6 +159,9 @@
     <ClInclude Include="include\AmberEngine\Utils\Defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Amberpch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -240,6 +243,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Amberpch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

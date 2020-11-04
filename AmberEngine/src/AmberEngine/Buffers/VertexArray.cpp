@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Buffers/VertexArray.h"
 #include "AmberEngine/Debug/GLDebug.h"
 

@@ -1,6 +1,6 @@
-#include "AmberEngine/LowRenderer/Camera.h"
+#include "Amberpch.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "AmberEngine/LowRenderer/Camera.h"
 
 AmberEngine::LowRenderer::Camera::Camera(glm::vec3 p_position, glm::vec3 p_up)
 	: m_yaw(YAW), m_pitch(PITCH), m_fov(FOV), m_position(p_position), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_worldUp(p_up)

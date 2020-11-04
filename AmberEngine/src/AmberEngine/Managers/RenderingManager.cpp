@@ -1,3 +1,5 @@
+#include "Amberpch.h"
+
 #include "AmberEngine/Managers/RenderingManager.h"
 
 AmberEngine::Managers::RenderingManager::RenderingManager(const Settings::DeviceSettings& p_deviceSettings, const Settings::WindowSettings& p_windowSettings, const Settings::DriverSettings& p_driverSettings)

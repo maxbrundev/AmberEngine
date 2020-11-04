@@ -1,4 +1,4 @@
-#include <iostream>
+#include "Amberpch.h"
 
 #include "AmberEngine/Context/Driver.h"
 #include "AmberEngine/Debug/GLDebug.h"
@@ -45,15 +45,13 @@ AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSet
 
 void AmberEngine::Context::Driver::InitGlew()
 {
-	GLCall(const GLenum error = glewInit());
+	const GLenum error = glewInit();
 	if (error != GLEW_OK)
 	{
 		std::string message = "Error Init GLEW: ";
 		std::string glewError = reinterpret_cast<const char*>(glewGetErrorString(error));
 
-		m_errors.push(message + glewError);
-
-		DisplayErrors();
+		std::cout << message + glewError << std::endl;
 	}
 }
 
@@ -65,18 +63,4 @@ void AmberEngine::Context::Driver::DisplayDriverInfo()
 	std::cout << glGetString(GL_VENDOR) << std::endl;
 	std::cout << glGetString(GL_RENDERER) << std::endl;
 	std::cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-}
-
-void AmberEngine::Context::Driver::DisplayErrors()
-{
-	while (!m_errors.empty())
-	{
-		std::cout << m_errors.front().c_str() << std::endl;
-		m_errors.pop();
-	}
-}
-
-const std::queue<std::string>& AmberEngine::Context::Driver::GetQueueErros()
-{
-	return m_errors;
 }

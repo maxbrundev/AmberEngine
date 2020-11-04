@@ -1,12 +1,10 @@
-#include <string>
-#include <iostream>
+#include "Amberpch.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 #include "AmberEngine/Debug/GLDebug.h"
 #include "AmberEngine/Resources/Texture.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 
 AmberEngine::Resources::Texture::Texture(const std::string& p_filePath) : m_textureId(0), m_path(p_filePath), m_width(0), m_height(0), m_bitsPerPixel(0)
 {
