@@ -1,9 +1,5 @@
 #pragma once
 
-#include <vector>
-
-#include <glm/glm.hpp>
-
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::PrimitivesShapes
@@ -33,9 +29,6 @@ namespace AmberEngine::PrimitivesShapes
 		static bool m_initialized;
 
 	public:
-		Cube() = default;
-		~Cube() = default;
-
 		static void Setup();
 		static void InitCubePositions();
 		static void InitCubeTextureCoordinates();

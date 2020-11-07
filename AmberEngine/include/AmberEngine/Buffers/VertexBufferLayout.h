@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::Buffers

@@ -1,10 +1,8 @@
 #pragma once
 
-#include <vector>
-
-#include <glm/glm.hpp>
-
 #include "AmberEngine/API/Export.h"
+
+#include "AmberEngine/Resources/Shader.h"
 
 namespace AmberEngine::Resources
 {
@@ -39,7 +37,7 @@ namespace AmberEngine::Resources
 			AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<AssimpTextureData> p_textures);
 			~AssimpMesh() = default;
 
-			void BindBuffers();
+			void BindBuffers(const Shader& p_shader);
 			void DeleteBuffers();
 
 		private:

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GL/glew.h>
+
 #include "AmberEngine/Settings/DriverSettings.h"
 
 namespace  AmberEngine::Context

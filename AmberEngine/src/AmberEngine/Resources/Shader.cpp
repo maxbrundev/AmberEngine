@@ -4,23 +4,23 @@
 
 #include "AmberEngine/Debug/GLDebug.h"
 
-AmberEngine::Resources::Shader::Shader(const std::string& p_filePath) : m_sourceFile(p_filePath), m_rendererID(0)
+AmberEngine::Resources::Shader::Shader(const std::string& p_filePath) : m_sourceFile(p_filePath), m_programID(0)
 {
 	ShaderProgramSource source = ParseShader(p_filePath);
-	m_rendererID = CreateShader(source.vertexSource, source.fragmentSource);
+	m_programID = CreateShader(source.vertexSource, source.fragmentSource);
 }
 
 AmberEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const std::string& p_fragmentShader)
-	: m_vertexFilePath(p_vertexShader), m_fragmentFilePath(p_fragmentShader), m_rendererID(0)
+	: m_vertexFilePath(p_vertexShader), m_fragmentFilePath(p_fragmentShader), m_programID(0)
 {
 	const std::string vertexShaderSource = Parse(p_vertexShader);
 	const std::string fragmentShaderSource = Parse(p_fragmentShader);
 
-	m_rendererID = CreateShader(vertexShaderSource, fragmentShaderSource);
+	m_programID = CreateShader(vertexShaderSource, fragmentShaderSource);
 }
 
 AmberEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const std::string& p_geometryShader, const std::string& p_fragmentShader)
-	:m_vertexFilePath(p_vertexShader), m_geometryFilePath(p_geometryShader), m_fragmentFilePath(p_fragmentShader), m_rendererID(0)
+	:m_vertexFilePath(p_vertexShader), m_geometryFilePath(p_geometryShader), m_fragmentFilePath(p_fragmentShader), m_programID(0)
 {
 	const std::string vertexShaderSource = Parse(p_vertexShader);
 	const std::string geometryShaderSource = Parse(p_geometryShader);
@@ -59,17 +59,17 @@ AmberEngine::Resources::Shader::Shader(const std::string& p_vertexShader, const 
 	GLCall(glDeleteShader(fs));
 	GLCall(glDeleteShader(gs));
 
-	m_rendererID = program;
+	m_programID = program;
 }
 
 AmberEngine::Resources::Shader::~Shader()
 {
-	GLCall(glDeleteProgram(m_rendererID));
+	GLCall(glDeleteProgram(m_programID));
 }
 
 void AmberEngine::Resources::Shader::Bind() const
 {
-	GLCall(glUseProgram(m_rendererID));
+	GLCall(glUseProgram(m_programID));
 }
 
 void AmberEngine::Resources::Shader::Unbind() const
@@ -228,7 +228,7 @@ void AmberEngine::Resources::Shader::LoadFromFile(const std::string& p_path)
 {
 	m_sourceFile = p_path;
 	ShaderProgramSource source = ParseShader(p_path);
-	m_rendererID = CreateShader(source.vertexSource, source.fragmentSource);
+	m_programID = CreateShader(source.vertexSource, source.fragmentSource);
 }
 
 unsigned int AmberEngine::Resources::Shader::GetUniformLocation(std::string_view p_name)
@@ -236,7 +236,7 @@ unsigned int AmberEngine::Resources::Shader::GetUniformLocation(std::string_view
 	if (m_uniformLocationCache.find(p_name) != m_uniformLocationCache.end())
 		return m_uniformLocationCache[p_name];
 
-	const int location = glGetUniformLocation(m_rendererID, static_cast<std::string>(p_name).c_str());
+	const int location = glGetUniformLocation(m_programID, static_cast<std::string>(p_name).c_str());
 	if (location == -1)
 		std::cout << "warning uniform doesn't exist" << std::endl;
 

@@ -1,16 +1,17 @@
 #pragma once
 
-#include "AmberEngine/Buffers/VertexBuffer.h"
-#include "AmberEngine/Buffers/VertexBufferLayout.h"
-
 #include "AmberEngine/API/Export.h"
+
+namespace AmberEngine::Buffers { class VertexBuffer; }
+namespace AmberEngine::Buffers { class VertexBufferLayout; }
 
 namespace AmberEngine::Buffers
 {
 	class API_AMBERENGINE VertexArray
 	{
 	private:
-		unsigned int m_rendererID;
+		GLuint m_bufferID;
+		
 	public:
 		VertexArray();
 		~VertexArray();
@@ -19,5 +20,8 @@ namespace AmberEngine::Buffers
 
 		void Bind() const;
 		void Unbind() const;
+
+
+		GLuint GetID();
 	};
 }

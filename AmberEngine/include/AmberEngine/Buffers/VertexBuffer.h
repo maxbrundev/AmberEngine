@@ -7,12 +7,15 @@ namespace AmberEngine::Buffers
 	class API_AMBERENGINE VertexBuffer
 	{
 	private:
-		unsigned int m_rendererID;
+		GLuint m_bufferID;
+		
 	public:
-		VertexBuffer(const void* p_data, unsigned int p_size);
+		VertexBuffer(const void* p_data, size_t p_elements);
 		~VertexBuffer();
 
 		void Bind() const;
 		void Unbind() const;
+
+		GLuint GetID();
 	};
 }

@@ -1,12 +1,8 @@
 #pragma once
 
-#include <string>
-
-#include <GL/glew.h>
+#include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Resources/ObjLoader.h"
-
-#include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::Resources
 {

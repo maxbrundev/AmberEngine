@@ -1,7 +1,6 @@
 #pragma once
 
-#include <unordered_map>
-
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 #include "AmberEngine/API/Export.h"
@@ -25,7 +24,7 @@ namespace AmberEngine::Resources
 			
 		std::string m_sourceFile;
 
-		unsigned int m_rendererID;
+		GLuint m_programID;
 
 	public:
 		Shader() = default;
@@ -50,7 +49,7 @@ namespace AmberEngine::Resources
 		void SetUniformVec4(std::string_view p_name, const glm::vec4& p_vec4);
 		void SetUniformMat4(std::string_view p_name, const glm::mat4& p_mat4);
 
-		inline unsigned int GetRendererID() const { return m_rendererID; }
+		inline unsigned int GetRendererID() const { return m_programID; }
 
 	private:
 		ShaderProgramSource ParseShader(const std::string& p_filePath);

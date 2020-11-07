@@ -1,16 +1,20 @@
 #include "Amberpch.h"
 
+#include <GL/glew.h>
+
 #include "AmberEngine/Buffers/VertexArray.h"
-#include "AmberEngine/Debug/GLDebug.h"
+
+#include "AmberEngine/Buffers/VertexBuffer.h"
+#include "AmberEngine/Buffers/VertexBufferLayout.h"
 
 AmberEngine::Buffers::VertexArray::VertexArray()
 {
-	GLCall(glGenVertexArrays(1, &m_rendererID));
+	glGenVertexArrays(1, &m_bufferID);
 }
 
 AmberEngine::Buffers::VertexArray::~VertexArray()
 {
-	GLCall(glDeleteVertexArrays(1, &m_rendererID));
+	glDeleteVertexArrays(1, &m_bufferID);
 }
 
 void AmberEngine::Buffers::VertexArray::AddBuffer(const VertexBuffer& p_vbo, const VertexBufferLayout& p_layout)
@@ -22,18 +26,23 @@ void AmberEngine::Buffers::VertexArray::AddBuffer(const VertexBuffer& p_vbo, con
 	for (unsigned int i = 0; i < elements.size(); i++)
 	{
 		const auto& element = elements[i];
-		GLCall(glEnableVertexAttribArray(i));
-		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, p_layout.GetStride(), reinterpret_cast<const GLvoid*>(offset)));
+		glEnableVertexAttribArray(i);
+		glVertexAttribPointer(static_cast<GLuint>(i), static_cast<GLint>(element.count), static_cast<GLenum>(element.type), element.normalized, static_cast<GLsizei>(p_layout.GetStride()), reinterpret_cast<const GLvoid*>(offset));
 		offset += element.count * sizeof(element.type);
 	}
 }
 
 void AmberEngine::Buffers::VertexArray::Bind() const
 {
-	GLCall(glBindVertexArray(m_rendererID));
+	glBindVertexArray(m_bufferID);
 }
 
 void AmberEngine::Buffers::VertexArray::Unbind() const
 {
-	GLCall(glBindVertexArray(0));
+	glBindVertexArray(0);
+}
+
+GLuint AmberEngine::Buffers::VertexArray::GetID()
+{
+	return m_bufferID;
 }

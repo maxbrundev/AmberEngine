@@ -1,7 +1,5 @@
 #include "Amberpch.h"
 
-#include <GL/glew.h>
-
 #include "AmberEngine/Resources/AssimpMesh.h"
 
 AmberEngine::Resources::AssimpMesh::AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<AssimpTextureData> p_textures) 
@@ -10,11 +8,23 @@ AmberEngine::Resources::AssimpMesh::AssimpMesh(std::vector<AssimpVertex> p_verti
 	InitBuffers();
 }
 
-void AmberEngine::Resources::AssimpMesh::BindBuffers()
-{
+void AmberEngine::Resources::AssimpMesh::BindBuffers(const Shader& p_shader)
+{	
 	for (int i = 0; i < m_textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
+	
+		std::string name = m_textures[i].type;
+		
+		if (name == "texture_diffuse")
+		{
+			//p_shader.SetUniform1i("u_DiffuseMap", i);
+		}
+		else if (name == "texture_specular")
+		{
+			//p_shader.SetUniform1i("u_SpecularMap", i);
+		}
+		
 		glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
 	}
 
@@ -44,11 +54,11 @@ void AmberEngine::Resources::AssimpMesh::InitBuffers()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), static_cast<void*>(nullptr));
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, normal)));
-
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, texCoords)));
+	
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, texCoords)));
-
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, normal)));
+	
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, tangent)));
 

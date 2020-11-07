@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GL/glew.h>
+
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::Resources
@@ -7,10 +9,11 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE Texture
 	{
 	private:
-		unsigned int m_textureId;
 		std::string m_type;
 		std::string m_path;
 
+		GLuint m_textureId;
+		
 		int m_width;
 		int m_height;
 		int m_bitsPerPixel;

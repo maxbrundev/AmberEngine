@@ -3,9 +3,11 @@
 #include <GLFW/glfw3.h>
 
 #include "AmberEngine/API/Export.h"
+
 #include "AmberEngine/Settings/DeviceSettings.h"
-#include "AmberEngine/Eventing/Event.h"
 #include "AmberEngine/Context/EDeviceError.h"
+
+#include "AmberEngine/Eventing/Event.h"
 
 namespace AmberEngine::Context
 {

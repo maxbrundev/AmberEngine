@@ -1,6 +1,6 @@
 #include "Amberpch.h"
 
-#include <GL/glew.h>
+#include <stb_image.h>
 
 #include "AmberEngine/Resources/AssimpModel.h"
 
@@ -55,10 +55,10 @@ AmberEngine::Resources::AssimpModel::AssimpModel(const std::string& p_filePath)
 	LoadModel(p_filePath);
 }
 
-void AmberEngine::Resources::AssimpModel::Draw()
+void AmberEngine::Resources::AssimpModel::Draw(const Shader& p_shader)
 {
 	for (int i = 0; i < m_meshes.size(); i++)
-		m_meshes[i].BindBuffers();
+		m_meshes[i].BindBuffers(p_shader);
 }
 
 AmberEngine::Resources::AssimpModel::~AssimpModel()

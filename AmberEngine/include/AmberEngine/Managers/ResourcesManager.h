@@ -1,11 +1,9 @@
 #pragma once
 
-#include <unordered_map>
-
-#include "AmberEngine/Resources/Shader.h"
-#include "AmberEngine/Resources/Texture.h"
-
 #include "AmberEngine/API/Export.h"
+
+#include "AmberEngine/Resources/Texture.h"
+#include "AmberEngine/Resources/Shader.h"
 
 namespace AmberEngine::Managers
 {

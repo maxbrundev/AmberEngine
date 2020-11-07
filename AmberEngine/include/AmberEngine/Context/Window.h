@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Settings/WindowSettings.h"

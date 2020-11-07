@@ -1,6 +1,7 @@
 #include "Amberpch.h"
 
 #include "AmberEngine/Context/Driver.h"
+
 #include "AmberEngine/Debug/GLDebug.h"
 
 AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSettings)

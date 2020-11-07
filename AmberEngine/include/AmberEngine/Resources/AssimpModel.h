@@ -1,13 +1,10 @@
 #pragma once
 
-#include <vector>
-
-#include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
-#include "AmberEngine/Resources/AssimpMesh.h"
-
 #include "AmberEngine/API/Export.h"
+
+#include "AmberEngine/Resources/AssimpMesh.h"
 
 namespace AmberEngine::Resources
 {
@@ -19,7 +16,7 @@ namespace AmberEngine::Resources
 		std::string m_directory;
 	public:
 		AssimpModel(const std::string& p_filePath);
-		void Draw();
+		void Draw(const Shader& p_shader);
 		~AssimpModel();
 
 	private:

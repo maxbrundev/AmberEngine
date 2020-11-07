@@ -1,28 +1,32 @@
 #include "Amberpch.h"
 
+#include <GL/glew.h>
+
 #include "AmberEngine/Buffers/IndexBuffer.h"
-#include "AmberEngine/Debug/GLDebug.h"
 
-AmberEngine::Buffers::IndexBuffer::IndexBuffer(const unsigned int* p_data, unsigned int p_count) : m_count(p_count)
+AmberEngine::Buffers::IndexBuffer::IndexBuffer(const unsigned int* p_data, size_t p_elements)
 {
-	ASSERT(sizeof(unsigned int) == sizeof(GLuint));
-
-	GLCall(glGenBuffers(1, &m_rendererID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_count * sizeof(unsigned int), p_data, GL_STATIC_DRAW));
+	glGenBuffers(1, &m_bufferID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_elements * sizeof(unsigned int), p_data, GL_STATIC_DRAW);
 }
 
 AmberEngine::Buffers::IndexBuffer::~IndexBuffer()
 {
-	GLCall(glDeleteBuffers(1, &m_rendererID));
+	glDeleteBuffers(1, &m_bufferID);
 }
 
 void AmberEngine::Buffers::IndexBuffer::Bind() const
 {
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferID);
 }
 
 void AmberEngine::Buffers::IndexBuffer::Unbind() const
 {
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+uint32_t AmberEngine::Buffers::IndexBuffer::GetID()
+{
+	return m_bufferID;
 }

@@ -1,7 +1,8 @@
 #include "Amberpch.h"
 
+#include <GL/glew.h>
+
 #include "AmberEngine/Buffers/VertexBufferLayout.h"
-#include "AmberEngine/Debug/GLDebug.h"
 
 AmberEngine::Buffers::VertexBufferLayout::VertexBufferLayout() : m_stride(0)
 {

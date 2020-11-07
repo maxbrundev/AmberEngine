@@ -8,6 +8,7 @@
 #include "AmberEngine/Inputs/EKeyState.h"
 #include "AmberEngine/Inputs/EMouseButton.h"
 #include "AmberEngine/Inputs/EMouseButtonState.h"
+
 #include "AmberEngine/Context/Window.h"
 
 namespace AmberEngine::Inputs

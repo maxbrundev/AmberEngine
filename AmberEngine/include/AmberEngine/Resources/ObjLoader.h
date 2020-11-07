@@ -1,9 +1,5 @@
 #pragma once
 
-#include <vector>
-
-#include <glm/glm.hpp>
-
 #include "AmberEngine/API/Export.h"
 
 namespace AmberEngine::Resources
