@@ -17,6 +17,8 @@ namespace AmberEngine::LowRenderer
 		
 		void SetFov(float p_value);
 
+		void SetClearColor(const glm::vec3& p_clearColor);
+
 		float& GetYaw();
 		float& GetPitch();
 		float& GetCameraFov();

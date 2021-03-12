@@ -58,6 +58,11 @@ void AmberEngine::LowRenderer::Camera::SetFov(float p_value)
 	m_fov = p_value;
 }
 
+void AmberEngine::LowRenderer::Camera::SetClearColor(const glm::vec3& p_clearColor)
+{
+	m_clearColor = p_clearColor;
+}
+
 float& AmberEngine::LowRenderer::Camera::GetCameraFov()
 {
 	return m_fov;
