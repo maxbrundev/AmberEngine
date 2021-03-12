@@ -13,6 +13,7 @@ namespace AmberEngine::Managers
 		~LayerManager() override;
 		
 		bool AddLayer(Core::ALayer* p_layer) override;
+		void DestroyLayers() override;
 		bool DestroyLayer(Core::ALayer* p_layer) override;
 		Core::ALayer* GetLayer(Core::ALayer* p_layer) override;
 		void UpdateLayers(float p_deltaTime);

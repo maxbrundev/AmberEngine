@@ -12,6 +12,11 @@ m_editor(m_context)
 	isRunning = true;
 }
 
+AmberEngine::Core::Application::~Application()
+{
+	m_layerManager->DestroyLayers();
+}
+
 void AmberEngine::Core::Application::Run()
 {
 	while (IsRunning())

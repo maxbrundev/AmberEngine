@@ -21,7 +21,7 @@ namespace AmberEngine::Core
 	{
 	public:
 		Application(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings);
-		virtual ~Application() = default;
+		virtual ~Application();
 		
 		void Run();
 		bool PushLayer(ALayer* p_layer);

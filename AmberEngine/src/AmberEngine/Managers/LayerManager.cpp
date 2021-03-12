@@ -4,7 +4,7 @@
 
 AmberEngine::Managers::LayerManager::~LayerManager()
 {
-	for (auto layer : m_layers)
+	for (auto* layer : m_layers)
 	{
 		delete layer;
 	}
@@ -23,6 +23,14 @@ bool AmberEngine::Managers::LayerManager::AddLayer(Core::ALayer* p_layer)
 	}
 
 	return false;
+}
+
+void AmberEngine::Managers::LayerManager::DestroyLayers()
+{
+	for (auto* layer : m_layers)
+	{
+		DestroyLayer(layer);
+	}
 }
 
 bool AmberEngine::Managers::LayerManager::DestroyLayer(Core::ALayer* p_layer)
@@ -48,7 +56,7 @@ AmberEngine::Core::ALayer* AmberEngine::Managers::LayerManager::GetLayer(Core::A
 
 void AmberEngine::Managers::LayerManager::UpdateLayers(float p_deltaTime)
 {
-	for (auto layer : m_layers)
+	for (auto* layer : m_layers)
 	{
 		layer->OnUpdate(p_deltaTime);
 	}
