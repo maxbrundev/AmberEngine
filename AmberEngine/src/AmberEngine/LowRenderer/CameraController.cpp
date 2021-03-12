@@ -3,13 +3,15 @@
 #include "AmberEngine/LowRenderer/CameraController.h"
 
 AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position)
-: m_window(p_window), inputManager(p_inputManager), m_camera(p_position), m_movementSpeed(SPEED), m_mouseSensitivity(SENSITIVITY), m_isFirstMouse(true), m_isLock(false)
+	: m_window(p_window), inputManager(p_inputManager), m_lastMousePosX(0), m_lastMousePosY(0), m_movementSpeed(SPEED),
+	  m_mouseSensitivity(SENSITIVITY),
+	  m_isFirstMouse(true), m_isLock(false), m_position(p_position)
 {
 }
 
 void AmberEngine::LowRenderer::CameraController::ProcessKeyboard(cameraMovement p_direction, float p_deltaTime)
 {
-	glm::vec3& position = m_camera.GetPosition();
+	glm::vec3& position = m_position;
 	glm::vec3 forward	= m_camera.GetForward();
 	glm::vec3 right		= m_camera.GetRight();
 	glm::vec3 up		= m_camera.GetUp();
@@ -74,6 +76,23 @@ void AmberEngine::LowRenderer::CameraController::Update(float p_deltaTime)
 	}
 }
 
+void AmberEngine::LowRenderer::CameraController::SetPosition(glm::vec3 p_pos)
+{
+	m_position = p_pos;
+}
+
+void AmberEngine::LowRenderer::CameraController::SetPosition(float pos_x, float pos_y, float pos_z)
+{
+	m_position.x = pos_x;
+	m_position.y = pos_y;
+	m_position.z = pos_z;
+}
+
+const glm::vec3& AmberEngine::LowRenderer::CameraController::GetPosition() const
+{
+	return m_position;
+}
+
 void AmberEngine::LowRenderer::CameraController::HandleInput(float p_deltaTime)
 {
 	if (inputManager.GetKey(Inputs::EKey::KEY_W) == Inputs::EKeyState::KEY_DOWN)
@@ -122,11 +141,6 @@ void AmberEngine::LowRenderer::CameraController::Lock()
 void AmberEngine::LowRenderer::CameraController::Unlock()
 {
 	m_isLock = false;
-}
-
-glm::mat4 AmberEngine::LowRenderer::CameraController::GetProjectionMatrix()
-{
-	return glm::perspective(glm::radians(m_camera.GetCameraFov()), static_cast<float>(m_window.GetSize().first) / static_cast<float>(m_window.GetSize().second), 0.1f, 300.0f);
 }
 
 AmberEngine::LowRenderer::Camera& AmberEngine::LowRenderer::CameraController::GetCamera()

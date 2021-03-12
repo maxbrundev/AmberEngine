@@ -195,7 +195,7 @@ xcopy "$(SolutionDir)..\Build\AmberEngine\bin\$(Platform)\$(Configuration)\*.dll
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\ExampleLayer.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -206,7 +206,7 @@ xcopy "$(SolutionDir)..\Build\AmberEngine\bin\$(Platform)\$(Configuration)\*.dll
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\ExampleLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Examples\basic_lighting_viewspace.fs" />

@@ -1,8 +1,8 @@
 #include "Amberpch.h"
 
-#include "AmberEngine/Managers/UIManager.h"
+#include "AmberEngine/Core/UIManager.h"
 
-AmberEngine::Managers::UIManager::UIManager(Context::Window& p_window) : m_window(p_window)
+AmberEngine::Core::UIManager::UIManager(Context::Window& p_window) : m_window(p_window)
 {
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(m_window.GetGlfwWindow(), true);
@@ -14,41 +14,41 @@ AmberEngine::Managers::UIManager::UIManager(Context::Window& p_window) : m_windo
 	//ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
-AmberEngine::Managers::UIManager::~UIManager()
+AmberEngine::Core::UIManager::~UIManager()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 
-void AmberEngine::Managers::UIManager::BeginFrame()
+void AmberEngine::Core::UIManager::BeginFrame()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 }
 
-void AmberEngine::Managers::UIManager::EndFrame()
+void AmberEngine::Core::UIManager::EndFrame()
 {
 	ImGui::Render();
 }
 
-void AmberEngine::Managers::UIManager::BeginWindow(const std::string& p_title)
+void AmberEngine::Core::UIManager::BeginWindow(const std::string& p_title)
 {
 	ImGui::Begin(p_title.c_str());
 }
 
-void AmberEngine::Managers::UIManager::EndWindow()
+void AmberEngine::Core::UIManager::EndWindow()
 {
 	ImGui::End();
 }
 
-void AmberEngine::Managers::UIManager::Render()
+void AmberEngine::Core::UIManager::Render()
 {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void AmberEngine::Managers::UIManager::DisplayMenu()
+void AmberEngine::Core::UIManager::DisplayMenu()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -64,7 +64,7 @@ void AmberEngine::Managers::UIManager::DisplayMenu()
 	}
 }
 
-void AmberEngine::Managers::UIManager::DisplayDeviceInfos()
+void AmberEngine::Core::UIManager::DisplayDeviceInfos()
 {
 	/*ImGuiWindowFlags window_flags = 0;
 	window_flags |= ImGuiWindowFlags_NoTitleBar;

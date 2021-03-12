@@ -1,7 +1,5 @@
 #pragma once
 
-#include <unordered_map>
-
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Inputs/EKey.h"
@@ -15,17 +13,6 @@ namespace AmberEngine::Inputs
 {
 	class API_AMBERENGINE InputManager
 	{
-	private:
-		Context::Window& m_window;
-
-		uint64_t m_keyPressedEventListerId;
-		uint64_t m_keyReleasedEventListerId;
-		uint64_t m_mousePressedEventListerId;
-		uint64_t m_mouseReleasedEventListerId;
-
-		std::unordered_map<EKey, EKeyState> m_keyEvents;
-		std::unordered_map<EMouseButton, EMouseButtonState> m_mouseEvents;
-		
 	public:
 		InputManager(Context::Window& p_window);
 		~InputManager();
@@ -46,5 +33,16 @@ namespace AmberEngine::Inputs
 		void OnKeyReleased(int p_key);
 		void OnMouseButtonPressed(int p_button);
 		void OnMouseButtonReleased(int p_button);
+
+	private:
+		Context::Window& m_window;
+
+		uint64_t m_keyPressedEventListerId;
+		uint64_t m_keyReleasedEventListerId;
+		uint64_t m_mousePressedEventListerId;
+		uint64_t m_mouseReleasedEventListerId;
+
+		std::unordered_map<EKey, EKeyState> m_keyEvents;
+		std::unordered_map<EMouseButton, EMouseButtonState> m_mouseEvents;
 	};
 }

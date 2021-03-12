@@ -8,46 +8,47 @@ namespace AmberEngine::LowRenderer
 {
 	class API_AMBERENGINE Camera
 	{
-	private:
-		const float PITCH = 0.0f;
-		const float YAW = -90.0f;
-		const float FOV = 45.0f;
-
-		glm::vec3 m_position;
-		glm::vec3 m_forward;
-		glm::vec3 m_up;
-		glm::vec3 m_right;
-
-		glm::vec3 m_worldUp;
-		glm::vec3 m_clearColor;
-		
-		float m_yaw;
-		float m_pitch;
-		float m_fov;
-
 	public:
-		Camera(glm::vec3 p_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_up = glm::vec3(0.0f, 1.0f, 0.0f));
-		//Camera(float p_posX, float p_posY, float p_posZ, float p_upX, float p_upY, float p_upZ, float p_yaw, float p_pitch);
-
-		glm::mat4 GetViewMatrix() const;
-
-		glm::vec3& GetPosition();
+		Camera();
+		~Camera() = default;
+		
+		void UpdateCameraVectors();
+		void CalculateMatrices(uint16_t p_windowWidth, uint16_t p_windowHeight, const glm::vec3& p_position);
+		
+		void SetFov(float p_value);
 
 		float& GetYaw();
 		float& GetPitch();
-
+		float& GetCameraFov();
+		
 		const glm::vec3& GetForward() const;
 		const glm::vec3& GetRight() const;
 		const glm::vec3& GetUp() const;
 
-		float& GetCameraFov();
-
-		void SetPosition(glm::vec3 p_pos);
-		void SetPosition(float pos_x, float pos_y, float pos_z);
-		void SetFov(float p_value);
-
-		void UpdateCameraVectors();
-
 		const glm::vec3& GetClearColor() const;
+
+		glm::mat4& GetViewMatrix();
+		glm::mat4& GetProjectionMatrix();
+		
+	private:
+		void CalculateViewMatrix(const glm::vec3& p_position, const  glm::vec3& p_up);
+		void CalculateProjectionMatrix(uint16_t p_windowWidth, uint16_t p_windowHeight);
+
+	private:
+		glm::mat4 m_viewMatrix;
+		glm::mat4 m_projectionMatrix;
+
+		glm::vec3 m_forward;
+		glm::vec3 m_up;
+		glm::vec3 m_right;
+		
+		glm::vec3 m_clearColor;
+
+		float m_yaw;
+		float m_pitch;
+		float m_fov;
+
+		float m_near;
+		float m_far;
 	};
 }

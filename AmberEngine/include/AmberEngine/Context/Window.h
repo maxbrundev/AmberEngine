@@ -3,22 +3,13 @@
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Settings/WindowSettings.h"
+
 #include "AmberEngine/Context/Device.h"
 
 namespace AmberEngine::Context
 {
 	class API_AMBERENGINE Window
 	{
-	private:
-		static std::unordered_map<GLFWwindow*, Window*> __WINDOWS_MAP;
-		
-		Device& m_device;
-		GLFWwindow* m_glfwWindow;
-
-		std::string m_title;
-		std::pair<uint16_t, uint16_t> m_size;
-		bool m_fullscreen;
-		
 	public:
 		Eventing::Event<int> KeyPressedEvent;
 		Eventing::Event<int> KeyReleasedEvent;
@@ -67,5 +58,16 @@ namespace AmberEngine::Context
 		
 		void OnResizeWindow(uint16_t p_width, uint16_t p_height);
 		void OnResizeFramebuffer(uint16_t p_width, uint16_t p_height);
+
+	private:
+		static std::unordered_map<GLFWwindow*, Window*> __WINDOWS_MAP;
+
+		GLFWwindow* m_glfwWindow;
+		
+		Device& m_device;
+
+		std::string m_title;
+		std::pair<uint16_t, uint16_t> m_size;
+		bool m_fullscreen;
 	};
 }

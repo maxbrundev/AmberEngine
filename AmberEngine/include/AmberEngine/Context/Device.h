@@ -5,6 +5,7 @@
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Settings/DeviceSettings.h"
+
 #include "AmberEngine/Context/EDeviceError.h"
 
 #include "AmberEngine/Eventing/Event.h"
@@ -13,10 +14,6 @@ namespace AmberEngine::Context
 {
 	class API_AMBERENGINE Device
 	{
-	private:
-		bool m_isAlive = false;
-		bool m_vsync = false;
-		
 	public:
 		static Eventing::Event<EDeviceError, std::string> ErrorEvent;
 		
@@ -33,5 +30,9 @@ namespace AmberEngine::Context
 	private:
 		void InitGLFW();
 		void BindErrorCallback();
+
+	private:
+		bool m_isAlive = false;
+		bool m_vsync = false;
 	};
 }

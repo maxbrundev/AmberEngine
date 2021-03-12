@@ -8,9 +8,6 @@ namespace  AmberEngine::Context
 {
 	class Driver
 	{
-	private:
-		bool isActive;
-
 	public:
 		Driver(const Settings::DriverSettings& p_driverSettings);
 		~Driver() = default;
@@ -19,5 +16,8 @@ namespace  AmberEngine::Context
 		
 	private:
 		void InitGlew();
+
+	private:
+		bool isActive;
 	};
 }

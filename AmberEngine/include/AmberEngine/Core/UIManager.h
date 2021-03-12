@@ -4,19 +4,17 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine::Managers
+//TODO: Delete this class.
+
+namespace AmberEngine::Core
 {
-	/**
-	* Temporary class
-	*/
-	
 	class API_AMBERENGINE UIManager
 	{
 	private:
-		Context::Window& m_window;
+		AmberEngine::Context::Window& m_window;
 
 	public:
-		UIManager(Context::Window& p_window);
+		UIManager(AmberEngine::Context::Window& p_window);
 		~UIManager();
 
 		void BeginFrame();

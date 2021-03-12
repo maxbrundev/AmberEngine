@@ -260,6 +260,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
     <ClInclude Include="include\AmberEngine\Context\Window.h" />
+    <ClInclude Include="include\AmberEngine\Core\ALayer.h" />
+    <ClInclude Include="include\AmberEngine\Core\Application.h" />
+    <ClInclude Include="include\AmberEngine\Core\Editor.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
@@ -278,9 +281,11 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\LowRenderer\Camera.h" />
     <ClInclude Include="include\AmberEngine\LowRenderer\CameraController.h" />
     <ClInclude Include="include\AmberEngine\Inputs\InputManager.h" />
-    <ClInclude Include="include\AmberEngine\Managers\RenderingManager.h" />
+    <ClInclude Include="include\AmberEngine\Core\Renderer.h" />
+    <ClInclude Include="include\AmberEngine\Managers\ILayerManager.h" />
+    <ClInclude Include="include\AmberEngine\Managers\LayerManager.h" />
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
-    <ClInclude Include="include\AmberEngine\Managers\UIManager.h" />
+    <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Resources\AssimpMesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\AssimpModel.h" />
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
@@ -292,6 +297,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />
     <ClInclude Include="include\AmberEngine\Utils\Defines.h" />
+    <ClInclude Include="include\AmberEngine\Utils\voxelizer.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
     <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
@@ -299,6 +305,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\ImGUI\stb_rect_pack.h" />
     <ClInclude Include="include\ImGUI\stb_textedit.h" />
     <ClInclude Include="include\ImGUI\stb_truetype.h" />
+    <ClInclude Include="include\AmberEngine\Core\Context.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Amberpch.cpp">
@@ -318,6 +325,10 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Context\Device.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Driver.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Window.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ALayer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Application.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Context.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />
@@ -328,9 +339,10 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\LowRenderer\Camera.cpp" />
     <ClCompile Include="src\AmberEngine\LowRenderer\CameraController.cpp" />
     <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp" />
-    <ClCompile Include="src\AmberEngine\Managers\RenderingManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Renderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Managers\LayerManager.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
-    <ClCompile Include="src\AmberEngine\Managers\UIManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\AssimpMesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\AssimpModel.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />

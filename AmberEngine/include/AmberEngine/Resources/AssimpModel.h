@@ -6,19 +6,23 @@
 
 #include "AmberEngine/Resources/AssimpMesh.h"
 
+//TODO: Refactor.
+
 namespace AmberEngine::Resources
 {
 	class API_AMBERENGINE AssimpModel
 	{
 	public:
+		AssimpModel(const std::string& p_filePath);
+		~AssimpModel();
+		
+		void Draw(Shader& p_shader);
+
+	public:
 		std::vector<AssimpTextureData> m_loadedTextures;
 		std::vector<AssimpMesh> m_meshes;
 		std::string m_directory;
-	public:
-		AssimpModel(const std::string& p_filePath);
-		void Draw(const Shader& p_shader);
-		~AssimpModel();
-
+		
 	private:
 		void LoadModel(const std::string& p_filePath);
 		void ProcessNode(aiNode* p_node, const aiScene* p_scene);

@@ -5,6 +5,8 @@
 #include "AmberEngine/Resources/Texture.h"
 #include "AmberEngine/Resources/Shader.h"
 
+//TODO: Refactor.
+
 namespace AmberEngine::Managers
 {
 	class API_AMBERENGINE ResourcesManager

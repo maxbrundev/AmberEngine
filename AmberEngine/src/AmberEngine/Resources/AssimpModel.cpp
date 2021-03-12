@@ -55,7 +55,7 @@ AmberEngine::Resources::AssimpModel::AssimpModel(const std::string& p_filePath)
 	LoadModel(p_filePath);
 }
 
-void AmberEngine::Resources::AssimpModel::Draw(const Shader& p_shader)
+void AmberEngine::Resources::AssimpModel::Draw(Shader& p_shader)
 {
 	for (int i = 0; i < m_meshes.size(); i++)
 		m_meshes[i].BindBuffers(p_shader);

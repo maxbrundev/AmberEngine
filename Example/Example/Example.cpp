@@ -1,10 +1,20 @@
 #include "pch.h"
 
-#include "Application.h"
-
+#include <AmberEngine/Core/Application.h>
 #include <AmberEngine/Utils/Defines.h>
-
 FORCE_DEDICATED_GPU
+
+#include "ExampleLayer.h"
+
+class Example : public AmberEngine::Core::Application
+{
+public:
+	inline Example(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
+	Application(p_deviceSettings, p_windowSettings, p_driverSettings)
+	{
+		PushLayer(new ExampleLayer(m_context, m_editor));
+	}
+};
 
 int main()
 {
@@ -27,8 +37,8 @@ int main()
 	driverSettings.enableBackFaceCulling = true;
 	driverSettings.enableMultisample = true;
 	driverSettings.enableDebugCallback = true;
+
+	std::unique_ptr<Example> exampleApp = std::make_unique<Example>(deviceSettings, windowSettings, driverSettings);
 	
-	Example::Application app(deviceSettings, windowSettings, driverSettings);
-	app.Setup();
-	app.Run();
+	exampleApp->Run();
 }
