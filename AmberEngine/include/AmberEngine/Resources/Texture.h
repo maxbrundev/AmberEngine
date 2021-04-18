@@ -8,27 +8,20 @@ namespace AmberEngine::Resources
 {
 	class API_AMBERENGINE Texture
 	{
-	private:
-		std::string m_type;
-		std::string m_path;
-
-		GLuint m_textureId;
-		
-		int m_width;
-		int m_height;
-		int m_bitsPerPixel;
-
 	public:
-		Texture() = default;
-		Texture(const std::string& p_filePath);
+		Texture(const std::string_view p_path, bool p_flipVertically = false);
 		~Texture();
 
-		void Bind(const unsigned int& p_slot = 0) const;
+		void Bind(uint32_t p_slot = 0) const;
 		void Unbind() const;
-
-		unsigned int GetTextureId();
-		int GetTextureWidth();
-		int GetTextureHeight();
+		
+	public:
+		uint32_t m_id;
+		uint32_t m_width;
+		uint32_t m_height;
+		uint32_t m_bitsPerPixel;
+		std::string_view m_type;
+		std::string_view m_path;
 
 	};
 }

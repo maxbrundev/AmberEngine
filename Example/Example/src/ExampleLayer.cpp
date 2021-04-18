@@ -20,7 +20,7 @@ ExampleLayer::ExampleLayer(AmberEngine::Core::Context& p_context, AmberEngine::C
 
 void ExampleLayer::OnStart()
 {
-	model = new AmberEngine::Resources::AssimpModel("res/Mesh/nanosuit/nanosuit.obj");
+	model = new AmberEngine::Resources::AssimpModel("res/Mesh/Digimon/WarGreymon.obj");
 	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "StandardLighting.glsl");
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);

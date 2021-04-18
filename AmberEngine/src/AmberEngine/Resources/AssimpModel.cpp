@@ -1,54 +1,6 @@
 #include "Amberpch.h"
 
-#include <stb_image.h>
-
 #include "AmberEngine/Resources/AssimpModel.h"
-
-unsigned int AmberEngine::Resources::AssimpModel::LoadTexture(const std::string& p_filePath, const std::string& p_directory)
-{
-	unsigned int textureId;
-
-	int width;
-	int height;
-	int bitsPerPixel;
-
-	std::string filename = p_filePath;
-
-	filename = p_directory + '/' + filename;
-
-	glGenTextures(1, &textureId);
-
-	unsigned char* dataBuffer = stbi_load(filename.c_str(), &width, &height, &bitsPerPixel, 0);
-
-	if (dataBuffer)
-	{
-		GLenum format;
-		if (bitsPerPixel == 1)
-			format = GL_RED;
-		else if (bitsPerPixel == 3)
-			format = GL_RGB;
-		else if (bitsPerPixel == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, dataBuffer);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(dataBuffer);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << p_filePath << std::endl;
-		stbi_image_free(dataBuffer);
-	}
-
-	return textureId;
-}
 
 AmberEngine::Resources::AssimpModel::AssimpModel(const std::string& p_filePath)
 {
@@ -103,7 +55,7 @@ AmberEngine::Resources::AssimpMesh AmberEngine::Resources::AssimpModel::ProcessM
 {
 	std::vector<AssimpVertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<AssimpTextureData> textures;
+	std::vector<Texture*> textures;
 
 	for (int i = 0; i < p_mesh->mNumVertices; i++)
 	{
@@ -115,10 +67,13 @@ AmberEngine::Resources::AssimpMesh AmberEngine::Resources::AssimpModel::ProcessM
 		vector.z = p_mesh->mVertices[i].z;
 		vertex.position = vector;
 
-		vector.x = p_mesh->mNormals[i].x;
-		vector.y = p_mesh->mNormals[i].y;
-		vector.z = p_mesh->mNormals[i].z;
-		vertex.normal = vector;
+		if(p_mesh->HasNormals())
+		{
+			vector.x = p_mesh->mNormals[i].x;
+			vector.y = p_mesh->mNormals[i].y;
+			vector.z = p_mesh->mNormals[i].z;
+			vertex.normal = vector;
+		}
 
 		if (p_mesh->mTextureCoords[0])
 		{
@@ -130,16 +85,20 @@ AmberEngine::Resources::AssimpMesh AmberEngine::Resources::AssimpModel::ProcessM
 		}
 		else
 			vertex.texCoords = glm::vec2(0.0f, 0.0f);
+
+		if(p_mesh->HasTangentsAndBitangents())
+		{
+			vector.x = p_mesh->mTangents[i].x;
+			vector.y = p_mesh->mTangents[i].y;
+			vector.z = p_mesh->mTangents[i].z;
+			vertex.tangent = vector;
+
+			vector.x = p_mesh->mBitangents[i].x;
+			vector.y = p_mesh->mBitangents[i].y;
+			vector.z = p_mesh->mBitangents[i].z;
+			vertex.bitangent = vector;
+		}
 		
-		vector.x = p_mesh->mTangents[i].x;
-		vector.y = p_mesh->mTangents[i].y;
-		vector.z = p_mesh->mTangents[i].z;
-		vertex.tangent = vector;
-		
-		vector.x = p_mesh->mBitangents[i].x;
-		vector.y = p_mesh->mBitangents[i].y;
-		vector.z = p_mesh->mBitangents[i].z;
-		vertex.bitangent = vector;
 		vertices.push_back(vertex);
 	}
 	
@@ -153,24 +112,24 @@ AmberEngine::Resources::AssimpMesh AmberEngine::Resources::AssimpModel::ProcessM
 	
 	aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	std::vector<AssimpTextureData> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<Texture*> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	
-	std::vector<AssimpTextureData> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<Texture*> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	
-	std::vector<AssimpTextureData> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
+	std::vector<Texture*> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	
-	std::vector<AssimpTextureData> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
+	std::vector<Texture*> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	return AssimpMesh(vertices, indices, textures);
 }
 
-std::vector<AmberEngine::Resources::AssimpTextureData> AmberEngine::Resources::AssimpModel::LoadMaterial(aiMaterial* mat, aiTextureType type, const std::string& typeName)
+std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpModel::LoadMaterial(aiMaterial* mat, aiTextureType type, const std::string& typeName)
 {
-	std::vector<AssimpTextureData> textures;
+	std::vector<Texture*> textures;
 	for (int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -179,7 +138,7 @@ std::vector<AmberEngine::Resources::AssimpTextureData> AmberEngine::Resources::A
 		bool skip = false;
 		for (int j = 0; j < m_loadedTextures.size(); j++)
 		{
-			if (std::strcmp(m_loadedTextures[j].path.data(), str.C_Str()) == 0)
+			if (std::strcmp(m_loadedTextures[j]->m_path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(m_loadedTextures[j]);
 				skip = true;
@@ -188,12 +147,15 @@ std::vector<AmberEngine::Resources::AssimpTextureData> AmberEngine::Resources::A
 		}
 		if (!skip)
 		{
-			AssimpTextureData texture;
-			texture.id = LoadTexture(str.C_Str(), m_directory);
-			texture.type = typeName;
-			texture.path = str.C_Str();
-			textures.push_back(texture);
-			m_loadedTextures.push_back(texture);
+			std::string filename = str.C_Str();
+
+			filename = m_directory + '/' + filename;
+			
+			Texture* currentTexture = new Texture(filename);
+			currentTexture->m_type = typeName;
+			
+			textures.emplace_back(currentTexture);
+			m_loadedTextures.push_back(currentTexture);
 		}
 	}
 	return textures;

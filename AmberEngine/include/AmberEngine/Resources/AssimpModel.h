@@ -19,7 +19,7 @@ namespace AmberEngine::Resources
 		void Draw(Shader& p_shader);
 
 	public:
-		std::vector<AssimpTextureData> m_loadedTextures;
+		std::vector<Texture*> m_loadedTextures;
 		std::vector<AssimpMesh> m_meshes;
 		std::string m_directory;
 		
@@ -27,7 +27,6 @@ namespace AmberEngine::Resources
 		void LoadModel(const std::string& p_filePath);
 		void ProcessNode(aiNode* p_node, const aiScene* p_scene);
 		AssimpMesh ProcessMesh(aiMesh* p_mesh, const aiScene* p_scene);
-		std::vector<AssimpTextureData> LoadMaterial(aiMaterial* p_mat, aiTextureType p_type, const std::string& p_typeName);
-		unsigned int LoadTexture(const std::string& p_filePath, const std::string& p_directory);
+		std::vector<Texture*> LoadMaterial(aiMaterial* p_mat, aiTextureType p_type, const std::string& p_typeName);
 	};
 }

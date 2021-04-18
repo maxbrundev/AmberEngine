@@ -7,25 +7,27 @@
 
 #include "AmberEngine/Debug/GLDebug.h"
 
-AmberEngine::Resources::Texture::Texture(const std::string& p_filePath) : m_textureId(0), m_path(p_filePath), m_width(0), m_height(0), m_bitsPerPixel(0)
+AmberEngine::Resources::Texture::Texture(const std::string_view p_path, bool p_flipVertically) : m_id(0), m_width(0), m_height(0), m_bitsPerPixel(0), m_path(p_path)
 {
-	GLCall(glGenTextures(1, &m_textureId));
+	GLuint textureID;
+	int textureWidth;
+	int textureHeight;
+	int bitsPerPixel;
+	
+	GLCall(glGenTextures(1, &textureID));
+	
+	stbi_set_flip_vertically_on_load(p_flipVertically);
+	unsigned char* dataBuffer = stbi_load(m_path.data(), &textureWidth, &textureHeight, &bitsPerPixel, 4);
 
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* dataBuffer = stbi_load(p_filePath.c_str(), &m_width, &m_height, &m_bitsPerPixel, 0);
-
+	m_id           = textureID;
+	m_width        = textureWidth;
+	m_height       = textureHeight;
+	m_bitsPerPixel = bitsPerPixel;
+	
 	if (dataBuffer)
 	{
-		GLenum format;
-		if (m_bitsPerPixel == 1)
-			format = GL_RED;
-		else if (m_bitsPerPixel == 3)
-			format = GL_RGB;
-		else if (m_bitsPerPixel == 4)
-			format = GL_RGBA;
-
-		GLCall(glBindTexture(GL_TEXTURE_2D, m_textureId));
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, dataBuffer));
+		GLCall(glBindTexture(GL_TEXTURE_2D, m_id));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataBuffer));
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
@@ -37,7 +39,7 @@ AmberEngine::Resources::Texture::Texture(const std::string& p_filePath) : m_text
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << p_filePath << std::endl;
+		std::cout << "Texture failed to load at path: " << m_path << std::endl;
 		stbi_image_free(dataBuffer);
 	}
 
@@ -46,31 +48,16 @@ AmberEngine::Resources::Texture::Texture(const std::string& p_filePath) : m_text
 
 AmberEngine::Resources::Texture::~Texture()
 {
-	GLCall(glDeleteTextures(1, &m_textureId));
+	GLCall(glDeleteTextures(1, &m_id));
 }
 
-void AmberEngine::Resources::Texture::Bind(const unsigned int& p_slot) const
+void AmberEngine::Resources::Texture::Bind(uint32_t p_slot) const
 {
 	GLCall(glActiveTexture(GL_TEXTURE0 + p_slot));
-	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureId));
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_id));
 }
 
 void AmberEngine::Resources::Texture::Unbind() const
 {
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-}
-
-GLuint AmberEngine::Resources::Texture::GetTextureId()
-{
-	return m_textureId;
-}
-
-int AmberEngine::Resources::Texture::GetTextureWidth()
-{
-	return m_width;
-}
-
-int AmberEngine::Resources::Texture::GetTextureHeight()
-{
-	return m_height;
 }

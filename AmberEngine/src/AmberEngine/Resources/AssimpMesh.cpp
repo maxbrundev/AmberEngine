@@ -2,7 +2,7 @@
 
 #include "AmberEngine/Resources/AssimpMesh.h"
 
-AmberEngine::Resources::AssimpMesh::AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<AssimpTextureData> p_textures) 
+AmberEngine::Resources::AssimpMesh::AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<Texture*> p_textures) 
 	: m_vertices(p_vertices), m_textures(p_textures), m_indices(p_indices)
 {
 	InitBuffers();
@@ -12,9 +12,9 @@ void AmberEngine::Resources::AssimpMesh::BindBuffers(Shader& p_shader)
 {	
 	for (int i = 0; i < m_textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + i);
+		m_textures[i]->Bind(i);
 	
-		std::string name = m_textures[i].type;
+		std::string_view name = m_textures[i]->m_type;
 		
 		if (name == "texture_diffuse")
 		{
@@ -24,8 +24,6 @@ void AmberEngine::Resources::AssimpMesh::BindBuffers(Shader& p_shader)
 		{
 			p_shader.SetUniform1i("u_SpecularMap", i);
 		}
-		
-		glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
 	}
 
 	glBindVertexArray(m_vao);

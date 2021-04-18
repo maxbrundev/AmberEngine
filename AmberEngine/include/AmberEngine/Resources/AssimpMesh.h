@@ -3,6 +3,7 @@
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Resources/Shader.h"
+#include "AmberEngine/Resources/Texture.h"
 
 //TODO: Refactor.
 
@@ -17,18 +18,11 @@ namespace AmberEngine::Resources
 		glm::vec3 bitangent;
 	};
 
-	struct API_AMBERENGINE AssimpTextureData
-	{
-		unsigned int id;
-		std::string type;
-		std::string path;
-	};
-
 	class API_AMBERENGINE AssimpMesh
 	{
 	public:
 		std::vector<AssimpVertex> m_vertices;
-		std::vector<AssimpTextureData> m_textures;
+		std::vector<Texture*> m_textures;
 		std::vector<unsigned int> m_indices;
 
 		unsigned int m_vao;
@@ -36,7 +30,7 @@ namespace AmberEngine::Resources
 		unsigned int m_ebo;
 
 	public:
-		AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<AssimpTextureData> p_textures);
+		AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<Texture*> p_textures);
 		~AssimpMesh() = default;
 
 		void BindBuffers(Shader& p_shader);
