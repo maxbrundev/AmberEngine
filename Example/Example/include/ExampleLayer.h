@@ -6,6 +6,7 @@
 
 #include <AmberEngine/Core/UIManager.h>
 #include <AmberEngine/Resources/AssimpModel.h>
+#include <AmberEngine/Resources/AssimpParser.h>
 
 class ExampleLayer : public AmberEngine::Core::ALayer
 {
@@ -27,5 +28,7 @@ private:
 	// Quick and Dirty Test Voxelizer.
 	std::vector<unsigned int> vertexArrays;
 	std::vector<unsigned int> meshIndices;
+
+	static AmberEngine::Resources::AssimpParser PARSER;
 };
 

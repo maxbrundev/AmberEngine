@@ -52,7 +52,7 @@ uniform Light light;
 
 uniform sampler2D u_DiffuseMap;
 uniform sampler2D u_SpecularMap;
-uniform float u_Shininess = 100.0;
+uniform float u_Shininess = 32.0f;
 
 void main()
 {

@@ -14,14 +14,20 @@
 #include <AmberEngine/ImGUI/imgui.h>
 #include <AmberEngine/Core/UIManager.h>
 
+AmberEngine::Resources::AssimpParser ExampleLayer::ExampleLayer::PARSER;
+
 ExampleLayer::ExampleLayer(AmberEngine::Core::Context& p_context, AmberEngine::Core::Editor& p_editor) : ALayer(p_context, p_editor, "Demo"),ui(*p_context.m_window)
 {
 }
 
 void ExampleLayer::OnStart()
 {
-	model = new AmberEngine::Resources::AssimpModel("res/Mesh/Digimon/WarGreymon.obj");
+	model = PARSER.LoadModel("res/Mesh/nanosuit/nanosuit.obj");
 	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "StandardLighting.glsl");
+
+	//m_context.m_resourcesManager.LoadTexture("diffuse", "crystal.jpg");
+	//m_context.m_resourcesManager.LoadTexture("specular", "crystal_spec.jpg");
+	
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);
 	lightingShader.SetUniform1i("u_SpecularMap", 1);
@@ -146,7 +152,8 @@ void ExampleLayer::OnUpdate(float p_deltaTime)
 	shader.SetUniformMat4("model", modelMatrix);
 	shader.SetUniformVec3("viewPos", cameraPosition);
 	shader.SetUniformVec3("light.direction", lighDir);
-
+	//m_context.m_resourcesManager.GetTexture("diffuse").Bind();
+	//m_context.m_resourcesManager.GetTexture("specular").Bind(1);
 	m_context.m_renderer->Draw(*model, m_context.m_resourcesManager.GetShader("StandardLighting"));
 	
 	//for (size_t i = 0; i < model->m_meshes.size(); i++)

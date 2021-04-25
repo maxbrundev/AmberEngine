@@ -90,5 +90,8 @@ void AmberEngine::LowRenderer::Camera::CalculateViewMatrix(const glm::vec3& p_po
 
 void AmberEngine::LowRenderer::Camera::CalculateProjectionMatrix(uint16_t p_windowWidth, uint16_t p_windowHeight)
 {
-	m_projectionMatrix = glm::perspective(glm::radians(m_fov), static_cast<float>(p_windowWidth) / static_cast<float>(p_windowHeight), m_near, m_far);
+	if(p_windowHeight > 0)
+	{
+		m_projectionMatrix = glm::perspective(glm::radians(m_fov), p_windowWidth / static_cast<float>(p_windowHeight), m_near, m_far);
+	}
 }

@@ -288,6 +288,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Resources\AssimpMesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\AssimpModel.h" />
+    <ClInclude Include="include\AmberEngine\Resources\AssimpParser.h" />
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\Primitives\Cube.h" />
     <ClInclude Include="include\AmberEngine\Resources\ObjLoader.h" />
@@ -297,6 +298,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />
     <ClInclude Include="include\AmberEngine\Utils\Defines.h" />
+    <ClInclude Include="include\AmberEngine\Utils\String.h" />
     <ClInclude Include="include\AmberEngine\Utils\voxelizer.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
@@ -345,11 +347,13 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\AssimpMesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\AssimpModel.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\AssimpParser.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Primitives\Cube.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\ObjLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Shader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
+    <ClCompile Include="src\AmberEngine\Utils\String.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl" />

@@ -218,8 +218,12 @@ void AmberEngine::Context::Window::BindFramebufferResizeCallback() const
 
 void AmberEngine::Context::Window::OnResizeWindow(uint16_t p_width, uint16_t p_height)
 {
-	m_size.first = p_width;
-	m_size.second = p_height;
+	// TODO:FIX
+	int width, height;
+	glfwGetWindowSize(m_glfwWindow, &width, &height);
+	
+	m_size.first = width;
+	m_size.second = height;
 }
 
 void AmberEngine::Context::Window::OnResizeFramebuffer(uint16_t p_width, uint16_t p_height)
@@ -233,9 +237,9 @@ void AmberEngine::Context::Window::OnResizeFramebuffer(uint16_t p_width, uint16_
 	 */
 	
 	SetViewport(p_width, p_height);
-
+	
 	int width, height;
-	glfwGetWindowSize(m_glfwWindow, &width, &height);
+	glfwGetFramebufferSize(m_glfwWindow, &width, &height);
 
 	m_size.first = width;
 	m_size.second = height;

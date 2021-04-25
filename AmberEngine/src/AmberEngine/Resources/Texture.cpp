@@ -6,8 +6,9 @@
 #include "AmberEngine/Resources/Texture.h"
 
 #include "AmberEngine/Debug/GLDebug.h"
+#include "AmberEngine/Utils/String.h"
 
-AmberEngine::Resources::Texture::Texture(const std::string_view p_path, bool p_flipVertically) : m_id(0), m_width(0), m_height(0), m_bitsPerPixel(0), m_path(p_path)
+AmberEngine::Resources::Texture::Texture(const std::string& p_path, bool p_flipVertically) : m_id(0), m_width(0), m_height(0), m_bitsPerPixel(0), m_path(p_path)
 {
 	GLuint textureID;
 	int textureWidth;
@@ -23,6 +24,8 @@ AmberEngine::Resources::Texture::Texture(const std::string_view p_path, bool p_f
 	m_width        = textureWidth;
 	m_height       = textureHeight;
 	m_bitsPerPixel = bitsPerPixel;
+
+	m_name = Utils::String::ExtractFileNameFromPath(m_path);
 	
 	if (dataBuffer)
 	{
@@ -42,7 +45,7 @@ AmberEngine::Resources::Texture::Texture(const std::string_view p_path, bool p_f
 		std::cout << "Texture failed to load at path: " << m_path << std::endl;
 		stbi_image_free(dataBuffer);
 	}
-
+	
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 

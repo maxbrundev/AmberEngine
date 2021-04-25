@@ -183,6 +183,12 @@
     <ClInclude Include="include\AmberEngine\Core\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\Resources\AssimpParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Utils\String.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -282,6 +288,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Core\Context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Resources\AssimpParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Utils\String.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

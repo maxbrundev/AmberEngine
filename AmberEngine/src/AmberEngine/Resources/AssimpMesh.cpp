@@ -2,10 +2,15 @@
 
 #include "AmberEngine/Resources/AssimpMesh.h"
 
-AmberEngine::Resources::AssimpMesh::AssimpMesh(std::vector<AssimpVertex> p_vertices, std::vector<unsigned int> p_indices, std::vector<Texture*> p_textures) 
-	: m_vertices(p_vertices), m_textures(p_textures), m_indices(p_indices)
+AmberEngine::Resources::AssimpMesh::AssimpMesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<Texture*> p_textures)
+	:m_vertexCount(static_cast<uint32_t>(p_vertices.size())), m_indicesCount(static_cast<uint32_t>(p_indices.size())), m_textures(p_textures)
 {
-	InitBuffers();
+	InitBuffers(p_vertices, p_indices);
+}
+
+AmberEngine::Resources::AssimpMesh::~AssimpMesh()
+{
+	DeleteBuffers();
 }
 
 void AmberEngine::Resources::AssimpMesh::BindBuffers(Shader& p_shader)
@@ -27,14 +32,40 @@ void AmberEngine::Resources::AssimpMesh::BindBuffers(Shader& p_shader)
 	}
 
 	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	glActiveTexture(GL_TEXTURE0);
 }
 
-void AmberEngine::Resources::AssimpMesh::InitBuffers()
+void AmberEngine::Resources::AssimpMesh::InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices)
 {
+	std::vector<float> vertexData;
+
+	for (const auto& vertex : p_vertices)
+	{
+		vertexData.push_back(vertex.position[0]);
+		vertexData.push_back(vertex.position[1]);
+		vertexData.push_back(vertex.position[2]);
+
+		vertexData.push_back(vertex.texCoords[0]);
+		vertexData.push_back(vertex.texCoords[1]);
+
+		vertexData.push_back(vertex.normals[0]);
+		vertexData.push_back(vertex.normals[1]);
+		vertexData.push_back(vertex.normals[2]);
+
+		vertexData.push_back(vertex.tangent[0]);
+		vertexData.push_back(vertex.tangent[1]);
+		vertexData.push_back(vertex.tangent[2]);
+
+		vertexData.push_back(vertex.bitangent[0]);
+		vertexData.push_back(vertex.bitangent[1]);
+		vertexData.push_back(vertex.bitangent[2]);
+	}
+	
+	uint64_t vertexSize = sizeof(Geometry::Vertex);
+	
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
 	glGenBuffers(1, &m_ebo);
@@ -43,25 +74,25 @@ void AmberEngine::Resources::AssimpMesh::InitBuffers()
 	
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 	
-	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(AssimpVertex), &m_vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), vertexData.data(), GL_STATIC_DRAW);
 	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_indices.size() * sizeof(unsigned int), p_indices.data(), GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), static_cast<void*>(nullptr));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), static_cast<void*>(nullptr));
 	
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, texCoords)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 3));
 	
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, normal)));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 5));
 	
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, tangent)));
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 8));
 	
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), reinterpret_cast<void*>(offsetof(AssimpVertex, bitangent)));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 11));
 	
 	glBindVertexArray(0);
 }
