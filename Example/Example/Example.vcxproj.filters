@@ -59,5 +59,6 @@
     <None Include="res\shaders\StandardLighting.fs" />
     <None Include="res\shaders\StandardLighting.vs" />
     <None Include="res\shaders\StandardLighting.glsl" />
+    <None Include="res\shaders\DepthVisualization.glsl" />
   </ItemGroup>
 </Project>

@@ -14,7 +14,10 @@ namespace AmberEngine::Resources
 		AssimpMesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<Texture*> p_textures);
 		~AssimpMesh();
 
-		void BindBuffers(Shader& p_shader);
+		void Bind();
+		void Unbind();
+
+		void BindMaterialTextures(Shader& p_shader);
 		void DeleteBuffers();
 
 	private:

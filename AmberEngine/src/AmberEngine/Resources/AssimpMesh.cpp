@@ -13,12 +13,24 @@ AmberEngine::Resources::AssimpMesh::~AssimpMesh()
 	DeleteBuffers();
 }
 
-void AmberEngine::Resources::AssimpMesh::BindBuffers(Shader& p_shader)
-{	
+void AmberEngine::Resources::AssimpMesh::Bind()
+{
+	glBindVertexArray(m_vao);
+}
+
+void AmberEngine::Resources::AssimpMesh::Unbind()
+{
+	glBindVertexArray(0);
+}
+
+void AmberEngine::Resources::AssimpMesh::BindMaterialTextures(Shader& p_shader)
+{
+	p_shader.Bind();
+	
 	for (int i = 0; i < m_textures.size(); i++)
 	{
 		m_textures[i]->Bind(i);
-	
+
 		std::string_view name = m_textures[i]->m_type;
 		
 		if (name == "texture_diffuse")
@@ -30,12 +42,6 @@ void AmberEngine::Resources::AssimpMesh::BindBuffers(Shader& p_shader)
 			p_shader.SetUniform1i("u_SpecularMap", i);
 		}
 	}
-
-	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, m_indicesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glActiveTexture(GL_TEXTURE0);
 }
 
 void AmberEngine::Resources::AssimpMesh::InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices)

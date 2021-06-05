@@ -2,8 +2,23 @@
 
 #include "AmberEngine/Managers/ResourcesManager.h"
 
+AmberEngine::Resources::AssimpParser AmberEngine::Managers::ResourcesManager::__ASSIMP;
+
 AmberEngine::Managers::ResourcesManager::ResourcesManager() : m_shaderRootDir("res/shaders/"), m_textureRootDir("res/textures/")
 {
+}
+
+AmberEngine::Resources::AssimpModel& AmberEngine::Managers::ResourcesManager::LoadModel(std::string_view p_name, std::string_view p_fileName)
+{
+	if (m_modelResources.find(p_name) != m_modelResources.end())
+		return *m_modelResources[p_name].get();
+	
+	Resources::AssimpModel* model = new Resources::AssimpModel(p_fileName);
+
+	__ASSIMP.LoadModel(static_cast<std::string>(p_fileName), model->GetMeshes(), model->GetMaterialNames());
+	
+	const auto res = m_modelResources.emplace(p_name, model);
+	return *res.first->second.get();
 }
 
 AmberEngine::Resources::Shader& AmberEngine::Managers::ResourcesManager::LoadShader(std::string_view p_name,
@@ -44,6 +59,11 @@ AmberEngine::Resources::Shader& AmberEngine::Managers::ResourcesManager::GetShad
 AmberEngine::Resources::Texture& AmberEngine::Managers::ResourcesManager::GetTexture(std::string_view p_name)
 {
 	return  *m_TextureResources.at(p_name);
+}
+
+AmberEngine::Resources::AssimpModel & AmberEngine::Managers::ResourcesManager::GetModel(std::string_view p_name)
+{
+	return *m_modelResources.at(p_name);
 }
 
 void AmberEngine::Managers::ResourcesManager::SetShaderRootDir(std::string_view p_directory)

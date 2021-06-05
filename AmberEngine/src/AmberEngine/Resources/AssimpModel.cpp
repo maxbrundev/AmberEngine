@@ -8,14 +8,21 @@ AmberEngine::Resources::AssimpModel::AssimpModel(std::string_view p_filePath) : 
 {
 }
 
-void AmberEngine::Resources::AssimpModel::Draw(Shader& p_shader)
-{
-	for (int i = 0; i < m_meshes.size(); i++)
-		m_meshes[i]->BindBuffers(p_shader);
-}
-
 AmberEngine::Resources::AssimpModel::~AssimpModel()
 {
 	for (auto mesh : m_meshes)
+	{
 		delete mesh;
+		mesh = nullptr;
+	}
+}
+
+std::vector<AmberEngine::Resources::AssimpMesh*>& AmberEngine::Resources::AssimpModel::GetMeshes()
+{
+	return m_meshes;
+}
+
+std::vector<std::string>& AmberEngine::Resources::AssimpModel::GetMaterialNames()
+{
+	return m_materialNames;
 }

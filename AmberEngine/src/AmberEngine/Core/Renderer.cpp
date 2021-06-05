@@ -2,13 +2,36 @@
 
 #include "AmberEngine/Core/Renderer.h"
 
+#include "AmberEngine/Resources/AssimpMesh.h"
+
 AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) : m_driver(p_driver), isWireFrame(false)
 {
 }
 
-void AmberEngine::Core::Renderer::Draw(Resources::AssimpModel& p_model, Resources::Shader& p_shader)
+void AmberEngine::Core::Renderer::DrawModelWithShader(Resources::AssimpModel& p_model, Resources::Shader& p_shader)
 {
-	p_model.Draw(p_shader);
+	for (auto mesh : p_model.GetMeshes())
+	{
+		DrawMesh(*mesh, p_shader);
+	}
+}
+
+void AmberEngine::Core::Renderer::DrawMesh(Resources::AssimpMesh& p_mesh, Resources::Shader& p_shader)
+{
+	p_mesh.BindMaterialTextures(p_shader);
+	
+	p_mesh.Bind();
+	
+	if(p_mesh.m_indicesCount > 0)
+	{
+		glDrawElements(GL_TRIANGLES, p_mesh.m_indicesCount, GL_UNSIGNED_INT, 0);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, p_mesh.m_vertexCount);
+	}
+
+	p_mesh.Unbind();
 }
 
 void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha)

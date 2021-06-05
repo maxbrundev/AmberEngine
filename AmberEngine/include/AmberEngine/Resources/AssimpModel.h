@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AmberEngine/API/Export.h"
+#include "AmberEngine/Resources/Shader.h"
 
 namespace AmberEngine::Resources
 {
@@ -12,9 +13,10 @@ namespace AmberEngine::Resources
 	public:
 		AssimpModel(std::string_view p_filePath);
 		~AssimpModel();
-		
-		void Draw(Shader& p_shader);
 
+		std::vector<AssimpMesh*>& GetMeshes();
+		std::vector<std::string>& GetMaterialNames();
+		
 	public:
 		std::vector<AssimpMesh*> m_meshes;
 		

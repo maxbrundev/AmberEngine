@@ -209,6 +209,7 @@ xcopy "$(SolutionDir)..\Build\AmberEngine\bin\$(Platform)\$(Configuration)\*.dll
     <ClCompile Include="src\ExampleLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\DepthVisualization.glsl" />
     <None Include="res\shaders\Examples\basic_lighting_viewspace.fs" />
     <None Include="res\shaders\Examples\basic_lighting_viewspace.vs" />
     <None Include="res\shaders\Examples\basic_lighting_worldspace.fs" />

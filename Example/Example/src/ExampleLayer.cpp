@@ -14,20 +14,20 @@
 #include <AmberEngine/ImGUI/imgui.h>
 #include <AmberEngine/Core/UIManager.h>
 
-AmberEngine::Resources::AssimpParser ExampleLayer::ExampleLayer::PARSER;
-
 ExampleLayer::ExampleLayer(AmberEngine::Core::Context& p_context, AmberEngine::Core::Editor& p_editor) : ALayer(p_context, p_editor, "Demo"),ui(*p_context.m_window)
 {
 }
 
 void ExampleLayer::OnStart()
 {
-	model = PARSER.LoadModel("res/Mesh/nanosuit/nanosuit.obj");
-	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "StandardLighting.glsl");
+	m_context.m_resourcesManager.LoadModel("Suit", "res/Mesh/nanosuit/nanosuit.obj");
 
+	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "StandardLighting.glsl");
+	AmberEngine::Resources::Shader& depthShader = m_context.m_resourcesManager.LoadShader("Depth", "DepthVisualization.glsl");
 	//m_context.m_resourcesManager.LoadTexture("diffuse", "crystal.jpg");
 	//m_context.m_resourcesManager.LoadTexture("specular", "crystal_spec.jpg");
-	
+	depthShader.Bind();
+	depthShader.Unbind();
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);
 	lightingShader.SetUniform1i("u_SpecularMap", 1);
@@ -144,17 +144,38 @@ void ExampleLayer::OnUpdate(float p_deltaTime)
 	glm::mat4 projectionMatrix = m_editor.GetCameraController().GetCamera().GetProjectionMatrix();
 	glm::mat4 viewMatrix       = m_editor.GetCameraController().GetCamera().GetViewMatrix();
 	glm::mat4 modelMatrix      = glm::mat4(1.0f);
-
 	auto& shader = m_context.m_resourcesManager.GetShader("StandardLighting");
-	shader.Bind();
-	shader.SetUniformMat4("projection", projectionMatrix);
-	shader.SetUniformMat4("view", viewMatrix);
-	shader.SetUniformMat4("model", modelMatrix);
-	shader.SetUniformVec3("viewPos", cameraPosition);
-	shader.SetUniformVec3("light.direction", lighDir);
+	auto& shaderDepth = m_context.m_resourcesManager.GetShader("Depth");
+	if (m_context.m_inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_B))
+	{
+		isDepth = !isDepth;
+		std::cout << "ok pelo" << std::endl;
+	}
+
+
+	if (isDepth)
+	{
+		shaderDepth.Bind();
+		shaderDepth.SetUniformMat4("projection", projectionMatrix);
+		shaderDepth.SetUniformMat4("view", viewMatrix);
+		shaderDepth.SetUniformMat4("model", modelMatrix);
+		shaderDepth.Unbind();
+	}
+	else
+	{
+		shader.Bind();
+		shader.SetUniformMat4("projection", projectionMatrix);
+		shader.SetUniformMat4("view", viewMatrix);
+		shader.SetUniformMat4("model", modelMatrix);
+		shader.SetUniformVec3("viewPos", cameraPosition);
+		shader.SetUniformVec3("light.direction", lighDir);
+		shader.Unbind();
+	}
+	
 	//m_context.m_resourcesManager.GetTexture("diffuse").Bind();
 	//m_context.m_resourcesManager.GetTexture("specular").Bind(1);
-	m_context.m_renderer->Draw(*model, m_context.m_resourcesManager.GetShader("StandardLighting"));
+
+	m_context.m_renderer->DrawModelWithShader(m_context.m_resourcesManager.GetModel("Suit"), isDepth ? shaderDepth : shader);
 	
 	//for (size_t i = 0; i < model->m_meshes.size(); i++)
 	//{
@@ -163,6 +184,7 @@ void ExampleLayer::OnUpdate(float p_deltaTime)
 	//	glBindVertexArray(0);
 	//}
 
+	shaderDepth.Unbind();
 	shader.Unbind();
 
 	ui.EndFrame();
@@ -171,6 +193,5 @@ void ExampleLayer::OnUpdate(float p_deltaTime)
 
 void ExampleLayer::OnDestroy()
 {
-	delete model;
-	model = nullptr;
+
 }

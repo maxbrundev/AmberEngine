@@ -3,37 +3,29 @@
 #include "AmberEngine/Resources/AssimpParser.h"
 
 #include "AmberEngine/Utils/String.h"
-#include "AmberEngine/Resources/AssimpModel.h"
 
-AmberEngine::Resources::AssimpModel* AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath)
+bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<AssimpMesh*>& p_meshes, std::vector<std::string>& p_materials)
 {
-	std::string directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
-	
-	AssimpModel* result = new AssimpModel(directory);
-
-	m_directory = directory;
+	m_directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
 	
 	Assimp::Importer import;
 	
-	const aiScene* scene = import.ReadFile(p_filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = import.ReadFile(p_filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		delete result;
-		result = nullptr;
-		
-		return nullptr;
+		return false;
 	}
 
-	ProcessMaterials(scene, result->m_materialNames);
+	ProcessMaterials(scene, p_materials);
 
 	aiMatrix4x4 identity;
 
-	ProcessNode(&identity, scene->mRootNode, scene, result->m_meshes);
+	ProcessNode(&identity, scene->mRootNode, scene, p_meshes);
 
 	m_loadedTextures.clear();
 
-	return result;
+	return true;
 }
 
 void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene * p_scene, std::vector<std::string>& p_materials)

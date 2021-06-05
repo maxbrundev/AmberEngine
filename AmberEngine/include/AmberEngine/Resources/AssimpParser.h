@@ -4,7 +4,6 @@
 
 #include <assimp/scene.h>
 
-#include "AmberEngine/Resources/AssimpModel.h"
 #include "AmberEngine/Resources/AssimpMesh.h"
 
 namespace AmberEngine::Resources
@@ -12,7 +11,7 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE AssimpParser
 	{
 	public:
-		AssimpModel* LoadModel(const std::string& p_filePath);
+		bool LoadModel(const std::string& p_filePath, std::vector<AssimpMesh*>& p_meshes, std::vector<std::string>& p_materials);
 		
 	private:
 		void ProcessMaterials(const struct aiScene* p_scene, std::vector<std::string>& p_materials);;

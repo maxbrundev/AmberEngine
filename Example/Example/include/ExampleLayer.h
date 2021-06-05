@@ -22,13 +22,12 @@ public:
 private:
 	//TODO: Remove + pass by Scene Manager + Model should be a mesh..
 	glm::vec3 lighDir = glm::vec3(1, 1, 1);
-	AmberEngine::Resources::AssimpModel* model;
-	AmberEngine::Core::UIManager ui;
+	float far = 100.0f;
 
+	AmberEngine::Core::UIManager ui;
+	bool isDepth = false;
 	// Quick and Dirty Test Voxelizer.
 	std::vector<unsigned int> vertexArrays;
 	std::vector<unsigned int> meshIndices;
-
-	static AmberEngine::Resources::AssimpParser PARSER;
 };
 
