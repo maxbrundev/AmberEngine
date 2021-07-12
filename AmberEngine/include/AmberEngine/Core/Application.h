@@ -26,8 +26,6 @@ namespace AmberEngine::Core
 		void Run();
 		bool PushLayer(ALayer* p_layer);
 		bool IsRunning();
-
-		void UpdateDeltaTime();
 		
 	public:
 		Context m_context;
@@ -37,8 +35,5 @@ namespace AmberEngine::Core
 		std::unique_ptr<Managers::LayerManager> m_layerManager;
 
 		bool isRunning;
-
-		float m_deltaTime = 0.0f;
-		float m_lastTime = 0.0f;
 	};
 }

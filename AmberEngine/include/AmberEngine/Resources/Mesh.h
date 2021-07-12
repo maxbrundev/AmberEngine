@@ -2,7 +2,7 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include "AmberEngine/Resources/ObjLoader.h"
+#include "AmberEngine/Resources/Parsers/ObjLoader.h"
 
 namespace AmberEngine::Resources
 {

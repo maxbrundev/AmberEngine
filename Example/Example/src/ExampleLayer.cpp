@@ -3,7 +3,7 @@
 #include "ExampleLayer.h"
 
 #define VOXELIZER_IMPLEMENTATION
-#include <AmberEngine/Utils/voxelizer.h>
+#include <AmberEngine/Tools/Utils/voxelizer.h>
 
 #include <AmberEngine/Buffers/VertexArray.h>
 #include <AmberEngine/Buffers/VertexBuffer.h>
@@ -13,6 +13,7 @@
 #include <AmberEngine/Resources/Primitives/Cube.h>
 #include <AmberEngine/ImGUI/imgui.h>
 #include <AmberEngine/Core/UIManager.h>
+#include <AmberEngine/Tools/Utils/String.h>
 
 ExampleLayer::ExampleLayer(AmberEngine::Core::Context& p_context, AmberEngine::Core::Editor& p_editor) : ALayer(p_context, p_editor, "Demo"),ui(*p_context.m_window)
 {
@@ -22,8 +23,8 @@ void ExampleLayer::OnStart()
 {
 	m_context.m_resourcesManager.LoadModel("Suit", "res/Mesh/nanosuit/nanosuit.obj");
 
-	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "StandardLighting.glsl");
-	AmberEngine::Resources::Shader& depthShader = m_context.m_resourcesManager.LoadShader("Depth", "DepthVisualization.glsl");
+	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
+	AmberEngine::Resources::Shader& depthShader = m_context.m_resourcesManager.LoadShader("Depth", "res/shaders/DepthVisualization.glsl");
 	//m_context.m_resourcesManager.LoadTexture("diffuse", "crystal.jpg");
 	//m_context.m_resourcesManager.LoadTexture("specular", "crystal_spec.jpg");
 	depthShader.Bind();
@@ -36,7 +37,109 @@ void ExampleLayer::OnStart()
 	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 	lightingShader.Unbind();
 
-	// Quick and Dirty Test for Cube PrimitivesShapes.
+	// Playing with indexation
+	//-------------------------------------
+	glm::vec3 verticesVec3[] =
+	{
+		glm::vec3(-1, -1, -1), // 0
+		glm::vec3(1, -1, -1), // 1
+		glm::vec3(1, 1, -1.0f), // 2
+		glm::vec3(-1, 1, -1), // 3
+		glm::vec3(-1, -1, 1), // 4
+		glm::vec3(1, -1, 1), // 5
+		glm::vec3(1, 1, 1), // 6 
+		glm::vec3(-1, 1, 1) // 7
+	};
+
+	float vertices[] =
+	{
+		-1, -1, -1, // 0
+
+		1, -1, -1, // 1
+
+		1, 1, -1.0f, // 2
+
+		-1, 1, -1, // 3
+
+		-1, -1, 1, // 4
+
+		1, -1, 1, // 5
+
+		1, 1, 1, // 6
+
+		-1, 1, 1 // 7
+	};
+
+	int indices[36] =
+	{
+		0, 1, 3, 3, 1, 2,
+		1, 5, 2, 2, 5, 6,
+		5, 4, 6, 6, 4, 7,
+		4, 0, 7, 7, 0, 3,
+		3, 2, 7, 7, 2, 6,
+		4, 5, 0, 0, 5, 1
+	};
+
+	//108 vertex positions -> 3 * 36 -> 3 vertex positions (x,y,z) by 1 index
+	float vertexBuffer[108]{0.0f};
+	for (int i = 0; i < 36; i++) {
+	
+		int indexX = indices[i];
+		int indexY = indices[i];
+		int indexZ = indices[i];
+
+		float verticeX = vertices[(indexX) * 3 + 0];
+		float verticeY = vertices[(indexY) * 3 + 1];
+		float verticeZ = vertices[(indexZ) * 3 + 2];
+
+		vertexBuffer[i * 3 + 0] = verticeX;
+		vertexBuffer[i * 3 + 1] = verticeY;
+		vertexBuffer[i * 3 + 2] = verticeZ;
+	}
+
+	glm::vec3 vertexBufferGLM[36]{ glm::vec3{{0.0f}} };
+	for (int i = 0; i < 36; i++) 
+	{
+		vertexBufferGLM[i].x = verticesVec3[indices[i]].x;
+		vertexBufferGLM[i].y = verticesVec3[indices[i]].y;
+		vertexBufferGLM[i].z = verticesVec3[indices[i]].z;
+	}
+
+	float vertexBufferTest[108]{0.0f};
+	for (int i = 0; i < 36; i++) {
+
+		int indexX = indices[i];
+		int indexY = indices[i];
+		int indexZ = indices[i];
+
+		float verticeX = verticesVec3[indexX].x;
+		float verticeY = verticesVec3[indexY].y;
+		float verticeZ = verticesVec3[indexZ].z;
+
+		vertexBufferTest[i * 3 + 0] = verticeX;
+		vertexBufferTest[i * 3 + 1] = verticeY;
+		vertexBufferTest[i * 3 + 2] = verticeZ;
+	}
+
+	for (int i = 0; i < 36; i++)
+	{
+		if (vertexBuffer[i * 3 + 0] != vertexBufferGLM[i].x || vertexBufferTest[i * 3 + 0] != vertexBufferGLM[i].x)
+		{
+			std::cout << "error" << std::endl;
+		}
+		if (vertexBuffer[i * 3 + 1] != vertexBufferGLM[i].y || vertexBufferTest[i * 3 + 1] != vertexBufferGLM[i].y)
+		{
+			std::cout << "error" << std::endl;
+		}
+		if (vertexBuffer[i * 3 + 2] != vertexBufferGLM[i].z || vertexBufferTest[i * 3 + 2] != vertexBufferGLM[i].z)
+		{
+			std::cout << "error" << std::endl;
+		}
+	}
+
+	//-------------------------------------
+
+	//Quick and Dirty Test for Cube PrimitivesShapes.
 	/*AmberEngine::PrimitivesShapes::Cube::Setup();
 
 	std::vector<float> vertices;

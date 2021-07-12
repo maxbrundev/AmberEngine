@@ -1,6 +1,7 @@
 #include "Amberpch.h"
 
 #include "AmberEngine/Core/Application.h"
+#include "AmberEngine/Tools/Time/Clock.h"
 
 AmberEngine::Core::Application::Application(const AmberEngine::Settings::DeviceSettings& p_deviceSettings,
 	const AmberEngine::Settings::WindowSettings& p_windowSettings,
@@ -19,14 +20,15 @@ AmberEngine::Core::Application::~Application()
 
 void AmberEngine::Core::Application::Run()
 {
+	Utils::Clock clock;
+
 	while (IsRunning())
 	{
-		UpdateDeltaTime();
 		m_editor.PreUpdate();
-		m_editor.Update(m_deltaTime);
-		m_layerManager->UpdateLayers(m_deltaTime);
+		m_editor.Update(clock.GetDeltaTime());
+		m_layerManager->UpdateLayers(clock.GetDeltaTime());
 		m_editor.PostUpdate();
-		
+		clock.Update();
 	}
 }
 
@@ -38,11 +40,4 @@ bool AmberEngine::Core::Application::PushLayer(ALayer* p_layer)
 bool AmberEngine::Core::Application::IsRunning()
 {
 	return isRunning && m_context.m_window->IsActive();
-}
-
-void AmberEngine::Core::Application::UpdateDeltaTime()
-{
-	float currentTime = glfwGetTime();
-	m_deltaTime = currentTime - m_lastTime;
-	m_lastTime = currentTime;
 }

@@ -45,7 +45,7 @@ namespace AmberEngine::LowRenderer
 		Camera& GetCamera();
 
 	private:
-		const float SPEED = 10.5f;
+		const float SPEED = 10.5;
 		const float SENSITIVITY = 0.1f;
 
 		Context::Window& m_window;

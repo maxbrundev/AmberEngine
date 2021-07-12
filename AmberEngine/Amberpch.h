@@ -25,4 +25,4 @@
 #include "AmberEngine/ImGUI/imgui_impl_glfw.h"
 #include "AmberEngine/ImGUI/imgui_impl_opengl3.h"
 
-#include "AmberEngine/Utils/voxelizer.h"
+#include "AmberEngine/Tools/Utils/voxelizer.h"

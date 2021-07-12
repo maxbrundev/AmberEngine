@@ -71,8 +71,4 @@ void AmberEngine::Core::UIManager::DisplayDeviceInfos()
 	window_flags |= ImGuiWindowFlags_NoMove;
 	window_flags |= ImGuiWindowFlags_NoResize;
 	window_flags |= ImGuiWindowFlags_NoBackground;*/
-
-	ImGui::Begin("Device");
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	ImGui::End();
 }

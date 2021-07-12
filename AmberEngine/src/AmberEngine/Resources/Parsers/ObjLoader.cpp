@@ -1,6 +1,6 @@
 #include "Amberpch.h"
 
-#include "AmberEngine/Resources/ObjLoader.h"
+#include "AmberEngine/Resources/Parsers/ObjLoader.h"
 
 AmberEngine::Resources::ObjLoader::ObjLoader(const std::string& p_filePath) : hasUVs(false), hasNormals(false)
 {

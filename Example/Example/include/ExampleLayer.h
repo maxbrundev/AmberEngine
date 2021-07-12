@@ -6,7 +6,7 @@
 
 #include <AmberEngine/Core/UIManager.h>
 #include <AmberEngine/Resources/AssimpModel.h>
-#include <AmberEngine/Resources/AssimpParser.h>
+#include <AmberEngine/Resources/Parsers/AssimpParser.h>
 
 class ExampleLayer : public AmberEngine::Core::ALayer
 {

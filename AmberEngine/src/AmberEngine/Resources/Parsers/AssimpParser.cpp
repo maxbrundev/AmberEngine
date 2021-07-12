@@ -1,8 +1,8 @@
 #include "Amberpch.h"
 
-#include "AmberEngine/Resources/AssimpParser.h"
+#include "AmberEngine/Resources/Parsers/AssimpParser.h"
 
-#include "AmberEngine/Utils/String.h"
+#include "AmberEngine/Tools/Utils/String.h"
 
 bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<AssimpMesh*>& p_meshes, std::vector<std::string>& p_materials)
 {

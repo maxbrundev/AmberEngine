@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include <AmberEngine/Core/Application.h>
-#include <AmberEngine/Utils/Defines.h>
+#include <AmberEngine/Tools/Utils/Defines.h>
 FORCE_DEDICATED_GPU
 
 #include "ExampleLayer.h"
@@ -28,7 +28,7 @@ int main()
 	windowSettings.width = 1280;
 	windowSettings.height = 720;
 	windowSettings.resizable = true;
-	windowSettings.vsync = true;
+	windowSettings.vsync = false;
 	windowSettings.samples = 4;
 
 	AmberEngine::Settings::DriverSettings driverSettings;

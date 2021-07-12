@@ -263,7 +263,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\ALayer.h" />
     <ClInclude Include="include\AmberEngine\Core\Application.h" />
     <ClInclude Include="include\AmberEngine\Core\Editor.h" />
-    <ClInclude Include="include\AmberEngine\Core\Scene.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
@@ -287,20 +286,23 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Managers\LayerManager.h" />
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
     <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
+    <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
     <ClInclude Include="include\AmberEngine\Resources\AssimpMesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\AssimpModel.h" />
-    <ClInclude Include="include\AmberEngine\Resources\AssimpParser.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h" />
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\Primitives\Cube.h" />
-    <ClInclude Include="include\AmberEngine\Resources\ObjLoader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\ObjLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Shader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\ShaderLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Texture.h" />
     <ClInclude Include="include\AmberEngine\Settings\DeviceSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />
-    <ClInclude Include="include\AmberEngine\Utils\Defines.h" />
-    <ClInclude Include="include\AmberEngine\Utils\String.h" />
-    <ClInclude Include="include\AmberEngine\Utils\voxelizer.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Time\Clock.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
     <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
@@ -332,7 +334,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Core\Application.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Context.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
-    <ClCompile Include="src\AmberEngine\Core\Scene.cpp" />
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />
@@ -347,15 +348,18 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Managers\LayerManager.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
     <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\AssimpMesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\AssimpModel.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\AssimpParser.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Primitives\Cube.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\ObjLoader.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Parsers\ObjLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Shader.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
-    <ClCompile Include="src\AmberEngine\Utils\String.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Time\Clock.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl" />

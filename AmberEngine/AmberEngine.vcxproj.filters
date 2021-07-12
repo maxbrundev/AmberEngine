@@ -69,9 +69,6 @@
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Resources\ObjLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\AmberEngine\Resources\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -147,13 +144,7 @@
     <ClInclude Include="include\AmberEngine\Inputs\InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Utils\Defines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Amberpch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AmberEngine\Utils\voxelizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AmberEngine\Core\UIManager.h">
@@ -183,13 +174,28 @@
     <ClInclude Include="include\AmberEngine\Core\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Resources\AssimpParser.h">
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Utils\String.h">
+    <ClInclude Include="include\AmberEngine\Tools\Utils\String.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Core\Scene.h">
+    <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Tools\Time\Clock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\ObjLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\ShaderLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Maths\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -222,9 +228,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\AmberEngine\Resources\ObjLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Resources\Shader.cpp">
@@ -293,13 +296,22 @@
     <ClCompile Include="src\AmberEngine\Core\Context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\Resources\AssimpParser.cpp">
+    <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\Utils\String.cpp">
+    <ClCompile Include="src\AmberEngine\Tools\Time\Clock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\Core\Scene.cpp">
+    <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Resources\Parsers\ObjLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\ShaderLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Maths\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

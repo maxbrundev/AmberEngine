@@ -6,7 +6,7 @@
 #include "AmberEngine/Resources/Texture.h"
 
 #include "AmberEngine/Debug/GLDebug.h"
-#include "AmberEngine/Utils/String.h"
+#include "AmberEngine/Tools/Utils/String.h"
 
 AmberEngine::Resources::Texture::Texture(const std::string& p_path, bool p_flipVertically) : m_id(0), m_width(0), m_height(0), m_bitsPerPixel(0), m_path(p_path)
 {
