@@ -1,4 +1,5 @@
 #include "Amberpch.h"
+
 #include "AmberEngine\Tools\Time\Clock.h"
 
 void Utils::Clock::Initialize()

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AmberEngine/API/Export.h"
+
 #include "AmberEngine/Context/Driver.h"
 #include "AmberEngine/Context/Device.h"
 #include "AmberEngine/Context/Window.h"
@@ -12,7 +14,7 @@
 
 namespace AmberEngine::Core
 {
-	class Context
+	class API_AMBERENGINE Context
 	{
 	public:
 		Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings);

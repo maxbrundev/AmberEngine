@@ -2,9 +2,11 @@
 
 #include <chrono>
 
+#include "AmberEngine/API/Export.h"
+
 namespace Utils
 {
-	class Clock
+	class API_AMBERENGINE Clock
 	{
 	public:
 		void Update();
