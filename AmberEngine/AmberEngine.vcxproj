@@ -260,7 +260,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
     <ClInclude Include="include\AmberEngine\Context\Window.h" />
-    <ClInclude Include="include\AmberEngine\Core\ALayer.h" />
     <ClInclude Include="include\AmberEngine\Core\Editor.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
@@ -284,12 +283,10 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
     <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
-    <ClInclude Include="include\AmberEngine\Resources\AssimpMesh.h" />
-    <ClInclude Include="include\AmberEngine\Resources\AssimpModel.h" />
-    <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h" />
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Model.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h" />
     <ClInclude Include="include\AmberEngine\Resources\Primitives\Cube.h" />
-    <ClInclude Include="include\AmberEngine\Resources\Parsers\ObjLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Shader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\ShaderLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Texture.h" />
@@ -343,12 +340,10 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
     <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\AssimpMesh.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\AssimpModel.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Model.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Primitives\Cube.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\Parsers\ObjLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Shader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />

@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<AssimpMesh*>& p_meshes, std::vector<std::string>& p_materials)
+bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials)
 {
 	m_directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
 	
@@ -44,7 +44,7 @@ void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene * p_sc
 	}
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform, aiNode * p_node, const aiScene * p_scene, std::vector<AssimpMesh*>& p_meshes)
+void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform, aiNode * p_node, const aiScene * p_scene, std::vector<Mesh*>& p_meshes)
 {
 	aiMatrix4x4 nodeTransformation = *p_transform * p_node->mTransformation;
 
@@ -58,7 +58,7 @@ void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform,
 		aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
 		
 		ProcessMesh(&nodeTransformation, mesh, p_scene, vertices, indices, textures);
-		p_meshes.push_back(new AssimpMesh(vertices, indices, textures)); // The model will handle mesh destruction
+		p_meshes.push_back(new Mesh(vertices, indices, textures)); // The model will handle mesh destruction
 	}
 
 	// Then do the same for each of its children

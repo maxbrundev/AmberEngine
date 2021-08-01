@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Resources/Texture.h"
 #include "AmberEngine/Resources/Shader.h"
-#include "AmberEngine/Resources/AssimpModel.h"
+#include "AmberEngine/Resources/Model.h"
 
 #include "AmberEngine/Resources/Parsers/AssimpParser.h"
 #include "AmberEngine/Resources/Loaders/ShaderLoader.h"
@@ -17,7 +17,7 @@ namespace AmberEngine::Managers
 		ResourcesManager();
 		~ResourcesManager() = default;
 
-		Resources::AssimpModel& LoadModel(std::string_view p_name, std::string_view p_fileName);
+		Resources::Model& LoadModel(std::string_view p_name, std::string_view p_fileName);
 
 		Resources::Shader& LoadShader(std::string_view p_name, const std::string& p_fileName);
 		Resources::Shader& LoadShaderFiles(std::string_view p_name, const std::string& p_VertexFileName, const std::string& p_FragmentFileName);
@@ -26,7 +26,7 @@ namespace AmberEngine::Managers
 
 		Resources::Shader& GetShader(std::string_view p_name);
 		Resources::Texture& GetTexture(std::string_view p_name);
-		Resources::AssimpModel& GetModel(std::string_view p_name);
+		Resources::Model& GetModel(std::string_view p_name);
 
 		void SetTextureRootDir(std::string_view p_directory);
 
@@ -35,7 +35,7 @@ namespace AmberEngine::Managers
 
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Shader>> m_shaderResources;
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Texture>> m_TextureResources;
-		std::unordered_map<std::string_view, std::shared_ptr<Resources::AssimpModel>> m_modelResources;
+		std::unordered_map<std::string_view, std::shared_ptr<Resources::Model>> m_modelResources;
 
 		static Resources::AssimpParser __ASSIMP;
 		static Resources::ShaderLoader __SHADERLOADER;

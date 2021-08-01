@@ -9,12 +9,12 @@ AmberEngine::Managers::ResourcesManager::ResourcesManager() : m_textureRootDir("
 {
 }
 
-AmberEngine::Resources::AssimpModel& AmberEngine::Managers::ResourcesManager::LoadModel(std::string_view p_name, std::string_view p_fileName)
+AmberEngine::Resources::Model& AmberEngine::Managers::ResourcesManager::LoadModel(std::string_view p_name, std::string_view p_fileName)
 {
 	if (m_modelResources.find(p_name) != m_modelResources.end())
 		return *m_modelResources[p_name].get();
 	
-	Resources::AssimpModel* model = new Resources::AssimpModel(p_fileName);
+	Resources::Model* model = new Resources::Model(p_fileName);
 
 	__ASSIMP.LoadModel(static_cast<std::string>(p_fileName), model->GetMeshes(), model->GetMaterialNames());
 	
@@ -66,7 +66,7 @@ AmberEngine::Resources::Texture& AmberEngine::Managers::ResourcesManager::GetTex
 	return  *m_TextureResources.at(p_name);
 }
 
-AmberEngine::Resources::AssimpModel & AmberEngine::Managers::ResourcesManager::GetModel(std::string_view p_name)
+AmberEngine::Resources::Model & AmberEngine::Managers::ResourcesManager::GetModel(std::string_view p_name)
 {
 	return *m_modelResources.at(p_name);
 }

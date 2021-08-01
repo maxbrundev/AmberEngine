@@ -2,23 +2,25 @@
 
 #include "AmberEngine/Core/Renderer.h"
 
-#include "AmberEngine/Resources/AssimpMesh.h"
+#include "AmberEngine/Resources/Mesh.h"
 
 AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) : m_driver(p_driver), isWireFrame(false)
 {
 }
 
-void AmberEngine::Core::Renderer::DrawModelWithShader(Resources::AssimpModel& p_model, Resources::Shader& p_shader)
+void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model)
 {
+	p_model.Bind();
+	
 	for (auto mesh : p_model.GetMeshes())
 	{
-		DrawMesh(*mesh, p_shader);
+		DrawMesh(*mesh);
 	}
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(Resources::AssimpMesh& p_mesh, Resources::Shader& p_shader)
+void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh)
 {
-	p_mesh.BindMaterialTextures(p_shader);
+	p_mesh.BindMaterialTextures();
 	
 	p_mesh.Bind();
 	
