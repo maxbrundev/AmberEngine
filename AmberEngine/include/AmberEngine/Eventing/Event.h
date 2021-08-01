@@ -24,6 +24,15 @@ namespace AmberEngine::Eventing
 
 		void Invoke(ArgTypes... p_args);
 	};
+
+	template <typename Func, typename Instance>
+	auto QuickBind(Func function, Instance* instance)
+	{
+		return [=](auto&&... args)
+		{
+			return (instance->*function)(std::forward<decltype(args)>(args)...);
+		};
+	}
 }
 
 #include "AmberEngine/Eventing/Event.inl"

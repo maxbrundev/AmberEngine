@@ -17,6 +17,7 @@ namespace AmberEngine::Resources
 		std::vector<Mesh*>& GetMeshes();
 		std::vector<std::string>& GetMaterialNames();
 		void SetTextureUniform(std::string uniformName, int id);
+		
 	public:
 		std::vector<Mesh*> m_meshes;
 		Shader* m_shader;

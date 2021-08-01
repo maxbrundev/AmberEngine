@@ -33,11 +33,11 @@ void AmberEngine::Resources::Mesh::BindMaterialTextures()
 		
 		if (name == "texture_diffuse")
 		{
-			callback("u_DiffuseMap", i);
+			SetTextureUniformCallback("u_DiffuseMap", i);
 		}
 		else if (name == "texture_specular")
 		{
-			callback("u_SpecularMap", i);
+			SetTextureUniformCallback("u_SpecularMap", i);
 		}
 	}
 }

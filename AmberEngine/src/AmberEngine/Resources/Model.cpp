@@ -5,6 +5,8 @@
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Shader.h"
 
+#include "AmberEngine/Eventing/Event.h"
+
 AmberEngine::Resources::Model::Model(std::string_view p_filePath) : path(p_filePath)
 {
 }
@@ -22,7 +24,7 @@ void AmberEngine::Resources::Model::Bind()
 {
 	for (auto mesh : m_meshes)
 	{
-		mesh->callback = [this](std::string uniform, int id) { SetTextureUniform(uniform, id); };
+		mesh->SetTextureUniformCallback = Eventing::QuickBind(&Model::SetTextureUniform, this);
 	}
 }
 

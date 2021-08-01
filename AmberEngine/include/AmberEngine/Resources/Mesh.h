@@ -7,9 +7,6 @@
 
 namespace AmberEngine::Resources
 {
-	//class Model;
-	//typedef void(Model::*SetTextureUnifromCallback)(std::string, int);
-	
 	class API_AMBERENGINE Mesh
 	{
 	public:
@@ -20,8 +17,8 @@ namespace AmberEngine::Resources
 		void Unbind();
 		void BindMaterialTextures();
 		void DeleteBuffers();
-		std::function<void(std::string, int)> callback;
-		//SetTextureUnifromCallback callback;
+
+		std::function<void(std::string, int)> SetTextureUniformCallback;
 
 	private:
 		void InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices);
