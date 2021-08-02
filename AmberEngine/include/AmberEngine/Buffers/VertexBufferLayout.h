@@ -2,6 +2,8 @@
 
 #include "AmberEngine/API/Export.h"
 
+// TODO: Remove this class, move the pointer offset and stride computation directly in the VAO.
+
 namespace AmberEngine::Buffers
 {
 	struct API_AMBERENGINE VertexBufferElement

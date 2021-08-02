@@ -2,6 +2,8 @@
 
 #include "AmberEngine/Resources/Model.h"
 
+#include <chrono>
+
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Shader.h"
 
@@ -24,6 +26,7 @@ void AmberEngine::Resources::Model::Bind()
 {
 	for (auto mesh : m_meshes)
 	{
+		// Template arguments deduction in case of curiosity: <void(__thiscall AmberEngine::Resources::Model::*)(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, int), class AmberEngine::Resources::Model>
 		mesh->SetTextureUniformCallback = Eventing::QuickBind(&Model::SetTextureUniform, this);
 	}
 }

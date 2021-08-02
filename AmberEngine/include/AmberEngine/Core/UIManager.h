@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AmberEngine/Context/Window.h"
-
 #include "AmberEngine/API/Export.h"
 
-//TODO: Delete this class.
+#include "AmberEngine/Context/Window.h"
+
+//TODO: Refacto.
 
 namespace AmberEngine::Core
 {

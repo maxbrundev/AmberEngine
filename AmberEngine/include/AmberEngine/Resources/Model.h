@@ -6,14 +6,17 @@ namespace AmberEngine::Resources
 {
 	class Mesh;
 	class Shader;
-
+	
 	class API_AMBERENGINE Model
 	{
 	public:
 		Model(std::string_view p_filePath);
 		~Model();
-		void Bind();
+
 		void SetShader(Shader& shader);
+		
+		void Bind();
+		
 		std::vector<Mesh*>& GetMeshes();
 		std::vector<std::string>& GetMaterialNames();
 		void SetTextureUniform(std::string uniformName, int id);

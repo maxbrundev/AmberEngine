@@ -5,12 +5,12 @@
 #include <AmberEngine/Tools/Time/Clock.h>
 #include <AmberEngine/ImGUI/imgui.h>
 
-Example::Application::Application(const AmberEngine::Settings::DeviceSettings & p_deviceSettings, 
-	const AmberEngine::Settings::WindowSettings & p_windowSettings, 
-	const AmberEngine::Settings::DriverSettings & p_driverSettings) : 
+Example::Application::Application(const AmberEngine::Settings::DeviceSettings & p_deviceSettings,
+	const AmberEngine::Settings::WindowSettings & p_windowSettings,
+	const AmberEngine::Settings::DriverSettings & p_driverSettings) :
 	m_context(p_deviceSettings, p_windowSettings, p_driverSettings),
 	m_editor(m_context),
-	ui(*m_context.m_window)
+	m_uiManager(*m_context.m_window)
 {
 	isRunning = true;
 }
@@ -35,7 +35,7 @@ void Example::Application::Setup()
 
 void Example::Application::Run()
 {
-	glm::vec3 lighDir = glm::vec3(1, 1, 1);
+	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	Utils::Clock clock;
 
@@ -51,7 +51,6 @@ void Example::Application::Run()
 
 		auto& shader = m_context.m_resourcesManager.GetShader("StandardLighting");
 		
-		
 		shader.Bind();
 		shader.SetUniformMat4("projection", projectionMatrix);
 		shader.SetUniformMat4("view", viewMatrix);
@@ -65,8 +64,15 @@ void Example::Application::Run()
 		m_context.m_renderer->Draw(m_context.m_resourcesManager.GetModel("Suit"));
 
 		shader.Unbind();
+
+		m_uiManager.BeginFrame();
+		m_uiManager.DisplayDeviceInfos();
+		m_uiManager.EndFrame();
+		m_uiManager.Render();
+
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.PostUpdate();
+
 		clock.Update();
 	}
 }

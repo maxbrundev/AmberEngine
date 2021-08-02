@@ -19,7 +19,7 @@ namespace Example
 	private:
 		AmberEngine::Core::Context m_context;
 		AmberEngine::Core::Editor m_editor;
-		AmberEngine::Core::UIManager ui;
+		AmberEngine::Core::UIManager m_uiManager;
 
 		bool isRunning;
 	};
