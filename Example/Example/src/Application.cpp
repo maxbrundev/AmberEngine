@@ -4,6 +4,9 @@
 
 #include <AmberEngine/Tools/Time/Clock.h>
 #include <AmberEngine/ImGUI/imgui.h>
+#include <AmberEngine/Resources/Primitives/Cube.h>
+#include <AmberEngine/Buffers/VertexBuffer.h>
+#include <AmberEngine/Buffers/VertexArray.h>
 
 Example::Application::Application(const AmberEngine::Settings::DeviceSettings & p_deviceSettings,
 	const AmberEngine::Settings::WindowSettings & p_windowSettings,
@@ -38,6 +41,32 @@ void Example::Application::Run()
 	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	Utils::Clock clock;
+	/*AmberEngine::PrimitivesShapes::Cube::Setup();
+	
+	std::vector<float> vertices;
+	std::vector<AmberEngine::PrimitivesShapes::Vertex> verticesCube = AmberEngine::PrimitivesShapes::Cube::GetVertices();
+	
+	for (auto& vertex : verticesCube)
+	{
+		vertices.push_back(vertex.position[0]);
+		vertices.push_back(vertex.position[1]);
+		vertices.push_back(vertex.position[2]);
+		vertices.push_back(vertex.textureCoord[0]);
+		vertices.push_back(vertex.textureCoord[1]);
+		vertices.push_back(vertex.normals[0]);
+		vertices.push_back(vertex.normals[1]);
+		vertices.push_back(vertex.normals[2]);
+	}
+	
+	AmberEngine::Buffers::VertexArray vao;
+	AmberEngine::Buffers::VertexBuffer vbo(vertices.data(), vertices.size() * sizeof(vertices));
+	vbo.Bind();
+	vao.Bind();
+	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), nullptr);
+	vao.BindAttribPointer(2, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<void*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::textureCoord)));
+	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<void*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::normals)));
+	vao.Unbind();
+	vbo.Unbind();*/
 
 	while (IsRunning())
 	{
@@ -62,11 +91,21 @@ void Example::Application::Run()
 		m_context.m_resourcesManager.GetTexture("specular").Bind(1);
 
 		m_context.m_renderer->Draw(m_context.m_resourcesManager.GetModel("Suit"));
-
+		//vao.Bind();
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//vao.Unbind();
 		shader.Unbind();
-
+		
 		m_uiManager.BeginFrame();
 		m_uiManager.DisplayDeviceInfos();
+
+		m_uiManager.BeginWindow("Scene");
+		ImGui::Text("Camera Position X: %.1f Y: %.1f Z: %.1f", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+		ImGui::DragFloat("Light Direction X", &lighDir.x, 0.005f, 0.0f, 0.0f, "X: %.1f");
+		ImGui::DragFloat("Light Direction Y", &lighDir.y, 0.005f, 0.0f, 0.0f, "Y: %.1f");
+		ImGui::DragFloat("Light Direction Z", &lighDir.z, 0.005f, 0.0f, 0.0f, "Z: %.1f");
+		m_uiManager.EndWindow();
+
 		m_uiManager.EndFrame();
 		m_uiManager.Render();
 

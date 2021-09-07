@@ -7,7 +7,7 @@
 AmberEngine::Buffers::IndexBuffer::IndexBuffer(const unsigned int* p_data, size_t p_elements)
 {
 	glGenBuffers(1, &m_bufferID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferID);
+	Bind();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_elements * sizeof(unsigned int), p_data, GL_STATIC_DRAW);
 }
 

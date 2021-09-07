@@ -2,8 +2,8 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine::Buffers { class VertexBuffer; }
-namespace AmberEngine::Buffers { class VertexBufferLayout; }
+#include "AmberEngine/Context/Driver.h"
+
 
 namespace AmberEngine::Buffers
 {
@@ -11,12 +11,13 @@ namespace AmberEngine::Buffers
 	{
 	private:
 		GLuint m_bufferID;
+		unsigned int index;
 		
 	public:
 		VertexArray();
 		~VertexArray();
 
-		void AddBuffer(const VertexBuffer& p_vbo, const VertexBufferLayout& p_layout);
+		void BindAttribPointer(const unsigned int p_size, const unsigned int p_type, const unsigned int p_normalized, const unsigned int p_stride, void* p_pointer);
 
 		void Bind() const;
 		void Unbind() const;

@@ -7,8 +7,8 @@
 AmberEngine::Buffers::VertexBuffer::VertexBuffer(const void* p_data, size_t p_elements)
 {
 	glGenBuffers(1, &m_bufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, m_bufferID);
-	glBufferData(GL_ARRAY_BUFFER, p_elements, p_data, GL_STATIC_DRAW);
+	Bind();
+	glBufferData(GL_ARRAY_BUFFER, p_elements * sizeof(float), p_data, GL_STATIC_DRAW);
 }
 
 AmberEngine::Buffers::VertexBuffer::~VertexBuffer()

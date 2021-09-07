@@ -4,12 +4,10 @@
 
 #include "AmberEngine/Buffers/VertexArray.h"
 
-#include "AmberEngine/Buffers/VertexBuffer.h"
-#include "AmberEngine/Buffers/VertexBufferLayout.h"
-
-AmberEngine::Buffers::VertexArray::VertexArray()
+AmberEngine::Buffers::VertexArray::VertexArray() : index{0}
 {
 	glGenVertexArrays(1, &m_bufferID);
+	Bind();
 }
 
 AmberEngine::Buffers::VertexArray::~VertexArray()
@@ -17,19 +15,11 @@ AmberEngine::Buffers::VertexArray::~VertexArray()
 	glDeleteVertexArrays(1, &m_bufferID);
 }
 
-void AmberEngine::Buffers::VertexArray::AddBuffer(const VertexBuffer& p_vbo, const VertexBufferLayout& p_layout)
+void AmberEngine::Buffers::VertexArray::BindAttribPointer(const unsigned int p_size, const unsigned int p_type, const unsigned int p_normalized, const unsigned int p_stride, void* p_pointer)
 {
-	Bind();
-	p_vbo.Bind();
-	const auto& elements = p_layout.GetElements();
-	unsigned int offset = 0;
-	for (unsigned int i = 0; i < elements.size(); i++)
-	{
-		const auto& element = elements[i];
-		glEnableVertexAttribArray(i);
-		glVertexAttribPointer(static_cast<GLuint>(i), static_cast<GLint>(element.count), static_cast<GLenum>(element.type), element.normalized, static_cast<GLsizei>(p_layout.GetStride()), reinterpret_cast<const GLvoid*>(offset));
-		offset += element.count * sizeof(element.type);
-	}
+	glEnableVertexAttribArray(index);
+	glVertexAttribPointer(static_cast<GLuint>(index), static_cast<GLint>(p_size), static_cast<GLenum>(p_type), p_normalized, static_cast<GLsizei>(p_stride), static_cast<const GLvoid*>(p_pointer));
+	index++;
 }
 
 void AmberEngine::Buffers::VertexArray::Bind() const

@@ -2,6 +2,8 @@
 
 #include "AmberEngine/API/Export.h"
 
+#include "AmberEngine/Context/Driver.h"
+
 namespace AmberEngine::Buffers
 {
 	class API_AMBERENGINE IndexBuffer

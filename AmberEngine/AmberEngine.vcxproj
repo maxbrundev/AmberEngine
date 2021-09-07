@@ -255,7 +255,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Buffers\IndexBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexArray.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexBuffer.h" />
-    <ClInclude Include="include\AmberEngine\Buffers\VertexBufferLayout.h" />
     <ClInclude Include="include\AmberEngine\Context\Device.h" />
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
@@ -320,7 +319,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="src\AmberEngine\Buffers\VertexBufferLayout.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Device.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Driver.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Window.cpp" />

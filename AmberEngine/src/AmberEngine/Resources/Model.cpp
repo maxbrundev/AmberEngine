@@ -24,6 +24,8 @@ AmberEngine::Resources::Model::~Model()
 
 void AmberEngine::Resources::Model::Bind()
 {
+	m_shader->Bind();
+
 	for (auto mesh : m_meshes)
 	{
 		// Template arguments deduction in case of curiosity: <void(__thiscall AmberEngine::Resources::Model::*)(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, int), class AmberEngine::Resources::Model>
@@ -48,6 +50,5 @@ std::vector<std::string>& AmberEngine::Resources::Model::GetMaterialNames()
 
 void AmberEngine::Resources::Model::SetTextureUniform(std::string uniformName, int id)
 {
-	m_shader->Bind();
 	m_shader->SetUniform1i(uniformName, id);
 }

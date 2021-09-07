@@ -10,17 +10,17 @@ AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertic
 
 AmberEngine::Resources::Mesh::~Mesh()
 {
-	DeleteBuffers();
+	Unbind();
 }
 
 void AmberEngine::Resources::Mesh::Bind()
 {
-	glBindVertexArray(m_vao);
+	m_vao.Bind();
 }
 
 void AmberEngine::Resources::Mesh::Unbind()
 {
-	glBindVertexArray(0);
+	m_vao.Unbind();
 }
 
 void AmberEngine::Resources::Mesh::BindMaterialTextures()
@@ -70,40 +70,14 @@ void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Verte
 	
 	uint64_t vertexSize = sizeof(Geometry::Vertex);
 	
-	glGenVertexArrays(1, &m_vao);
-	glGenBuffers(1, &m_vbo);
-	glGenBuffers(1, &m_ebo);
+	m_vbo = std::make_unique<Buffers::VertexBuffer>(vertexData.data(), vertexData.size());
+	m_ebo = std::make_unique<Buffers::IndexBuffer>(p_indices.data(), p_indices.size());
 	
-	glBindVertexArray(m_vao);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-	
-	glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), vertexData.data(), GL_STATIC_DRAW);
-	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_indices.size() * sizeof(unsigned int), p_indices.data(), GL_STATIC_DRAW);
-	
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), static_cast<void*>(nullptr));
-	
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 3));
-	
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 5));
-	
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 8));
-	
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, static_cast<GLsizei>(vertexSize), reinterpret_cast<GLvoid*>(sizeof(float) * 11));
-	
-	glBindVertexArray(0);
-}
+	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, static_cast<void*>(nullptr));
+	m_vao.BindAttribPointer(2, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 3));
+	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 5));
+	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 8));
+	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 11));
 
-void AmberEngine::Resources::Mesh::DeleteBuffers()
-{
-	glDeleteVertexArrays(1, &m_vao);
-	glDeleteBuffers(1, &m_vbo);
-	glDeleteBuffers(1, &m_ebo);
+	m_vao.Unbind();
 }

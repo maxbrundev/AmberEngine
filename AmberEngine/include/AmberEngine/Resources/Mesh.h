@@ -3,6 +3,10 @@
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Geometry/Vertex.h"
+#include "AmberEngine/Buffers/VertexArray.h"
+#include "AmberEngine/Buffers/VertexBuffer.h"
+#include "AmberEngine/Buffers/IndexBuffer.h"
+
 #include "AmberEngine/Resources/Texture.h"
 
 namespace AmberEngine::Resources
@@ -16,7 +20,6 @@ namespace AmberEngine::Resources
 		void Bind();
 		void Unbind();
 		void BindMaterialTextures();
-		void DeleteBuffers();
 
 		std::function<void(std::string, int)> SetTextureUniformCallback;
 
@@ -28,8 +31,8 @@ namespace AmberEngine::Resources
 		const uint32_t m_indicesCount;
 		std::vector<Texture*> m_textures;
 
-		unsigned int m_vao;
-		unsigned int m_vbo;
-		unsigned int m_ebo;
+		Buffers::VertexArray m_vao;
+		std::unique_ptr<Buffers::VertexBuffer> m_vbo;
+		std::unique_ptr<Buffers::IndexBuffer> m_ebo;
 	};
 }
