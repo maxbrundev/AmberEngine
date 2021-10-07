@@ -24,8 +24,8 @@ void Example::Application::Setup()
 
 	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
 	
-	m_context.m_resourcesManager.LoadTexture("diffuse", "crystal.jpg");
-	m_context.m_resourcesManager.LoadTexture("specular", "crystal_spec.jpg");
+	m_context.m_resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
+	m_context.m_resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
 	m_context.m_resourcesManager.GetModel("Suit").SetShader(lightingShader);
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);
@@ -87,8 +87,8 @@ void Example::Application::Run()
 		shader.SetUniformVec3("viewPos", cameraPosition);
 		shader.SetUniformVec3("light.direction", lighDir);
 		
-		m_context.m_resourcesManager.GetTexture("diffuse").Bind();
-		m_context.m_resourcesManager.GetTexture("specular").Bind(1);
+		//m_context.m_resourcesManager.GetTexture("diffuse").Bind();
+		//m_context.m_resourcesManager.GetTexture("specular").Bind(1);
 
 		m_context.m_renderer->Draw(m_context.m_resourcesManager.GetModel("Suit"));
 		//vao.Bind();

@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{AE520B00-2613-49C7-804D-EF391D9D933B}</ProjectGuid>
     <RootNamespace>AmberEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -282,6 +282,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
     <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
+    <ClInclude Include="include\AmberEngine\Resources\ETextureFilteringMode.h" />
+    <ClInclude Include="include\AmberEngine\Resources\ETextureType.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\TextureLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\Model.h" />
     <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h" />
@@ -338,6 +341,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
     <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\TextureLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Model.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp" />

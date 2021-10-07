@@ -28,14 +28,12 @@ void AmberEngine::Resources::Mesh::BindMaterialTextures()
 	for (int i = 0; i < m_textures.size(); i++)
 	{
 		m_textures[i]->Bind(i);
-
-		std::string_view name = m_textures[i]->m_type;
 		
-		if (name == "texture_diffuse")
+		if (m_textures[i]->type == Settings::ETextureType::DIFFUSE)
 		{
 			SetTextureUniformCallback("u_DiffuseMap", i);
 		}
-		else if (name == "texture_specular")
+		else if (m_textures[i]->type == Settings::ETextureType::SPECULAR)
 		{
 			SetTextureUniformCallback("u_SpecularMap", i);
 		}

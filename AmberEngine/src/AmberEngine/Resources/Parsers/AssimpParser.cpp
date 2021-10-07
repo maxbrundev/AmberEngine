@@ -2,6 +2,7 @@
 
 #include "AmberEngine/Resources/Parsers/AssimpParser.h"
 
+#include "AmberEngine/Resources/Loaders/TextureLoader.h"
 #include "AmberEngine/Tools/Utils/String.h"
 
 bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials)
@@ -39,12 +40,12 @@ void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene * p_sc
 			aiString name;
 			
 			aiGetMaterialString(material, AI_MATKEY_NAME, &name);
-			p_materials.push_back(name.C_Str());
+			p_materials.emplace_back(name.C_Str());
 		}
 	}
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform, aiNode * p_node, const aiScene * p_scene, std::vector<Mesh*>& p_meshes)
+void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform, aiNode* p_node, const aiScene * p_scene, std::vector<Mesh*>& p_meshes)
 {
 	aiMatrix4x4 nodeTransformation = *p_transform * p_node->mTransformation;
 
@@ -74,11 +75,11 @@ void AmberEngine::Resources::AssimpParser::ProcessMesh(aiMatrix4x4* p_transform,
 
 	for (uint32_t i = 0; i < p_mesh->mNumVertices; ++i)
 	{
-		aiVector3D position  = meshTransformation * p_mesh->mVertices[i];
-		aiVector3D normal    = meshTransformation * (p_mesh->mNormals ? p_mesh->mNormals[i] : aiVector3D(0.0f, 0.0f, 0.0f));
-		aiVector3D texCoords = p_mesh->mTextureCoords[0] ? p_mesh->mTextureCoords[0][i] : aiVector3D(0.0f, 0.0f, 0.0f);
-		aiVector3D tangent   = p_mesh->mTangents ? meshTransformation * p_mesh->mTangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
-		aiVector3D bitangent = p_mesh->mBitangents ? meshTransformation * p_mesh->mBitangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
+		const aiVector3D position  = meshTransformation * p_mesh->mVertices[i];
+		const aiVector3D normal    = meshTransformation * (p_mesh->mNormals ? p_mesh->mNormals[i] : aiVector3D(0.0f, 0.0f, 0.0f));
+		const aiVector3D texCoords = p_mesh->mTextureCoords[0] ? p_mesh->mTextureCoords[0][i] : aiVector3D(0.0f, 0.0f, 0.0f);
+		const aiVector3D tangent   = p_mesh->mTangents ? meshTransformation * p_mesh->mTangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
+		const aiVector3D bitangent = p_mesh->mBitangents ? meshTransformation * p_mesh->mBitangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
 
 		p_outVertices.push_back
 		(
@@ -113,21 +114,21 @@ void AmberEngine::Resources::AssimpParser::ProcessMesh(aiMatrix4x4* p_transform,
 
 	aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	std::vector<Texture*> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<Texture*> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, Settings::ETextureType::DIFFUSE);
 	p_outTextures.insert(p_outTextures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-	std::vector<Texture*> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<Texture*> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, Settings::ETextureType::SPECULAR);
 	p_outTextures.insert(p_outTextures.end(), specularMaps.begin(), specularMaps.end());
 
-	std::vector<Texture*> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
+	std::vector<Texture*> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, Settings::ETextureType::NORMAL_MAP);
 	p_outTextures.insert(p_outTextures.end(), normalMaps.begin(), normalMaps.end());
 
-	std::vector<Texture*> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
+	std::vector<Texture*> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP);
 	p_outTextures.insert(p_outTextures.end(), heightMaps.begin(), heightMaps.end());
 }
 
 std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpParser::LoadMaterial(aiMaterial* p_mat,
-	aiTextureType p_type, const std::string& p_typeName)
+	aiTextureType p_type, Settings::ETextureType p_textureType)
 {
 	std::vector<Texture*> textures;
 	for (int i = 0; i < p_mat->GetTextureCount(p_type); i++)
@@ -138,7 +139,7 @@ std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpPars
 		bool skip = false;
 		for (int j = 0; j < m_loadedTextures.size(); j++)
 		{
-			if (std::strcmp(m_loadedTextures[j]->m_name.data(), str.C_Str()) == 0)
+			if (std::strcmp(m_loadedTextures[j]->name.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(m_loadedTextures[j]);
 				skip = true;
@@ -150,10 +151,10 @@ std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpPars
 		{
 			std::string path = m_directory + str.C_Str();
 
-			auto currentTexture = textures.emplace_back(new Texture(path));
-			currentTexture->m_type = p_typeName;
-			
-			m_loadedTextures.push_back(currentTexture);
+			Texture* texture = AmberEngine::Resources::TextureLoader::Create(path, Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true);
+
+			textures.push_back(texture);
+			m_loadedTextures.push_back(texture);
 		}
 	}
 	return textures;
