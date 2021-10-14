@@ -10,7 +10,7 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE Shader
 	{
 	public:
-		Shader(const std::string& p_path, uint32_t p_id);
+		Shader(const std::string& p_filePath, uint32_t p_id);
 		~Shader();
 
 		void Bind() const;

@@ -2,8 +2,10 @@
 
 #include "AmberEngine/Resources/Mesh.h"
 
-AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<Texture*> p_textures)
-	:m_vertexCount(static_cast<uint32_t>(p_vertices.size())), m_indicesCount(static_cast<uint32_t>(p_indices.size())), m_textures(p_textures)
+AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, const std::vector<Texture*>& p_textures)
+: m_vertexCount(static_cast<uint32_t>(p_vertices.size())),
+m_indicesCount(static_cast<uint32_t>(p_indices.size())),
+m_textures(p_textures)
 {
 	InitBuffers(p_vertices, p_indices);
 }
@@ -11,16 +13,24 @@ AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertic
 AmberEngine::Resources::Mesh::~Mesh()
 {
 	Unbind();
+
+	for(auto texture : m_textures)
+	{
+		delete texture;
+		texture = nullptr;
+	}
+
+	m_textures.clear();
 }
 
 void AmberEngine::Resources::Mesh::Bind()
 {
-	m_vao.Bind();
+	m_vertexArray.Bind();
 }
 
 void AmberEngine::Resources::Mesh::Unbind()
 {
-	m_vao.Unbind();
+	m_vertexArray.Unbind();
 }
 
 void AmberEngine::Resources::Mesh::BindMaterialTextures()
@@ -28,14 +38,17 @@ void AmberEngine::Resources::Mesh::BindMaterialTextures()
 	for (int i = 0; i < m_textures.size(); i++)
 	{
 		m_textures[i]->Bind(i);
-		
-		if (m_textures[i]->type == Settings::ETextureType::DIFFUSE)
+
+		switch (m_textures[i]->type)
 		{
+		case Settings::ETextureType::DIFFUSE:
 			SetTextureUniformCallback("u_DiffuseMap", i);
-		}
-		else if (m_textures[i]->type == Settings::ETextureType::SPECULAR)
-		{
+			break;
+		case Settings::ETextureType::SPECULAR:
 			SetTextureUniformCallback("u_SpecularMap", i);
+			break;
+		default: 
+			break;
 		}
 	}
 }
@@ -65,17 +78,17 @@ void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Verte
 		vertexData.push_back(vertex.bitangent[1]);
 		vertexData.push_back(vertex.bitangent[2]);
 	}
-	
-	uint64_t vertexSize = sizeof(Geometry::Vertex);
-	
-	m_vbo = std::make_unique<Buffers::VertexBuffer>(vertexData.data(), vertexData.size());
-	m_ebo = std::make_unique<Buffers::IndexBuffer>(p_indices.data(), p_indices.size());
-	
-	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, static_cast<void*>(nullptr));
-	m_vao.BindAttribPointer(2, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 3));
-	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 5));
-	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 8));
-	m_vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 11));
 
-	m_vao.Unbind();
+	constexpr uint64_t vertexSize = sizeof(Geometry::Vertex);
+	
+	m_vertexBuffer = std::make_unique<Buffers::VertexBuffer>(vertexData.data(), vertexData.size());
+	m_indexBuffer = std::make_unique<Buffers::IndexBuffer>(p_indices.data(), p_indices.size());
+	
+	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, static_cast<void*>(nullptr));
+	m_vertexArray.BindAttribPointer(2, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 3));
+	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 5));
+	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 8));
+	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 11));
+
+	m_vertexArray.Unbind();
 }

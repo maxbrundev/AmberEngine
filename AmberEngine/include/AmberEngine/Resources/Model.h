@@ -13,7 +13,7 @@ namespace AmberEngine::Resources
 		Model(std::string_view p_filePath);
 		~Model();
 
-		void SetShader(Shader& shader);
+		void SetShader(Shader& p_shader);
 		
 		void Bind();
 		
@@ -22,9 +22,10 @@ namespace AmberEngine::Resources
 		void SetTextureUniform(std::string uniformName, int id);
 		
 	public:
-		std::vector<Mesh*> m_meshes;
-		Shader* m_shader;
-		std::vector<std::string> m_materialNames;
 		const std::string_view path;
+
+		std::vector<Mesh*> m_meshes;
+		std::vector<std::string> m_materialNames;
+		Shader* m_shader;
 	};
 }

@@ -26,16 +26,16 @@ bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePa
 
 	m_loadedTextures.clear();
 
+	std::cout << m_loadedTextures.size();
+
 	return true;
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene * p_scene, std::vector<std::string>& p_materials)
+void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene* p_scene, std::vector<std::string>& p_materials)
 {
 	for (uint32_t i = 0; i < p_scene->mNumMaterials; ++i)
 	{
-		aiMaterial* material = p_scene->mMaterials[i];
-		
-		if (material)
+		if (const aiMaterial* material = p_scene->mMaterials[i])
 		{
 			aiString name;
 			
@@ -131,25 +131,29 @@ std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpPars
 	aiTextureType p_type, Settings::ETextureType p_textureType)
 {
 	std::vector<Texture*> textures;
+
 	for (int i = 0; i < p_mat->GetTextureCount(p_type); i++)
 	{
 		aiString str;
 		p_mat->GetTexture(p_type, i, &str);
 
-		bool skip = false;
-		for (int j = 0; j < m_loadedTextures.size(); j++)
+		bool isTextureAlreadyLoaded = false;
+
+		for (auto& m_loadedTexture : m_loadedTextures)
 		{
-			if (std::strcmp(m_loadedTextures[j]->name.data(), str.C_Str()) == 0)
+			if (std::strcmp(m_loadedTexture->name.data(), str.C_Str()) == 0)
 			{
-				textures.push_back(m_loadedTextures[j]);
-				skip = true;
+				textures.push_back(m_loadedTexture);
+
+				isTextureAlreadyLoaded = true;
+
 				break;
 			}
 		}
 		
-		if (!skip)
+		if (!isTextureAlreadyLoaded)
 		{
-			std::string path = m_directory + str.C_Str();
+			const std::string path = m_directory + str.C_Str();
 
 			Texture* texture = AmberEngine::Resources::TextureLoader::Create(path, Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true);
 

@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Debug/GLDebug.h"
 
-AmberEngine::Resources::Shader::Shader(const std::string& p_path, uint32_t p_id) : path(p_path), id(p_id)
+AmberEngine::Resources::Shader::Shader(const std::string& p_filePath, uint32_t p_id) : id(p_id), path(p_filePath)
 {
 }
 

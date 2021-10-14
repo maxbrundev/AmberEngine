@@ -9,7 +9,7 @@
 
 #include "AmberEngine/Eventing/Event.h"
 
-AmberEngine::Resources::Model::Model(std::string_view p_filePath) : path(p_filePath)
+AmberEngine::Resources::Model::Model(std::string_view p_filePath) : path(p_filePath), m_shader(nullptr)
 {
 }
 
@@ -33,9 +33,9 @@ void AmberEngine::Resources::Model::Bind()
 	}
 }
 
-void AmberEngine::Resources::Model::SetShader(Shader& shader)
+void AmberEngine::Resources::Model::SetShader(Shader& p_shader)
 {
-	m_shader = &shader;
+	m_shader = &p_shader;
 }
 
 std::vector<AmberEngine::Resources::Mesh*>& AmberEngine::Resources::Model::GetMeshes()
