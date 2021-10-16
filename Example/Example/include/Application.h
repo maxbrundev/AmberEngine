@@ -2,7 +2,6 @@
 
 #include <AmberEngine/Core/Context.h>
 #include <AmberEngine/Core/Editor.h>
-#include <AmberEngine/Core/UIManager.h>
 
 namespace Example
 {
@@ -14,13 +13,11 @@ namespace Example
 
 		void Setup();
 		void Run();
-		bool IsRunning();
+		bool IsRunning() const;
 
 	private:
 		AmberEngine::Core::Context m_context;
 		AmberEngine::Core::Editor m_editor;
-		AmberEngine::Core::UIManager m_uiManager;
-
 		bool isRunning;
 	};
 }

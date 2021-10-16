@@ -23,7 +23,7 @@ namespace AmberEngine::LowRenderer
 		};
 
 	public:
-		CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position = glm::vec3(0.0f, 0.0f, 0.0f));
+		CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position = glm::vec3(0.0f, 0.0f, -3.0f));
 		~CameraController() = default;
 
 		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);

@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Core/Context.h"
 
-#include "AmberEngine/LowRenderer/CameraController.h"
+#include "AmberEngine/Views/SceneView.h"
 
 namespace AmberEngine::Core
 {
@@ -12,12 +12,12 @@ namespace AmberEngine::Core
 	{
 	public:
 		Editor(Context& p_context);
-		~Editor();
+		~Editor() = default;
 
 		void PreUpdate();
 		void Update(float p_deltaTime);
 		void PostUpdate();
-		
+		void RenderScene();
 		
 		void UpdateInput();
 
@@ -25,14 +25,11 @@ namespace AmberEngine::Core
 		void LockCamera();
 		void ToggleCamera();
 		void SetCameraPosition(const glm::vec3& p_position);
-
-		LowRenderer::CameraController& GetCameraController();
 		
-	private:
+	public:
 		AmberEngine::Core::Context&	m_context;
 
-		LowRenderer::CameraController m_cameraController;
-		
+		AmberEngine::Views::SceneView m_sceneView;
 		bool isCameraFree;
 	};
 }

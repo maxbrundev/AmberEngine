@@ -9,6 +9,7 @@
 #include "AmberEngine/Inputs/InputManager.h"
 
 #include "AmberEngine/Core/Renderer.h"
+#include "AmberEngine/Managers/UIManager.h"
 
 #include "AmberEngine/Managers/ResourcesManager.h"
 
@@ -25,10 +26,10 @@ namespace AmberEngine::Core
 		std::unique_ptr<AmberEngine::Context::Window> m_window;
 		std::unique_ptr<AmberEngine::Context::Driver> m_driver;
 		
-		std::unique_ptr<Inputs::InputManager> m_inputManager;
+		std::unique_ptr<AmberEngine::Inputs::InputManager> m_inputManager;
 		
 		std::unique_ptr<Renderer> m_renderer;
-		
+		std::unique_ptr<AmberEngine::Manager::UIManager> m_uiManager;
 		Managers::ResourcesManager m_resourcesManager;
 	};
 }
