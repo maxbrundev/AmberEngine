@@ -310,6 +310,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\ImGUI\stb_textedit.h" />
     <ClInclude Include="include\ImGUI\stb_truetype.h" />
     <ClInclude Include="include\AmberEngine\Core\Context.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\EModelParserFlags.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Amberpch.cpp">

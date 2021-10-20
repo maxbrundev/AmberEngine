@@ -9,7 +9,7 @@
 
 #include "AmberEngine/Eventing/Event.h"
 
-AmberEngine::Resources::Model::Model(std::string_view p_filePath) : path(p_filePath), m_shader(nullptr)
+AmberEngine::Resources::Model::Model(const std::string& p_filePath) : path(p_filePath), m_shader(nullptr)
 {
 }
 
@@ -48,7 +48,7 @@ std::vector<std::string>& AmberEngine::Resources::Model::GetMaterialNames()
 	return m_materialNames;
 }
 
-void AmberEngine::Resources::Model::SetTextureUniform(std::string uniformName, int id)
+void AmberEngine::Resources::Model::SetTextureUniform(const std::string_view p_uniformName, int p_id) const
 {
-	m_shader->SetUniform1i(uniformName, id);
+	m_shader->SetUniform1i(p_uniformName, p_id);
 }

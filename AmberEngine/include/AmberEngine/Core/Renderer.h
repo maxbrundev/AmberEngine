@@ -30,7 +30,7 @@ namespace AmberEngine::Core
 	private:
 		void DrawMesh(Resources::Mesh& p_mesh);
 	private:
-		Context::Driver m_driver;
+		Context::Driver& m_driver;
 		bool isWireFrame;
 	};
 }

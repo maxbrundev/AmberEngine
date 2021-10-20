@@ -19,8 +19,8 @@ namespace AmberEngine::Resources
 		void Unbind() const;
 		
 	public:
-		const std::string_view path;
-		const std::string_view name;
+		const std::string path;
+		const std::string name;
 		const uint32_t id;
 		const uint32_t width;
 		const uint32_t height;

@@ -26,8 +26,6 @@ bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePa
 
 	m_loadedTextures.clear();
 
-	std::cout << m_loadedTextures.size();
-
 	return true;
 }
 

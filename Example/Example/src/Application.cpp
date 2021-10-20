@@ -2,6 +2,7 @@
 
 #include "Application.h"
 
+#include <iostream>
 #include <AmberEngine/Tools/Time/Clock.h>
 #include <AmberEngine/ImGUI/imgui.h>
 #include <AmberEngine/Resources/Primitives/Cube.h>
@@ -33,6 +34,11 @@ void Example::Application::Setup()
 	lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
 	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 	lightingShader.Unbind();
+
+	for (auto element : m_context.m_resourcesManager.m_TextureResources)
+	{
+		
+	}
 }
 
 void Example::Application::Run()

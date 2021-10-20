@@ -22,7 +22,7 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::TextureLoader::Create(c
 	glGenTextures(1, &textureID);
 
 	stbi_set_flip_vertically_on_load(p_flipVertically);
-	unsigned char* dataBuffer = stbi_load(p_filePath.data(), &textureWidth, &textureHeight, &bitsPerPixel, 4);
+	unsigned char* dataBuffer = stbi_load(p_filePath.c_str(), &textureWidth, &textureHeight, &bitsPerPixel, 4);
 
 	const std::string name = Utils::String::ExtractFileNameFromPath(p_filePath);
 

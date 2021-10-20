@@ -18,27 +18,27 @@ namespace AmberEngine::Managers
 		ResourcesManager();
 		~ResourcesManager() = default;
 
-		Resources::Model& LoadModel(std::string_view p_name, std::string_view p_fileName);
+		Resources::Model& LoadModel(const std::string_view p_name, const std::string& p_filePath);
 
-		Resources::Shader& LoadShader(std::string_view p_name, const std::string& p_fileName);
-		Resources::Shader& LoadShaderFiles(std::string_view p_name, const std::string& p_VertexFileName, const std::string& p_FragmentFileName);
+		Resources::Shader& LoadShader(const std::string_view p_name, const std::string& p_filePath);
+		Resources::Shader& LoadShaderFiles(const std::string_view p_name, const std::string& p_VertexFilePath, const std::string& p_FragmentFilePath);
 
-		Resources::Texture& LoadTexture(std::string_view p_name,
-			const std::string& p_fileName, AmberEngine::Settings::ETextureFilteringMode p_firstFilter,
+		Resources::Texture& LoadTexture(const std::string_view p_name,
+			const std::string& p_filePath, AmberEngine::Settings::ETextureFilteringMode p_firstFilter,
 			AmberEngine::Settings::ETextureFilteringMode p_secondFilter, AmberEngine::Settings::ETextureType p_textureType,
 			bool p_flipVertically, bool p_generateMipmap);
 
-		Resources::Shader& GetShader(std::string_view p_name);
-		Resources::Texture& GetTexture(std::string_view p_name);
-		Resources::Model& GetModel(std::string_view p_name);
+		Resources::Shader& GetShader(const std::string_view p_name);
+		Resources::Texture& GetTexture(const std::string_view p_name);
+		Resources::Model& GetModel(const std::string_view p_name);
 
-		void SetTextureRootDir(std::string_view p_directory);
-
+		void SetTextureRootDir(const std::string_view p_directory);
+		std::unordered_map<std::string_view, std::shared_ptr<Resources::Texture>> m_TextureResources;
 	private:
 		std::string m_textureRootDir;
 
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Shader>> m_shaderResources;
-		std::unordered_map<std::string_view, std::shared_ptr<Resources::Texture>> m_TextureResources;
+		
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Model>> m_modelResources;
 
 		static Resources::AssimpParser __ASSIMP;
