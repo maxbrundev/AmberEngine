@@ -33,12 +33,12 @@ namespace AmberEngine::Managers
 		Resources::Model& GetModel(const std::string_view p_name);
 
 		void SetTextureRootDir(const std::string_view p_directory);
-		std::unordered_map<std::string_view, std::shared_ptr<Resources::Texture>> m_TextureResources;
+		
 	private:
 		std::string m_textureRootDir;
 
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Shader>> m_shaderResources;
-		
+		std::unordered_map<std::string_view, std::shared_ptr<Resources::Texture>> m_TextureResources;
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Model>> m_modelResources;
 
 		static Resources::AssimpParser __ASSIMP;
