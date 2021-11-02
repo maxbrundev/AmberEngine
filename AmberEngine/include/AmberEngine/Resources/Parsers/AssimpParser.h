@@ -16,10 +16,10 @@ namespace AmberEngine::Resources
 	private:
 		void ProcessMaterials(const struct aiScene* p_scene, std::vector<std::string>& p_materials);;
 		void ProcessNode(aiMatrix4x4* p_transform, struct aiNode* p_node, const struct aiScene* p_scene, std::vector<Mesh*>& p_meshes);
-		void ProcessMesh(aiMatrix4x4* p_transform, struct aiMesh* p_mesh, const struct aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<Texture*>& p_outTextures);
-		std::vector<Texture*> LoadMaterial(aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType);
+		void ProcessMesh(aiMatrix4x4* p_transform, struct aiMesh* p_mesh, const struct aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<std::shared_ptr<Texture>>& p_outTextures);
+		std::vector<std::shared_ptr<Texture>> LoadMaterial(aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType);
 
-		std::vector<Texture*> m_loadedTextures;
+		std::vector<std::shared_ptr<Texture>> m_loadedTextures;
 		std::string m_directory;
 	};
 }

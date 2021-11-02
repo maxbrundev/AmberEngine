@@ -52,7 +52,7 @@ void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform,
 	{
 		std::vector<Geometry::Vertex> vertices;
 		std::vector<uint32_t> indices;
-		std::vector<Texture*> textures;
+		std::vector<std::shared_ptr<Texture>> textures;
 		
 		aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
 		
@@ -67,7 +67,7 @@ void AmberEngine::Resources::AssimpParser::ProcessNode(aiMatrix4x4* p_transform,
 	}
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessMesh(aiMatrix4x4* p_transform, aiMesh* p_mesh, const aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<Texture*>& p_outTextures)
+void AmberEngine::Resources::AssimpParser::ProcessMesh(aiMatrix4x4* p_transform, aiMesh* p_mesh, const aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<std::shared_ptr<Texture>>& p_outTextures)
 {
 	const aiMatrix4x4 meshTransformation = *p_transform;
 
@@ -112,23 +112,22 @@ void AmberEngine::Resources::AssimpParser::ProcessMesh(aiMatrix4x4* p_transform,
 
 	aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	std::vector<Texture*> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, Settings::ETextureType::DIFFUSE);
+	std::vector<std::shared_ptr<Texture>> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, Settings::ETextureType::DIFFUSE);
 	p_outTextures.insert(p_outTextures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-	std::vector<Texture*> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, Settings::ETextureType::SPECULAR);
+	std::vector<std::shared_ptr<Texture>> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, Settings::ETextureType::SPECULAR);
 	p_outTextures.insert(p_outTextures.end(), specularMaps.begin(), specularMaps.end());
 
-	std::vector<Texture*> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, Settings::ETextureType::NORMAL_MAP);
+	std::vector<std::shared_ptr<Texture>> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, Settings::ETextureType::NORMAL_MAP);
 	p_outTextures.insert(p_outTextures.end(), normalMaps.begin(), normalMaps.end());
 
-	std::vector<Texture*> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP);
+	std::vector<std::shared_ptr<Texture>> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP);
 	p_outTextures.insert(p_outTextures.end(), heightMaps.begin(), heightMaps.end());
 }
 
-std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpParser::LoadMaterial(aiMaterial* p_mat,
-	aiTextureType p_type, Settings::ETextureType p_textureType)
+std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resources::AssimpParser::LoadMaterial(aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType)
 {
-	std::vector<Texture*> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 
 	for (int i = 0; i < p_mat->GetTextureCount(p_type); i++)
 	{
@@ -137,11 +136,11 @@ std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpPars
 
 		bool isTextureAlreadyLoaded = false;
 
-		for (auto& m_loadedTexture : m_loadedTextures)
+		for (const auto& texture : m_loadedTextures)
 		{
-			if (std::strcmp(m_loadedTexture->name.data(), str.C_Str()) == 0)
+			if (std::strcmp(texture->name.data(), str.C_Str()) == 0)
 			{
-				textures.push_back(m_loadedTexture);
+				textures.push_back(texture);
 
 				isTextureAlreadyLoaded = true;
 
@@ -153,7 +152,7 @@ std::vector<AmberEngine::Resources::Texture*> AmberEngine::Resources::AssimpPars
 		{
 			const std::string path = m_directory + str.C_Str();
 
-			Texture* texture = AmberEngine::Resources::TextureLoader::Create(path, Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true);
+			std::shared_ptr<Texture> texture = std::make_shared<Texture>(*TextureLoader::Create(path, Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
 
 			textures.push_back(texture);
 			m_loadedTextures.push_back(texture);

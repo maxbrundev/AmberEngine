@@ -2,7 +2,9 @@
 
 #include "AmberEngine/Resources/Mesh.h"
 
-AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, const std::vector<Texture*>& p_textures)
+#include "AmberEngine/Resources/Loaders/TextureLoader.h"
+
+AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, const std::vector<std::shared_ptr<Texture>>& p_textures)
 : m_vertexCount(static_cast<uint32_t>(p_vertices.size())),
 m_indicesCount(static_cast<uint32_t>(p_indices.size())),
 m_textures(p_textures)
@@ -16,8 +18,7 @@ AmberEngine::Resources::Mesh::~Mesh()
 
 	for(auto texture : m_textures)
 	{
-		delete texture;
-		texture = nullptr;
+		TextureLoader::Delete(texture.get());
 	}
 
 	m_textures.clear();

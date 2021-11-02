@@ -12,7 +12,7 @@ int main()
 	AmberEngine::Settings::DeviceSettings deviceSettings;
 	deviceSettings.contextVersionMajor = 4;
 	deviceSettings.contextVersionMinor = 3;
-	deviceSettings.debugProfile = true;
+	deviceSettings.debugProfile = false;
 	
 	AmberEngine::Settings::WindowSettings windowSettings;
 	windowSettings.title = "AmberEngineV0.1.5";
@@ -27,7 +27,7 @@ int main()
 	driverSettings.enableBlend = true;
 	driverSettings.enableBackFaceCulling = true;
 	driverSettings.enableMultisample = true;
-	driverSettings.enableDebugCallback = true;
+	driverSettings.enableDebugCallback = false;
 
 	std::unique_ptr<Example::Application> exampleApp = std::make_unique<Example::Application>(deviceSettings, windowSettings, driverSettings);
 	exampleApp->Setup();

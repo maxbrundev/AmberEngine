@@ -69,4 +69,18 @@ bool AmberEngine::Resources::TextureLoader::Destroy(Texture*& p_textureInstance)
 
 		return true;
 	}
+
+	return false;
+}
+
+bool AmberEngine::Resources::TextureLoader::Delete(Texture* p_textureInstance)
+{
+	if (p_textureInstance)
+	{
+		glDeleteTextures(1, &p_textureInstance->id);
+
+		return true;
+	}
+
+	return false;
 }
