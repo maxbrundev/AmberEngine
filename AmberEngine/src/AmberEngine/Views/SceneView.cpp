@@ -5,7 +5,7 @@
 AmberEngine::Views::SceneView::SceneView(Context::Window& p_window, Inputs::InputManager& p_inputManager) :
 	AView("Scene"),
 	m_window(p_window),
-	m_cameraController(p_window, p_inputManager),
+	m_cameraController(p_window, p_inputManager, glm::vec3(0.0f, 0.0f, 15.0f)),
 	m_frameBuffer(0, 0)
 {
 	m_frameBuffer.Resize(m_window.GetSize().first, m_window.GetSize().first);

@@ -54,16 +54,21 @@ uniform sampler2D u_DiffuseMap;
 uniform sampler2D u_SpecularMap;
 uniform float u_Shininess = 100.0;
 
+uniform vec4 u_Diffuse = vec4(1.0, 1.0, 1.0, 1.0);
+
 void main()
 {
+	vec4 textureColor = texture(u_DiffuseMap, fs_in.TexCoords) * u_Diffuse;
+
     // ambient
-    vec3 ambient = light.ambient * texture(u_DiffuseMap, fs_in.TexCoords).rgb;
+    vec3 ambient = light.ambient * textureColor.rgb;
 
     // diffuse
     vec3 norm = normalize(fs_in.Normal);
     vec3 lightDir = normalize(-light.direction);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = light.diffuse * diff * texture(u_DiffuseMap, fs_in.TexCoords).rgb;
+	
+    vec3 diffuse = light.diffuse * diff * textureColor.rgb;
 
     // specular
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
