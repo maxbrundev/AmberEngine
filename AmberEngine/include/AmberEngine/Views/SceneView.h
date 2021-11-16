@@ -24,15 +24,13 @@ namespace AmberEngine::Views
 		void BindFBO();
 		void UnbindFBO();
 
-		void ResizeFrameBuffer(uint16_t p_width, uint16_t p_height);
-
 		LowRenderer::CameraController& GetCameraController();
 		
 	public:
 		AmberEngine::Context::Window& m_window;
 		LowRenderer::CameraController m_cameraController;
 		AmberEngine::Buffers::FrameBuffer m_frameBuffer;
-
+		//glm::vec2 viewportSize;
 		bool isFirstFrame = true;
 	};
 }

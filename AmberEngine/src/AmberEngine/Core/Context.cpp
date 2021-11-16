@@ -11,6 +11,7 @@ AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings&
 	m_driver = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
 	m_renderer = std::make_unique<AmberEngine::Core::Renderer>(*m_driver);
 	m_uiManager = std::make_unique<AmberEngine::Manager::UIManager>(m_window->GetGlfwWindow());
+	m_uiManager->EnableDocking(true);
 	m_inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*m_window);
 }
 
