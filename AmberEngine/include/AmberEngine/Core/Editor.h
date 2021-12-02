@@ -4,7 +4,8 @@
 
 #include "AmberEngine/Core/Context.h"
 
-#include "AmberEngine/Views/SceneView.h"
+#include "AmberEngine/UI/Views/SceneView.h"
+#include "AmberEngine/UI/MenuBar.h"
 
 namespace AmberEngine::Core
 {
@@ -29,7 +30,9 @@ namespace AmberEngine::Core
 	public:
 		AmberEngine::Core::Context&	m_context;
 
-		AmberEngine::Views::SceneView m_sceneView;
+		AmberEngine::UI::SceneView m_sceneView;
+		AmberEngine::UI::MenuBar m_menuBar;
+
 		bool isCameraFree;
 	};
 }

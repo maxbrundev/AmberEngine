@@ -19,13 +19,13 @@ Example::Application::Application(const AmberEngine::Settings::DeviceSettings & 
 
 void Example::Application::Setup()
 {
-	m_context.m_resourcesManager.LoadModel("Suit", "res/Mesh/nanosuit/nanosuit.obj");
+	m_context.resourcesManager.LoadModel("Helmet", "res/Mesh/DamagedHelmet/glTF/DamagedHelmet.gltf");
 
-	AmberEngine::Resources::Shader& lightingShader = m_context.m_resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
+	AmberEngine::Resources::Shader& lightingShader = m_context.resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
 	
-	m_context.m_resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
-	m_context.m_resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
-	m_context.m_resourcesManager.GetModel("Suit").SetShader(lightingShader);
+	//m_context.resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
+	//m_context.resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
+	m_context.resourcesManager.GetModel("Helmet").SetShader(lightingShader);
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);
 	lightingShader.SetUniform1i("u_SpecularMap", 1);
@@ -76,7 +76,7 @@ void Example::Application::Run()
 		glm::mat4 viewMatrix = m_editor.m_sceneView.GetCameraController().GetCamera().GetViewMatrix();
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
-		auto& shader = m_context.m_resourcesManager.GetShader("StandardLighting");
+		auto& shader = m_context.resourcesManager.GetShader("StandardLighting");
 		
 		shader.Bind();
 		shader.SetUniformMat4("projection", projectionMatrix);
@@ -85,7 +85,7 @@ void Example::Application::Run()
 		shader.SetUniformVec3("viewPos", cameraPosition);
 		shader.SetUniformVec3("light.direction", lighDir);
 
-		m_context.m_renderer->Draw(m_context.m_resourcesManager.GetModel("Suit"));
+		m_context.renderer->Draw(m_context.resourcesManager.GetModel("Helmet"));
 
 		shader.Unbind();
 
@@ -99,5 +99,5 @@ void Example::Application::Run()
 
 bool Example::Application::IsRunning() const
 {
-	return isRunning && m_context.m_window->IsActive();
+	return isRunning && m_context.window->IsActive();
 }

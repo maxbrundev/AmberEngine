@@ -4,25 +4,25 @@
 
 AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_context(p_context),
-	m_sceneView(*p_context.m_window, *p_context.m_inputManager),
+	m_sceneView(*p_context.window, *p_context.inputManager),
 	isCameraFree(true)
 {
-	m_context.m_uiManager->EnableDocking(true);
+	m_context.uiManager->EnableDocking(true);
 }
 
 void AmberEngine::Core::Editor::PreUpdate()
 {
 	m_sceneView.BindFBO();
 
-	m_context.m_device->PollEvents();
+	m_context.device->PollEvents();
 
-	m_context.m_renderer->SetClearColor(0.1f, 0.1f, 0.1f);
-	m_context.m_renderer->Clear(true, true, true);
+	m_context.renderer->SetClearColor(0.1f, 0.1f, 0.1f);
+	m_context.renderer->Clear(true, true, true);
 }
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
-	m_context.m_renderer->UpdateRenderMode();
+	m_context.renderer->UpdateRenderMode();
 
 	m_sceneView.PrepareCamera();
 
@@ -32,16 +32,17 @@ void AmberEngine::Core::Editor::Update(float p_deltaTime)
 
 void AmberEngine::Core::Editor::PostUpdate()
 {
-	m_context.m_window->SwapBuffers();
-	m_context.m_inputManager->clearEvents();
+	m_context.window->SwapBuffers();
+	m_context.inputManager->clearEvents();
 }
 
 void AmberEngine::Core::Editor::RenderScene()
 {
 	m_sceneView.UnbindFBO();
-	m_context.m_uiManager->PreDraw();
+	m_context.uiManager->PreDraw();
 	m_sceneView.Render();
-	m_context.m_uiManager->PostDraw();
+	m_menuBar.Draw();
+	m_context.uiManager->PostDraw();
 }
 
 void AmberEngine::Core::Editor::UpdateInput()
@@ -51,26 +52,26 @@ void AmberEngine::Core::Editor::UpdateInput()
 	else
 		LockCamera();
 
-	if (m_context.m_inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_SHIFT))
-		m_context.m_renderer->ToggleWireFrame();
+	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_SHIFT))
+		m_context.renderer->ToggleWireFrame();
 
-	if (m_context.m_inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_ALT))
+	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_ALT))
 		ToggleCamera();
 
-	if (m_context.m_inputManager->IsKeyPressed(Inputs::EKey::KEY_ESCAPE))
-		m_context.m_window->SetShouldClose(true);
+	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_ESCAPE))
+		m_context.window->SetShouldClose(true);
 }
 
 void AmberEngine::Core::Editor::FreeCamera()
 {
 	m_sceneView.GetCameraController().Unlock();
-	m_context.m_window->SetCursorModeLock();
+	m_context.window->SetCursorModeLock();
 }
 
 void AmberEngine::Core::Editor::LockCamera()
 {
 	m_sceneView.GetCameraController().Lock();
-	m_context.m_window->SetCursorModeFree();
+	m_context.window->SetCursorModeFree();
 }
 
 void AmberEngine::Core::Editor::ToggleCamera()

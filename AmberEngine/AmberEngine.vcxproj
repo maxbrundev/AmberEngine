@@ -281,7 +281,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Inputs\InputManager.h" />
     <ClInclude Include="include\AmberEngine\Core\Renderer.h" />
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
-    <ClInclude Include="include\AmberEngine\Managers\UIManager.h" />
+    <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
     <ClInclude Include="include\AmberEngine\Resources\ETextureFilteringMode.h" />
     <ClInclude Include="include\AmberEngine\Resources\ETextureType.h" />
@@ -300,8 +300,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h" />
-    <ClInclude Include="include\AmberEngine\Views\AView.h" />
-    <ClInclude Include="include\AmberEngine\Views\SceneView.h" />
+    <ClInclude Include="include\AmberEngine\UI\MenuBar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Views\AView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Views\SceneView.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
     <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
@@ -344,7 +345,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Renderer.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
-    <ClCompile Include="src\AmberEngine\Managers\UIManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Loaders\TextureLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
@@ -356,8 +357,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Time\Clock.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
-    <ClCompile Include="src\AmberEngine\Views\AView.cpp" />
-    <ClCompile Include="src\AmberEngine\Views\SceneView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\MenuBar.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Views\AView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Views\SceneView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl" />

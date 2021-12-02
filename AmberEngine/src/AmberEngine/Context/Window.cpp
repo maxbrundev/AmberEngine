@@ -2,6 +2,8 @@
 
 #include "AmberEngine/Context/Window.h"
 
+AmberEngine::Eventing::Event<bool>  AmberEngine::Context::Window::CloseEvent;
+
 std::unordered_map<GLFWwindow*, AmberEngine::Context::Window*>  AmberEngine::Context::Window::__WINDOWS_MAP;
 
 AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings) :
@@ -28,6 +30,7 @@ AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::
 
 	m_device.SetVsync(p_windowSettings.vsync);
 
+	CloseEvent.AddListener(std::bind(&Window::SetShouldClose, this, std::placeholders::_1));
 	ResizeEvent.AddListener(std::bind(&Window::OnResizeWindow, this, std::placeholders::_1, std::placeholders::_2));
 	FramebufferResizeEvent.AddListener(std::bind(&Window::OnResizeFramebuffer, this, std::placeholders::_1, std::placeholders::_2));
 }
@@ -105,6 +108,16 @@ void AmberEngine::Context::Window::SetSize(uint16_t p_width, uint16_t p_height)
 void AmberEngine::Context::Window::Restore() const
 {
 	glfwRestoreWindow(m_glfwWindow);
+}
+
+void AmberEngine::Context::Window::SetIconFromMemory(uint8_t * p_data, uint32_t p_width, uint32_t p_height)
+{
+	GLFWimage images[1];
+	images[0].pixels = p_data;
+	images[0].height = p_width;
+	images[0].width = p_height;
+
+	glfwSetWindowIcon(m_glfwWindow, 1, images);
 }
 
 void AmberEngine::Context::Window::Hide() const

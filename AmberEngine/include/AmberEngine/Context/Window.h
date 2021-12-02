@@ -11,6 +11,8 @@ namespace AmberEngine::Context
 	class API_AMBERENGINE Window
 	{
 	public:
+		static Eventing::Event<bool> CloseEvent;
+
 		Eventing::Event<int> KeyPressedEvent;
 		Eventing::Event<int> KeyReleasedEvent;
 		Eventing::Event<int> MouseButtonPressedEvent;
@@ -29,6 +31,9 @@ namespace AmberEngine::Context
 		void MakeCurrentContext() const;
 		void SwapBuffers() const;
 		void Restore() const;
+
+		void SetIconFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height);
+
 		void Hide() const;
 		void SetShouldClose(bool p_value) const;
 		void SetCursorModeLock() const;

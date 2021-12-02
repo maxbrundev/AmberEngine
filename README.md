@@ -1,48 +1,36 @@
 # AmberEngine
-Personal OpenGL C++ Game Engine Project
+Personal OpenGL C++ Game Engine learning Project
 
-# Planned Updates
-- New Maths classes and wrappers (Transform, Vectors / Matrices tools...)
-- New Resources System (Shader Loader / Manager, Model Loader...)
-- New Renderer (SSBO, UBO, FBO, Batch Rendering...)
-- New Input System
-- ImGui docking
-- Implementing an Entity Component System (Transform, Material, Mesh... Components)
-- Scene System (Actors Management)
-- Implementing the Editor (Create Primitives, Create Shaders, Import obj)
-- Rendering Improvements (Shadows, PBR, Animations...)
-- Extract the Context and Inputs from AmberEngine as DLLs
+# AmberEngine v0.5r1
+![alt text](Screens/AmberScreen.PNG?raw=true "AmberEngine")
 
-# Long-term Goals
-- Voxel Cone Tracing
+# Requirements
+- OS: Windows 7
+- GPU: Graphics card supporting OpenGL 4.3
 
-# Libraries used
+# Software
+- Visual Studio 2017
+
+# Dependencies
 - OpenGL with GLEW (Graphics API)
 - GLFW (Windowing and Inputs)
 - Assimp (3D model loader)
-- imGui (GUI)
+- stb_image (image loader)
+- GLM (OpenGL Mathematics)
+- ImGui (GUI)
 
-# AmberEngine RendererV0.1.5
-- Updating AmberEngine as DLL
-- Obj Loader
-- Assimp
-- Directional Light
-- Texture Tiling Shader
-- Lambert Shader
-![alt text](Screens/AmberRenderer1.5.png?raw=true "AmberEngine")
-![alt text](Screens/AmberRendererV0.1.5.png?raw=true "AmberEngine")
+# References
+- Some Models downloaded from Morgan McGuire's [Computer Graphics Archive](https://casual-effects.com/data)
 
-# AmberEngine RendererV0.1.4
-- Lighting Maps
-- Texture
-- Mipmap
-![alt text](Screens/AmberRendererV0.1.4.png?raw=true "AmberEngine")
+# Next Updates
+- ECS
+- Scene System & Scene Graph
+- Gizmos
+- Editor UI (Scene Hierarchy, Components Inspector)
 
-# AmberEngine RendererV0.1.3
-- Lighting
-- Material
-![alt text](Screens/AmberRendererV0.1.3.png?raw=true "AmberEngine")
-
-# AmberEngine RendererV0.1.2
-- Color
-![alt text](Screens/AmberRendererV0.1.2.png?raw=true "AmberEngine")
+# Planned Updates
+- Maths classes and wrappers (Transform, Vectors / Matrices tools...)
+- Renderer (SSBO, UBO, Batch Rendering, Shadows, PBR)
+- Editor UI (Create Primitives, Create Shaders, Import obj)
+## Long-term Goals
+- Voxel Cone Tracing
