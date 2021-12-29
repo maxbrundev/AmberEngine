@@ -13,11 +13,12 @@ AmberEngine::Core::Editor::Editor(Context& p_context) :
 void AmberEngine::Core::Editor::PreUpdate()
 {
 	m_sceneView.BindFBO();
-
 	m_context.device->PollEvents();
 
 	m_context.renderer->SetClearColor(0.1f, 0.1f, 0.1f);
 	m_context.renderer->Clear(true, true, true);
+	m_context.uiManager->PreDraw();
+
 }
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
@@ -39,7 +40,7 @@ void AmberEngine::Core::Editor::PostUpdate()
 void AmberEngine::Core::Editor::RenderScene()
 {
 	m_sceneView.UnbindFBO();
-	m_context.uiManager->PreDraw();
+	
 	m_sceneView.Render();
 	m_menuBar.Draw();
 	m_context.uiManager->PostDraw();
