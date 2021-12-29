@@ -3,7 +3,9 @@
 #include "AmberEngine/UI/Views/AView.h"
 
 AmberEngine::UI::AView::AView(std::string p_viewName) :
-m_size(100, 100), m_name(std::move(p_viewName)), m_sizeChanged(false) {}
+m_size(100, 100),
+m_name(std::move(p_viewName)),
+m_sizeChanged(false) {}
 
 void AmberEngine::UI::AView::CopyImGuiSize()
 {

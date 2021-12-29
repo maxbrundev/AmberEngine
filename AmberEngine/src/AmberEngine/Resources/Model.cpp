@@ -26,7 +26,7 @@ void AmberEngine::Resources::Model::Bind()
 {
 	m_shader->Bind();
 
-	for (auto mesh : m_meshes)
+	for (const auto mesh : m_meshes)
 	{
 		// Template arguments deduction in case of curiosity: <void(__thiscall AmberEngine::Resources::Model::*)(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, int), class AmberEngine::Resources::Model>
 		mesh->SetTextureUniformCallback = Eventing::QuickBind(&Model::SetTextureUniform, this);

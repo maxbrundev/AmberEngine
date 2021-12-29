@@ -1,7 +1,5 @@
 #include "pch.h"
 
-
-
 #include <AmberEngine/Tools/Utils/Defines.h>
 FORCE_DEDICATED_GPU
 
@@ -29,7 +27,9 @@ int main()
 	driverSettings.enableMultisample = true;
 	driverSettings.enableDebugCallback = true;
 
-	std::unique_ptr<Example::Application> exampleApp = std::make_unique<Example::Application>(deviceSettings, windowSettings, driverSettings);
-	exampleApp->Setup();
-	exampleApp->Run();
+	Example::Application exampleApp(deviceSettings, windowSettings, driverSettings);
+	exampleApp.Setup();
+	exampleApp.Run();
+
+	return 0;
 }

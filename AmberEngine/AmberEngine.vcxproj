@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{AE520B00-2613-49C7-804D-EF391D9D933B}</ProjectGuid>
     <RootNamespace>AmberEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -260,6 +260,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
     <ClInclude Include="include\AmberEngine\Context\Window.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\IComponent.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\ModelComponent.h" />
     <ClInclude Include="include\AmberEngine\Core\Editor.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
@@ -297,6 +300,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />
     <ClInclude Include="include\AmberEngine\Tools\Time\Clock.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\ASingleton.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h" />
@@ -332,6 +336,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Context\Driver.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Window.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Context.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Actor.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
@@ -356,6 +362,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Resources\Loaders\ShaderLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Time\Clock.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\ASingleton.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
     <ClCompile Include="src\AmberEngine\UI\MenuBar.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Views\AView.cpp" />

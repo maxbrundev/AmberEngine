@@ -201,6 +201,18 @@
     <ClInclude Include="include\AmberEngine\Core\UIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\ModelComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Tools\Utils\ASingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\IComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -312,6 +324,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Core\UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Core\ECS\Actor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\ModelComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Tools\Utils\ASingleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

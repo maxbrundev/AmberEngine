@@ -10,7 +10,7 @@ namespace AmberEngine::Resources
 	public:
 		ShaderLoader() = delete;
 
-		static Shader* Create(const std::string& p_filePath);
+		static Shader* Create(std::string p_filePath);
 		static Shader* CreateFromSource(const std::string& p_vertexShader, const std::string& p_fragmentShader);
 		static void	Recompile(Shader& p_shader, const std::string& p_filePath);
 		static bool Destroy(Shader*& p_shader);

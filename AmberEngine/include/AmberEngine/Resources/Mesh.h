@@ -15,7 +15,7 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE Mesh
 	{
 	public:
-		Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, const std::vector<std::shared_ptr<Texture>>& p_textures);
+		Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>> p_textures);
 		~Mesh();
 
 		void Bind();

@@ -8,7 +8,7 @@
 #include "AmberEngine/Debug/GLDebug.h"
 #include "AmberEngine/Tools/Utils/String.h"
 
-AmberEngine::Resources::Texture* AmberEngine::Resources::TextureLoader::Create(const std::string& p_filePath,
+AmberEngine::Resources::Texture* AmberEngine::Resources::TextureLoader::Create(std::string p_filePath,
 	AmberEngine::Settings::ETextureFilteringMode p_firstFilter,
 	AmberEngine::Settings::ETextureFilteringMode p_secondFilter,
 	AmberEngine::Settings::ETextureType p_textureType,
@@ -22,11 +22,8 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::TextureLoader::Create(c
 	glGenTextures(1, &textureID);
 
 	stbi_set_flip_vertically_on_load(p_flipVertically);
-	unsigned char* dataBuffer = stbi_load(p_filePath.c_str(), &textureWidth, &textureHeight, &bitsPerPixel, 4);
 
-	const std::string name = Utils::String::ExtractFileNameFromPath(p_filePath);
-
-	if (dataBuffer)
+	if (unsigned char* dataBuffer = stbi_load(p_filePath.c_str(), &textureWidth, &textureHeight, &bitsPerPixel, 4); dataBuffer)
 	{
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
@@ -45,7 +42,9 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::TextureLoader::Create(c
 		stbi_image_free(dataBuffer);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		return new Texture(p_filePath, name, textureID, textureWidth, textureHeight, bitsPerPixel, p_firstFilter, p_secondFilter, p_textureType, p_generateMipmap);
+		std::string name = Utils::String::ExtractFileNameFromPath(p_filePath);
+
+		return new Texture(std::move(p_filePath), std::move(name), textureID, textureWidth, textureHeight, bitsPerPixel, p_firstFilter, p_secondFilter, p_textureType, p_generateMipmap);
 	}
 	else
 	{

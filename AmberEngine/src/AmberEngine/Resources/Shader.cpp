@@ -4,13 +4,13 @@
 
 #include "AmberEngine/Debug/GLDebug.h"
 
-AmberEngine::Resources::Shader::Shader(const std::string& p_filePath, uint32_t p_id) : id(p_id), path(p_filePath)
+AmberEngine::Resources::Shader::Shader(std::string p_filePath, uint32_t p_id) : path(std::move(p_filePath)), id(p_id)
 {
 }
 
 AmberEngine::Resources::Shader::~Shader()
 {
-	GLCall(glDeleteProgram(id));
+	glDeleteProgram(id);
 }
 
 void AmberEngine::Resources::Shader::Bind() const
@@ -63,7 +63,7 @@ uint32_t AmberEngine::Resources::Shader::GetUniformLocation(const std::string_vi
 	if (m_uniformLocationCache.find(p_name) != m_uniformLocationCache.end())
 		return m_uniformLocationCache[p_name];
 
-	const uint32_t location = glGetUniformLocation(id, static_cast<std::string>(p_name).c_str());
+	const int32_t location = glGetUniformLocation(id, static_cast<std::string>(p_name).c_str());
 	if (location == -1)
 		std::cout << "warning uniform doesn't exist" << std::endl;
 

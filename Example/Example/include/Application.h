@@ -18,6 +18,7 @@ namespace Example
 	private:
 		AmberEngine::Core::Context m_context;
 		AmberEngine::Core::Editor m_editor;
+
 		bool isRunning;
 	};
 }

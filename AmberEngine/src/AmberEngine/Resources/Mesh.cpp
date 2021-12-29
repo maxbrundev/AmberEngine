@@ -4,10 +4,10 @@
 
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
-AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, const std::vector<std::shared_ptr<Texture>>& p_textures)
-: m_vertexCount(static_cast<uint32_t>(p_vertices.size())),
-m_indicesCount(static_cast<uint32_t>(p_indices.size())),
-m_textures(p_textures)
+AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>> p_textures) :
+m_vertexCount(p_vertices.size()),
+m_indicesCount(p_indices.size()),
+m_textures(std::move(p_textures))
 {
 	InitBuffers(p_vertices, p_indices);
 }
@@ -85,7 +85,7 @@ void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Verte
 	m_vertexBuffer = std::make_unique<Buffers::VertexBuffer>(vertexData.data(), vertexData.size());
 	m_indexBuffer = std::make_unique<Buffers::IndexBuffer>(p_indices.data(), p_indices.size());
 	
-	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, static_cast<void*>(nullptr));
+	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, nullptr);
 	m_vertexArray.BindAttribPointer(2, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 3));
 	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 5));
 	m_vertexArray.BindAttribPointer(3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<GLvoid*>(sizeof(float) * 8));

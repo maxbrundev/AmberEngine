@@ -8,15 +8,15 @@
 
 std::string AmberEngine::Resources::ShaderLoader::__FILE_TRACE;
 
-AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::Create(const std::string& p_filePath)
+AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::Create(std::string p_filePath)
 {
 	__FILE_TRACE = p_filePath;
 
-	std::pair<std::string, std::string> source = ParseShader(p_filePath);
+	const std::pair<std::string, std::string> source = ParseShader(p_filePath);
 
-	uint32_t programmeID = CreateShader(source.first, source.second);
+	const uint32_t programmeID = CreateShader(source.first, source.second);
 
-	Shader* shader = new Shader(p_filePath, programmeID);
+	Shader* shader = new Shader(std::move(p_filePath), programmeID);
 
 	return shader;
 }
@@ -25,9 +25,11 @@ AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::CreateFrom
 {
 	__FILE_TRACE = Utils::String::ExtractDirectoryFromPath(p_vertexShader) + "/" + Utils::String::ExtractDirectoryFromPath(p_fragmentShader);
 
-	uint32_t programmeID = CreateShader(p_vertexShader, p_fragmentShader);
+	const uint32_t programmeID = CreateShader(p_vertexShader, p_fragmentShader);
 
-	Shader* shader = new Shader("", programmeID);
+	std::string filePath = "";
+
+	Shader* shader = new Shader(std::move(filePath), programmeID);
 
 	return shader;
 }
@@ -178,8 +180,8 @@ uint32_t AmberEngine::Resources::ShaderLoader::CompileShader(uint32_t p_type, co
 		std::string errorLog(maxLength, ' ');
 		glGetShaderInfoLog(id, maxLength, &maxLength, errorLog.data());
 
-		std::string shaderTypeString = p_type == GL_VERTEX_SHADER ? "VERTEX SHADER" : "FRAGMENT SHADER";
-		std::string errorHeader = "[" + shaderTypeString + "] \"";
+		const std::string shaderTypeString = p_type == GL_VERTEX_SHADER ? "VERTEX SHADER" : "FRAGMENT SHADER";
+		const std::string errorHeader = "[" + shaderTypeString + "] \"";
 
 		std::cout << errorHeader + __FILE_TRACE + "\":\n" + errorLog << std::endl;
 

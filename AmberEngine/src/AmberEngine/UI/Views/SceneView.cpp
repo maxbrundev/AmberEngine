@@ -2,8 +2,6 @@
 
 #include "AmberEngine/UI/Views/SceneView.h"
 
-#include "AmberEngine/ImGUI/imgui_internal.h"
-
 AmberEngine::UI::SceneView::SceneView(Context::Window& p_window, Inputs::InputManager& p_inputManager) :
 	AView("Scene"),
 	m_window(p_window),
@@ -12,7 +10,10 @@ AmberEngine::UI::SceneView::SceneView(Context::Window& p_window, Inputs::InputMa
 {
 	m_frameBuffer.Resize(m_window.GetSize().first, m_window.GetSize().first);
 
-	p_window.FramebufferResizeEvent.AddListener(std::bind(&SceneView::ResizeFrameBuffer, this, std::placeholders::_1, std::placeholders::_2));
+	p_window.FramebufferResizeEvent.AddListener([this](auto&& PH1, auto&& PH2)
+	{
+		ResizeFrameBuffer(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2));
+	});
 }
 
 AmberEngine::UI::SceneView::~SceneView()

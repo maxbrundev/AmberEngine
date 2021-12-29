@@ -3,6 +3,9 @@
 #include "Application.h"
 
 #include <AmberEngine/Tools/Time/Clock.h>
+
+#include <AmberEngine/Managers/ResourcesManager.h>
+
 /*#include <AmberEngine/ImGUI/imgui.h>
 #include <AmberEngine/Resources/Primitives/Cube.h>
 #include <AmberEngine/Buffers/VertexBuffer.h>
@@ -12,20 +15,23 @@ Example::Application::Application(const AmberEngine::Settings::DeviceSettings & 
 	const AmberEngine::Settings::WindowSettings & p_windowSettings,
 	const AmberEngine::Settings::DriverSettings & p_driverSettings) :
 	m_context(p_deviceSettings, p_windowSettings, p_driverSettings),
-	m_editor(m_context)
+	m_editor(m_context),
+	isRunning(true)
 {
-	isRunning = true;
 }
 
 void Example::Application::Setup()
 {
-	m_context.resourcesManager.LoadModel("Helmet", "res/Mesh/DamagedHelmet/glTF/DamagedHelmet.gltf");
+	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
-	AmberEngine::Resources::Shader& lightingShader = m_context.resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
+	resourcesManager.LoadModel("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+
+	AmberEngine::Resources::Shader& lightingShader = resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
 	
-	//m_context.resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
-	//m_context.resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
-	m_context.resourcesManager.GetModel("Helmet").SetShader(lightingShader);
+	//resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
+	//resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
+
+	resourcesManager.GetModel("Helmet").SetShader(lightingShader);
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);
 	lightingShader.SetUniform1i("u_SpecularMap", 1);
@@ -67,6 +73,8 @@ void Example::Application::Run()
 	vao.Unbind();
 	vbo.Unbind();*/
 
+	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
+
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
@@ -76,7 +84,7 @@ void Example::Application::Run()
 		glm::mat4 viewMatrix = m_editor.m_sceneView.GetCameraController().GetCamera().GetViewMatrix();
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
-		auto& shader = m_context.resourcesManager.GetShader("StandardLighting");
+		auto& shader = resourcesManager.GetShader("StandardLighting");
 		
 		shader.Bind();
 		shader.SetUniformMat4("projection", projectionMatrix);
@@ -85,7 +93,7 @@ void Example::Application::Run()
 		shader.SetUniformVec3("viewPos", cameraPosition);
 		shader.SetUniformVec3("light.direction", lighDir);
 
-		m_context.renderer->Draw(m_context.resourcesManager.GetModel("Helmet"));
+		m_context.renderer->Draw(resourcesManager.GetModel("Helmet"));
 
 		shader.Unbind();
 

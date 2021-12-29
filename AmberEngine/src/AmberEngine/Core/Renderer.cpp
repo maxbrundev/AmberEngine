@@ -12,7 +12,7 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model)
 {
 	p_model.Bind();
 	
-	for (auto mesh : p_model.GetMeshes())
+	for (const auto mesh : p_model.GetMeshes())
 	{
 		DrawMesh(*mesh);
 	}
