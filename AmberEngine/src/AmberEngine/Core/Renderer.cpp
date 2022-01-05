@@ -8,8 +8,10 @@ AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) : m_driver(p_dr
 {
 }
 
-void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model)
+void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix)
 {
+	m_modelMatrixSender(*p_modelMatrix);
+
 	p_model.Bind();
 	
 	for (const auto& mesh : p_model.GetMeshes())
@@ -64,6 +66,11 @@ void AmberEngine::Core::Renderer::Clear(AmberEngine::LowRenderer::Camera& p_came
 
 	/* Reset the OpenGL clear color to the previous clear color (Backuped one) */
 	SetClearColor(previousClearColor[0], previousClearColor[1], previousClearColor[2], previousClearColor[3]);
+}
+
+void AmberEngine::Core::Renderer::RegisterModelMatrixSender(std::function<void(glm::mat4)> p_modelMatrixSender)
+{
+	m_modelMatrixSender = p_modelMatrixSender;
 }
 
 void AmberEngine::Core::Renderer::UpdateRenderMode()

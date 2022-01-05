@@ -32,6 +32,11 @@ void AmberEngine::ECS::Actor::SetName(std::string p_name)
 	m_name = std::move(p_name);
 }
 
+std::string AmberEngine::ECS::Actor::GetName()
+{
+	return m_name;
+}
+
 AmberEngine::Maths::Transform& AmberEngine::ECS::Actor::GetTransform()
 {
 	return m_transform;

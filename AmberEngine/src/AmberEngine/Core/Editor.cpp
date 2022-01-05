@@ -8,6 +8,11 @@ AmberEngine::Core::Editor::Editor(Context& p_context) :
 	isCameraFree(true)
 {
 	m_context.uiManager->EnableDocking(true);
+
+	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
+	{
+		m_context.engineUBO->SetSubData(p_modelMatrix, 0);
+	});
 }
 
 void AmberEngine::Core::Editor::PreUpdate()
@@ -24,6 +29,11 @@ void AmberEngine::Core::Editor::PreUpdate()
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
 	m_context.renderer->UpdateRenderMode();
+
+	size_t offset = sizeof(glm::mat4); // We skip the model matrix (Which is a special case, modified every draw calls)
+	m_context.engineUBO->SetSubData(m_sceneView.GetCameraController().GetCamera().GetViewMatrix(), std::ref(offset));
+	m_context.engineUBO->SetSubData(m_sceneView.GetCameraController().GetCamera().GetProjectionMatrix(), std::ref(offset));
+	m_context.engineUBO->SetSubData(m_sceneView.GetCameraController().GetPosition(), std::ref(offset));
 
 	m_sceneView.PrepareCamera();
 

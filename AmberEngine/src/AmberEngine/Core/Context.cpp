@@ -15,6 +15,17 @@ AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings&
 	uiManager = std::make_unique<AmberEngine::Core::UIManager>(window->GetGlfwWindow());
 	uiManager->EnableDocking(true);
 	inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*window);
+
+	engineUBO = std::make_unique<Buffers::UniformBuffer>
+		(
+			/* UBO Data Layout */
+			sizeof(glm::mat4) +
+			sizeof(glm::mat4) +
+			sizeof(glm::mat4) +
+			sizeof(glm::vec3),
+			0, 0,
+			Buffers::EAccessSpecifier::STREAM_DRAW
+			);
 }
 
 AmberEngine::Core::Context::~Context()

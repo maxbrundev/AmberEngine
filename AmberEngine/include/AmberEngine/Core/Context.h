@@ -2,6 +2,7 @@
 
 #include "AmberEngine/API/Export.h"
 
+
 #include "AmberEngine/Context/Driver.h"
 #include "AmberEngine/Context/Device.h"
 #include "AmberEngine/Context/Window.h"
@@ -9,20 +10,24 @@
 #include "AmberEngine/Core/Renderer.h"
 #include "AmberEngine/Core/UIManager.h"
 
+#include "AmberEngine/Buffers/UniformBuffer.h"
+
 namespace AmberEngine::Core
 {
 	class API_AMBERENGINE Context
 	{
 	public:
-		Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings);
+		Context(const Settings::DeviceSettings& p_deviceSettings, const Settings::WindowSettings& p_windowSettings, const Settings::DriverSettings& p_driverSettings);
 		~Context();
 	
 	public:
-		std::unique_ptr<AmberEngine::Context::Device>		device;
-		std::unique_ptr<AmberEngine::Context::Window>		window;
-		std::unique_ptr<AmberEngine::Context::Driver>		driver;
-		std::unique_ptr<AmberEngine::Inputs::InputManager>	inputManager;
-		std::unique_ptr<Renderer>							renderer;
-		std::unique_ptr<AmberEngine::Core::UIManager>		uiManager;
+		std::unique_ptr<AmberEngine::Context::Device>	device;
+		std::unique_ptr<AmberEngine::Context::Window>	window;
+		std::unique_ptr<AmberEngine::Context::Driver>	driver;
+		std::unique_ptr<Inputs::InputManager>			inputManager;
+		std::unique_ptr<Renderer>						renderer;
+		std::unique_ptr<UIManager>						uiManager;
+
+		std::unique_ptr<Buffers::UniformBuffer>			engineUBO;
 	};
 }

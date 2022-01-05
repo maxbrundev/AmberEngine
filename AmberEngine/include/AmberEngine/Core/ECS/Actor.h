@@ -49,6 +49,8 @@ namespace AmberEngine::ECS
 
 		void SetName(std::string p_name);
 
+		std::string GetName();
+
 		Maths::Transform& GetTransform();
 
 	private:

@@ -5,9 +5,14 @@ layout (location = 0) in vec3 geo_Pos;
 layout (location = 1) in vec2 geo_TexCoords;
 layout (location = 2) in vec3 geo_Normal;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+/* Global information sent by the engine */
+layout (std140) uniform EngineUBO
+{
+    mat4    ubo_Model;
+    mat4    ubo_View;
+    mat4    ubo_Projection;
+    vec3    ubo_ViewPos;
+};
 
 out VS_OUT
 {
@@ -19,11 +24,11 @@ out VS_OUT
 
 void main()
 {
-    vs_out.FragPos = vec3(model * vec4(geo_Pos, 1.0));
-    vs_out.Normal = mat3(transpose(inverse(model))) * geo_Normal;
+    vs_out.FragPos = vec3(ubo_Model * vec4(geo_Pos, 1.0));
+    vs_out.Normal = mat3(transpose(inverse(ubo_Model))) * geo_Normal;
     vs_out.TexCoords = geo_TexCoords;
 
-    gl_Position = projection * view * vec4(vs_out.FragPos, 1.0);
+    gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
 }
 
 #shader fragment
@@ -31,7 +36,14 @@ void main()
 
 out vec4 FragColor;
 
-uniform vec3 viewPos;
+/* Global information sent by the engine */
+layout (std140) uniform EngineUBO
+{
+    mat4    ubo_Model;
+    mat4    ubo_View;
+    mat4    ubo_Projection;
+    vec3    ubo_ViewPos;
+};
 
 in VS_OUT
 {
@@ -71,7 +83,7 @@ void main()
     vec3 diffuse = light.diffuse * diff * textureColor.rgb;
 
     // specular
-    vec3 viewDir = normalize(viewPos - fs_in.FragPos);
+    vec3 viewDir = normalize(ubo_ViewPos - fs_in.FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0),u_Shininess);
     vec3 specular = light.specular * spec * texture(u_SpecularMap, fs_in.TexCoords).rgb;

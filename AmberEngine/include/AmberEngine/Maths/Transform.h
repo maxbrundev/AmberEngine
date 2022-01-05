@@ -24,8 +24,8 @@ namespace AmberEngine::Maths
 		void RotateLocal(const glm::vec3& p_rotation);
 		void ScaleLocal(const glm::vec3& p_scale);
 
-		glm::mat4 GetLocalMatrix();
-		glm::mat4 GetWorldMatrix();
+		glm::mat4& GetLocalMatrix();
+		glm::mat4& GetWorldMatrix();
 
 	private:
 		void PreDecomposeWorldMatrix();

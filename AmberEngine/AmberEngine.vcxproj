@@ -267,6 +267,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\LightComponent.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\ModelComponent.h" />
     <ClInclude Include="include\AmberEngine\Core\Editor.h" />
+    <ClInclude Include="include\AmberEngine\Core\Scene.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
@@ -347,6 +348,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Scene.cpp" />
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />

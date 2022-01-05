@@ -75,12 +75,12 @@ void AmberEngine::Maths::Transform::ScaleLocal(const glm::vec3& p_scale)
 	SetLocalScale(m_localScale * p_scale);
 }
 
-glm::mat4 AmberEngine::Maths::Transform::GetLocalMatrix()
+glm::mat4& AmberEngine::Maths::Transform::GetLocalMatrix()
 {
 	return m_localMatrix;
 }
 
-glm::mat4 AmberEngine::Maths::Transform::GetWorldMatrix()
+glm::mat4& AmberEngine::Maths::Transform::GetWorldMatrix()
 {
 	return m_worldMatrix;
 }

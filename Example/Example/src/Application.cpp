@@ -146,21 +146,15 @@ void Example::Application::Run()
 	{
 		m_editor.PreUpdate();
 
-		glm::vec3 cameraPosition = m_editor.m_sceneView.GetCameraController().GetPosition();
-		glm::mat4 projectionMatrix = m_editor.m_sceneView.GetCameraController().GetCamera().GetProjectionMatrix();
-		glm::mat4 viewMatrix = m_editor.m_sceneView.GetCameraController().GetCamera().GetViewMatrix();
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 		auto& shader = resourcesManager.GetShader("StandardLighting");
 		
 		shader.Bind();
-		shader.SetUniformMat4("projection", projectionMatrix);
-		shader.SetUniformMat4("view", viewMatrix);
-		shader.SetUniformMat4("model", modelMatrix);
-		shader.SetUniformVec3("viewPos", cameraPosition);
+		
 		shader.SetUniformVec3("light.direction", lighDir);
 
-		m_context.renderer->Draw(resourcesManager.GetModel("Helmet"));
+		m_context.renderer->Draw(resourcesManager.GetModel("Helmet"), &modelMatrix);
 
 		//m_context.renderer->Draw(*testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel());
 

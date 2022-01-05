@@ -1,6 +1,9 @@
 #include "Amberpch.h"
 
 #include "AmberEngine/Resources/Model.h"
+
+#include "AmberEngine/Buffers/UniformBuffer.h"
+
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Shader.h"
 
@@ -41,6 +44,8 @@ void AmberEngine::Resources::Model::SetTextureUniform(const std::string_view p_u
 void AmberEngine::Resources::Model::SetShader(Shader& p_shader)
 {
 	m_shader = &p_shader;
+
+	Buffers::UniformBuffer::BindBlockToShader(*m_shader, "EngineUBO");
 }
 
 AmberEngine::Resources::Shader* AmberEngine::Resources::Model::GetShader() const
