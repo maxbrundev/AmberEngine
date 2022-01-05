@@ -4,14 +4,16 @@
 
 #include <chrono>
 
+#include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
+
 #include "AmberEngine/Tools/Utils/String.h"
 
-bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials)
+bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, Model& p_model)
 {
 	m_directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
 
-	//const auto start = std::chrono::high_resolution_clock::now();
+	const auto start = std::chrono::high_resolution_clock::now();
 
 	Assimp::Importer import;
 
@@ -22,19 +24,21 @@ bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePa
 		return false;
 	}
 
-	p_materials.reserve(scene->mNumMaterials);
+	p_model.GetMaterialNames().reserve(scene->mNumMaterials);
 
-	ProcessMaterials(scene, p_materials);
+	ProcessMaterials(scene, p_model.GetMaterialNames());
 
 	const aiMatrix4x4 identity;
 
-	ProcessNode(&identity, scene->mRootNode, scene, p_meshes);
+	ProcessNode(&identity, scene->mRootNode, scene, p_model.GetMeshes());
 
 	m_loadedTextures.clear();
 
-	//const auto end = std::chrono::high_resolution_clock::now();
-	//std::chrono::duration<double> elapsed = end - start;
-	//std::cout << "duration: " << elapsed.count() << " s\n";
+	p_model.BindTextureCallback();
+
+	const auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "duration: " << elapsed.count() << " s\n";
 
 	return true;
 }
@@ -57,33 +61,33 @@ void AmberEngine::Resources::AssimpParser::ProcessNode(const aiMatrix4x4* p_tran
 {
 	const aiMatrix4x4 nodeTransformation = *p_transform * p_node->mTransformation;
 
-	std::vector<Geometry::Vertex> vertices;
-	std::vector<uint32_t> indices;
-	std::vector<std::shared_ptr<Texture>> textures;
 
 	// Process all the node's meshes (if any)
 	for (uint32_t i = 0; i < p_node->mNumMeshes; i++)
 	{
-		aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
-		const aiMaterial* material = p_scene->mMaterials[mesh->mMaterialIndex];
+		const aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
+		//const aiMaterial* material = p_scene->mMaterials[mesh->mMaterialIndex];
 
-		const uint64_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE)
-			+ material->GetTextureCount(aiTextureType_SPECULAR)
-			+ material->GetTextureCount(aiTextureType_NORMALS)
-			+ material->GetTextureCount(aiTextureType_HEIGHT);
+		//const uint64_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE)
+		//	+ material->GetTextureCount(aiTextureType_SPECULAR)
+		//	+ material->GetTextureCount(aiTextureType_NORMALS)
+		//	+ material->GetTextureCount(aiTextureType_HEIGHT);
 
+		std::vector<Geometry::Vertex> vertices;
+		std::vector<uint32_t> indices;
+		std::vector<std::shared_ptr<Texture>> textures;
 
-		vertices.reserve(mesh->mNumVertices);
-		indices.reserve(mesh->mNumFaces);
-		textures.reserve(textureCount);
+		//vertices.reserve(mesh->mNumVertices);
+		//indices.reserve(mesh->mNumFaces);
+		//textures.reserve(textureCount);
 
 		ProcessMesh(&nodeTransformation, mesh, p_scene, vertices, indices, textures);
 
 		p_meshes.push_back(new Mesh(vertices, indices, std::move(textures))); // The model will handle mesh destruction
 
-		vertices.clear();
-		indices.clear();
-		textures.clear();
+		//vertices.clear();
+		//indices.clear();
+		//textures.clear();
 	}
 
 	// Then do the same for each of its children
@@ -172,9 +176,9 @@ std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resou
 
 		if (!isTextureAlreadyLoaded)
 		{
-			const std::string path = m_directory + str.C_Str();
+			std::string path = m_directory + str.C_Str();
 
-			std::shared_ptr<Texture> texture(TextureLoader::Create(path, Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
+			std::shared_ptr<Texture> texture(TextureLoader::Create(std::move(path), Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
 
 			textures.push_back(texture);
 

@@ -13,15 +13,18 @@ namespace AmberEngine::Resources
 		Model(const std::string& p_filePath);
 		~Model();
 
-		void SetShader(Shader& p_shader);
-		
 		void Bind();
-		
+		void BindTextureCallback();
+
+		void SetTextureUniform(const std::string_view p_uniformName, int p_id) const;
+
+		void SetShader(Shader& p_shader);
+		Shader* GetShader() const;
+
 		std::vector<Mesh*>& GetMeshes();
 		std::vector<std::string>& GetMaterialNames();
-		void SetTextureUniform(const std::string_view p_uniformName, int p_id) const;
-		
-	public:
+
+	private:
 		const std::string path;
 
 		std::vector<Mesh*> m_meshes;

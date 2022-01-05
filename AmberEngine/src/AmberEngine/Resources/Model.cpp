@@ -1,9 +1,6 @@
 #include "Amberpch.h"
 
 #include "AmberEngine/Resources/Model.h"
-
-#include <chrono>
-
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Shader.h"
 
@@ -15,7 +12,7 @@ AmberEngine::Resources::Model::Model(const std::string& p_filePath) : path(p_fil
 
 AmberEngine::Resources::Model::~Model()
 {
-	for (auto mesh : m_meshes)
+	for (auto& mesh : m_meshes)
 	{
 		delete mesh;
 		mesh = nullptr;
@@ -25,17 +22,30 @@ AmberEngine::Resources::Model::~Model()
 void AmberEngine::Resources::Model::Bind()
 {
 	m_shader->Bind();
+}
 
-	for (const auto mesh : m_meshes)
+void AmberEngine::Resources::Model::BindTextureCallback()
+{
+	for (const auto& mesh : m_meshes)
 	{
 		// Template arguments deduction in case of curiosity: <void(__thiscall AmberEngine::Resources::Model::*)(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, int), class AmberEngine::Resources::Model>
 		mesh->SetTextureUniformCallback = Eventing::QuickBind(&Model::SetTextureUniform, this);
 	}
 }
 
+void AmberEngine::Resources::Model::SetTextureUniform(const std::string_view p_uniformName, int p_id) const
+{
+	m_shader->SetUniform1i(p_uniformName, p_id);
+}
+
 void AmberEngine::Resources::Model::SetShader(Shader& p_shader)
 {
 	m_shader = &p_shader;
+}
+
+AmberEngine::Resources::Shader* AmberEngine::Resources::Model::GetShader() const
+{
+	return m_shader;
 }
 
 std::vector<AmberEngine::Resources::Mesh*>& AmberEngine::Resources::Model::GetMeshes()
@@ -46,9 +56,4 @@ std::vector<AmberEngine::Resources::Mesh*>& AmberEngine::Resources::Model::GetMe
 std::vector<std::string>& AmberEngine::Resources::Model::GetMaterialNames()
 {
 	return m_materialNames;
-}
-
-void AmberEngine::Resources::Model::SetTextureUniform(const std::string_view p_uniformName, int p_id) const
-{
-	m_shader->SetUniform1i(p_uniformName, p_id);
 }

@@ -252,8 +252,10 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
   <ItemGroup>
     <ClInclude Include="Amberpch.h" />
     <ClInclude Include="include\AmberEngine\API\Export.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\EAccessSpecifier.h" />
     <ClInclude Include="include\AmberEngine\Buffers\FrameBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\IndexBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\UniformBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexArray.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexBuffer.h" />
     <ClInclude Include="include\AmberEngine\Context\Device.h" />
@@ -261,7 +263,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
     <ClInclude Include="include\AmberEngine\Context\Window.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h" />
-    <ClInclude Include="include\AmberEngine\Core\ECS\Components\IComponent.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\AComponent.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\LightComponent.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\ModelComponent.h" />
     <ClInclude Include="include\AmberEngine\Core\Editor.h" />
     <ClInclude Include="include\AmberEngine\Debug\GLDebug.h" />
@@ -286,6 +289,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
     <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Entities\ELightType.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Entities\Light.h" />
     <ClInclude Include="include\AmberEngine\Resources\ETextureFilteringMode.h" />
     <ClInclude Include="include\AmberEngine\Resources\ETextureType.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\TextureLoader.h" />
@@ -330,6 +335,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\UniformBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Context\Device.cpp" />
@@ -337,6 +343,8 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Context\Window.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Context.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Actor.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\AComponent.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
     <ClCompile Include="src\AmberEngine\Debug\GLDebug.cpp" />
@@ -353,6 +361,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
     <ClCompile Include="src\AmberEngine\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
+    <ClCompile Include="src\AmberEngine\Rendering\Entities\Light.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Loaders\TextureLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Model.cpp" />

@@ -6,9 +6,8 @@ void Utils::Clock::Initialize()
 {
 	deltaTime = 0.0f;
 
-	lastTime = currentTime;
 	currentTime = std::chrono::steady_clock::now();
-
+	lastTime = currentTime;
 
 	isInitialized = true;
 }

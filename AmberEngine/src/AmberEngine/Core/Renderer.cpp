@@ -12,7 +12,7 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model)
 {
 	p_model.Bind();
 	
-	for (const auto mesh : p_model.GetMeshes())
+	for (const auto& mesh : p_model.GetMeshes())
 	{
 		DrawMesh(*mesh);
 	}
@@ -21,9 +21,9 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model)
 void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh)
 {
 	p_mesh.BindMaterialTextures();
-	
+
 	p_mesh.Bind();
-	
+
 	if(p_mesh.m_indicesCount > 0)
 	{
 		glDrawElements(GL_TRIANGLES, p_mesh.m_indicesCount, GL_UNSIGNED_INT, 0);

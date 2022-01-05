@@ -6,6 +6,9 @@
 
 #include <AmberEngine/Managers/ResourcesManager.h>
 
+#include <AmberEngine/Core/ECS/Actor.h>
+#include <AmberEngine/Core/ECS/Components/ModelComponent.h>
+
 /*#include <AmberEngine/ImGUI/imgui.h>
 #include <AmberEngine/Resources/Primitives/Cube.h>
 #include <AmberEngine/Buffers/VertexBuffer.h>
@@ -73,8 +76,72 @@ void Example::Application::Run()
 	vao.Unbind();
 	vbo.Unbind();*/
 
+
+	/*glm::vec3 verticesVec3[] =
+	{
+		glm::vec3(-1, -1, -1), // 0
+		glm::vec3(1, -1, -1), // 1
+		glm::vec3(1, 1, -1.0f), // 2
+		glm::vec3(-1, 1, -1), // 3
+		glm::vec3(-1, -1, 1), // 4
+		glm::vec3(1, -1, 1), // 5
+		glm::vec3(1, 1, 1), // 6 
+		glm::vec3(-1, 1, 1) // 7
+	};
+
+	float vertices[] =
+	{
+		-1, -1, -1, // 0
+
+		1, -1, -1, // 1
+
+		1, 1, -1.0f, // 2
+
+		-1, 1, -1, // 3
+
+		-1, -1, 1, // 4
+
+		1, -1, 1, // 5
+
+		1, 1, 1, // 6
+
+		-1, 1, 1 // 7
+	};
+
+	int indices[36] =
+	{
+		0, 1, 3, 3, 1, 2,
+		1, 5, 2, 2, 5, 6,
+		5, 4, 6, 6, 4, 7,
+		4, 0, 7, 7, 0, 3,
+		3, 2, 7, 7, 2, 6,
+		4, 5, 0, 0, 5, 1
+	};
+
+	//108 vertex positions -> 3 * 36 -> 3 vertex positions (x,y,z) by 1 index
+	float vertexBuffer[108]{ 0.0f };
+	for (int i = 0; i < 36; i++) {
+
+		int indexX = indices[i];
+		int indexY = indices[i];
+		int indexZ = indices[i];
+
+		float verticeX = vertices[(indexX) * 3 + 0];
+		float verticeY = vertices[(indexY) * 3 + 1];
+		float verticeZ = vertices[(indexZ) * 3 + 2];
+
+		vertexBuffer[i * 3 + 0] = verticeX;
+		vertexBuffer[i * 3 + 1] = verticeY;
+		vertexBuffer[i * 3 + 2] = verticeZ;
+	}*/
+
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
+	//ECS TEST
+	//AmberEngine::ECS::Actor testActor;
+	//
+	//testActor.AddComponent<AmberEngine::ECS::Components::ModelComponent>("res/Mesh/DamagedHelmet/glTF/DamagedHelmet.gltf");
+	//testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
@@ -94,6 +161,8 @@ void Example::Application::Run()
 		shader.SetUniformVec3("light.direction", lighDir);
 
 		m_context.renderer->Draw(resourcesManager.GetModel("Helmet"));
+
+		//m_context.renderer->Draw(*testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel());
 
 		shader.Unbind();
 

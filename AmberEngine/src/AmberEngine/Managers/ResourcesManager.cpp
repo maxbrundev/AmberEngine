@@ -39,7 +39,7 @@ AmberEngine::Resources::Model& AmberEngine::Managers::ResourcesManager::LoadMode
 
 	auto model = new Resources::Model(p_filePath);
 
-	__ASSIMP.LoadModel(p_filePath, model->GetMeshes(), model->GetMaterialNames());
+	__ASSIMP.LoadModel(p_filePath, *model);
 	
 	const auto res = m_modelResources.emplace(p_name, model);
 	return *res.first->second;
