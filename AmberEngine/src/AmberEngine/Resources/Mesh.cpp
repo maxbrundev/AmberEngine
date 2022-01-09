@@ -16,7 +16,7 @@ AmberEngine::Resources::Mesh::~Mesh()
 {
 	Unbind();
 
-	for(auto texture : m_textures)
+	for(auto& texture : m_textures)
 	{
 		TextureLoader::Delete(texture.get());
 	}
@@ -24,17 +24,17 @@ AmberEngine::Resources::Mesh::~Mesh()
 	m_textures.clear();
 }
 
-void AmberEngine::Resources::Mesh::Bind()
+void AmberEngine::Resources::Mesh::Bind() const
 {
 	m_vertexArray.Bind();
 }
 
-void AmberEngine::Resources::Mesh::Unbind()
+void AmberEngine::Resources::Mesh::Unbind() const
 {
 	m_vertexArray.Unbind();
 }
 
-void AmberEngine::Resources::Mesh::BindMaterialTextures()
+void AmberEngine::Resources::Mesh::BindMaterialTextures() const
 {
 	for (int i = 0; i < m_textures.size(); i++)
 	{

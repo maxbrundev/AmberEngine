@@ -13,7 +13,8 @@ namespace AmberEngine::Resources
 		Model(const std::string& p_filePath);
 		~Model();
 
-		void Bind();
+		void Bind() const;
+		void Unbind() const;
 		void BindTextureCallback();
 
 		void SetTextureUniform(const std::string_view p_uniformName, int p_id) const;

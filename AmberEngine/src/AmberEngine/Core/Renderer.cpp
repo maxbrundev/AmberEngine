@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "Amberpch.h"
 
 #include "AmberEngine/Core/Renderer.h"
@@ -18,6 +20,8 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 cons
 	{
 		DrawMesh(*mesh);
 	}
+
+	p_model.Unbind();
 }
 
 void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh)
@@ -70,7 +74,7 @@ void AmberEngine::Core::Renderer::Clear(AmberEngine::LowRenderer::Camera& p_came
 
 void AmberEngine::Core::Renderer::RegisterModelMatrixSender(std::function<void(glm::mat4)> p_modelMatrixSender)
 {
-	m_modelMatrixSender = p_modelMatrixSender;
+	m_modelMatrixSender = std::move(p_modelMatrixSender);
 }
 
 void AmberEngine::Core::Renderer::UpdateRenderMode()

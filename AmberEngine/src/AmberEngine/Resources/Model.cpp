@@ -22,9 +22,14 @@ AmberEngine::Resources::Model::~Model()
 	}
 }
 
-void AmberEngine::Resources::Model::Bind()
+void AmberEngine::Resources::Model::Bind() const
 {
 	m_shader->Bind();
+}
+
+void AmberEngine::Resources::Model::Unbind() const
+{
+	m_shader->Unbind();
 }
 
 void AmberEngine::Resources::Model::BindTextureCallback()

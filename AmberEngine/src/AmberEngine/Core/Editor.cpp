@@ -7,12 +7,12 @@ AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_sceneView(*p_context.window, *p_context.inputManager),
 	isCameraFree(true)
 {
-	m_context.uiManager->EnableDocking(true);
-
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
 	{
 		m_context.engineUBO->SetSubData(p_modelMatrix, 0);
 	});
+
+	m_context.uiManager->EnableDocking(true);
 }
 
 void AmberEngine::Core::Editor::PreUpdate()

@@ -9,8 +9,8 @@
 #include <AmberEngine/Core/ECS/Actor.h>
 #include <AmberEngine/Core/ECS/Components/ModelComponent.h>
 
-/*#include <AmberEngine/ImGUI/imgui.h>
-#include <AmberEngine/Resources/Primitives/Cube.h>
+#include <AmberEngine/ImGUI/imgui.h>
+/*#include <AmberEngine/Resources/Primitives/Cube.h>
 #include <AmberEngine/Buffers/VertexBuffer.h>
 #include <AmberEngine/Buffers/VertexArray.h>*/
 
@@ -35,20 +35,21 @@ void Example::Application::Setup()
 	//resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
 
 	resourcesManager.GetModel("Helmet").SetShader(lightingShader);
+
+	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
+
 	lightingShader.Bind();
 	lightingShader.SetUniform1i("u_DiffuseMap", 0);
 	lightingShader.SetUniform1i("u_SpecularMap", 1);
 	lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 	lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
 	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	lightingShader.SetUniformVec3("light.direction", lighDir);
 	lightingShader.Unbind();
 }
 
 void Example::Application::Run()
 {
-	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	Utils::Clock clock;
 	/*AmberEngine::PrimitivesShapes::Cube::Setup();
 	
 	std::vector<float> vertices;
@@ -75,7 +76,6 @@ void Example::Application::Run()
 	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<void*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::normals)));
 	vao.Unbind();
 	vbo.Unbind();*/
-
 
 	/*glm::vec3 verticesVec3[] =
 	{
@@ -135,30 +135,80 @@ void Example::Application::Run()
 		vertexBuffer[i * 3 + 2] = verticeZ;
 	}*/
 
+	Utils::Clock clock;
+
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
-	//ECS TEST
-	//AmberEngine::ECS::Actor testActor;
-	//
-	//testActor.AddComponent<AmberEngine::ECS::Components::ModelComponent>("res/Mesh/DamagedHelmet/glTF/DamagedHelmet.gltf");
-	//testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+	AmberEngine::ECS::Actor testActor;
+	
+	testActor.AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+
+	//Tranform test
+	float positionX = 0.0f;
+	float positionY = 0.0f;
+	float positionZ = 0.0f;
+
+	float rotationX = 0.0f;
+	float rotationY = 0.0f;
+	float rotationZ = 0.0f;
+
+	float scaleX = 1.0f;
+	float scaleY = 1.0f;
+	float scaleZ = 1.0f;
+
+	float translationX = 0.0f;
+	float translationY = 0.0f;
+	float translationZ = 0.0f;
+
+	float rotateX = 0.0f;
+	float rotateY = 0.0f;
+	float rotateZ = 0.0f;
+
+	float scalingX = 1.0f;
+	float scalingY = 1.0f;
+	float scalingZ = 1.0f;
+
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
 
-		glm::mat4 modelMatrix = glm::mat4(1.0f);
+		//Tranform test
+		ImGui::Begin("Transform Test");
+		ImGui::SliderFloat("Position X", &positionX, -100.0f, 100.0f);
+		ImGui::SliderFloat("Position Y", &positionY, -100.0f, 100.0f);
+		ImGui::SliderFloat("Position Z", &positionZ, -100.0f, 100.0f);
 
-		auto& shader = resourcesManager.GetShader("StandardLighting");
-		
-		shader.Bind();
-		
-		shader.SetUniformVec3("light.direction", lighDir);
+		ImGui::SliderFloat("Rotation X", &rotationX, -360.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Y", &rotationY, -360.0f, 360.0f); 
+		ImGui::SliderFloat("Rotation Z", &rotationZ, -360.0f, 360.0f);
 
-		m_context.renderer->Draw(resourcesManager.GetModel("Helmet"), &modelMatrix);
+		ImGui::SliderFloat("Scale X", &scaleX, 1.0f, 100.0f);
+		ImGui::SliderFloat("Scale Y", &scaleY, 1.0f, 100.0f);
+		ImGui::SliderFloat("Scale Z", &scaleZ, 1.0f, 100.0f);
 
-		//m_context.renderer->Draw(*testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel());
+		ImGui::SliderFloat("Translate X", &translationX, -1.0f, 1.0f);
+		ImGui::SliderFloat("Translate Y", &translationY, -1.0f, 1.0f);
+		ImGui::SliderFloat("Translate Z", &translationZ, -1.0f, 1.0f);
 
-		shader.Unbind();
+		ImGui::SliderFloat("Rotate X", &rotateX, -1.0f, 1.0f);
+		ImGui::SliderFloat("Rotate Y", &rotateY, -1.0f, 1.0f);
+		ImGui::SliderFloat("Rotate Z", &rotateZ, -1.0f, 1.0f);
+
+		ImGui::SliderFloat("Scaling X", &scalingX, 1.5f, 0.0001f);
+		ImGui::SliderFloat("Scaling Y", &scalingY, 1.5f, 0.0001f);
+		ImGui::SliderFloat("Scaling Z", &scalingZ, 1.5f, 0.0001f);
+		ImGui::End();
+
+		//Tranform test
+		testActor.GetTransform().SetLocalPosition({ positionX, positionY, positionZ });
+		testActor.GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
+		testActor.GetTransform().SetLocalScale({ scaleX, scaleY, scaleZ });
+		//testActor.GetTransform().TranslateLocal({ translationX, translationY, translationZ });
+		//testActor.GetTransform().RotateLocal({ rotateX, rotateY, rotateZ });
+		//testActor.GetTransform().ScaleLocal({ scalingX, scalingY, scalingZ });
+
+		m_context.renderer->Draw(*testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel(), &testActor.GetTransform().GetWorldMatrix());
 
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.RenderScene();

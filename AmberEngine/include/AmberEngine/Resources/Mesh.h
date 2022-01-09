@@ -18,9 +18,9 @@ namespace AmberEngine::Resources
 		Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>> p_textures);
 		~Mesh();
 
-		void Bind();
-		void Unbind();
-		void BindMaterialTextures();
+		void Bind() const;
+		void Unbind() const;
+		void BindMaterialTextures() const;
 
 		std::function<void(std::string, int)> SetTextureUniformCallback;
 

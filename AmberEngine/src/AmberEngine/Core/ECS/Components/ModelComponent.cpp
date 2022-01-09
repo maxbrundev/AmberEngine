@@ -5,13 +5,14 @@
 #include "AmberEngine/Core/ECS/Actor.h"
 
 #include "AmberEngine/Managers/ResourcesManager.h"
-#include "AmberEngine/Tools/Utils/String.h"
+//#include "AmberEngine/Tools/Utils/String.h"
 
 
-AmberEngine::ECS::Components::ModelComponent::ModelComponent(Actor& p_owner, const std::string& p_filePath) : AComponent(p_owner), m_model(nullptr)
+AmberEngine::ECS::Components::ModelComponent::ModelComponent(Actor& p_owner, std::string_view p_name, const std::string& p_filePath) : AComponent(p_owner), m_model(nullptr)
 {
-	std::string name = Utils::String::RemoveExtensionFromFileName(Utils::String::ExtractFileNameFromPath(p_filePath));
-	m_model = &Managers::ResourcesManager::Instance().LoadModel(std::move(name), p_filePath);
+	//std::string name = Utils::String::RemoveExtensionFromFileName(Utils::String::ExtractFileNameFromPath(p_filePath));
+	
+	m_model = &Managers::ResourcesManager::Instance().LoadModel(p_name, p_filePath);
 
 	std::cout << (m_model == nullptr ? "model is null" : "model is not null") << std::endl;
 	std::cout << "Model component created" << std::endl;
