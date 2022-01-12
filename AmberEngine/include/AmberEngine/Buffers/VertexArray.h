@@ -3,16 +3,12 @@
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Context/Driver.h"
-
+#include "AmberEngine/Buffers/VertexBuffer.h"
 
 namespace AmberEngine::Buffers
 {
 	class API_AMBERENGINE VertexArray
 	{
-	private:
-		GLuint m_bufferID;
-		unsigned int index;
-		
 	public:
 		VertexArray();
 		~VertexArray();
@@ -22,7 +18,10 @@ namespace AmberEngine::Buffers
 		void Bind() const;
 		void Unbind() const;
 
+		GLuint GetID() const;
 
-		GLuint GetID();
+	private:
+		GLuint m_bufferID;
+		uint32_t index;
 	};
 }

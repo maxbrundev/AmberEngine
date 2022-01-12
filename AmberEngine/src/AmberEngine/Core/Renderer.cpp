@@ -1,6 +1,6 @@
-#include <utility>
-
 #include "Amberpch.h"
+
+#include <utility>
 
 #include "AmberEngine/Core/Renderer.h"
 
@@ -30,13 +30,13 @@ void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh)
 
 	p_mesh.Bind();
 
-	if(p_mesh.m_indicesCount > 0)
+	if(p_mesh.GetIndexCount() > 0)
 	{
-		glDrawElements(GL_TRIANGLES, p_mesh.m_indicesCount, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, p_mesh.GetIndexCount(), GL_UNSIGNED_INT, 0);
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, p_mesh.m_vertexCount);
+		glDrawArrays(GL_TRIANGLES, 0, p_mesh.GetVertexCount());
 	}
 
 	p_mesh.Unbind();

@@ -6,6 +6,7 @@
 
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Shader.h"
+#include "AmberEngine/Resources/Loaders/ShaderLoader.h"
 
 #include "AmberEngine/Eventing/Event.h"
 
@@ -20,6 +21,8 @@ AmberEngine::Resources::Model::~Model()
 		delete mesh;
 		mesh = nullptr;
 	}
+
+	m_shader = nullptr;
 }
 
 void AmberEngine::Resources::Model::Bind() const
@@ -53,7 +56,7 @@ void AmberEngine::Resources::Model::SetShader(Shader& p_shader)
 	Buffers::UniformBuffer::BindBlockToShader(*m_shader, "EngineUBO");
 }
 
-AmberEngine::Resources::Shader* AmberEngine::Resources::Model::GetShader() const
+AmberEngine::Resources::Shader* AmberEngine::Resources::Model::GetShader()
 {
 	return m_shader;
 }

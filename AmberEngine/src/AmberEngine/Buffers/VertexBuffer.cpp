@@ -1,7 +1,5 @@
 #include "Amberpch.h"
 
-#include <GL/glew.h>
-
 #include "AmberEngine/Buffers/VertexBuffer.h"
 
 AmberEngine::Buffers::VertexBuffer::VertexBuffer(const void* p_data, size_t p_elements)

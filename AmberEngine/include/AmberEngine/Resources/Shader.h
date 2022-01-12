@@ -1,9 +1,10 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <glm/glm.hpp>
-
 #include "AmberEngine/API/Export.h"
+
+#include <GL/glew.h>
+
+#include <glm/glm.hpp>
 
 namespace AmberEngine::Resources
 {
@@ -12,7 +13,6 @@ namespace AmberEngine::Resources
 	public:
 		Shader(std::string p_filePath, uint32_t p_id);
 		~Shader();
-
 		void Bind() const;
 		void Unbind() const;
 
@@ -28,8 +28,8 @@ namespace AmberEngine::Resources
 		uint32_t GetUniformLocation(const std::string_view p_name);
 
 	public:
-		const std::string path;
 		const uint32_t id;
+		const std::string path;
 
 	private:
 		std::unordered_map<std::string_view, uint32_t> m_uniformLocationCache;

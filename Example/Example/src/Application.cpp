@@ -8,8 +8,8 @@
 
 #include <AmberEngine/Core/ECS/Actor.h>
 #include <AmberEngine/Core/ECS/Components/ModelComponent.h>
+#include <AmberEngine/Resources/Loaders/ShaderLoader.h>
 
-#include <AmberEngine/ImGUI/imgui.h>
 /*#include <AmberEngine/Resources/Primitives/Cube.h>
 #include <AmberEngine/Buffers/VertexBuffer.h>
 #include <AmberEngine/Buffers/VertexArray.h>*/
@@ -37,10 +37,10 @@ void Example::Application::Setup()
 	resourcesManager.GetModel("Helmet").SetShader(lightingShader);
 
 	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
-
+	
 	lightingShader.Bind();
-	lightingShader.SetUniform1i("u_DiffuseMap", 0);
-	lightingShader.SetUniform1i("u_SpecularMap", 1);
+	//lightingShader.SetUniform1i("u_DiffuseMap", 0);
+	//lightingShader.SetUniform1i("u_SpecularMap", 1);
 	lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 	lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
 	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -68,12 +68,10 @@ void Example::Application::Run()
 	}
 	
 	AmberEngine::Buffers::VertexArray vao;
-	AmberEngine::Buffers::VertexBuffer vbo(vertices.data(), vertices.size() * sizeof(vertices));
-	vbo.Bind();
-	vao.Bind();
+	AmberEngine::Buffers::VertexBuffer vbo(vertices.data(), vertices.size());
 	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), nullptr);
-	vao.BindAttribPointer(2, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<void*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::textureCoord)));
-	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<void*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::normals)));
+	vao.BindAttribPointer(2, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<GLvoid*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::textureCoord)));
+	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<GLvoid*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::normals)));
 	vao.Unbind();
 	vbo.Unbind();*/
 
@@ -169,6 +167,8 @@ void Example::Application::Run()
 	float scalingY = 1.0f;
 	float scalingZ = 1.0f;
 
+	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
+
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
@@ -213,7 +213,7 @@ void Example::Application::Run()
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.RenderScene();
 		m_editor.PostUpdate();
-
+		
 		clock.Update();
 	}
 }

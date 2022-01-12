@@ -27,12 +27,12 @@ AmberEngine::Buffers::FrameBuffer::~FrameBuffer()
 	glDeleteRenderbuffers(1, &m_depthStencilBuffer);
 }
 
-void AmberEngine::Buffers::FrameBuffer::Bind()
+void AmberEngine::Buffers::FrameBuffer::Bind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_bufferID);
 }
 
-void AmberEngine::Buffers::FrameBuffer::Unbind()
+void AmberEngine::Buffers::FrameBuffer::Unbind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -53,17 +53,17 @@ void AmberEngine::Buffers::FrameBuffer::Resize(uint16_t p_width, uint16_t p_heig
 	Unbind();
 }
 
-uint32_t AmberEngine::Buffers::FrameBuffer::GetID()
+uint32_t AmberEngine::Buffers::FrameBuffer::GetID() const
 {
 	return m_bufferID;
 }
 
-uint32_t AmberEngine::Buffers::FrameBuffer::GetTextureID()
+uint32_t AmberEngine::Buffers::FrameBuffer::GetTextureID() const
 {
 	return m_renderTexture;
 }
 
-uint32_t AmberEngine::Buffers::FrameBuffer::GetRenderBufferID()
+uint32_t AmberEngine::Buffers::FrameBuffer::GetRenderBufferID() const
 {
 	return m_depthStencilBuffer;
 }

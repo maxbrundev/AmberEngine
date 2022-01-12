@@ -2,8 +2,6 @@
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
 
-#include <GL/glew.h>
-
 #include "AmberEngine/Resources/Shader.h"
 
 AmberEngine::Buffers::UniformBuffer::UniformBuffer(size_t p_size, uint32_t p_bindingPoint, uint32_t p_offset, EAccessSpecifier p_accessSpecifier)
@@ -20,12 +18,12 @@ AmberEngine::Buffers::UniformBuffer::~UniformBuffer()
 	glDeleteBuffers(1, &m_bufferID);
 }
 
-void AmberEngine::Buffers::UniformBuffer::Bind()
+void AmberEngine::Buffers::UniformBuffer::Bind() const
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, m_bufferID);
 }
 
-void AmberEngine::Buffers::UniformBuffer::Unbind()
+void AmberEngine::Buffers::UniformBuffer::Unbind() const
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

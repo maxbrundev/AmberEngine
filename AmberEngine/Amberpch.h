@@ -20,6 +20,7 @@
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <assimp/scene.h>
 
 #include "AmberEngine/ImGUI/imgui.h"
 #include "AmberEngine/ImGUI/imgui_impl_glfw.h"

@@ -4,8 +4,6 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-#include "AmberEngine/Debug/GLDebug.h"
-
 std::string AmberEngine::Resources::ShaderLoader::__FILE_TRACE;
 
 AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::Create(std::string p_filePath)
@@ -14,9 +12,9 @@ AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::Create(std
 
 	const std::pair<std::string, std::string> source = ParseShader(p_filePath);
 
-	const uint32_t programmeID = CreateShader(source.first, source.second);
+	const uint32_t programID = CreateShader(source.first, source.second);
 
-	Shader* shader = new Shader(std::move(p_filePath), programmeID);
+	Shader* shader = new Shader(std::move(p_filePath), programID);
 
 	return shader;
 }
@@ -25,11 +23,11 @@ AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::CreateFrom
 {
 	__FILE_TRACE = Utils::String::ExtractDirectoryFromPath(p_vertexShader) + "/" + Utils::String::ExtractDirectoryFromPath(p_fragmentShader);
 
-	const uint32_t programmeID = CreateShader(p_vertexShader, p_fragmentShader);
+	const uint32_t programID = CreateShader(p_vertexShader, p_fragmentShader);
 
-	std::string filePath = "";
+	std::string filePath;
 
-	Shader* shader = new Shader(std::move(filePath), programmeID);
+	Shader* shader = new Shader(std::move(filePath), programID);
 
 	return shader;
 }
@@ -38,26 +36,52 @@ void AmberEngine::Resources::ShaderLoader::Recompile(Shader& p_shader, const std
 {
 	__FILE_TRACE = p_filePath;
 
-	std::pair<std::string, std::string> source = ParseShader(p_filePath);
+	const std::pair<std::string, std::string> source = ParseShader(p_filePath);
 
-	uint32_t programmeID = CreateShader(source.first, source.second);
+	/* Create the new program */
 
-	/* Pointer to the shaderID (const data member, tricks to access it) */
-	uint32_t* shaderID = reinterpret_cast<uint32_t*>(&p_shader) + offsetof(Shader, id);
+	if (const uint32_t newProgramID = CreateShader(source.first, source.second))
+	{
+		/* Pointer to the shaderID (const data member, tricks to access it) */
+		/* Only work with the first public member of a class */
+		std::uint32_t* shaderID = reinterpret_cast<uint32_t*>(&p_shader) + offsetof(Shader, id);
 
-	/* Deletes the previous program */
-	glDeleteProgram(*shaderID);
+		//uint32_t* shaderID = const_cast<uint32_t*>(&p_shader.id);
 
-	/* Store the new program in the shader */
-	*shaderID = programmeID;
+		/* Deletes the previous program */
+		glDeleteProgram(*shaderID);
+
+		/* Store the new program in the shader */
+		*shaderID = newProgramID;
+
+		std::cout<< "[COMPILE] \"" + __FILE_TRACE + "\": Success!" << std::endl;
+	}
+	else
+	{
+		std::cout << "[COMPILE] \"" + __FILE_TRACE + "\": Failed! Previous shader version keept" << std::endl;
+	}
 }
 
-bool AmberEngine::Resources::ShaderLoader::Destroy(Shader*& p_shader)
+bool AmberEngine::Resources::ShaderLoader::Destroy(Shader*& p_shaderInstance)
 {
-	if (p_shader)
+	if (p_shaderInstance)
 	{
-		delete p_shader;
-		p_shader = nullptr;
+		glDeleteProgram(p_shaderInstance->id);
+
+		delete p_shaderInstance;
+		p_shaderInstance = nullptr;
+
+		return true;
+	}
+
+	return false;
+}
+
+bool AmberEngine::Resources::ShaderLoader::Delete(Shader* p_shaderInstance)
+{
+	if (p_shaderInstance)
+	{
+		glDeleteProgram(p_shaderInstance->id);
 
 		return true;
 	}
@@ -123,18 +147,18 @@ std::string AmberEngine::Resources::ShaderLoader::Parse(const std::string& p_fil
 
 uint32_t AmberEngine::Resources::ShaderLoader::CreateShader(const std::string &p_vertexSources, const std::string& p_fragmentSources)
 {
-	GLCall(const uint32_t program = glCreateProgram());
+	const uint32_t program = glCreateProgram();
 
-	const uint32_t vs = CompileShader(GL_VERTEX_SHADER, p_vertexSources);
-	const uint32_t fs = CompileShader(GL_FRAGMENT_SHADER, p_fragmentSources);
+	const uint32_t vs = CompileShader(GL_VERTEX_SHADER, p_vertexSources, program);
+	const uint32_t fs = CompileShader(GL_FRAGMENT_SHADER, p_fragmentSources, program);
 
-	GLCall(glAttachShader(program, vs));
-	GLCall(glAttachShader(program, fs));
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
 
-	GLCall(glLinkProgram(program));
+	glLinkProgram(program);
 
 	GLint linkStatus;
-	GLCall(glGetProgramiv(program, GL_LINK_STATUS, &linkStatus));
+	glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
 
 	if (linkStatus == GL_FALSE)
 	{
@@ -146,31 +170,40 @@ uint32_t AmberEngine::Resources::ShaderLoader::CreateShader(const std::string &p
 
 		std::cout << "[LINK] \"" + __FILE_TRACE + "\":\n" + errorLog << std::endl;
 
-		GLCall(glDeleteProgram(program));
+		glDeleteProgram(program);
+
+		glDetachShader(program, vs);
+		glDetachShader(program, fs);
+
+		glDeleteShader(vs);
+		glDeleteShader(fs);
 
 		return 0;
 	}
 
-	GLCall(glValidateProgram(program));
+	glValidateProgram(program);
 
-	GLCall(glDeleteShader(vs));
-	GLCall(glDeleteShader(fs));
+	glDetachShader(program, vs);
+	glDetachShader(program, fs);
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 
 	return program;
 }
 
-uint32_t AmberEngine::Resources::ShaderLoader::CompileShader(uint32_t p_type, const std::string& p_source)
+uint32_t AmberEngine::Resources::ShaderLoader::CompileShader(uint32_t p_type, const std::string& p_source, uint32_t p_program)
 {
-	GLCall(uint32_t id = glCreateShader(p_type));
+	uint32_t id = glCreateShader(p_type);
 
 	const char* src = p_source.c_str();
 
-	GLCall(glShaderSource(id, 1, &src, nullptr));
+	glShaderSource(id, 1, &src, nullptr);
 
-	GLCall(glCompileShader(id));
+	glCompileShader(id);
 
 	GLint compileStatus;
-	GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &compileStatus));
+	glGetShaderiv(id, GL_COMPILE_STATUS, &compileStatus);
 
 	if (compileStatus == GL_FALSE)
 	{
@@ -185,6 +218,7 @@ uint32_t AmberEngine::Resources::ShaderLoader::CompileShader(uint32_t p_type, co
 
 		std::cout << errorHeader + __FILE_TRACE + "\":\n" + errorLog << std::endl;
 
+		glDetachShader(p_program, id);
 		glDeleteShader(id);
 
 		return 0;

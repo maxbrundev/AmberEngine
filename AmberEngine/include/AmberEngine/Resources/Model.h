@@ -20,7 +20,7 @@ namespace AmberEngine::Resources
 		void SetTextureUniform(const std::string_view p_uniformName, int p_id) const;
 
 		void SetShader(Shader& p_shader);
-		Shader* GetShader() const;
+		Shader* GetShader();
 
 		std::vector<Mesh*>& GetMeshes();
 		std::vector<std::string>& GetMaterialNames();

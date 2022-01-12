@@ -24,10 +24,13 @@ namespace AmberEngine::Resources
 
 		std::function<void(std::string, int)> SetTextureUniformCallback;
 
+		uint32_t GetVertexCount() const;
+		uint32_t GetIndexCount() const;
+
 	private:
 		void InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices);
 
-	public:
+	private:
 		const uint32_t m_vertexCount;
 		const uint32_t m_indicesCount;
 		std::vector<std::shared_ptr<Texture>> m_textures;

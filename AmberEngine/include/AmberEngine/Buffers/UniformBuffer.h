@@ -23,8 +23,8 @@ namespace AmberEngine::Buffers
 
 		~UniformBuffer();
 
-		void Bind();
-		void Unbind();
+		void Bind() const;
+		void Unbind() const;
 
 		template<typename T>
 		void SetSubData(const T& p_data, size_t p_offset)

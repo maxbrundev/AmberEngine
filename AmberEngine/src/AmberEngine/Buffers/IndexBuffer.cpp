@@ -1,7 +1,5 @@
 #include "Amberpch.h"
 
-#include <GL/glew.h>
-
 #include "AmberEngine/Buffers/IndexBuffer.h"
 
 AmberEngine::Buffers::IndexBuffer::IndexBuffer(const unsigned int* p_data, size_t p_elements)
@@ -26,7 +24,7 @@ void AmberEngine::Buffers::IndexBuffer::Unbind() const
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-uint32_t AmberEngine::Buffers::IndexBuffer::GetID()
+uint32_t AmberEngine::Buffers::IndexBuffer::GetID() const
 {
 	return m_bufferID;
 }

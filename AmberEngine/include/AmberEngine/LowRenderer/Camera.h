@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 #include "AmberEngine/API/Export.h"
+
+#include <glm/glm.hpp>
 
 namespace AmberEngine::LowRenderer
 {

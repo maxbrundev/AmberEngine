@@ -5,7 +5,6 @@
 
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
-#include "AmberEngine/Debug/GLDebug.h"
 #include "AmberEngine/Tools/Utils/String.h"
 
 AmberEngine::Resources::Texture* AmberEngine::Resources::TextureLoader::Create(std::string p_filePath,

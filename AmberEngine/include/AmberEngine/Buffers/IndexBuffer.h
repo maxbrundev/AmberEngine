@@ -8,9 +8,6 @@ namespace AmberEngine::Buffers
 {
 	class API_AMBERENGINE IndexBuffer
 	{
-	private:
-		GLuint m_bufferID;
-
 	public:
 		IndexBuffer(const unsigned int* p_data, size_t p_elements);
 		~IndexBuffer();
@@ -18,6 +15,9 @@ namespace AmberEngine::Buffers
 		void Bind() const;
 		void Unbind() const;
 
-		GLuint GetID();
+		GLuint GetID() const;
+
+	private:
+		GLuint m_bufferID;
 	};
 }

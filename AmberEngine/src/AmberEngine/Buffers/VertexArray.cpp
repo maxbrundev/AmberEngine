@@ -1,7 +1,5 @@
 #include "Amberpch.h"
 
-#include <GL/glew.h>
-
 #include "AmberEngine/Buffers/VertexArray.h"
 
 AmberEngine::Buffers::VertexArray::VertexArray() : index{0}
@@ -32,7 +30,7 @@ void AmberEngine::Buffers::VertexArray::Unbind() const
 	glBindVertexArray(0);
 }
 
-GLuint AmberEngine::Buffers::VertexArray::GetID()
+GLuint AmberEngine::Buffers::VertexArray::GetID() const
 {
 	return m_bufferID;
 }

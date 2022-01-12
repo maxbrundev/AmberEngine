@@ -2,8 +2,8 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include "ETextureFilteringMode.h"
-#include "ETextureType.h"
+#include "AmberEngine/Resources/ETextureFilteringMode.h"
+#include "AmberEngine/Resources/ETextureType.h"
 
 namespace AmberEngine::Resources
 {

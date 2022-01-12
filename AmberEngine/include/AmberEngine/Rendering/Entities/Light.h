@@ -1,14 +1,12 @@
 #pragma once
 
-#include "AmberEngine/API/Export.h"
-
 #include "AmberEngine/Rendering/Entities/ELightType.h"
 
 #include "AmberEngine/Maths/Transform.h"
 
 namespace AmberEngine::Rendering::Entities
 {
-	struct API_AMBERENGINE Light
+	struct Light
 	{
 		Light(Maths::Transform& p_tranform, ELightType p_type);
 

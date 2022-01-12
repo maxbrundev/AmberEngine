@@ -2,7 +2,7 @@
 
 #include "AmberEngine/Resources/Parsers/AssimpParser.h"
 
-#include <chrono>
+//#include <chrono>
 
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
@@ -13,7 +13,7 @@ bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePa
 {
 	m_directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
 
-	const auto start = std::chrono::high_resolution_clock::now();
+	//const auto start = std::chrono::high_resolution_clock::now();
 
 	Assimp::Importer import;
 
@@ -36,9 +36,9 @@ bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePa
 
 	p_model.BindTextureCallback();
 
-	const auto end = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> elapsed = end - start;
-	std::cout << "duration: " << elapsed.count() << " s\n";
+	//const auto end = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<double> elapsed = end - start;
+	//std::cout << "duration: " << elapsed.count() << " s\n";
 
 	return true;
 }

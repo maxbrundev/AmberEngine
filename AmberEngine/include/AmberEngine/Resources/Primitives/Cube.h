@@ -4,7 +4,7 @@
 
 namespace AmberEngine::PrimitivesShapes
 {
-	struct API_AMBERENGINE Vertex
+	struct Vertex
 	{
 		Vertex() = default;
 		Vertex(glm::vec3 p_position, glm::vec2 p_textureCoord, glm::vec3 p_normals)

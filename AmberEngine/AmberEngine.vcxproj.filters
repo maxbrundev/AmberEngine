@@ -186,9 +186,6 @@
     <ClInclude Include="include\AmberEngine\Buffers\FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\Resources\Parsers\EModelParserFlags.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\AmberEngine\UI\MenuBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>

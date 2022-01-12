@@ -32,6 +32,11 @@ void AmberEngine::Resources::Mesh::Bind() const
 void AmberEngine::Resources::Mesh::Unbind() const
 {
 	m_vertexArray.Unbind();
+
+	for (const auto& m_texture : m_textures)
+	{
+		m_texture->Unbind();
+	}
 }
 
 void AmberEngine::Resources::Mesh::BindMaterialTextures() const
@@ -52,6 +57,16 @@ void AmberEngine::Resources::Mesh::BindMaterialTextures() const
 			break;
 		}
 	}
+}
+
+uint32_t AmberEngine::Resources::Mesh::GetVertexCount() const
+{
+	return m_vertexCount;
+}
+
+uint32_t AmberEngine::Resources::Mesh::GetIndexCount() const
+{
+	return m_indicesCount;
 }
 
 void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices)

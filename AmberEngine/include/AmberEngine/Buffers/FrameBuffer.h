@@ -12,14 +12,15 @@ namespace AmberEngine::Buffers
 		FrameBuffer(uint16_t p_width, uint16_t p_height);
 		~FrameBuffer();
 
-		void Bind();
-		void Unbind();
+		void Bind() const;
+		void Unbind() const;
 
 		void Resize(uint16_t p_width, uint16_t p_height);
 
-		uint32_t GetID();
-		uint32_t GetTextureID();
-		uint32_t GetRenderBufferID();
+		uint32_t GetID() const;
+		uint32_t GetTextureID() const;
+		uint32_t GetRenderBufferID() const;
+
 	private:
 		uint32_t m_bufferID = 0;
 		uint32_t m_renderTexture = 0;

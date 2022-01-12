@@ -2,8 +2,6 @@
 
 #include "AmberEngine/Resources/Shader.h"
 
-#include "AmberEngine/Debug/GLDebug.h"
-
 AmberEngine::Resources::Shader::Shader(std::string p_filePath, uint32_t p_id) : path(std::move(p_filePath)), id(p_id)
 {
 }
@@ -15,47 +13,47 @@ AmberEngine::Resources::Shader::~Shader()
 
 void AmberEngine::Resources::Shader::Bind() const
 {
-	GLCall(glUseProgram(id));
+	glUseProgram(id);
 }
 
 void AmberEngine::Resources::Shader::Unbind() const
 {
-	GLCall(glUseProgram(0));
+	glUseProgram(0);
 }
 
 void AmberEngine::Resources::Shader::SetUniformIntPointer(const std::string_view p_name, int p_count, const int* p_value)
 {
-	GLCall(glUniform1iv(GetUniformLocation(p_name), p_count, p_value));
+	glUniform1iv(GetUniformLocation(p_name), p_count, p_value);
 }
 
 void AmberEngine::Resources::Shader::SetUniform1i(const std::string_view p_name, const int p_value)
 {
-	GLCall(glUniform1i(GetUniformLocation(p_name), p_value));
+	glUniform1i(GetUniformLocation(p_name), p_value);
 }
 
 void AmberEngine::Resources::Shader::SetUniform1f(const std::string_view p_name, const float p_value)
 {
-	GLCall(glUniform1f(GetUniformLocation(p_name), p_value));
+	glUniform1f(GetUniformLocation(p_name), p_value);
 }
 
 void AmberEngine::Resources::Shader::SetUniform4f(const std::string_view p_name, const float p_v0, const float p_v1, const float p_v2, const float p_v3)
 {
-	GLCall(glUniform4f(GetUniformLocation(p_name), p_v0, p_v1, p_v2, p_v3));
+	glUniform4f(GetUniformLocation(p_name), p_v0, p_v1, p_v2, p_v3);
 }
 
 void AmberEngine::Resources::Shader::SetUniformVec3(const std::string_view p_name, const glm::vec3& p_vec3)
 {
-	GLCall(glUniform3f(GetUniformLocation(p_name), p_vec3.x, p_vec3.y, p_vec3.z));
+	glUniform3f(GetUniformLocation(p_name), p_vec3.x, p_vec3.y, p_vec3.z);
 }
 
 void AmberEngine::Resources::Shader::SetUniformVec4(const std::string_view p_name, const glm::vec4& p_vec4)
 {
-	GLCall(glUniform4f(GetUniformLocation(p_name), p_vec4.x, p_vec4.y, p_vec4.z, p_vec4.w));
+	glUniform4f(GetUniformLocation(p_name), p_vec4.x, p_vec4.y, p_vec4.z, p_vec4.w);
 }
 
 void AmberEngine::Resources::Shader::SetUniformMat4(const std::string_view p_name, const glm::mat4& p_mat4)
 {
-	GLCall(glUniformMatrix4fv(GetUniformLocation(p_name), 1, GL_FALSE, &p_mat4[0][0]));
+	glUniformMatrix4fv(GetUniformLocation(p_name), 1, GL_FALSE, &p_mat4[0][0]);
 }
 
 uint32_t AmberEngine::Resources::Shader::GetUniformLocation(const std::string_view p_name)

@@ -4,18 +4,16 @@
 
 AmberEngine::ECS::Actor::Actor()
 {
-	std::cout << "Actor created" << std::endl;
-
 }
 
 AmberEngine::ECS::Actor::~Actor()
 {
-	std::cout << "Actor Destrcuted" << std::endl;
 	for (auto& component : m_components)
 	{
 		delete component;
 		component = nullptr;
 	}
+
 	m_components.clear();
 }
 
