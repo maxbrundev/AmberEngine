@@ -22,13 +22,14 @@ void AmberEngine::Maths::Transform::GenerateMatrices(glm::vec3 p_position, glm::
 	glm::mat4 rotationZ{ 1.0f };
 	rotationZ = glm::rotate(rotationZ, glm::radians(p_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
+
 	rotationMatrix = rotationZ * rotationY * rotationX;
 
-	//m_localMatrix = glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
-	m_localMatrix = glm::scale(scaleMatrix, p_scale) * rotationMatrix * glm::translate(positionMatrix, p_position);
+	m_localMatrix =  glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
 	m_localPosition	= p_position;
 	m_localRotation = p_rotation;
 	m_localScale	= p_scale;
+	m_localRotationQuat = glm::quat_cast(rotationMatrix);
 
 	UpdateWorldMatrix();
 }
@@ -40,7 +41,7 @@ void AmberEngine::Maths::Transform::UpdateWorldMatrix()
 	PreDecomposeWorldMatrix();
 }
 
-bool AmberEngine::Maths::Transform::HasParent()
+bool AmberEngine::Maths::Transform::HasParent() const
 {
 	return m_parent != nullptr;
 }
@@ -58,6 +59,13 @@ void AmberEngine::Maths::Transform::SetLocalRotation(glm::vec3 p_newRotation)
 void AmberEngine::Maths::Transform::SetLocalScale(glm::vec3 p_newScale)
 {
 	GenerateMatrices(m_localPosition, m_localRotation, p_newScale);
+}
+
+glm::vec3 AmberEngine::Maths::Transform::GetWorldForward() const
+{
+	const glm::vec3 forward = m_worldRotationQuat * glm::vec3(0.0f, 0.0f, 1.0f);
+
+	return forward;
 }
 
 void AmberEngine::Maths::Transform::TranslateLocal(const glm::vec3& p_translation)
@@ -96,10 +104,9 @@ void AmberEngine::Maths::Transform::PreDecomposeWorldMatrix()
 	glm::vec3 scaleY(m_worldMatrix[1][0], m_worldMatrix[1][1], m_worldMatrix[1][2]);
 	glm::vec3 scaleZ(m_worldMatrix[2][0], m_worldMatrix[2][1], m_worldMatrix[2][2]);
 
-
 	m_worldScale.x = glm::length(scaleX);
-	m_worldScale.y = glm::length(glm::vec3(m_worldMatrix[1][0], m_worldMatrix[1][1], m_worldMatrix[1][2]));
-	m_worldScale.z = glm::length(glm::vec3(m_worldMatrix[2][0], m_worldMatrix[2][1], m_worldMatrix[2][2]));
+	m_worldScale.y = glm::length(scaleY);
+	m_worldScale.z = glm::length(scaleZ);
 
 	glm::vec3 rotationX { 0.0f };
 	glm::vec3 rotationY { 0.0f };
@@ -118,10 +125,11 @@ void AmberEngine::Maths::Transform::PreDecomposeWorldMatrix()
 		rotationZ = (glm::vec3(m_worldMatrix[2][0], m_worldMatrix[2][1], m_worldMatrix[2][2]) / m_worldScale.z);
 	}
 
-	glm::mat3 worldRotationMatrix { rotationX.x, rotationX.y, rotationX.z,
-									rotationY.x, rotationY.y, rotationY.z,
-									rotationZ.x, rotationZ.y, rotationZ.z };
-
-	glm::fquat rotation = glm::quat_cast(worldRotationMatrix);
-	m_worldRotation = glm::eulerAngles(rotation) * (180.0f / glm::pi<float>());
+	const glm::mat3 worldRotationMatrix { rotationX.x, rotationX.y, rotationX.z,
+										  rotationY.x, rotationY.y, rotationY.z,
+										  rotationZ.x, rotationZ.y, rotationZ.z };
+	
+	m_worldRotationQuat = glm::quat_cast(worldRotationMatrix);
+	
+	m_worldRotation = glm::eulerAngles(m_worldRotationQuat) * (180.0f / glm::pi<float>());
 }

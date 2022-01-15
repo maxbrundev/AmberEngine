@@ -8,6 +8,8 @@
 
 #include <AmberEngine/Core/ECS/Actor.h>
 #include <AmberEngine/Core/ECS/Components/ModelComponent.h>
+
+#include <AmberEngine/Rendering/Entities/ELightType.h>
 #include <AmberEngine/Resources/Loaders/ShaderLoader.h>
 
 /*#include <AmberEngine/Resources/Primitives/Cube.h>
@@ -36,16 +38,16 @@ void Example::Application::Setup()
 
 	resourcesManager.GetModel("Helmet").SetShader(lightingShader);
 
-	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
-	
-	lightingShader.Bind();
-	//lightingShader.SetUniform1i("u_DiffuseMap", 0);
-	//lightingShader.SetUniform1i("u_SpecularMap", 1);
-	lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-	lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	lightingShader.SetUniformVec3("light.direction", lighDir);
-	lightingShader.Unbind();
+	//glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
+	//
+	//lightingShader.Bind();
+	////lightingShader.SetUniform1i("u_DiffuseMap", 0);
+	////lightingShader.SetUniform1i("u_SpecularMap", 1);
+	//lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	//lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+	//lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	//lightingShader.SetUniformVec3("light.direction", lighDir);
+	//lightingShader.Unbind();
 }
 
 void Example::Application::Run()
@@ -137,78 +139,42 @@ void Example::Application::Run()
 
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
-	AmberEngine::ECS::Actor testActor;
+	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor();
+	AmberEngine::ECS::Actor* testLight = new AmberEngine::ECS::Actor();
 	
-	testActor.AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
-	testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
-	//Tranform test
-	float positionX = 0.0f;
-	float positionY = 0.0f;
-	float positionZ = 0.0f;
+	testLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
+
+	m_editor.m_context.m_scene.AddActor(testActor, "Actor1");
+	m_editor.m_context.m_scene.AddActor(testLight, "Actor2");
 
 	float rotationX = 0.0f;
 	float rotationY = 0.0f;
 	float rotationZ = 0.0f;
 
-	float scaleX = 1.0f;
-	float scaleY = 1.0f;
-	float scaleZ = 1.0f;
-
-	float translationX = 0.0f;
-	float translationY = 0.0f;
-	float translationZ = 0.0f;
-
-	float rotateX = 0.0f;
-	float rotateY = 0.0f;
-	float rotateZ = 0.0f;
-
-	float scalingX = 1.0f;
-	float scalingY = 1.0f;
-	float scalingZ = 1.0f;
-
-	glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
+	float rotationX2 = 0.0f;
+	float rotationY2 = 0.0f;
+	float rotationZ2 = 0.0f;
 
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
 
-		//Tranform test
 		ImGui::Begin("Transform Test");
-		ImGui::SliderFloat("Position X", &positionX, -100.0f, 100.0f);
-		ImGui::SliderFloat("Position Y", &positionY, -100.0f, 100.0f);
-		ImGui::SliderFloat("Position Z", &positionZ, -100.0f, 100.0f);
+		
+		ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
 
-		ImGui::SliderFloat("Rotation X", &rotationX, -360.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Y", &rotationY, -360.0f, 360.0f); 
-		ImGui::SliderFloat("Rotation Z", &rotationZ, -360.0f, 360.0f);
-
-		ImGui::SliderFloat("Scale X", &scaleX, 1.0f, 100.0f);
-		ImGui::SliderFloat("Scale Y", &scaleY, 1.0f, 100.0f);
-		ImGui::SliderFloat("Scale Z", &scaleZ, 1.0f, 100.0f);
-
-		ImGui::SliderFloat("Translate X", &translationX, -1.0f, 1.0f);
-		ImGui::SliderFloat("Translate Y", &translationY, -1.0f, 1.0f);
-		ImGui::SliderFloat("Translate Z", &translationZ, -1.0f, 1.0f);
-
-		ImGui::SliderFloat("Rotate X", &rotateX, -1.0f, 1.0f);
-		ImGui::SliderFloat("Rotate Y", &rotateY, -1.0f, 1.0f);
-		ImGui::SliderFloat("Rotate Z", &rotateZ, -1.0f, 1.0f);
-
-		ImGui::SliderFloat("Scaling X", &scalingX, 1.5f, 0.0001f);
-		ImGui::SliderFloat("Scaling Y", &scalingY, 1.5f, 0.0001f);
-		ImGui::SliderFloat("Scaling Z", &scalingZ, 1.5f, 0.0001f);
+		ImGui::SliderFloat("Rotation X2", &rotationX2, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Y2", &rotationY2, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Z2", &rotationZ2, 0.0f, 360.0f);
 		ImGui::End();
 
-		//Tranform test
-		testActor.GetTransform().SetLocalPosition({ positionX, positionY, positionZ });
-		testActor.GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
-		testActor.GetTransform().SetLocalScale({ scaleX, scaleY, scaleZ });
-		//testActor.GetTransform().TranslateLocal({ translationX, translationY, translationZ });
-		//testActor.GetTransform().RotateLocal({ rotateX, rotateY, rotateZ });
-		//testActor.GetTransform().ScaleLocal({ scalingX, scalingY, scalingZ });
-
-		m_context.renderer->Draw(*testActor.GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel(), &testActor.GetTransform().GetWorldMatrix());
+		testLight->GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
+		testActor->GetTransform().SetLocalRotation({ rotationX2, rotationY2, rotationZ2 });
 
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.RenderScene();

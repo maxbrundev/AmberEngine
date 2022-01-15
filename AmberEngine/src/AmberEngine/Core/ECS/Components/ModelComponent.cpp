@@ -24,14 +24,7 @@ AmberEngine::ECS::Components::ModelComponent::~ModelComponent()
 
 void AmberEngine::ECS::Components::ModelComponent::Update(float p_deltaTime)
 {
-	const glm::mat4 modelMatrix = owner.GetTransform().GetWorldMatrix();
 
-	if(m_model->GetShader() != nullptr)
-	{
-		m_model->GetShader()->Bind();
-		//TODO: Send Lights uniforms data.
-		m_model->GetShader()->Unbind();
-	}
 }
 
 AmberEngine::Resources::Model* AmberEngine::ECS::Components::ModelComponent::GetModel() const

@@ -1,6 +1,6 @@
 #pragma once
 
-//TODO: Implement complete menu bar class.
+// TODO: Implement complete menu bar class.
 namespace AmberEngine::UI
 {
 	class MenuBar

@@ -5,6 +5,7 @@
 #include "AmberEngine/Maths/Transform.h"
 
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
+#include "AmberEngine/Core/ECS/Components/LightComponent.h"
 
 namespace AmberEngine::ECS
 {
@@ -46,7 +47,7 @@ namespace AmberEngine::ECS
 			return nullptr;
 		}
 
-		void Update(float p_deltaTime);
+		void Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime);
 
 		void SetName(std::string p_name);
 

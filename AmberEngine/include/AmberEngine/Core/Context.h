@@ -14,6 +14,8 @@
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
 
+#include "AmberEngine/Core/SceneSystem/Scene.h"
+
 namespace AmberEngine::Core
 {
 	class API_AMBERENGINE Context
@@ -31,5 +33,7 @@ namespace AmberEngine::Core
 		std::unique_ptr<UIManager>						uiManager;
 
 		std::unique_ptr<Buffers::UniformBuffer>			engineUBO;
+
+		SceneSystem::Scene m_scene;
 	};
 }

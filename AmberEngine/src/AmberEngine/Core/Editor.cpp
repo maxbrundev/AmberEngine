@@ -17,6 +17,7 @@ AmberEngine::Core::Editor::Editor(Context& p_context) :
 
 void AmberEngine::Core::Editor::PreUpdate()
 {
+	// TODO: Reorganize and clean this method.
 	m_sceneView.BindFBO();
 	m_context.device->PollEvents();
 
@@ -28,6 +29,10 @@ void AmberEngine::Core::Editor::PreUpdate()
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
+	// TODO: Reorganize and clean this method.
+	m_context.m_scene.Update(p_deltaTime);
+	m_context.m_scene.DrawAll(*m_context.renderer);
+	
 	m_context.renderer->UpdateRenderMode();
 
 	size_t offset = sizeof(glm::mat4); // We skip the model matrix (Which is a special case, modified every draw calls)

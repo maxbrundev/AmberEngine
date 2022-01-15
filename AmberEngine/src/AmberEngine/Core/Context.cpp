@@ -2,7 +2,7 @@
 
 #include "AmberEngine/Core/Context.h"
 
-AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings)
+AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) : m_scene("TestScene")
 {
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
 	window = std::make_unique<AmberEngine::Context::Window>(*device, p_windowSettings);

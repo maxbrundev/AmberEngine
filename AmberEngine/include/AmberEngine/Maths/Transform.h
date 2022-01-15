@@ -1,8 +1,10 @@
 #pragma once
 
 #include "AmberEngine/API/Export.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+
 namespace AmberEngine::Maths
 {
 	class API_AMBERENGINE Transform
@@ -14,11 +16,13 @@ namespace AmberEngine::Maths
 		void GenerateMatrices(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
 		void UpdateWorldMatrix();
 
-		bool HasParent();
+		bool HasParent() const;
 
 		void SetLocalPosition(glm::vec3 p_newPosition);
 		void SetLocalRotation(glm::vec3 p_newRotation);
 		void SetLocalScale(glm::vec3 p_newScale);
+
+		glm::vec3 GetWorldForward() const;
 
 		void TranslateLocal(const glm::vec3& p_translation);
 		void RotateLocal(const glm::vec3& p_rotation);
@@ -30,7 +34,7 @@ namespace AmberEngine::Maths
 	private:
 		void PreDecomposeWorldMatrix();
 
-	private:
+	public:
 		glm::vec3 m_localPosition;
 		glm::vec3 m_localRotation;
 		glm::vec3 m_localScale;
@@ -41,6 +45,9 @@ namespace AmberEngine::Maths
 
 		glm::mat4 m_localMatrix;
 		glm::mat4 m_worldMatrix;
+
+		glm::quat m_worldRotationQuat;
+		glm::quat m_localRotationQuat;
 
 		Transform* m_parent;
 	};

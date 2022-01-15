@@ -12,7 +12,7 @@
 
 namespace AmberEngine::Managers
 {
-	// ASingleton will be removed, just an experimenting purpose.
+	// ASingleton will be removed, just an experimentation purpose.
 	class API_AMBERENGINE ResourcesManager final : public ASingleton<ResourcesManager>
 	{
 	public:

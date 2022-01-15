@@ -8,7 +8,7 @@
 
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-//TODO: Render current scene from the scene manager.
+// TODO: Render current scene from the scene manager.
 namespace AmberEngine::UI
 {
 	class API_AMBERENGINE SceneView : public AView
