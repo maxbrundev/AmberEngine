@@ -140,23 +140,31 @@ void Example::Application::Run()
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
 	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor();
-	AmberEngine::ECS::Actor* testLight = new AmberEngine::ECS::Actor();
+	AmberEngine::ECS::Actor* testActor2 = new AmberEngine::ECS::Actor();
+	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor();
 	
 	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
 	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
-	testLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
+	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+
+	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
 
 	m_editor.m_context.m_scene.AddActor(testActor, "Actor1");
-	m_editor.m_context.m_scene.AddActor(testLight, "Actor2");
+	m_editor.m_context.m_scene.AddActor(testActor2, "Actor2");
+	m_editor.m_context.m_scene.AddActor(directionalLight, "Directional Light");
 
-	float rotationX = 0.0f;
-	float rotationY = 0.0f;
-	float rotationZ = 0.0f;
+	testActor->GetTransform().SetParent(testActor2->GetTransform());
+	testActor->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });
 
-	float rotationX2 = 0.0f;
-	float rotationY2 = 0.0f;
-	float rotationZ2 = 0.0f;
+	float rotationX = testActor->GetTransform().GetWorldPosition().x;
+	float rotationY = testActor->GetTransform().GetWorldPosition().y;
+	float rotationZ = testActor->GetTransform().GetWorldPosition().z;
+
+	float rotationX2 = testActor2->GetTransform().GetWorldPosition().x;
+	float rotationY2 = testActor2->GetTransform().GetWorldPosition().y;
+	float rotationZ2 = testActor2->GetTransform().GetWorldPosition().z;
 
 	while (IsRunning())
 	{
@@ -164,17 +172,17 @@ void Example::Application::Run()
 
 		ImGui::Begin("Transform Test");
 		
-		ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 100.0f);
+		ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 100.0f);
+		ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 100.0f);
 
-		ImGui::SliderFloat("Rotation X2", &rotationX2, 0.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Y2", &rotationY2, 0.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Z2", &rotationZ2, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation X2", &rotationX2, 0.0f, 100.0f);
+		ImGui::SliderFloat("Rotation Y2", &rotationY2, 0.0f, 100.0f);
+		ImGui::SliderFloat("Rotation Z2", &rotationZ2, 0.0f, 100.0f);
 		ImGui::End();
 
-		testLight->GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
-		testActor->GetTransform().SetLocalRotation({ rotationX2, rotationY2, rotationZ2 });
+		testActor->GetTransform().SetWorldPosition({ rotationX, rotationY, rotationZ });
+		testActor2->GetTransform().SetWorldPosition({ rotationX2, rotationY2, rotationZ2 });
 
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.RenderScene();

@@ -22,7 +22,6 @@ void AmberEngine::Maths::Transform::GenerateMatrices(glm::vec3 p_position, glm::
 	glm::mat4 rotationZ{ 1.0f };
 	rotationZ = glm::rotate(rotationZ, glm::radians(p_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-
 	rotationMatrix = rotationZ * rotationY * rotationX;
 
 	m_localMatrix =  glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
@@ -46,6 +45,41 @@ bool AmberEngine::Maths::Transform::HasParent() const
 	return m_parent != nullptr;
 }
 
+void AmberEngine::Maths::Transform::TranslateLocal(const glm::vec3& p_translation)
+{
+	SetLocalPosition(m_localPosition + p_translation);
+}
+
+void AmberEngine::Maths::Transform::RotateLocal(const glm::vec3& p_rotation)
+{
+	SetLocalRotation(m_localRotation + p_rotation);
+}
+
+void AmberEngine::Maths::Transform::ScaleLocal(const glm::vec3& p_scale)
+{
+	SetLocalScale(m_localScale * p_scale);
+}
+
+void AmberEngine::Maths::Transform::SetParent(Transform& p_parent)
+{
+	m_parent = &p_parent;
+
+	UpdateWorldMatrix();
+}
+
+bool AmberEngine::Maths::Transform::RemoveParent()
+{
+	if(m_parent != nullptr)
+	{
+		m_parent = nullptr;
+		UpdateWorldMatrix();
+
+		return true;
+	}
+
+	return false;
+}
+
 void AmberEngine::Maths::Transform::SetLocalPosition(glm::vec3 p_newPosition)
 {
 	GenerateMatrices(p_newPosition, m_localRotation, m_localScale);
@@ -61,6 +95,51 @@ void AmberEngine::Maths::Transform::SetLocalScale(glm::vec3 p_newScale)
 	GenerateMatrices(m_localPosition, m_localRotation, p_newScale);
 }
 
+void AmberEngine::Maths::Transform::SetWorldPosition(glm::vec3 p_newPosition)
+{
+	GenerateMatrices(p_newPosition, m_worldRotation, m_worldScale);
+}
+
+void AmberEngine::Maths::Transform::SetWorldRotation(glm::vec3 p_newRotation)
+{
+	GenerateMatrices(m_worldPosition, p_newRotation, m_worldScale);
+}
+
+void AmberEngine::Maths::Transform::SetWorldScale(glm::vec3 p_newScale)
+{
+	GenerateMatrices(m_worldPosition, m_worldRotation, p_newScale);
+}
+
+const glm::vec3& AmberEngine::Maths::Transform::GetLocalPosition() const
+{
+	return m_localPosition;
+}
+
+const glm::vec3& AmberEngine::Maths::Transform::GetLocalRotationEuler() const
+{
+	return m_localRotation;
+}
+
+const glm::vec3& AmberEngine::Maths::Transform::GetLocalScale() const
+{
+	return m_localScale;
+}
+
+const glm::vec3& AmberEngine::Maths::Transform::GetWorldPosition() const
+{
+	return m_worldPosition;
+}
+
+const glm::vec3& AmberEngine::Maths::Transform::GetWorldRotationEuler() const
+{
+	return m_worldRotation;
+}
+
+const glm::vec3& AmberEngine::Maths::Transform::GetWorldScale() const
+{
+	return m_worldScale;
+}
+
 glm::vec3 AmberEngine::Maths::Transform::GetWorldForward() const
 {
 	const glm::vec3 forward = m_worldRotationQuat * glm::vec3(0.0f, 0.0f, 1.0f);
@@ -68,19 +147,31 @@ glm::vec3 AmberEngine::Maths::Transform::GetWorldForward() const
 	return forward;
 }
 
-void AmberEngine::Maths::Transform::TranslateLocal(const glm::vec3& p_translation)
+glm::vec3 AmberEngine::Maths::Transform::GetWorldUp() const
 {
-	SetLocalPosition(m_localPosition + p_translation);
+	return m_worldRotationQuat * glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
-void AmberEngine::Maths::Transform::RotateLocal(const glm::vec3& p_rotation)
+glm::vec3 AmberEngine::Maths::Transform::GetWorldRight() const
 {
-	SetLocalRotation(m_localRotation + p_rotation);
+	return m_worldRotationQuat * glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
-void AmberEngine::Maths::Transform::ScaleLocal(const glm::vec3& p_scale)
+glm::vec3 AmberEngine::Maths::Transform::GetLocalForward() const
 {
-	SetLocalScale(m_localScale * p_scale);
+	const glm::vec3 forward = m_localRotationQuat * glm::vec3(0.0f, 0.0f, 1.0f);
+
+	return forward;
+}
+
+glm::vec3 AmberEngine::Maths::Transform::GetLocalUp() const
+{
+	return m_localRotationQuat * glm::vec3(0.0f, 1.0f, 0.0f);
+}
+
+glm::vec3 AmberEngine::Maths::Transform::GetLocalRight() const
+{
+	return m_localRotationQuat * glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
 glm::mat4& AmberEngine::Maths::Transform::GetLocalMatrix()
