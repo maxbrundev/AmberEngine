@@ -2,9 +2,22 @@
 
 #include "AmberEngine/Maths/Transform.h"
 
+#include "AmberEngine/Eventing/Event.h"
+
 AmberEngine::Maths::Transform::Transform(const glm::vec3 & p_position, const glm::vec3 & p_rotation, const glm::vec3 & p_scale) : m_parent(nullptr)
 {
 	GenerateMatrices(p_position, p_rotation, p_scale);
+}
+
+AmberEngine::Maths::Transform::~Transform()
+{
+	for (auto& [childID, callback] : m_childrenTransfromCallbacks)
+	{
+		callback(ETransformState::DESTROYED);
+		callback = nullptr;
+	}
+
+	m_childrenTransfromCallbacks.clear();
 }
 
 void AmberEngine::Maths::Transform::GenerateMatrices(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale)
@@ -38,6 +51,11 @@ void AmberEngine::Maths::Transform::UpdateWorldMatrix()
 	m_worldMatrix = HasParent() ? m_parent->m_worldMatrix * m_localMatrix : m_localMatrix;
 
 	PreDecomposeWorldMatrix();
+
+	for (const auto& [childID, callback] : m_childrenTransfromCallbacks)
+	{
+		callback(ETransformState::CHANGED);
+	}
 }
 
 bool AmberEngine::Maths::Transform::HasParent() const
@@ -64,6 +82,11 @@ void AmberEngine::Maths::Transform::SetParent(Transform& p_parent)
 {
 	m_parent = &p_parent;
 
+	m_parentCallbackID = m_parent->AddChildrenCallback([this](auto&& PH1)
+	{
+		HandleParentTransformCallback(std::forward<decltype(PH1)>(PH1));
+	});
+
 	UpdateWorldMatrix();
 }
 
@@ -71,13 +94,38 @@ bool AmberEngine::Maths::Transform::RemoveParent()
 {
 	if(m_parent != nullptr)
 	{
+		m_parent->m_childrenTransfromCallbacks.erase(m_parentCallbackID);
 		m_parent = nullptr;
-		UpdateWorldMatrix();
+
+		GenerateMatrices(m_worldPosition, m_worldRotation, m_worldScale);
 
 		return true;
 	}
 
 	return false;
+}
+
+void AmberEngine::Maths::Transform::HandleParentTransformCallback(ETransformState p_state)
+{
+	switch (p_state)
+	{
+	case ETransformState::CHANGED:
+		UpdateWorldMatrix();
+		break;
+
+	case ETransformState::DESTROYED:
+		m_parent = nullptr;
+		GenerateMatrices(m_worldPosition, m_worldRotation, m_worldScale);
+		break;
+	}
+}
+
+uint64_t AmberEngine::Maths::Transform::AddChildrenCallback(const std::function<void(ETransformState)>& p_callback)
+{
+	uint64_t childCallbackID = m_childCallbackID++;
+	m_childrenTransfromCallbacks.emplace(childCallbackID, p_callback);
+
+	return childCallbackID;
 }
 
 void AmberEngine::Maths::Transform::SetLocalPosition(glm::vec3 p_newPosition)

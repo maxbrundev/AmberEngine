@@ -14,17 +14,17 @@ namespace AmberEngine::Core::SceneSystem
 		~Scene();
 
 		void AddActor(ECS::Actor* p_actor, const std::string& p_name);
-		void RemoveGameObject(ECS::Actor*& p_actor);
+		void DestroyActor(ECS::Actor*& p_actor);
 		
 		void DrawAll(Renderer& p_renderer) const;
 
 		void Update(float p_deltaTime) const;
 
-		std::unordered_map<std::string_view, ECS::Actor*>& GetActors();
+		std::unordered_map<std::string, ECS::Actor*>& GetActors();
 		const std::vector<ECS::Components::LightComponent*>& GetLights();
 
 	private:
-		std::unordered_map<std::string_view, ECS::Actor*> m_actors;
+		std::unordered_map<std::string, ECS::Actor*> m_actors;
 		std::vector<ECS::Components::LightComponent*> m_lights;
 		std::string m_name;
 	};

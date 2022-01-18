@@ -5,13 +5,15 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "ETransformState.h"
+
 namespace AmberEngine::Maths
 {
 	class API_AMBERENGINE Transform
 	{
 	public:
 		Transform(const glm::vec3& p_position = glm::vec3 { 0.0f, 0.0f, 0.0f }, const glm::vec3& p_rotation = glm::vec3 { 0.0f, 0.0f, 0.0f },const glm::vec3& p_scale = glm::vec3 { 1.0f, 1.0f, 1.0f });
-		~Transform() = default;
+		~Transform();
 
 		void GenerateMatrices(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
 		void UpdateWorldMatrix();
@@ -24,6 +26,9 @@ namespace AmberEngine::Maths
 
 		void SetParent(Transform& p_parent);
 		bool RemoveParent();
+		void HandleParentTransformCallback(ETransformState p_state);
+
+		uint64_t AddChildrenCallback(const std::function<void(ETransformState)>& p_callback);
 
 		void SetLocalPosition(glm::vec3 p_newPosition);
 		void SetLocalRotation(glm::vec3 p_newRotation);
@@ -71,5 +76,9 @@ namespace AmberEngine::Maths
 		glm::quat m_localRotationQuat;
 
 		Transform* m_parent;
+
+		uint64_t m_childCallbackID  = 0;
+		uint64_t m_parentCallbackID = 0;
+		std::unordered_map<uint64_t, std::function<void(ETransformState)>> m_childrenTransfromCallbacks;
 	};
 }

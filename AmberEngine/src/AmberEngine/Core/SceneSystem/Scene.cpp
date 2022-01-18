@@ -32,9 +32,17 @@ void AmberEngine::Core::SceneSystem::Scene::AddActor(ECS::Actor* p_actor, const 
 	}
 }
 
-void AmberEngine::Core::SceneSystem::Scene::RemoveGameObject(ECS::Actor*& p_actor)
+void AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor*& p_actor)
 {
-	m_actors.erase(m_actors.find(p_actor->GetName()));
+	const auto it = m_actors.find(p_actor->GetName());
+	
+	if(it != m_actors.end())
+	{
+		delete p_actor;
+		p_actor = nullptr;
+	
+		m_actors.erase(it->first);
+	}
 }
 
 void AmberEngine::Core::SceneSystem::Scene::DrawAll(Core::Renderer& p_renderer) const
@@ -57,7 +65,7 @@ void AmberEngine::Core::SceneSystem::Scene::Update(float p_deltaTime) const
 	}
 }
 
-std::unordered_map<std::string_view, AmberEngine::ECS::Actor*>& AmberEngine::Core::SceneSystem::Scene::GetActors()
+std::unordered_map<std::string, AmberEngine::ECS::Actor*>& AmberEngine::Core::SceneSystem::Scene::GetActors()
 {
 	return m_actors;
 }

@@ -141,6 +141,7 @@ void Example::Application::Run()
 
 	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor();
 	AmberEngine::ECS::Actor* testActor2 = new AmberEngine::ECS::Actor();
+	AmberEngine::ECS::Actor* testActor3 = new AmberEngine::ECS::Actor();
 	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor();
 	
 	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
@@ -149,41 +150,66 @@ void Example::Application::Run()
 	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
 	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
+	testActor3->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	testActor3->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+
 	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
 
-	m_editor.m_context.m_scene.AddActor(testActor, "Actor1");
-	m_editor.m_context.m_scene.AddActor(testActor2, "Actor2");
-	m_editor.m_context.m_scene.AddActor(directionalLight, "Directional Light");
+	m_context.m_scene.AddActor(testActor, "Actor1");
+	m_context.m_scene.AddActor(testActor2, "Actor2");
+	m_context.m_scene.AddActor(testActor3, "Actor3");
+	m_context.m_scene.AddActor(directionalLight, "Directional Light");
 
-	testActor->GetTransform().SetParent(testActor2->GetTransform());
-	testActor->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });
+	testActor2->GetTransform().SetParent(testActor->GetTransform());
+	testActor2->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });
 
-	float rotationX = testActor->GetTransform().GetWorldPosition().x;
-	float rotationY = testActor->GetTransform().GetWorldPosition().y;
-	float rotationZ = testActor->GetTransform().GetWorldPosition().z;
+	testActor3->GetTransform().SetParent(testActor->GetTransform());
+	testActor3->GetTransform().SetLocalPosition({ 20.0f, 0.0f, 0.0f });
 
-	float rotationX2 = testActor2->GetTransform().GetWorldPosition().x;
-	float rotationY2 = testActor2->GetTransform().GetWorldPosition().y;
-	float rotationZ2 = testActor2->GetTransform().GetWorldPosition().z;
+	float positionX = testActor->GetTransform().GetWorldPosition().x;
+	float positionY = testActor->GetTransform().GetWorldPosition().y;
+	float positionZ = testActor->GetTransform().GetWorldPosition().z;
+
+	float positionX2 = testActor2->GetTransform().GetWorldPosition().x;
+	float positionY2 = testActor2->GetTransform().GetWorldPosition().y;
+	float positionZ2 = testActor2->GetTransform().GetWorldPosition().z;
+
+	float positionX3 = testActor3->GetTransform().GetWorldPosition().x;
+	float positionY3 = testActor3->GetTransform().GetWorldPosition().y;
+	float positionZ3 = testActor3->GetTransform().GetWorldPosition().z;
 
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
 
 		ImGui::Begin("Transform Test");
-		
-		ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 100.0f);
-		ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 100.0f);
-		ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position X", &positionX, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position Y", &positionY, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position Z", &positionZ, 0.0f, 100.0f);
 
-		ImGui::SliderFloat("Rotation X2", &rotationX2, 0.0f, 100.0f);
-		ImGui::SliderFloat("Rotation Y2", &rotationY2, 0.0f, 100.0f);
-		ImGui::SliderFloat("Rotation Z2", &rotationZ2, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position X2", &positionX2, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position Y2", &positionY2, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position Z2", &positionZ2, 0.0f, 100.0f);
+
+		ImGui::SliderFloat("Position X3", &positionX3, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position Y3", &positionY3, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position Z3", &positionZ3, 0.0f, 100.0f);
 		ImGui::End();
 
-		testActor->GetTransform().SetWorldPosition({ rotationX, rotationY, rotationZ });
-		testActor2->GetTransform().SetWorldPosition({ rotationX2, rotationY2, rotationZ2 });
+		if(testActor)
+			testActor->GetTransform().SetLocalPosition({ positionX, positionY, positionZ });
 
+		if(testActor2)
+			testActor2->GetTransform().SetLocalPosition({ positionX2, positionY2, positionZ2 });
+
+		if(testActor3)
+			testActor3->GetTransform().SetLocalPosition({ positionX3, positionY3, positionZ3 });
+
+		if(m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))
+		{
+			m_editor.m_context.m_scene.DestroyActor(testActor2);
+		}
+	
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.RenderScene();
 		m_editor.PostUpdate();

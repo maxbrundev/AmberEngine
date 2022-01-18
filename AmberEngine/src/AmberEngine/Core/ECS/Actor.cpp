@@ -18,6 +18,8 @@ AmberEngine::ECS::Actor::~Actor()
 	}
 
 	m_components.clear();
+
+	m_transform.RemoveParent();
 }
 
 void AmberEngine::ECS::Actor::Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime)

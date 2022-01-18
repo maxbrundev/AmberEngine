@@ -289,6 +289,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\Renderer.h" />
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
     <ClInclude Include="include\AmberEngine\Core\UIManager.h" />
+    <ClInclude Include="include\AmberEngine\Maths\ETransformState.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Entities\ELightType.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Entities\Light.h" />
