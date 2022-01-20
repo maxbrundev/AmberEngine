@@ -211,7 +211,6 @@ void Example::Application::Run()
 		}
 	
 		m_editor.Update(clock.GetDeltaTime());
-		m_editor.RenderScene();
 		m_editor.PostUpdate();
 		
 		clock.Update();

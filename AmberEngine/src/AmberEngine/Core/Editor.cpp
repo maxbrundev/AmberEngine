@@ -4,7 +4,7 @@
 
 AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_context(p_context),
-	m_sceneView(*p_context.window, *p_context.inputManager),
+	m_sceneView(m_context),
 	isCameraFree(true)
 {
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
@@ -15,50 +15,41 @@ AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_context.uiManager->EnableDocking(true);
 }
 
-void AmberEngine::Core::Editor::PreUpdate()
+void AmberEngine::Core::Editor::PreUpdate() const
 {
-	// TODO: Reorganize and clean this method.
-	m_sceneView.BindFBO();
 	m_context.device->PollEvents();
 
 	m_context.renderer->SetClearColor(0.1f, 0.1f, 0.1f);
 	m_context.renderer->Clear(true, true, true);
-	m_context.uiManager->PreDraw();
 
+	m_context.uiManager->PreDraw();
 }
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
-	// TODO: Reorganize and clean this method.
+	RenderViews(p_deltaTime);
+
 	m_context.m_scene.Update(p_deltaTime);
 	m_context.m_scene.DrawAll(*m_context.renderer);
-	
+
+	//------------//
 	m_context.renderer->UpdateRenderMode();
-
-	size_t offset = sizeof(glm::mat4); // We skip the model matrix (Which is a special case, modified every draw calls)
-	m_context.engineUBO->SetSubData(m_sceneView.GetCameraController().GetCamera().GetViewMatrix(), std::ref(offset));
-	m_context.engineUBO->SetSubData(m_sceneView.GetCameraController().GetCamera().GetProjectionMatrix(), std::ref(offset));
-	m_context.engineUBO->SetSubData(m_sceneView.GetCameraController().GetPosition(), std::ref(offset));
-
-	m_sceneView.PrepareCamera();
-
-	m_sceneView.Update(p_deltaTime);
 	UpdateInput();
+	m_sceneView.Draw();
+	m_menuBar.Draw();
+	m_context.uiManager->PostDraw();
 }
 
-void AmberEngine::Core::Editor::PostUpdate()
+void AmberEngine::Core::Editor::PostUpdate() const
 {
 	m_context.window->SwapBuffers();
 	m_context.inputManager->clearEvents();
 }
 
-void AmberEngine::Core::Editor::RenderScene()
+void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 {
-	m_sceneView.UnbindFBO();
-	
+	m_sceneView.Update(p_deltaTime);
 	m_sceneView.Render();
-	m_menuBar.Draw();
-	m_context.uiManager->PostDraw();
 }
 
 void AmberEngine::Core::Editor::UpdateInput()
@@ -93,9 +84,4 @@ void AmberEngine::Core::Editor::LockCamera()
 void AmberEngine::Core::Editor::ToggleCamera()
 {
 	isCameraFree = !isCameraFree;
-}
-
-void AmberEngine::Core::Editor::SetCameraPosition(const glm::vec3& p_position)
-{
-	m_sceneView.GetCameraController().SetPosition(p_position);
 }

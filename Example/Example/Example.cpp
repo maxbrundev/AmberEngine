@@ -13,7 +13,7 @@ int main()
 	deviceSettings.debugProfile = true;
 	
 	AmberEngine::Settings::WindowSettings windowSettings;
-	windowSettings.title = "AmberEngineV0.1.5";
+	windowSettings.title = "AmberEngine v0.5r1";
 	windowSettings.width = 1280;
 	windowSettings.height = 720;
 	windowSettings.resizable = true;
@@ -27,9 +27,19 @@ int main()
 	driverSettings.enableMultisample = true;
 	driverSettings.enableDebugCallback = true;
 
-	Example::Application exampleApp(deviceSettings, windowSettings, driverSettings);
-	exampleApp.Setup();
-	exampleApp.Run();
+	const auto listenerId = AmberEngine::Context::Device::ErrorEvent += [](AmberEngine::Context::EDeviceError device_error, std::string error_message)
+	{
+		// Anticipating SSBO addition.
+		error_message = "AmberEngine requires OpenGL 4.3 or newer.\r\n" + error_message;
+		std::cout << error_message.c_str() << std::endl;
+	};
+
+	const std::unique_ptr<Example::Application> exampleApp = std::make_unique<Example::Application>(deviceSettings, windowSettings, driverSettings);
+
+	AmberEngine::Context::Device::ErrorEvent -= listenerId;
+
+	exampleApp->Setup();
+	exampleApp->Run();
 
 	return 0;
 }

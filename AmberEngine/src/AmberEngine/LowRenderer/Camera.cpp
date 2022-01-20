@@ -3,7 +3,7 @@
 #include "AmberEngine/LowRenderer/Camera.h"
 
 AmberEngine::LowRenderer::Camera::Camera()
-	:  m_clearColor(0.0f, 0.0f, 0.0f), m_yaw(-90.0f), m_pitch(0.0f), m_fov(45.0f), m_near(0.1f), m_far(100.0f)
+	:  m_clearColor(0.1f, 0.1f, 0.1f), m_yaw(-90.0f), m_pitch(0.0f), m_fov(45.0f), m_near(0.1f), m_far(100.0f)
 {
 	UpdateCameraVectors();
 }

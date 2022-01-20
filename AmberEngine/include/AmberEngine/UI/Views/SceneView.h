@@ -7,6 +7,7 @@
 #include "AmberEngine/Buffers/FrameBuffer.h"
 
 #include "AmberEngine/LowRenderer/CameraController.h"
+#include "AmberEngine/Core/Context.h"
 
 // TODO: Render current scene from the scene manager.
 namespace AmberEngine::UI
@@ -14,27 +15,28 @@ namespace AmberEngine::UI
 	class API_AMBERENGINE SceneView : public AView
 	{
 	public:
-		SceneView(Context::Window& p_window, Inputs::InputManager& p_inputManager);
+		SceneView(Core::Context& p_context);
 		virtual ~SceneView() override;
 
 		void Update(float p_deltaTime);
 		void Render();
-
+		void Draw();
 		void PrepareCamera();
-
-		void BindFBO();
-		void UnbindFBO();
+		void FillEngineUBO();
 
 		LowRenderer::CameraController& GetCameraController();
 		
 	private:
 		void ResizeFrameBuffer(uint16_t p_width, uint16_t p_height);
 
-	public:
-		AmberEngine::Context::Window& m_window;
+	private:
+		Core::Context& m_context;
+
 		LowRenderer::CameraController m_cameraController;
+
 		AmberEngine::Buffers::FrameBuffer m_frameBuffer;
-		//glm::vec2 viewportSize;
+
+		glm::vec2 viewportSize;
 		bool isFirstFrame = true;
 	};
 }
