@@ -6,7 +6,7 @@ AmberEngine::UI::SceneView::SceneView(Core::Context& p_context) :
 	AView("Scene"),
 	m_context(p_context),
 	m_cameraController(*m_context.window, *m_context.inputManager, glm::vec3(0.0f, 0.0f, 15.0f)),
-	m_frameBuffer(m_context.window->GetSize().first, m_context.window->GetSize().second)
+	m_frameBuffer(256, 144)
 	
 {
 	//m_context.window->FramebufferResizeEvent.AddListener([this](auto&& PH1, auto&& PH2)
@@ -26,25 +26,27 @@ void AmberEngine::UI::SceneView::Update(float p_deltaTime)
 
 	auto[winWidth, winHeight] = GetSafeSize();
 
-	if (viewportSize.x > 0.0f && viewportSize.y > 0.0f)
+	if (viewportSize.x > 0.0f && viewportSize.y > 0.0f 
+		&& (m_frameBuffer.GetSize().first != winWidth || m_frameBuffer.GetSize().second != winHeight))
 	{
 		m_frameBuffer.Resize(winWidth, winHeight);
 	}
+
+	m_context.window->SetViewport(winWidth, winHeight);
+
+	m_context.m_scene.Update(p_deltaTime);
 }
 
 void AmberEngine::UI::SceneView::Render()
 {
-	FillEngineUBO();
-
-	auto[winWidth, winHeight] = GetSafeSize();
-	m_context.window->SetViewport(winWidth, winHeight);
-
 	PrepareCamera();
+
+	FillEngineUBO();
 
 	m_frameBuffer.Bind();
 	m_context.renderer->Clear(m_cameraController.GetCamera(), true, true, true);
 
-	// TODO: Render current scene.
+	m_context.m_scene.DrawAll(*m_context.renderer);
 }
 
 void AmberEngine::UI::SceneView::Draw()

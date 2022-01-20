@@ -29,15 +29,9 @@ void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
 	RenderViews(p_deltaTime);
 
-	m_context.m_scene.Update(p_deltaTime);
-	m_context.m_scene.DrawAll(*m_context.renderer);
-
-	//------------//
 	m_context.renderer->UpdateRenderMode();
+
 	UpdateInput();
-	m_sceneView.Draw();
-	m_menuBar.Draw();
-	m_context.uiManager->PostDraw();
 }
 
 void AmberEngine::Core::Editor::PostUpdate() const
@@ -50,6 +44,10 @@ void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 {
 	m_sceneView.Update(p_deltaTime);
 	m_sceneView.Render();
+
+	m_sceneView.Draw();
+	m_menuBar.Draw();
+	m_context.uiManager->PostDraw();
 }
 
 void AmberEngine::Core::Editor::UpdateInput()

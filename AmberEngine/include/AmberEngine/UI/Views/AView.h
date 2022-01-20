@@ -12,8 +12,9 @@ namespace AmberEngine::UI
 		void UpdateSize();
 		std::pair<uint16_t, uint16_t> GetSafeSize() const;
 		
-		const glm::vec2 GetSize() const;
 		void SetSize(const glm::vec2& p_size);
+		const glm::vec2 GetSize() const;
+		
 
 	protected:
 		glm::vec2 m_size;

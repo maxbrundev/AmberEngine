@@ -21,9 +21,13 @@ namespace AmberEngine::Buffers
 		uint32_t GetTextureID() const;
 		uint32_t GetRenderBufferID() const;
 
+		const std::pair<uint16_t, uint16_t> GetSize() const;
+
 	private:
 		uint32_t m_bufferID = 0;
 		uint32_t m_renderTexture = 0;
 		uint32_t m_depthStencilBuffer = 0;
+
+		std::pair<uint16_t, uint16_t> m_size;
 	};
 }

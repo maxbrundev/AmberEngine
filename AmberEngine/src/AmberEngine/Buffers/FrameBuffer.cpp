@@ -51,6 +51,9 @@ void AmberEngine::Buffers::FrameBuffer::Resize(uint16_t p_width, uint16_t p_heig
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthStencilBuffer);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencilBuffer);
 	Unbind();
+
+	m_size.first = p_width;
+	m_size.second = p_height;
 }
 
 uint32_t AmberEngine::Buffers::FrameBuffer::GetID() const
@@ -66,4 +69,9 @@ uint32_t AmberEngine::Buffers::FrameBuffer::GetTextureID() const
 uint32_t AmberEngine::Buffers::FrameBuffer::GetRenderBufferID() const
 {
 	return m_depthStencilBuffer;
+}
+
+const std::pair<uint16_t, uint16_t> AmberEngine::Buffers::FrameBuffer::GetSize() const
+{
+	return m_size;
 }

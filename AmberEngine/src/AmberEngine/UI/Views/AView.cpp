@@ -3,7 +3,7 @@
 #include "AmberEngine/UI/Views/AView.h"
 
 AmberEngine::UI::AView::AView(std::string p_viewName) :
-m_size(100, 100),
+m_size(256, 144),
 m_name(std::move(p_viewName)),
 m_sizeChanged(false) {}
 
@@ -27,13 +27,13 @@ std::pair<uint16_t, uint16_t> AmberEngine::UI::AView::GetSafeSize() const
 	return { static_cast<uint16_t>(result.x), static_cast<uint16_t>(result.y) };
 }
 
-const glm::vec2 AmberEngine::UI::AView::GetSize() const
-{
-	return m_size;
-}
-
 void AmberEngine::UI::AView::SetSize(const glm::vec2& p_size)
 {
 	m_size = p_size;
 	m_sizeChanged = true;
+}
+
+const glm::vec2 AmberEngine::UI::AView::GetSize() const
+{
+	return m_size;
 }
