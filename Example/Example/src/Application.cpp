@@ -151,48 +151,79 @@ void Example::Application::Run()
 	m_context.m_scene.AddActor(testActor3, "Actor3");
 	m_context.m_scene.AddActor(directionalLight, "Directional Light");
 
-	float rotationX = directionalLight->GetTransform().GetLocalPosition().x;
-	float rotationY = directionalLight->GetTransform().GetLocalPosition().y;
-	float rotationZ = directionalLight->GetTransform().GetLocalPosition().z;
-		 
-	float positionX2 = testActor2->GetTransform().GetLocalPosition().x;
-	float positionY2 = testActor2->GetTransform().GetLocalPosition().y;
-	float positionZ2 = testActor2->GetTransform().GetLocalPosition().z;
-		 
-	float positionX3 = testActor3->GetTransform().GetLocalPosition().x;
-	float positionY3 = testActor3->GetTransform().GetLocalPosition().y;
-	float positionZ3 = testActor3->GetTransform().GetLocalPosition().z;
+	float rotationX;
+	float rotationY;
+	float rotationZ;
+
+	float positionX2;
+	float positionY2;
+	float positionZ2;
+
+	float positionX3;
+	float positionY3;
+	float positionZ3;
 
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
 
-		ImGui::Begin("Directional Test");
-		ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
-		ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
-
-		ImGui::SliderFloat("Position X2", &positionX2, -100.0f, 100.0f);
-		ImGui::SliderFloat("Position Y2", &positionY2, -100.0f, 100.0f);
-		ImGui::SliderFloat("Position Z2", &positionZ2, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("Position X3", &positionX3, -100.0f, 100.0f);
-		ImGui::SliderFloat("Position Y3", &positionY3, -100.0f, 100.0f);
-		ImGui::SliderFloat("Position Z3", &positionZ3, -100.0f, 100.0f);
-		ImGui::End();
-
-		if (directionalLight)
-			directionalLight->GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
-
-		if (testActor2)
-			testActor2->GetTransform().SetLocalPosition({ positionX2, positionY2, positionZ2 });
-		
-		if (testActor3)
-			testActor3->GetTransform().SetLocalPosition({ positionX3, positionY3, positionZ3 });
-
-		if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_R))
 		{
-			AmberEngine::Resources::ShaderLoader::Recompile(resourcesManager.GetShader("StandardLighting"), "res/shaders/StandardLighting.glsl");
+			if (directionalLight)
+			{
+				rotationX = directionalLight->GetTransform().GetLocalRotationEuler().x;
+				rotationY = directionalLight->GetTransform().GetLocalRotationEuler().y;
+				rotationZ = directionalLight->GetTransform().GetLocalRotationEuler().z;
+			}
+
+			if (testActor2)
+			{
+				positionX2 = testActor2->GetTransform().GetLocalPosition().x;
+				positionY2 = testActor2->GetTransform().GetLocalPosition().y;
+				positionZ2 = testActor2->GetTransform().GetLocalPosition().z;
+			}
+
+			if (testActor3)
+			{
+				positionX3 = testActor3->GetTransform().GetLocalPosition().x;
+				positionY3 = testActor3->GetTransform().GetLocalPosition().y;
+				positionZ3 = testActor3->GetTransform().GetLocalPosition().z;
+			}
+
+			ImGui::Begin("Directional Test");
+			ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
+			ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
+			ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
+
+			ImGui::SliderFloat("Position X2", &positionX2, -100.0f, 100.0f);
+			ImGui::SliderFloat("Position Y2", &positionY2, -100.0f, 100.0f);
+			ImGui::SliderFloat("Position Z2", &positionZ2, -100.0f, 100.0f);
+
+			ImGui::SliderFloat("Position X3", &positionX3, -100.0f, 100.0f);
+			ImGui::SliderFloat("Position Y3", &positionY3, -100.0f, 100.0f);
+			ImGui::SliderFloat("Position Z3", &positionZ3, -100.0f, 100.0f);
+			ImGui::End();
+
+			if (directionalLight)
+				directionalLight->GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
+
+			if (testActor2)
+				testActor2->GetTransform().SetLocalPosition({ positionX2, positionY2, positionZ2 });
+
+			if (testActor3)
+				testActor3->GetTransform().SetLocalPosition({ positionX3, positionY3, positionZ3 });
+
+			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_R))
+			{
+				AmberEngine::Resources::ShaderLoader::Recompile(resourcesManager.GetShader("StandardLighting"), "res/shaders/StandardLighting.glsl");
+			}
+
+			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))
+			{
+				//working
+				//m_context.m_scene.DestroyActor(testActor2);
+				//working
+				testActor3->GetTransform().RemoveParent();
+			}
 		}
 
 		m_editor.Update(clock.GetDeltaTime());
