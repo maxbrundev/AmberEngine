@@ -2,69 +2,91 @@
 
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position)
-	: m_window(p_window), inputManager(p_inputManager), m_lastMousePosX(0), m_lastMousePosY(0), m_movementSpeed(SPEED),
-	  m_mouseSensitivity(SENSITIVITY),
-	  m_isFirstMouse(true), m_isLock(false), m_position(p_position)
+AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, const glm::vec3& p_position) :
+	m_window(p_window),
+	inputManager(p_inputManager),
+	m_position(p_position),
+	m_isFirstMouse(true),
+	m_isLock(false)
 {
+	m_camera.SetFov(60.0f);
 }
 
 void AmberEngine::LowRenderer::CameraController::ProcessKeyboard(cameraMovement p_direction, float p_deltaTime)
 {
-	glm::vec3& position = m_position;
-	glm::vec3 forward	= m_camera.GetForward();
-	glm::vec3 right		= m_camera.GetRight();
-	glm::vec3 up		= m_camera.GetUp();
+	const glm::vec3 forward	= m_camera.GetForward();
+	const glm::vec3 right	= m_camera.GetRight();
+	const glm::vec3 up		= m_camera.GetUp();
 
-	float velocity = m_movementSpeed * p_deltaTime;
+	const float velocity = m_moveSpeed * p_deltaTime;
 
 	if (p_direction == cameraMovement::FORWARD)
-		position += forward * velocity;
+	{
+		m_position += forward * velocity;
+	}
 	if (p_direction == cameraMovement::BACKWARD)
-		position -= forward * velocity;
+	{
+		m_position -= forward * velocity;
+	}
 	if (p_direction == cameraMovement::LEFT)
-		position -= right * velocity;
+	{
+		m_position -= right * velocity;
+	}
 	if (p_direction == cameraMovement::RIGHT)
-		position += right * velocity;
+	{
+		m_position += right * velocity;
+	}
 	if (p_direction == cameraMovement::UP)
-		position += up * velocity;
+	{
+		m_position += up * velocity;
+	}
 	if (p_direction == cameraMovement::DOWN)
-		position -= up * velocity;
+	{
+		m_position -= up * velocity;
+	}
 }
 
-void AmberEngine::LowRenderer::CameraController::ProcessMouseMovement(float p_xoffset, float p_yoffset, bool p_isConstrainPitch)
+void AmberEngine::LowRenderer::CameraController::ProcessMouseMovement(float p_offsetX, float p_offsetY)
 {
-	float& yaw = m_camera.GetYaw();
+	float& yaw   = m_camera.GetYaw();
 	float& pitch = m_camera.GetPitch();
 
-	p_xoffset *= m_mouseSensitivity;
-	p_yoffset *= m_mouseSensitivity;
+	p_offsetX *= m_mouseSensitivity;
+	p_offsetY *= m_mouseSensitivity;
 	
-	yaw += p_xoffset;
-	pitch += p_yoffset;
-
-	if (p_isConstrainPitch)
+	yaw   += p_offsetX;
+	pitch += p_offsetY;
+	
+	if (pitch > 89.0f)
 	{
-		if (pitch > 89.0f)
-			pitch = 89.0f;
-
-		if (pitch < -89.0f)
-			pitch = -89.0f;
+		pitch = 89.0f;
+	}
+	if (pitch < -89.0f)
+	{
+		pitch = -89.0f;
 	}
 
 	m_camera.UpdateCameraVectors();
 }
 
-void AmberEngine::LowRenderer::CameraController::ProcessMouseScroll(float p_yoffset)
+void AmberEngine::LowRenderer::CameraController::ProcessMouseScroll(float p_offsetY)
 {
 	float& fov = m_camera.GetCameraFov();
 
 	if (fov >= 1.0f && fov <= 45.0f)
-		fov -= p_yoffset;
+	{
+		fov -= p_offsetY;
+	}
+
 	if (fov <= 1.0f)
+	{
 		fov = 1.0f;
+	}
+
 	if (fov >= 45.0f)
+	{
 		fov = 45.0f;
+	}
 }
 
 void AmberEngine::LowRenderer::CameraController::Update(float p_deltaTime)
@@ -76,16 +98,16 @@ void AmberEngine::LowRenderer::CameraController::Update(float p_deltaTime)
 	}
 }
 
-void AmberEngine::LowRenderer::CameraController::SetPosition(glm::vec3 p_pos)
+void AmberEngine::LowRenderer::CameraController::SetPosition(const glm::vec3& p_position)
 {
-	m_position = p_pos;
+	m_position = p_position;
 }
 
-void AmberEngine::LowRenderer::CameraController::SetPosition(float pos_x, float pos_y, float pos_z)
+void AmberEngine::LowRenderer::CameraController::SetPosition(float p_posX, float p_posY, float p_posZ)
 {
-	m_position.x = pos_x;
-	m_position.y = pos_y;
-	m_position.z = pos_z;
+	m_position.x = p_posX;
+	m_position.y = p_posY;
+	m_position.z = p_posZ;
 }
 
 const glm::vec3& AmberEngine::LowRenderer::CameraController::GetPosition() const
@@ -96,40 +118,52 @@ const glm::vec3& AmberEngine::LowRenderer::CameraController::GetPosition() const
 void AmberEngine::LowRenderer::CameraController::HandleInput(float p_deltaTime)
 {
 	if (inputManager.GetKey(Inputs::EKey::KEY_W) == Inputs::EKeyState::KEY_DOWN)
+	{
 		ProcessKeyboard(cameraMovement::FORWARD, p_deltaTime);
+	}
 	if (inputManager.GetKey(Inputs::EKey::KEY_S) == Inputs::EKeyState::KEY_DOWN)
+	{
 		ProcessKeyboard(cameraMovement::BACKWARD, p_deltaTime);
+	}
 	if (inputManager.GetKey(Inputs::EKey::KEY_A) == Inputs::EKeyState::KEY_DOWN)
+	{
 		ProcessKeyboard(cameraMovement::LEFT, p_deltaTime);
+	}
 	if (inputManager.GetKey(Inputs::EKey::KEY_D) == Inputs::EKeyState::KEY_DOWN)
+	{
 		ProcessKeyboard(cameraMovement::RIGHT, p_deltaTime);
+	}
 	if (inputManager.GetKey(Inputs::EKey::KEY_SPACE) == Inputs::EKeyState::KEY_DOWN)
+	{
 		ProcessKeyboard(cameraMovement::UP, p_deltaTime);
+	}
 	if (inputManager.GetKey(Inputs::EKey::KEY_LEFT_CONTROL) == Inputs::EKeyState::KEY_DOWN)
+	{
 		ProcessKeyboard(cameraMovement::DOWN, p_deltaTime);
+	}
 }
 
 void AmberEngine::LowRenderer::CameraController::HandleMouse()
 {
-	double xPos;
-	double yPos;
+	double posX;
+	double posY;
 
-	glfwGetCursorPos(m_window.GetGlfwWindow(), &xPos, &yPos);
+	glfwGetCursorPos(m_window.GetGlfwWindow(), &posX, &posY);
 
 	if (m_isFirstMouse)
 	{
-		m_lastMousePosX = xPos;
-		m_lastMousePosY = yPos;
+		m_lastMousePosX = posX;
+		m_lastMousePosY = posY;
 		m_isFirstMouse = false;
 	}
 
-	float xoffset = xPos - m_lastMousePosX;
-	float yoffset = m_lastMousePosY - yPos;
+	const float offsetX = posX - m_lastMousePosX;
+	const float offsetY = m_lastMousePosY - posY;
 
-	m_lastMousePosX = xPos;
-	m_lastMousePosY = yPos;
+	m_lastMousePosX = posX;
+	m_lastMousePosY = posY;
 
-	ProcessMouseMovement(xoffset, yoffset);
+	ProcessMouseMovement(offsetX, offsetY);
 }
 
 void AmberEngine::LowRenderer::CameraController::Lock()

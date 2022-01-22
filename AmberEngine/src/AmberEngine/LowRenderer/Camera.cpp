@@ -2,8 +2,7 @@
 
 #include "AmberEngine/LowRenderer/Camera.h"
 
-AmberEngine::LowRenderer::Camera::Camera()
-	:  m_clearColor(0.1f, 0.1f, 0.1f), m_yaw(-90.0f), m_pitch(0.0f), m_fov(45.0f), m_near(0.1f), m_far(100.0f)
+AmberEngine::LowRenderer::Camera::Camera() : m_clearColor(0.1f, 0.1f, 0.1f), m_yaw(-90.0f), m_pitch(0.0f), m_fov(45.0f), m_near(0.1f), m_far(100.0f)
 {
 	UpdateCameraVectors();
 }
@@ -56,6 +55,16 @@ const glm::vec3& AmberEngine::LowRenderer::Camera::GetUp() const
 void AmberEngine::LowRenderer::Camera::SetFov(float p_value)
 {
 	m_fov = p_value;
+}
+
+void AmberEngine::LowRenderer::Camera::SetNear(float p_value)
+{
+	m_near = p_value;
+}
+
+void AmberEngine::LowRenderer::Camera::SetFar(float p_value)
+{
+	m_far = p_value;
 }
 
 void AmberEngine::LowRenderer::Camera::SetClearColor(const glm::vec3& p_clearColor)

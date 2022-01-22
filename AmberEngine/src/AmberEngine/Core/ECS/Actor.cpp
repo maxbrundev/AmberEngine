@@ -37,10 +37,9 @@ void AmberEngine::ECS::Actor::Update(const std::vector<ECS::Components::LightCom
 		for(auto& light : p_lights)
 		{
 			auto lightData = light->GetLightData();
-			shader->SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-			shader->SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-			shader->SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 			shader->SetUniformVec3("light.direction", light->owner.GetTransform().GetWorldForward());
+			shader->SetUniformVec3("light.color", lightData.color);
+			shader->SetUniform1f("light.intensity", lightData.intensity);
 		}
 
 		shader->Unbind();

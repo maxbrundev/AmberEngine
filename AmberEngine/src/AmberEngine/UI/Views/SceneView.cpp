@@ -5,10 +5,12 @@
 AmberEngine::UI::SceneView::SceneView(Core::Context& p_context) :
 	AView("Scene"),
 	m_context(p_context),
-	m_cameraController(*m_context.window, *m_context.inputManager, glm::vec3(0.0f, 0.0f, 15.0f)),
+	m_cameraController(*m_context.window, *m_context.inputManager, glm::vec3(0.0f, 0.0f, 0.0f)),
 	m_frameBuffer(256, 144)
 	
 {
+	m_cameraController.GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
+	m_cameraController.GetCamera().SetFar(5000.0f);
 	//m_context.window->FramebufferResizeEvent.AddListener([this](auto&& PH1, auto&& PH2)
 	//{
 	//	ResizeFrameBuffer(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2));

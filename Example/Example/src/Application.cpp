@@ -29,34 +29,19 @@ void Example::Application::Setup()
 {
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
-	resourcesManager.LoadModel("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
 
-	AmberEngine::Resources::Shader& lightingShader = resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
-	
 	//resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
 	//resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
-
-	resourcesManager.GetModel("Helmet").SetShader(lightingShader);
-
-	//glm::vec3 lighDir = glm::vec3(1.0f, 1.0f, 1.0f);
-	//
-	//lightingShader.Bind();
-	////lightingShader.SetUniform1i("u_DiffuseMap", 0);
-	////lightingShader.SetUniform1i("u_SpecularMap", 1);
-	//lightingShader.SetUniformVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	//lightingShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-	//lightingShader.SetUniformVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	//lightingShader.SetUniformVec3("light.direction", lighDir);
-	//lightingShader.Unbind();
 }
 
 void Example::Application::Run()
 {
 	/*AmberEngine::PrimitivesShapes::Cube::Setup();
-	
+
 	std::vector<float> vertices;
 	std::vector<AmberEngine::PrimitivesShapes::Vertex> verticesCube = AmberEngine::PrimitivesShapes::Cube::GetVertices();
-	
+
 	for (auto& vertex : verticesCube)
 	{
 		vertices.push_back(vertex.position[0]);
@@ -68,7 +53,7 @@ void Example::Application::Run()
 		vertices.push_back(vertex.normals[1]);
 		vertices.push_back(vertex.normals[2]);
 	}
-	
+
 	AmberEngine::Buffers::VertexArray vao;
 	AmberEngine::Buffers::VertexBuffer vbo(vertices.data(), vertices.size());
 	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), nullptr);
@@ -85,7 +70,7 @@ void Example::Application::Run()
 		glm::vec3(-1, 1, -1), // 3
 		glm::vec3(-1, -1, 1), // 4
 		glm::vec3(1, -1, 1), // 5
-		glm::vec3(1, 1, 1), // 6 
+		glm::vec3(1, 1, 1), // 6
 		glm::vec3(-1, 1, 1) // 7
 	};
 
@@ -142,77 +127,77 @@ void Example::Application::Run()
 	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor();
 	AmberEngine::ECS::Actor* testActor2 = new AmberEngine::ECS::Actor();
 	AmberEngine::ECS::Actor* testActor3 = new AmberEngine::ECS::Actor();
+
 	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor();
-	
-	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
+	directionalLight->GetComponent<AmberEngine::ECS::Components::LightComponent>()->GetLightData().color = glm::vec3(1.0f, 0.9f, 0.8f);
+
+	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Sponza", "res/Mesh/Sponza/sponza.obj");
 	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
-	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	testActor->GetTransform().SetWorldScale({ 0.05f, 0.05f, 0.05f });
+
+	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
 	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
-	testActor3->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Helmet", "res/Mesh/nanosuit/nanosuit.obj");
+	testActor3->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
 	testActor3->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
-	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
+	testActor3->GetTransform().SetParent(testActor2->GetTransform());
+	testActor3->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });
 
 	m_context.m_scene.AddActor(testActor, "Actor1");
 	m_context.m_scene.AddActor(testActor2, "Actor2");
 	m_context.m_scene.AddActor(testActor3, "Actor3");
 	m_context.m_scene.AddActor(directionalLight, "Directional Light");
 
-	testActor2->GetTransform().SetParent(testActor->GetTransform());
-	testActor2->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });
-
-	testActor3->GetTransform().SetParent(testActor->GetTransform());
-	testActor3->GetTransform().SetLocalPosition({ 20.0f, 0.0f, 0.0f });
-
-	float positionX = testActor->GetTransform().GetWorldPosition().x;
-	float positionY = testActor->GetTransform().GetWorldPosition().y;
-	float positionZ = testActor->GetTransform().GetWorldPosition().z;
-
-	float positionX2 = testActor2->GetTransform().GetWorldPosition().x;
-	float positionY2 = testActor2->GetTransform().GetWorldPosition().y;
-	float positionZ2 = testActor2->GetTransform().GetWorldPosition().z;
-
-	float positionX3 = testActor3->GetTransform().GetWorldPosition().x;
-	float positionY3 = testActor3->GetTransform().GetWorldPosition().y;
-	float positionZ3 = testActor3->GetTransform().GetWorldPosition().z;
+	float rotationX = directionalLight->GetTransform().GetLocalPosition().x;
+	float rotationY = directionalLight->GetTransform().GetLocalPosition().y;
+	float rotationZ = directionalLight->GetTransform().GetLocalPosition().z;
+		 
+	float positionX2 = testActor2->GetTransform().GetLocalPosition().x;
+	float positionY2 = testActor2->GetTransform().GetLocalPosition().y;
+	float positionZ2 = testActor2->GetTransform().GetLocalPosition().z;
+		 
+	float positionX3 = testActor3->GetTransform().GetLocalPosition().x;
+	float positionY3 = testActor3->GetTransform().GetLocalPosition().y;
+	float positionZ3 = testActor3->GetTransform().GetLocalPosition().z;
 
 	while (IsRunning())
 	{
 		m_editor.PreUpdate();
 
-		ImGui::Begin("Transform Test");
-		ImGui::SliderFloat("Position X", &positionX, 0.0f, 100.0f);
-		ImGui::SliderFloat("Position Y", &positionY, 0.0f, 100.0f);
-		ImGui::SliderFloat("Position Z", &positionZ, 0.0f, 100.0f);
+		ImGui::Begin("Directional Test");
+		ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
+		ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
 
-		ImGui::SliderFloat("Position X2", &positionX2, 0.0f, 100.0f);
-		ImGui::SliderFloat("Position Y2", &positionY2, 0.0f, 100.0f);
-		ImGui::SliderFloat("Position Z2", &positionZ2, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position X2", &positionX2, -100.0f, 100.0f);
+		ImGui::SliderFloat("Position Y2", &positionY2, -100.0f, 100.0f);
+		ImGui::SliderFloat("Position Z2", &positionZ2, -100.0f, 100.0f);
 
-		ImGui::SliderFloat("Position X3", &positionX3, 0.0f, 100.0f);
-		ImGui::SliderFloat("Position Y3", &positionY3, 0.0f, 100.0f);
-		ImGui::SliderFloat("Position Z3", &positionZ3, 0.0f, 100.0f);
+		ImGui::SliderFloat("Position X3", &positionX3, -100.0f, 100.0f);
+		ImGui::SliderFloat("Position Y3", &positionY3, -100.0f, 100.0f);
+		ImGui::SliderFloat("Position Z3", &positionZ3, -100.0f, 100.0f);
 		ImGui::End();
 
-		if(testActor)
-			testActor->GetTransform().SetLocalPosition({ positionX, positionY, positionZ });
+		if (directionalLight)
+			directionalLight->GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
 
-		if(testActor2)
+		if (testActor2)
 			testActor2->GetTransform().SetLocalPosition({ positionX2, positionY2, positionZ2 });
-
-		if(testActor3)
+		
+		if (testActor3)
 			testActor3->GetTransform().SetLocalPosition({ positionX3, positionY3, positionZ3 });
 
-		if(m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))
+		if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_R))
 		{
-			m_editor.m_context.m_scene.DestroyActor(testActor2);
+			AmberEngine::Resources::ShaderLoader::Recompile(resourcesManager.GetShader("StandardLighting"), "res/shaders/StandardLighting.glsl");
 		}
-	
+
 		m_editor.Update(clock.GetDeltaTime());
 		m_editor.PostUpdate();
-		
+
 		clock.Update();
 	}
 }

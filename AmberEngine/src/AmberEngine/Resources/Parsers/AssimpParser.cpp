@@ -180,6 +180,11 @@ std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resou
 
 			std::shared_ptr<Texture> texture(TextureLoader::Create(std::move(path), Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
 
+			if(texture == nullptr)
+			{
+				continue;
+			}
+
 			textures.push_back(texture);
 
 			m_loadedTextures.push_back(texture);

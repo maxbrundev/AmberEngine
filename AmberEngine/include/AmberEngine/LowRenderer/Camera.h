@@ -16,6 +16,8 @@ namespace AmberEngine::LowRenderer
 		void CalculateMatrices(uint16_t p_windowWidth, uint16_t p_windowHeight, const glm::vec3& p_position);
 		
 		void SetFov(float p_value);
+		void SetNear(float p_value);
+		void SetFar(float p_value);
 
 		void SetClearColor(const glm::vec3& p_clearColor);
 

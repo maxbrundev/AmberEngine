@@ -23,17 +23,17 @@ namespace AmberEngine::LowRenderer
 		};
 
 	public:
-		CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, glm::vec3 p_position = glm::vec3(0.0f, 0.0f, -3.0f));
+		CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, const glm::vec3& p_position);
 		~CameraController() = default;
 
 		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);
-		void ProcessMouseMovement(float p_xoffset, float p_yoffset, bool p_isConstrainPitch = true);
-		void ProcessMouseScroll(float p_yoffset);
+		void ProcessMouseMovement(float p_offsetX, float p_offsetY);
+		void ProcessMouseScroll(float p_offsetY);
 
 		void Update(float p_deltaTime);
 		
-		void SetPosition(glm::vec3 p_pos);
-		void SetPosition(float pos_x, float pos_y, float pos_z);
+		void SetPosition(const glm::vec3& p_position);
+		void SetPosition(float p_posX, float p_posY, float p_posZ);
 		
 		const glm::vec3& GetPosition() const;
 		
@@ -45,22 +45,20 @@ namespace AmberEngine::LowRenderer
 		Camera& GetCamera();
 
 	private:
-		const float SPEED = 10.5;
-		const float SENSITIVITY = 0.1f;
-
 		Context::Window& m_window;
 		Inputs::InputManager& inputManager;
+
 		Camera m_camera;
-
-		double m_lastMousePosX;
-		double m_lastMousePosY;
-		float m_movementSpeed;
-		float m_mouseSensitivity;
-
-		bool m_isFirstMouse;
-		bool m_isLock;
 
 		glm::vec3 m_position;
 
+		double m_lastMousePosX = 0.0f;
+		double m_lastMousePosY = 0.0f;
+
+		float m_mouseSensitivity = 0.1f;
+		float m_moveSpeed = 10.0f;
+
+		bool m_isFirstMouse;
+		bool m_isLock;
 	};
 }
