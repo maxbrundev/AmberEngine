@@ -82,9 +82,14 @@ uniform sampler2D u_DiffuseMap;
 uniform sampler2D u_SpecularMap;
 uniform vec4 u_Diffuse    = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 u_Specular   = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float u_Shininess = 50.0;
+uniform float u_Shininess = 100.0;
 
 uniform Light light;
+
+/* Constant variables */
+const vec3 c_lightPosition = vec3(-1000.0, 1000.0, 1000.0);
+const vec3 c_lightDiffuse  = vec3(1.0, 1.0, 1.0);
+const vec3 c_lightAmbient  = vec3(0.3, 0.3, 0.3);
 
 /* Global variables */
 vec3 g_Normal;
@@ -98,7 +103,7 @@ out vec4 FragColor;
 vec3 BlinnPhong(vec3 p_lightDir, vec3 p_lightColor, float p_luminosity)
 {
     const vec3 lightDir             = normalize(-p_lightDir);
-    const vec3  halfwayDir          = normalize(-p_lightDir + g_ViewDir);
+    const vec3 halfwayDir           = normalize(-p_lightDir + g_ViewDir);
     const float diffuseCoefficient  = max(dot(lightDir, g_Normal), 0.0);
     const float specularCoefficient = pow(max(dot(halfwayDir, g_Normal), 0.0), u_Shininess * 2.0);
 
@@ -121,6 +126,16 @@ vec3 Phong(vec3 p_lightDir, vec3 p_lightColor, float p_luminosity)
     return diffuse + specular;
 }
 
+vec3 Lambert(vec3 p_position, vec3 p_diffuseColor, vec3 p_ambientColor)
+{
+    const vec3 lightDir            = normalize(p_position - fs_in.FragPos);
+    const float diffuseCoefficient = max(dot(lightDir, g_Normal), 0.0);
+
+    vec3 diffuse  = g_DiffuseTexel.rgb * diffuseCoefficient * p_diffuseColor;
+    diffuse += vec3(g_DiffuseTexel.rgb * p_ambientColor);
+    return diffuse;
+}
+
 vec3 CalculateDirectionalLight(Light p_light)
 {
     return BlinnPhong(p_light.direction, p_light.color, p_light.intensity);
@@ -137,9 +152,10 @@ void main()
   vec3 lightSum = vec3(0.0);
 
   lightSum += CalculateDirectionalLight(light);
+  //lightSum += Lambert(c_lightPosition, c_lightDiffuse, c_lightAmbient);
 
   //Quick Ambiant
-  lightSum += vec3(g_DiffuseTexel.rgb * light.color * 0.2);
+  lightSum += vec3(g_DiffuseTexel.rgb * light.color * c_lightAmbient);
 
   FragColor = vec4(lightSum, 1.0f);
 }
