@@ -1039,6 +1039,7 @@ ImGuiIO::ImGuiIO()
     KeyRepeatDelay = 0.275f;
     KeyRepeatRate = 0.050f;
     UserData = NULL;
+    DisableMouseUpdate = false;
 
     Fonts = NULL;
     FontGlobalScale = 1.0f;
@@ -3978,11 +3979,14 @@ void ImGui::NewFrame()
     for (int i = 0; i < IM_ARRAYSIZE(g.IO.KeysDown); i++)
         g.IO.KeysDownDuration[i] = g.IO.KeysDown[i] ? (g.IO.KeysDownDuration[i] < 0.0f ? 0.0f : g.IO.KeysDownDuration[i] + g.IO.DeltaTime) : -1.0f;
 
-    // Update gamepad/keyboard navigation
-    NavUpdate();
+    if (!g.IO.DisableMouseUpdate)
+    {
+        // Update gamepad/keyboard navigation
+        NavUpdate();
 
-    // Update mouse input state
-    UpdateMouseInputs();
+        // Update mouse input state
+        UpdateMouseInputs();
+    }
 
     // Undocking
     // (needs to be before UpdateMouseMovingWindowNewFrame so the window is already offset and following the mouse on the detaching frame)

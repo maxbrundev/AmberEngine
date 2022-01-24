@@ -116,7 +116,7 @@ void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int acti
     if (g_PrevUserCallbackMousebutton != NULL && window == g_Window)
         g_PrevUserCallbackMousebutton(window, button, action, mods);
 
-    if (action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
+    if (!ImGui::GetIO().DisableMouseUpdate && action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
         g_MouseJustPressed[button] = true;
 }
 
@@ -300,6 +300,10 @@ static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
 {
     // Update buttons
     ImGuiIO& io = ImGui::GetIO();
+
+    if (io.DisableMouseUpdate)
+        return;
+
     for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
     {
         // If a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame.
