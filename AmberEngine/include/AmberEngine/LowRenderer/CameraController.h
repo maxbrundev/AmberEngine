@@ -37,10 +37,8 @@ namespace AmberEngine::LowRenderer
 		
 		const glm::vec3& GetPosition() const;
 		
-		void HandleInput(float p_deltaTime);
+		void HandleInputs(float p_deltaTime);
 		void HandleMouse();
-		void Lock();
-		void Unlock();
 
 		Camera& GetCamera();
 
@@ -58,7 +56,7 @@ namespace AmberEngine::LowRenderer
 		float m_mouseSensitivity = 0.1f;
 		float m_moveSpeed = 10.0f;
 
-		bool m_isFirstMouse;
-		bool m_isLock;
+		bool m_isFirstMouse = true;
+		bool m_rightMousePressed = false;
 	};
 }

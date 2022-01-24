@@ -37,6 +37,9 @@ namespace AmberEngine::UI
 		AmberEngine::Buffers::FrameBuffer m_frameBuffer;
 
 		glm::vec2 viewportSize;
+
 		bool isFirstFrame = true;
+		bool m_isFocused  = false;
+		bool m_isHovered  = false;
 	};
 }

@@ -5,16 +5,12 @@
 AmberEngine::UI::SceneView::SceneView(Core::Context& p_context) :
 	AView("Scene"),
 	m_context(p_context),
-	m_cameraController(*m_context.window, *m_context.inputManager, glm::vec3(0.0f, 0.0f, 0.0f)),
+	m_cameraController(*m_context.window, *m_context.inputManager, glm::vec3(0.0f, 0.0f, 15.0f)),
 	m_frameBuffer(256, 144)
 	
 {
 	m_cameraController.GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
 	m_cameraController.GetCamera().SetFar(5000.0f);
-	//m_context.window->FramebufferResizeEvent.AddListener([this](auto&& PH1, auto&& PH2)
-	//{
-	//	ResizeFrameBuffer(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2));
-	//});
 }
 
 AmberEngine::UI::SceneView::~SceneView()
@@ -24,7 +20,10 @@ AmberEngine::UI::SceneView::~SceneView()
 
 void AmberEngine::UI::SceneView::Update(float p_deltaTime)
 {
-	m_cameraController.Update(p_deltaTime);
+	if(m_isHovered)
+	{
+		m_cameraController.Update(p_deltaTime);
+	}
 
 	auto[winWidth, winHeight] = GetSafeSize();
 
@@ -62,26 +61,11 @@ void AmberEngine::UI::SceneView::Draw()
 
 	ImGui::Begin(m_name.c_str(), nullptr);
 
-	//const float height = ImGui::GetCurrentWindow()->TitleBarHeight();
-	// TODO: Clarify why is there a difference between viewportSize and GetSafeSize values since both exclude Title bar height.
+	m_isFocused = ImGui::IsWindowFocused();
+	m_isHovered = ImGui::IsWindowHovered();
+
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-	//if(viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
-	//{
-	//	viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-	//}
-
-	//{
-	//	ImVec2 vMin = ImGui::GetWindowContentRegionMin();
-	//	ImVec2 vMax = ImGui::GetWindowContentRegionMax();
-	//
-	//	vMin.x += ImGui::GetWindowPos().x;
-	//	vMin.y += ImGui::GetWindowPos().y;
-	//	vMax.x += ImGui::GetWindowPos().x;
-	//	vMax.y += ImGui::GetWindowPos().y;
-	//
-	//	ImGui::GetForegroundDrawList()->AddRect(vMin, vMax, IM_COL32(255, 255, 0, 255));
-	//}
 
 	if (!isFirstFrame)
 	{

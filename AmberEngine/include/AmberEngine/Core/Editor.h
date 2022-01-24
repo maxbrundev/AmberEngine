@@ -20,17 +20,11 @@ namespace AmberEngine::Core
 		void PostUpdate() const;
 		void RenderViews(float p_deltaTime);
 		void UpdateInput();
-
-		void FreeCamera();
-		void LockCamera();
-		void ToggleCamera();
 		
 	public:
 		Context& m_context;
 
 		UI::SceneView m_sceneView;
 		UI::MenuBar m_menuBar;
-
-		bool isCameraFree;
 	};
 }

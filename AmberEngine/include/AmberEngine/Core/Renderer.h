@@ -22,18 +22,14 @@ namespace AmberEngine::Core
 
 		void RegisterModelMatrixSender(std::function<void(glm::mat4)> p_modelMatrixSender);
 
-		void UpdateRenderMode();
-
 		void PolygonModeLine();
 		void PolygonModeFill();
-
-		void ToggleWireFrame();
 
 	private:
 		std::function<void(glm::mat4)> m_modelMatrixSender;
 		void DrawMesh(Resources::Mesh& p_mesh);
+
 	private:
 		Context::Driver& m_driver;
-		bool isWireFrame;
 	};
 }

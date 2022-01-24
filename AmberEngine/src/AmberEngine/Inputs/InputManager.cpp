@@ -75,7 +75,7 @@ bool AmberEngine::Inputs::InputManager::IsMouseButtonPressed(EMouseButton p_butt
 
 bool AmberEngine::Inputs::InputManager::IsMouseButtonReleased(EMouseButton p_button) const
 {
-	return m_mouseEvents.find(p_button) != m_mouseEvents.end() && m_mouseEvents.at(p_button) == EMouseButtonState::MOUSE_DOWN;
+	return m_mouseEvents.find(p_button) != m_mouseEvents.end() && m_mouseEvents.at(p_button) == EMouseButtonState::MOUSE_UP;
 }
 
 void AmberEngine::Inputs::InputManager::OnKeyPressed(int p_key)

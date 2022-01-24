@@ -1,17 +1,18 @@
 #pragma once
 
-// TODO: Implement complete menu bar class.
+#include "AmberEngine/Core/Context.h"
+
 namespace AmberEngine::UI
 {
 	class MenuBar
 	{
 	public:
-		MenuBar() = default;
+		MenuBar(Core::Context& p_context);
 		~MenuBar() = default;
 
 		void Draw();
 
 	private:
-
+		Core::Context& m_context;
 	};
 }

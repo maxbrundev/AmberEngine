@@ -5,7 +5,7 @@
 AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_context(p_context),
 	m_sceneView(m_context),
-	isCameraFree(true)
+	m_menuBar(m_context)
 {
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
 	{
@@ -29,8 +29,6 @@ void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
 	RenderViews(p_deltaTime);
 
-	m_context.renderer->UpdateRenderMode();
-
 	UpdateInput();
 }
 
@@ -52,34 +50,6 @@ void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 
 void AmberEngine::Core::Editor::UpdateInput()
 {
-	if (isCameraFree)
-		FreeCamera();
-	else
-		LockCamera();
-
-	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_SHIFT))
-		m_context.renderer->ToggleWireFrame();
-
-	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_LEFT_ALT))
-		ToggleCamera();
-
 	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_ESCAPE))
 		m_context.window->SetShouldClose(true);
-}
-
-void AmberEngine::Core::Editor::FreeCamera()
-{
-	m_sceneView.GetCameraController().Unlock();
-	m_context.window->SetCursorModeLock();
-}
-
-void AmberEngine::Core::Editor::LockCamera()
-{
-	m_sceneView.GetCameraController().Lock();
-	m_context.window->SetCursorModeFree();
-}
-
-void AmberEngine::Core::Editor::ToggleCamera()
-{
-	isCameraFree = !isCameraFree;
 }

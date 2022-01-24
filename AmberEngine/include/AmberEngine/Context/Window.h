@@ -5,6 +5,7 @@
 #include "AmberEngine/Settings/WindowSettings.h"
 
 #include "AmberEngine/Context/Device.h"
+#include "AmberEngine/Context/ECursorMode.h"
 
 namespace AmberEngine::Context
 {
@@ -17,6 +18,7 @@ namespace AmberEngine::Context
 		Eventing::Event<int> KeyReleasedEvent;
 		Eventing::Event<int> MouseButtonPressedEvent;
 		Eventing::Event<int> MouseButtonReleasedEvent;
+		Eventing::Event<double, double> CursorPositionEvent;
 		
 		Eventing::Event<uint16_t, uint16_t> ResizeEvent;
 		Eventing::Event<uint16_t, uint16_t> FramebufferResizeEvent;
@@ -32,13 +34,12 @@ namespace AmberEngine::Context
 		void SwapBuffers() const;
 		void Restore() const;
 
-		void SetIconFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height);
+		void SetIconFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height) const;
 
 		void Hide() const;
 		void SetShouldClose(bool p_value) const;
-		void SetCursorModeLock() const;
-		void SetCursorModeFree() const;
-
+		void SetCursorMode(ECursorMode p_cursorMode);
+		ECursorMode GetCursorMode() const;
 		void SetViewport(int p_width, int p_height) const;
 
 		void SetSize(uint16_t p_width, uint16_t p_height);
@@ -58,6 +59,7 @@ namespace AmberEngine::Context
 
 		void BindKeyCallback() const;
 		void BindMouseCallback() const;
+		void BindCursorPosCallback() const;
 		void BindResizeCallback() const;
 		void BindFramebufferResizeCallback() const;
 		
@@ -74,5 +76,6 @@ namespace AmberEngine::Context
 		std::string m_title;
 		std::pair<uint16_t, uint16_t> m_size;
 		bool m_fullscreen;
+		ECursorMode m_cursorMode;
 	};
 }

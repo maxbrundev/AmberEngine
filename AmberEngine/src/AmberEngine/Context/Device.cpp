@@ -29,12 +29,12 @@ AmberEngine::Context::Device::~Device()
 
 void AmberEngine::Context::Device::InitGLFW()
 {
-	int initializationCode = glfwInit();
+	const int initializationCode = glfwInit();
 	
 	if (initializationCode == GLFW_FALSE)
 	{
-		throw std::runtime_error("Failed to Init GLFW");
 		glfwTerminate();
+		throw std::runtime_error("Failed to Init GLFW");
 	}
 }
 

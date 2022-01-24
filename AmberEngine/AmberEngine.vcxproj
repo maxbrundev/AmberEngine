@@ -260,6 +260,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Buffers\VertexBuffer.h" />
     <ClInclude Include="include\AmberEngine\Context\Device.h" />
     <ClInclude Include="include\AmberEngine\Context\Driver.h" />
+    <ClInclude Include="include\AmberEngine\Context\ECursorMode.h" />
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
     <ClInclude Include="include\AmberEngine\Context\Window.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h" />

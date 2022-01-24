@@ -6,7 +6,7 @@
 
 #include "AmberEngine/Resources/Mesh.h"
 
-AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) : m_driver(p_driver), isWireFrame(false)
+AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) : m_driver(p_driver)
 {
 }
 
@@ -77,14 +77,6 @@ void AmberEngine::Core::Renderer::RegisterModelMatrixSender(std::function<void(g
 	m_modelMatrixSender = std::move(p_modelMatrixSender);
 }
 
-void AmberEngine::Core::Renderer::UpdateRenderMode()
-{
-	if (isWireFrame)
-		PolygonModeLine();
-	else
-		PolygonModeFill();
-}
-
 void AmberEngine::Core::Renderer::PolygonModeLine()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -93,9 +85,4 @@ void AmberEngine::Core::Renderer::PolygonModeLine()
 void AmberEngine::Core::Renderer::PolygonModeFill()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void AmberEngine::Core::Renderer::ToggleWireFrame()
-{
-	isWireFrame = !isWireFrame;
 }

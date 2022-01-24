@@ -20,13 +20,13 @@ AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::
 
 	BindKeyCallback();
 	BindMouseCallback();
+	BindCursorPosCallback();
 	BindResizeCallback();
 	BindFramebufferResizeCallback();
 	
 	MakeCurrentContext();
 
-	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetCursorPosCallback(m_glfwWindow, Managers::InputManager::cursor_position_callback);
+	SetCursorMode(AmberEngine::Context::ECursorMode::NORMAL);
 
 	m_device.SetVsync(p_windowSettings.vsync);
 
@@ -48,10 +48,11 @@ void AmberEngine::Context::Window::CreateGlfwWindow()
 		primaryMonitor = glfwGetPrimaryMonitor();
 	
 	m_glfwWindow = glfwCreateWindow(static_cast<int>(m_size.first), static_cast<int>(m_size.second), m_title.c_str(), primaryMonitor, nullptr);
+
 	if (!m_glfwWindow)
 	{
-		throw std::runtime_error("Failed to create GLFW Window");
 		glfwTerminate();
+		throw std::runtime_error("Failed to create GLFW Window");
 	}
 
 	__WINDOWS_MAP[m_glfwWindow] = this;
@@ -82,14 +83,10 @@ AmberEngine::Context::Window* AmberEngine::Context::Window::FindInstance(GLFWwin
 	return __WINDOWS_MAP.find(p_glfwWindow) != __WINDOWS_MAP.end() ? __WINDOWS_MAP[p_glfwWindow] : nullptr;
 }
 
-void AmberEngine::Context::Window::SetCursorModeLock() const
+void AmberEngine::Context::Window::SetCursorMode(ECursorMode p_cursorMode)
 {
-	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-}
-
-void AmberEngine::Context::Window::SetCursorModeFree() const
-{
-	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	m_cursorMode = p_cursorMode;
+	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, static_cast<int>(p_cursorMode));
 }
 
 void AmberEngine::Context::Window::SetViewport(int p_width, int p_height) const
@@ -110,7 +107,7 @@ void AmberEngine::Context::Window::Restore() const
 	glfwRestoreWindow(m_glfwWindow);
 }
 
-void AmberEngine::Context::Window::SetIconFromMemory(uint8_t * p_data, uint32_t p_width, uint32_t p_height)
+void AmberEngine::Context::Window::SetIconFromMemory(uint8_t * p_data, uint32_t p_width, uint32_t p_height) const
 {
 	GLFWimage images[1];
 	images[0].pixels = p_data;
@@ -155,6 +152,11 @@ int AmberEngine::Context::Window::GetKey(const int p_key) const
 	return glfwGetKey(m_glfwWindow, p_key);
 }
 
+AmberEngine::Context::ECursorMode AmberEngine::Context::Window::GetCursorMode() const
+{
+	return m_cursorMode;
+}
+
 void AmberEngine::Context::Window::BindKeyCallback() const
 {
 	auto keyCallback = [](GLFWwindow* p_window, int p_key, int p_scancode, int p_action, int p_mods)
@@ -197,6 +199,23 @@ void AmberEngine::Context::Window::BindMouseCallback() const
 			}
 		}
 	};
+
+	glfwSetMouseButtonCallback(m_glfwWindow, mouseCallback);
+}
+
+void AmberEngine::Context::Window::BindCursorPosCallback() const
+{
+	auto cursorPosCallback = [](GLFWwindow* p_window, double p_xpos, double p_ypos)
+	{
+		Window* windowInstance = FindInstance(p_window);
+
+		if (windowInstance)
+		{
+			windowInstance->CursorPositionEvent.Invoke(p_xpos, p_ypos);
+		}
+	};
+
+	glfwSetCursorPosCallback(m_glfwWindow, cursorPosCallback);
 }
 
 void AmberEngine::Context::Window::BindResizeCallback() const
