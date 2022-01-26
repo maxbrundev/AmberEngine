@@ -2,7 +2,9 @@
 
 #include "AmberEngine/Core/Context.h"
 
-AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) : m_scene("TestScene")
+AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
+	editorAssetsPath("..\\..\\Resources\\Editor\\"),
+	m_scene("TestScene")
 {
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
 	window = std::make_unique<AmberEngine::Context::Window>(*device, p_windowSettings);
@@ -12,20 +14,21 @@ AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings&
 
 	driver = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
 	renderer = std::make_unique<AmberEngine::Core::Renderer>(*driver);
+	m_editorResources = std::make_unique<AmberEngine::Core::EditorResources>(editorAssetsPath);
 	uiManager = std::make_unique<AmberEngine::Core::UIManager>(window->GetGlfwWindow());
 	uiManager->EnableDocking(true);
 	inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*window);
 
 	engineUBO = std::make_unique<Buffers::UniformBuffer>
-		(
-			/* UBO Data Layout */
-			sizeof(glm::mat4) +
-			sizeof(glm::mat4) +
-			sizeof(glm::mat4) +
-			sizeof(glm::vec3),
-			0, 0,
-			Buffers::EAccessSpecifier::STREAM_DRAW
-			);
+	(
+		/* UBO Data Layout */
+		sizeof(glm::mat4) +
+		sizeof(glm::mat4) +
+		sizeof(glm::mat4) +
+		sizeof(glm::vec3),
+		0, 0,
+		Buffers::EAccessSpecifier::STREAM_DRAW
+		);
 }
 
 AmberEngine::Core::Context::~Context()

@@ -10,6 +10,7 @@
 #include "AmberEngine/Inputs/InputManager.h"
 
 #include "AmberEngine/Core/Renderer.h"
+#include "AmberEngine/Core/EditorResources.h"
 #include "AmberEngine/Core/UIManager.h"
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
@@ -25,6 +26,8 @@ namespace AmberEngine::Core
 		~Context();
 	
 	public:
+		const std::string editorAssetsPath;
+
 		std::unique_ptr<AmberEngine::Context::Device>	device;
 		std::unique_ptr<AmberEngine::Context::Window>	window;
 		std::unique_ptr<AmberEngine::Context::Driver>	driver;
@@ -33,6 +36,7 @@ namespace AmberEngine::Core
 		std::unique_ptr<UIManager>						uiManager;
 
 		std::unique_ptr<Buffers::UniformBuffer>			engineUBO;
+		std::unique_ptr<Core::EditorResources>			m_editorResources;
 
 		SceneSystem::Scene m_scene;
 	};

@@ -5,6 +5,7 @@
 AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_context(p_context),
 	m_sceneView(m_context),
+	m_hierarchy("Hierarchy"),
 	m_menuBar(m_context)
 {
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
@@ -44,6 +45,7 @@ void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 	m_sceneView.Render();
 
 	m_sceneView.Draw();
+	m_hierarchy.Draw();
 	m_menuBar.Draw();
 	m_context.uiManager->PostDraw();
 }

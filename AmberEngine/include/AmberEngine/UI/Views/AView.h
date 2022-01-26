@@ -5,7 +5,7 @@ namespace AmberEngine::UI
 	class AView
 	{
 	public:
-		AView(std::string p_viewName);
+		AView(std::string p_title);
 		virtual ~AView() = default;
 
 		void CopyImGuiSize();
@@ -18,7 +18,7 @@ namespace AmberEngine::UI
 
 	protected:
 		glm::vec2 m_size;
-		std::string m_name;
+		std::string m_title;
 		bool m_sizeChanged;
 	};
 }

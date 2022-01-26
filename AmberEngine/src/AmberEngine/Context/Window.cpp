@@ -2,9 +2,9 @@
 
 #include "AmberEngine/Context/Window.h"
 
-AmberEngine::Eventing::Event<bool>  AmberEngine::Context::Window::CloseEvent;
+AmberEngine::Eventing::Event<bool> AmberEngine::Context::Window::CloseEvent;
 
-std::unordered_map<GLFWwindow*, AmberEngine::Context::Window*>  AmberEngine::Context::Window::__WINDOWS_MAP;
+std::unordered_map<GLFWwindow*, AmberEngine::Context::Window*> AmberEngine::Context::Window::__WINDOWS_MAP;
 
 AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings) :
 	m_device(p_device),

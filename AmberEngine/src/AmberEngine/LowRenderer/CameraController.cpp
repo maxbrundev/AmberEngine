@@ -2,8 +2,6 @@
 
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-#include "AmberEngine/ImGUI/imgui_internal.h"
-
 AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, const glm::vec3& p_position) :
 	m_window(p_window),
 	inputManager(p_inputManager),

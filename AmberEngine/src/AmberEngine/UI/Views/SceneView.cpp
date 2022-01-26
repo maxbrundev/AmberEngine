@@ -59,7 +59,7 @@ void AmberEngine::UI::SceneView::Draw()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(0, 0));
 
-	ImGui::Begin(m_name.c_str(), nullptr);
+	ImGui::Begin(m_title.c_str(), nullptr);
 
 	m_isFocused = ImGui::IsWindowFocused();
 	m_isHovered = ImGui::IsWindowHovered();

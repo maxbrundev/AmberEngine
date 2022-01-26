@@ -41,6 +41,7 @@ void AmberEngine::Resources::Mesh::Unbind() const
 
 void AmberEngine::Resources::Mesh::BindMaterialTextures() const
 {
+	//TODO: Set Blank texture if no material file fetched.
 	for (int i = 0; i < m_textures.size(); i++)
 	{
 		m_textures[i]->Bind(i);

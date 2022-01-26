@@ -13,6 +13,13 @@ namespace AmberEngine::UI
 		void Draw();
 
 	private:
+		void DisplayFileMenu() const;
+		void DisplayDrawModeMenu();
+
+	private:
 		Core::Context& m_context;
+		bool m_isShadeDrawMode     = true;
+		bool m_isWireframeDrawMode = false;
+		bool m_isNormalDebugDrawMode = false;
 	};
 }

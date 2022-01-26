@@ -83,6 +83,7 @@ uniform sampler2D u_SpecularMap;
 uniform vec4 u_Diffuse    = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 u_Specular   = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float u_Shininess = 100.0;
+uniform int u_DebugNormal = 0;
 
 uniform Light light;
 
@@ -151,11 +152,18 @@ void main()
 
   vec3 lightSum = vec3(0.0);
 
-  lightSum += CalculateDirectionalLight(light);
-  //lightSum += Lambert(c_lightPosition, c_lightDiffuse, c_lightAmbient);
+  if(u_DebugNormal == 0)
+  {
+    lightSum += CalculateDirectionalLight(light);
+    //lightSum += Lambert(c_lightPosition, c_lightDiffuse, c_lightAmbient);
 
-  //Quick Ambiant
-  lightSum += vec3(g_DiffuseTexel.rgb * light.color * c_lightAmbient);
+    //Quick Ambiant
+    lightSum += vec3(g_DiffuseTexel.rgb * light.color * c_lightAmbient);
+  }
+  else
+  {
+    lightSum = g_Normal * 0.5 + 0.5;
+  }
 
   FragColor = vec4(lightSum, 1.0f);
 }

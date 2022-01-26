@@ -16,6 +16,9 @@ namespace AmberEngine::Managers
 	class API_AMBERENGINE ResourcesManager final : public ASingleton<ResourcesManager>
 	{
 	public:
+		static Resources::AssimpParser __ASSIMP;
+
+	public:
 		friend class ASingleton<ResourcesManager>;
 
 		//static ResourcesManager& Instance();
@@ -51,6 +54,5 @@ namespace AmberEngine::Managers
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Model>> m_modelResources;
 		//static ResourcesManager* m_instance;
 		//static ResourcesManager m_instance;
-		static Resources::AssimpParser __ASSIMP;
 	};
 }

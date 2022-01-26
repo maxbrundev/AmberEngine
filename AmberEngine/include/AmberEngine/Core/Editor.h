@@ -5,6 +5,7 @@
 #include "AmberEngine/Core/Context.h"
 
 #include "AmberEngine/UI/Views/SceneView.h"
+#include "AmberEngine/UI/Hierarchy.h"
 #include "AmberEngine/UI/MenuBar.h"
 
 namespace AmberEngine::Core
@@ -25,6 +26,7 @@ namespace AmberEngine::Core
 		Context& m_context;
 
 		UI::SceneView m_sceneView;
+		UI::Hierarchy m_hierarchy;
 		UI::MenuBar m_menuBar;
 	};
 }

@@ -124,11 +124,11 @@ void Example::Application::Run()
 
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
 
-	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor();
-	AmberEngine::ECS::Actor* testActor2 = new AmberEngine::ECS::Actor();
-	AmberEngine::ECS::Actor* testActor3 = new AmberEngine::ECS::Actor();
+	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor("Actor1");
+	AmberEngine::ECS::Actor* testActor2 = new AmberEngine::ECS::Actor("Actor2");
+	AmberEngine::ECS::Actor* testActor3 = new AmberEngine::ECS::Actor("Actor3");
 
-	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor();
+	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor("Directional Light");
 	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
 	directionalLight->GetComponent<AmberEngine::ECS::Components::LightComponent>()->GetLightData().color = glm::vec3(1.0f, 0.9f, 0.8f);
 
@@ -143,13 +143,13 @@ void Example::Application::Run()
 	testActor3->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
 	testActor3->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
-	testActor3->GetTransform().SetParent(testActor2->GetTransform());
+	testActor3->SetParent(*testActor2);
 	testActor3->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });
 
-	m_context.m_scene.AddActor(testActor, "Actor1");
-	m_context.m_scene.AddActor(testActor2, "Actor2");
-	m_context.m_scene.AddActor(testActor3, "Actor3");
-	m_context.m_scene.AddActor(directionalLight, "Directional Light");
+	m_context.m_scene.AddActor(testActor);
+	m_context.m_scene.AddActor(testActor2);
+	m_context.m_scene.AddActor(testActor3);
+	m_context.m_scene.AddActor(directionalLight);
 
 	float rotationX;
 	float rotationY;
@@ -198,9 +198,9 @@ void Example::Application::Run()
 			ImGui::SliderFloat("Position Y2", &positionY2, -100.0f, 100.0f);
 			ImGui::SliderFloat("Position Z2", &positionZ2, -100.0f, 100.0f);
 
-			ImGui::SliderFloat("Position X3", &positionX3, -100.0f, 100.0f);
-			ImGui::SliderFloat("Position Y3", &positionY3, -100.0f, 100.0f);
-			ImGui::SliderFloat("Position Z3", &positionZ3, -100.0f, 100.0f);
+			ImGui::SliderFloat("Position X3", &positionX3, -360.0f, 360.0f);
+			ImGui::SliderFloat("Position Y3", &positionY3, -360.0f, 360.0f);
+			ImGui::SliderFloat("Position Z3", &positionZ3, -360.0f, 360.0f);
 			ImGui::End();
 
 			if (directionalLight)
@@ -220,9 +220,9 @@ void Example::Application::Run()
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))
 			{
 				//working
-				//m_context.m_scene.DestroyActor(testActor2);
+				m_context.m_scene.DestroyActor(testActor2);
 				//working
-				testActor3->GetTransform().RemoveParent();
+				//testActor3->RemoveParent();
 			}
 		}
 

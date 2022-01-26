@@ -4,6 +4,7 @@
 
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
 #include "AmberEngine/Core/ECS/Components/LightComponent.h"
+#include "AmberEngine/Resources/Shader.h"
 
 AmberEngine::Core::SceneSystem::Scene::Scene(std::string p_name) : m_name(std::move(p_name))
 {
@@ -21,10 +22,9 @@ AmberEngine::Core::SceneSystem::Scene::~Scene()
 	m_lights.clear();
 }
 
-void AmberEngine::Core::SceneSystem::Scene::AddActor(ECS::Actor* p_actor, const std::string& p_name)
+void AmberEngine::Core::SceneSystem::Scene::AddActor(ECS::Actor* p_actor)
 {
-	auto actor = m_actors.emplace(p_name, p_actor);
-	p_actor->SetName(p_name);
+	auto actor = m_actors.emplace(p_actor->GetName(), p_actor);
 
 	if(auto lightComponent = actor.first->second->GetComponent<ECS::Components::LightComponent>(); lightComponent != nullptr)
 	{
@@ -53,6 +53,27 @@ void AmberEngine::Core::SceneSystem::Scene::DrawAll(Core::Renderer& p_renderer) 
 		{
 			p_renderer.Draw(*actor.second->GetComponent<ECS::Components::ModelComponent>()->GetModel(), &actor.second->GetTransform().GetWorldMatrix());
 		}
+	}
+}
+
+// TODO: Remove this method and save the previous shader before set the Normal Visualizer.
+void AmberEngine::Core::SceneSystem::Scene::SetDebugNormal(bool p_value)
+{
+	if (m_isDebugingNormal != p_value)
+	{
+		for (const auto& actor : m_actors)
+		{
+			if (const auto model = actor.second->GetComponent<ECS::Components::ModelComponent>())
+			{
+				auto shader = model->GetModel()->GetShader();
+				shader->Bind();
+
+				shader->SetUniform1i("u_DebugNormal", p_value);
+				shader->Unbind();
+			}
+		}
+
+		m_isDebugingNormal = p_value;
 	}
 }
 

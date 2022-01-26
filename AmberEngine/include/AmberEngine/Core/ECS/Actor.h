@@ -2,6 +2,8 @@
 
 #include "AmberEngine/API/Export.h"
 
+#include "AmberEngine/Eventing/Event.h"
+
 #include "AmberEngine/Maths/Transform.h"
 
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
@@ -12,7 +14,11 @@ namespace AmberEngine::ECS
 	class API_AMBERENGINE Actor
 	{
 	public:
-		Actor();
+		static Eventing::Event<Actor&> CreatedEvent;
+		static Eventing::Event<Actor&> DestroyEvent;
+
+	public:
+		Actor(std::string p_name);
 		~Actor();
 
 		template<typename T>
@@ -48,6 +54,12 @@ namespace AmberEngine::ECS
 		}
 
 		void Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime);
+		void SetParent(Actor& p_parent);
+		void RemoveParent();
+
+		Actor* GetParent() const;
+
+		std::vector<Actor*>& GetChildren();
 
 		void SetName(std::string p_name);
 
@@ -57,6 +69,9 @@ namespace AmberEngine::ECS
 
 	private:
 		Maths::Transform m_transform;
+		int64_t					m_parentID = 0;
+		Actor*	m_parent = nullptr;
+		std::vector<Actor*>		m_children;
 		std::vector<Components::AComponent*> m_components;
 		std::string m_name;
 	};

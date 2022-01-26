@@ -13,11 +13,11 @@ namespace AmberEngine::Core::SceneSystem
 		Scene(std::string p_name);
 		~Scene();
 
-		void AddActor(ECS::Actor* p_actor, const std::string& p_name);
+		void AddActor(ECS::Actor* p_actor);
 		void DestroyActor(ECS::Actor*& p_actor);
 		
 		void DrawAll(Renderer& p_renderer) const;
-
+		void SetDebugNormal(bool p_value);
 		void Update(float p_deltaTime) const;
 
 		std::unordered_map<std::string, ECS::Actor*>& GetActors();
@@ -27,5 +27,6 @@ namespace AmberEngine::Core::SceneSystem
 		std::unordered_map<std::string, ECS::Actor*> m_actors;
 		std::vector<ECS::Components::LightComponent*> m_lights;
 		std::string m_name;
+		bool m_isDebugingNormal = false;
 	};
 }
