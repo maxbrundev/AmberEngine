@@ -19,8 +19,13 @@ namespace AmberEngine::Buffers
 	class API_AMBERENGINE UniformBuffer
 	{
 	public:
-		UniformBuffer(size_t p_size, uint32_t p_bindingPoint = 0, uint32_t p_offset = 0, EAccessSpecifier p_accessSpecifier = EAccessSpecifier::DYNAMIC_DRAW);
+		static void BindBlockToShader(Resources::Shader& p_shader, uint32_t p_uniformBlockLocation, uint32_t p_bindingPoint = 0);
+		static void BindBlockToShader(Resources::Shader& p_shader, const std::string& p_name, uint32_t p_bindingPoint = 0);
 
+		static uint32_t GetBlockLocation(Resources::Shader& p_shader, const std::string& p_name);
+
+	public:
+		UniformBuffer(size_t p_size, uint32_t p_bindingPoint = 0, uint32_t p_offset = 0, EAccessSpecifier p_accessSpecifier = EAccessSpecifier::DYNAMIC_DRAW);
 		~UniformBuffer();
 
 		void Bind() const;
@@ -45,11 +50,6 @@ namespace AmberEngine::Buffers
 		}
 
 		uint32_t GetID() const;
-
-		static void BindBlockToShader(Resources::Shader& p_shader, uint32_t p_uniformBlockLocation, uint32_t p_bindingPoint = 0);
-		static void BindBlockToShader(Resources::Shader& p_shader, const std::string& p_name, uint32_t p_bindingPoint = 0);
-
-		static uint32_t GetBlockLocation(Resources::Shader& p_shader, const std::string& p_name);
 
 	private:
 		uint32_t m_bufferID;

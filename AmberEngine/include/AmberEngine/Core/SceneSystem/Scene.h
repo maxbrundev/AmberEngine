@@ -24,9 +24,9 @@ namespace AmberEngine::Core::SceneSystem
 		const std::vector<ECS::Components::LightComponent*>& GetLights();
 
 	private:
+		bool m_isDebugingNormal = false;
+		std::string m_name;
 		std::unordered_map<std::string, ECS::Actor*> m_actors;
 		std::vector<ECS::Components::LightComponent*> m_lights;
-		std::string m_name;
-		bool m_isDebugingNormal = false;
 	};
 }

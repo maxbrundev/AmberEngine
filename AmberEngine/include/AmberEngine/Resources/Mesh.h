@@ -20,12 +20,14 @@ namespace AmberEngine::Resources
 
 		void Bind() const;
 		void Unbind() const;
-		void BindMaterialTextures() const;
+		void BindMaterialTextures(Texture* p_texture) const;
 
 		std::function<void(std::string, int)> SetTextureUniformCallback;
 
 		uint32_t GetVertexCount() const;
 		uint32_t GetIndexCount() const;
+
+		std::vector<std::shared_ptr<Texture>>& GetTextures();
 
 	private:
 		void InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices);

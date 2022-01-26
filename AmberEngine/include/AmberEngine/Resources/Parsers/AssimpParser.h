@@ -9,7 +9,7 @@
 #include "AmberEngine/Resources/Model.h"
 #include "AmberEngine/Resources/Texture.h"
 
-namespace AmberEngine::Resources
+namespace AmberEngine::Resources::Parsers
 {
 	class API_AMBERENGINE AssimpParser
 	{

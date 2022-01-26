@@ -5,12 +5,26 @@
 #include "AmberEngine/Core/Renderer.h"
 
 #include "AmberEngine/Resources/Mesh.h"
+#include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
-AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) : m_driver(p_driver)
+AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) :
+	m_driver(p_driver),
+	m_emptyTexture(Resources::Loaders::TextureLoader::CreateColor
+	(
+	(255 << 24) | (255 << 16) | (255 << 8) | 255,
+	AmberEngine::Settings::ETextureFilteringMode::NEAREST,
+	AmberEngine::Settings::ETextureFilteringMode::NEAREST,
+	false
+	))
 {
 }
 
-void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix)
+AmberEngine::Core::Renderer::~Renderer()
+{
+	Resources::Loaders::TextureLoader::Destroy(m_emptyTexture);
+}
+
+void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix) const
 {
 	m_modelMatrixSender(*p_modelMatrix);
 
@@ -24,9 +38,9 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 cons
 	p_model.Unbind();
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh)
+void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh) const
 {
-	p_mesh.BindMaterialTextures();
+	p_mesh.BindMaterialTextures(m_emptyTexture);
 
 	p_mesh.Bind();
 
@@ -42,12 +56,12 @@ void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh)
 	p_mesh.Unbind();
 }
 
-void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha)
+void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha) const
 {
 	glClearColor(p_red, p_green, p_blue, p_alpha);
 }
 
-void AmberEngine::Core::Renderer::Clear(bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer)
+void AmberEngine::Core::Renderer::Clear(bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer) const
 {
 	glClear
 	(
@@ -57,7 +71,7 @@ void AmberEngine::Core::Renderer::Clear(bool p_colorBuffer, bool p_depthBuffer, 
 	);
 }
 
-void AmberEngine::Core::Renderer::Clear(AmberEngine::LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer)
+void AmberEngine::Core::Renderer::Clear(AmberEngine::LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer) const
 {
 	/* Backup the previous OpenGL clear color */
 	GLfloat previousClearColor[4];
@@ -77,12 +91,12 @@ void AmberEngine::Core::Renderer::RegisterModelMatrixSender(std::function<void(g
 	m_modelMatrixSender = std::move(p_modelMatrixSender);
 }
 
-void AmberEngine::Core::Renderer::PolygonModeLine()
+void AmberEngine::Core::Renderer::PolygonModeLine() const
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void AmberEngine::Core::Renderer::PolygonModeFill()
+void AmberEngine::Core::Renderer::PolygonModeFill() const
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

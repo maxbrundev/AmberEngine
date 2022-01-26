@@ -10,16 +10,16 @@ AmberEngine::Core::EditorResources::EditorResources(const std::string& p_editorA
 	std::string modelsFolder	= p_editorAssetsPath + "Models\\";
 	std::string shadersFolder	= p_editorAssetsPath + "Shaders\\";
 
-	m_models["Cube"]            = &AmberEngine::Managers::ResourcesManager::Instance().LoadModel("Cube", modelsFolder + "Cube.fbx");
-	m_models["Cylinder"]        = &AmberEngine::Managers::ResourcesManager::Instance().LoadModel("Cylinder", modelsFolder + "Cylinder.fbx");
-	m_models["Plane"]           = &AmberEngine::Managers::ResourcesManager::Instance().LoadModel("Plane", modelsFolder + "Plane.fbx");
-	m_models["Vertical_Plane"]  = &AmberEngine::Managers::ResourcesManager::Instance().LoadModel("Vertical_Plane", modelsFolder + "Vertical_Plane.fbx");
-	m_models["Roll"]            = &AmberEngine::Managers::ResourcesManager::Instance().LoadModel("Roll", modelsFolder + "Roll.fbx");
-	m_models["Sphere"]          = &AmberEngine::Managers::ResourcesManager::Instance().LoadModel("Sphere", modelsFolder + "Sphere.fbx");
+	m_models["Cube"]            = &Managers::ResourcesManager::Instance().LoadModel("Cube", modelsFolder + "Cube.fbx");
+	m_models["Cylinder"]        = &Managers::ResourcesManager::Instance().LoadModel("Cylinder", modelsFolder + "Cylinder.fbx");
+	m_models["Plane"]           = &Managers::ResourcesManager::Instance().LoadModel("Plane", modelsFolder + "Plane.fbx");
+	m_models["Vertical_Plane"]  = &Managers::ResourcesManager::Instance().LoadModel("Vertical_Plane", modelsFolder + "Vertical_Plane.fbx");
+	m_models["Roll"]            = &Managers::ResourcesManager::Instance().LoadModel("Roll", modelsFolder + "Roll.fbx");
+	m_models["Sphere"]          = &Managers::ResourcesManager::Instance().LoadModel("Sphere", modelsFolder + "Sphere.fbx");
 
 	auto normalsSource = Resources::RawShader::GetNormalVisualizer();
 
-	m_shaders["Normals"] = Resources::ShaderLoader::CreateFromSource(normalsSource.first, normalsSource.second);
+	m_shaders["Normals"] = Resources::Loaders::ShaderLoader::CreateFromSource(normalsSource.first, normalsSource.second);
 }
 
 AmberEngine::Core::EditorResources::~EditorResources()

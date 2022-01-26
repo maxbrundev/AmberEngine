@@ -18,7 +18,7 @@ AmberEngine::Resources::Mesh::~Mesh()
 
 	for(auto& texture : m_textures)
 	{
-		TextureLoader::Delete(texture.get());
+		Loaders::TextureLoader::Delete(texture.get());
 	}
 
 	m_textures.clear();
@@ -32,30 +32,33 @@ void AmberEngine::Resources::Mesh::Bind() const
 void AmberEngine::Resources::Mesh::Unbind() const
 {
 	m_vertexArray.Unbind();
-
-	for (const auto& m_texture : m_textures)
-	{
-		m_texture->Unbind();
-	}
 }
 
-void AmberEngine::Resources::Mesh::BindMaterialTextures() const
+void AmberEngine::Resources::Mesh::BindMaterialTextures(Texture* p_texture) const
 {
-	//TODO: Set Blank texture if no material file fetched.
-	for (int i = 0; i < m_textures.size(); i++)
+	if(m_textures.empty())
 	{
-		m_textures[i]->Bind(i);
-
-		switch (m_textures[i]->type)
+		p_texture->Bind(0);
+		SetTextureUniformCallback("u_DiffuseMap", 0);
+		SetTextureUniformCallback("u_SpecularMap", 0);
+	}
+	else
+	{
+		for (int i = 0; i < m_textures.size(); i++)
 		{
-		case Settings::ETextureType::DIFFUSE:
-			SetTextureUniformCallback("u_DiffuseMap", i);
-			break;
-		case Settings::ETextureType::SPECULAR:
-			SetTextureUniformCallback("u_SpecularMap", i);
-			break;
-		default: 
-			break;
+			m_textures[i]->Bind(i);
+
+			switch (m_textures[i]->type)
+			{
+			case Settings::ETextureType::DIFFUSE:
+				SetTextureUniformCallback("u_DiffuseMap", i);
+				break;
+			case Settings::ETextureType::SPECULAR:
+				SetTextureUniformCallback("u_SpecularMap", i);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
@@ -68,6 +71,11 @@ uint32_t AmberEngine::Resources::Mesh::GetVertexCount() const
 uint32_t AmberEngine::Resources::Mesh::GetIndexCount() const
 {
 	return m_indicesCount;
+}
+
+std::vector<std::shared_ptr<AmberEngine::Resources::Texture>>& AmberEngine::Resources::Mesh::GetTextures()
+{
+	return m_textures;
 }
 
 void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices)

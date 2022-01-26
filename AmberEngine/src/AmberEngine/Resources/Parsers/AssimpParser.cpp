@@ -9,7 +9,7 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePath, Model& p_model)
+bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string& p_filePath, Model& p_model)
 {
 	m_directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
 
@@ -43,7 +43,7 @@ bool AmberEngine::Resources::AssimpParser::LoadModel(const std::string& p_filePa
 	return true;
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene* p_scene, std::vector<std::string>& p_materials)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterials(const aiScene* p_scene, std::vector<std::string>& p_materials)
 {
 	for (uint32_t i = 0; i < p_scene->mNumMaterials; ++i)
 	{
@@ -57,7 +57,7 @@ void AmberEngine::Resources::AssimpParser::ProcessMaterials(const aiScene* p_sce
 	}
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessNode(const aiMatrix4x4* p_transform, const aiNode* p_node, const aiScene * p_scene, std::vector<Mesh*>& p_meshes)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessNode(const aiMatrix4x4* p_transform, const aiNode* p_node, const aiScene * p_scene, std::vector<Mesh*>& p_meshes)
 {
 	const aiMatrix4x4 nodeTransformation = *p_transform * p_node->mTransformation;
 
@@ -97,7 +97,7 @@ void AmberEngine::Resources::AssimpParser::ProcessNode(const aiMatrix4x4* p_tran
 	}
 }
 
-void AmberEngine::Resources::AssimpParser::ProcessMesh(const aiMatrix4x4* p_transform, const aiMesh* p_mesh, const aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<std::shared_ptr<Texture>>& p_outTextures)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessMesh(const aiMatrix4x4* p_transform, const aiMesh* p_mesh, const aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<std::shared_ptr<Texture>>& p_outTextures)
 {
 	const aiMatrix4x4 meshTransformation = *p_transform;
 
@@ -151,7 +151,7 @@ void AmberEngine::Resources::AssimpParser::ProcessMesh(const aiMatrix4x4* p_tran
 	p_outTextures.insert(p_outTextures.end(), heightMaps.begin(), heightMaps.end());
 }
 
-std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resources::AssimpParser::LoadMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType)
+std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resources::Parsers::AssimpParser::LoadMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType)
 {
 	std::vector<std::shared_ptr<Texture>> textures;
 
@@ -178,7 +178,7 @@ std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resou
 		{
 			std::string path = m_directory + str.C_Str();
 
-			std::shared_ptr<Texture> texture(TextureLoader::Create(std::move(path), Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
+			std::shared_ptr<Texture> texture(Loaders::TextureLoader::Create(std::move(path), Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
 
 			if(texture == nullptr)
 			{

@@ -21,6 +21,10 @@ namespace AmberEngine::ECS
 		Actor(std::string p_name);
 		~Actor();
 
+		void Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime);
+
+		void RemoveParent();
+
 		template<typename T>
 		void AddComponent(T* p_component)
 		{
@@ -49,30 +53,25 @@ namespace AmberEngine::ECS
 					return static_cast<T*>(component);
 				}
 			}
-		
+
 			return nullptr;
 		}
 
-		void Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime);
+		void SetName(std::string p_name);
 		void SetParent(Actor& p_parent);
-		void RemoveParent();
 
+		std::string GetName();
 		Actor* GetParent() const;
 
 		std::vector<Actor*>& GetChildren();
 
-		void SetName(std::string p_name);
-
-		std::string GetName();
-
 		Maths::Transform& GetTransform();
 
 	private:
-		Maths::Transform m_transform;
-		int64_t					m_parentID = 0;
-		Actor*	m_parent = nullptr;
-		std::vector<Actor*>		m_children;
-		std::vector<Components::AComponent*> m_components;
 		std::string m_name;
+		Maths::Transform m_transform;
+		Actor* m_parent = nullptr;
+		std::vector<Actor*> m_children;
+		std::vector<Components::AComponent*> m_components;
 	};
 }

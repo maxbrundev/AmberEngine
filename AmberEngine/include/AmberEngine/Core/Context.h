@@ -11,11 +11,10 @@
 
 #include "AmberEngine/Core/Renderer.h"
 #include "AmberEngine/Core/EditorResources.h"
+#include "AmberEngine/Core/SceneSystem/Scene.h"
 #include "AmberEngine/Core/UIManager.h"
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
-
-#include "AmberEngine/Core/SceneSystem/Scene.h"
 
 namespace AmberEngine::Core
 {

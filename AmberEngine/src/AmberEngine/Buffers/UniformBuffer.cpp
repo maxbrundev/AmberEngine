@@ -4,6 +4,22 @@
 
 #include "AmberEngine/Resources/Shader.h"
 
+void AmberEngine::Buffers::UniformBuffer::BindBlockToShader(Resources::Shader& p_shader, uint32_t p_uniformBlockLocation, uint32_t p_bindingPoint)
+{
+	glUniformBlockBinding(p_shader.id, p_uniformBlockLocation, p_bindingPoint);
+}
+
+void AmberEngine::Buffers::UniformBuffer::BindBlockToShader(Resources::Shader& p_shader, const std::string& p_name,
+	uint32_t p_bindingPoint)
+{
+	glUniformBlockBinding(p_shader.id, GetBlockLocation(p_shader, p_name), p_bindingPoint);
+}
+
+uint32_t AmberEngine::Buffers::UniformBuffer::GetBlockLocation(Resources::Shader& p_shader, const std::string& p_name)
+{
+	return glGetUniformBlockIndex(p_shader.id, p_name.c_str());
+}
+
 AmberEngine::Buffers::UniformBuffer::UniformBuffer(size_t p_size, uint32_t p_bindingPoint, uint32_t p_offset, EAccessSpecifier p_accessSpecifier)
 {
 	glGenBuffers(1, &m_bufferID);
@@ -31,20 +47,4 @@ void AmberEngine::Buffers::UniformBuffer::Unbind() const
 uint32_t AmberEngine::Buffers::UniformBuffer::GetID() const
 {
 	return m_bufferID;
-}
-
-void AmberEngine::Buffers::UniformBuffer::BindBlockToShader(Resources::Shader& p_shader, uint32_t p_uniformBlockLocation, uint32_t p_bindingPoint)
-{
-	glUniformBlockBinding(p_shader.id, p_uniformBlockLocation, p_bindingPoint);
-}
-
-void AmberEngine::Buffers::UniformBuffer::BindBlockToShader(Resources::Shader& p_shader, const std::string& p_name,
-	uint32_t p_bindingPoint)
-{
-	glUniformBlockBinding(p_shader.id, GetBlockLocation(p_shader, p_name), p_bindingPoint);
-}
-
-uint32_t AmberEngine::Buffers::UniformBuffer::GetBlockLocation(Resources::Shader& p_shader, const std::string& p_name)
-{
-	return glGetUniformBlockIndex(p_shader.id, p_name.c_str());
 }

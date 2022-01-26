@@ -2,7 +2,6 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 #include "ETransformState.h"

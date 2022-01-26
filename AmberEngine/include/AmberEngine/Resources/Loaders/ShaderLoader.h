@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Resources/Shader.h"
 
-namespace AmberEngine::Resources
+namespace AmberEngine::Resources::Loaders
 {
 	class API_AMBERENGINE ShaderLoader
 	{

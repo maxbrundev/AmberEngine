@@ -16,6 +16,8 @@
 #include <AmberEngine/Buffers/VertexBuffer.h>
 #include <AmberEngine/Buffers/VertexArray.h>*/
 
+#include <AmberEngine/ImGui/imgui.h>
+
 Example::Application::Application(const AmberEngine::Settings::DeviceSettings & p_deviceSettings,
 	const AmberEngine::Settings::WindowSettings & p_windowSettings,
 	const AmberEngine::Settings::DriverSettings & p_driverSettings) :
@@ -31,8 +33,8 @@ void Example::Application::Setup()
 
 	resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
 
-	//resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
-	//resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE, true, true);
+	resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
+	resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::SPECULAR, true, true);
 }
 
 void Example::Application::Run()
@@ -140,6 +142,9 @@ void Example::Application::Run()
 	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
 	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
+	//testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetTexture(resourcesManager.GetTexture("diffuse"));
+	//testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetTexture(resourcesManager.GetTexture("specular"));
+
 	testActor3->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
 	testActor3->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
@@ -214,7 +219,7 @@ void Example::Application::Run()
 
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_R))
 			{
-				AmberEngine::Resources::ShaderLoader::Recompile(resourcesManager.GetShader("StandardLighting"), "res/shaders/StandardLighting.glsl");
+				AmberEngine::Resources::Loaders::ShaderLoader::Recompile(resourcesManager.GetShader("StandardLighting"), "res/shaders/StandardLighting.glsl");
 			}
 
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))

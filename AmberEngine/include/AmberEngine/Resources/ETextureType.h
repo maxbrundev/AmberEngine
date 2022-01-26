@@ -6,6 +6,7 @@ namespace AmberEngine::Settings
 {
 	enum class API_AMBERENGINE ETextureType
 	{
+		NONE,
 		DIFFUSE,
 		SPECULAR,
 		NORMAL_MAP,

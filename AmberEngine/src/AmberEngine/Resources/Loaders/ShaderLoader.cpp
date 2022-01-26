@@ -4,9 +4,9 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-std::string AmberEngine::Resources::ShaderLoader::__FILE_TRACE;
+std::string AmberEngine::Resources::Loaders::ShaderLoader::__FILE_TRACE;
 
-AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::Create(std::string p_filePath)
+AmberEngine::Resources::Shader* AmberEngine::Resources::Loaders::ShaderLoader::Create(std::string p_filePath)
 {
 	__FILE_TRACE = p_filePath;
 
@@ -19,7 +19,7 @@ AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::Create(std
 	return shader;
 }
 
-AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::CreateFromSource(const std::string& p_vertexShader, const std::string& p_fragmentShader)
+AmberEngine::Resources::Shader* AmberEngine::Resources::Loaders::ShaderLoader::CreateFromSource(const std::string& p_vertexShader, const std::string& p_fragmentShader)
 {
 	__FILE_TRACE = Utils::String::ExtractDirectoryFromPath(p_vertexShader) + "/" + Utils::String::ExtractDirectoryFromPath(p_fragmentShader);
 
@@ -32,7 +32,7 @@ AmberEngine::Resources::Shader* AmberEngine::Resources::ShaderLoader::CreateFrom
 	return shader;
 }
 
-void AmberEngine::Resources::ShaderLoader::Recompile(Shader& p_shader, const std::string& p_filePath)
+void AmberEngine::Resources::Loaders::ShaderLoader::Recompile(Shader& p_shader, const std::string& p_filePath)
 {
 	__FILE_TRACE = p_filePath;
 
@@ -62,7 +62,7 @@ void AmberEngine::Resources::ShaderLoader::Recompile(Shader& p_shader, const std
 	}
 }
 
-bool AmberEngine::Resources::ShaderLoader::Destroy(Shader*& p_shaderInstance)
+bool AmberEngine::Resources::Loaders::ShaderLoader::Destroy(Shader*& p_shaderInstance)
 {
 	if (p_shaderInstance)
 	{
@@ -77,7 +77,7 @@ bool AmberEngine::Resources::ShaderLoader::Destroy(Shader*& p_shaderInstance)
 	return false;
 }
 
-bool AmberEngine::Resources::ShaderLoader::Delete(Shader* p_shaderInstance)
+bool AmberEngine::Resources::Loaders::ShaderLoader::Delete(Shader* p_shaderInstance)
 {
 	if (p_shaderInstance)
 	{
@@ -89,7 +89,7 @@ bool AmberEngine::Resources::ShaderLoader::Delete(Shader* p_shaderInstance)
 	return false;
 }
 
-std::pair<std::string, std::string> AmberEngine::Resources::ShaderLoader::ParseShader(const std::string& p_filePath)
+std::pair<std::string, std::string> AmberEngine::Resources::Loaders::ShaderLoader::ParseShader(const std::string& p_filePath)
 {
 	std::ifstream stream(p_filePath);
 
@@ -131,7 +131,7 @@ std::pair<std::string, std::string> AmberEngine::Resources::ShaderLoader::ParseS
 	};
 }
 
-std::string AmberEngine::Resources::ShaderLoader::Parse(const std::string& p_filePath)
+std::string AmberEngine::Resources::Loaders::ShaderLoader::Parse(const std::string& p_filePath)
 {
 	std::ifstream stream(p_filePath);
 	std::string line;
@@ -145,7 +145,7 @@ std::string AmberEngine::Resources::ShaderLoader::Parse(const std::string& p_fil
 	return stringstream.str();
 }
 
-uint32_t AmberEngine::Resources::ShaderLoader::CreateShader(const std::string &p_vertexSources, const std::string& p_fragmentSources)
+uint32_t AmberEngine::Resources::Loaders::ShaderLoader::CreateShader(const std::string &p_vertexSources, const std::string& p_fragmentSources)
 {
 	const uint32_t program = glCreateProgram();
 
@@ -192,7 +192,7 @@ uint32_t AmberEngine::Resources::ShaderLoader::CreateShader(const std::string &p
 	return program;
 }
 
-uint32_t AmberEngine::Resources::ShaderLoader::CompileShader(uint32_t p_type, const std::string& p_source, uint32_t p_program)
+uint32_t AmberEngine::Resources::Loaders::ShaderLoader::CompileShader(uint32_t p_type, const std::string& p_source, uint32_t p_program)
 {
 	uint32_t id = glCreateShader(p_type);
 

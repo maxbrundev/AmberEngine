@@ -30,7 +30,7 @@ void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
 	RenderViews(p_deltaTime);
 
-	UpdateInput();
+	HandleInput();
 }
 
 void AmberEngine::Core::Editor::PostUpdate() const
@@ -50,7 +50,7 @@ void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 	m_context.uiManager->PostDraw();
 }
 
-void AmberEngine::Core::Editor::UpdateInput()
+void AmberEngine::Core::Editor::HandleInput()
 {
 	if (m_context.inputManager->IsKeyPressed(Inputs::EKey::KEY_ESCAPE))
 		m_context.window->SetShouldClose(true);

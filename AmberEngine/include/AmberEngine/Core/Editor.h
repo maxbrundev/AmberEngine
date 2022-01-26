@@ -20,7 +20,7 @@ namespace AmberEngine::Core
 		void Update(float p_deltaTime);
 		void PostUpdate() const;
 		void RenderViews(float p_deltaTime);
-		void UpdateInput();
+		void HandleInput();
 		
 	public:
 		Context& m_context;

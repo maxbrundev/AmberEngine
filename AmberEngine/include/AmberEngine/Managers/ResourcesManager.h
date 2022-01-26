@@ -6,8 +6,6 @@
 #include "AmberEngine/Resources/Shader.h"
 #include "AmberEngine/Resources/Model.h"
 
-#include "AmberEngine/Resources/Parsers/AssimpParser.h"
-
 #include "AmberEngine/Tools/Utils/ASingleton.h"
 
 namespace AmberEngine::Managers
@@ -15,9 +13,6 @@ namespace AmberEngine::Managers
 	// ASingleton will be removed, just an experimentation purpose.
 	class API_AMBERENGINE ResourcesManager final : public ASingleton<ResourcesManager>
 	{
-	public:
-		static Resources::AssimpParser __ASSIMP;
-
 	public:
 		friend class ASingleton<ResourcesManager>;
 

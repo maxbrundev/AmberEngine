@@ -2,8 +2,8 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
+
 #include "AmberEngine/Resources/Shader.h"
-#include "AmberEngine/Core/SceneSystem/Scene.h"
 
 AmberEngine::Eventing::Event<AmberEngine::ECS::Actor&> AmberEngine::ECS::Actor::CreatedEvent;
 AmberEngine::Eventing::Event<AmberEngine::ECS::Actor&> AmberEngine::ECS::Actor::DestroyEvent;
@@ -52,18 +52,9 @@ void AmberEngine::ECS::Actor::Update(const std::vector<ECS::Components::LightCom
 	}
 }
 
-void AmberEngine::ECS::Actor::SetParent(Actor& p_parent)
-{
-	m_transform.RemoveParent();
-
-	m_parent = &p_parent;
-	m_transform.SetParent(p_parent.GetTransform());
-	p_parent.m_children.push_back(this);
-}
-
 void AmberEngine::ECS::Actor::RemoveParent()
 {
-	if(m_parent)
+	if (m_parent)
 	{
 		m_parent->m_children.erase(std::remove_if(m_parent->m_children.begin(), m_parent->m_children.end(), [this](Actor* p_element)
 		{
@@ -76,6 +67,25 @@ void AmberEngine::ECS::Actor::RemoveParent()
 	m_transform.RemoveParent();
 }
 
+void AmberEngine::ECS::Actor::SetName(std::string p_name)
+{
+	m_name = std::move(p_name);
+}
+
+void AmberEngine::ECS::Actor::SetParent(Actor& p_parent)
+{
+	m_transform.RemoveParent();
+
+	m_parent = &p_parent;
+	m_transform.SetParent(p_parent.GetTransform());
+	p_parent.m_children.push_back(this);
+}
+
+std::string AmberEngine::ECS::Actor::GetName()
+{
+	return m_name;
+}
+
 AmberEngine::ECS::Actor* AmberEngine::ECS::Actor::GetParent() const
 {
 	return m_parent;
@@ -84,16 +94,6 @@ AmberEngine::ECS::Actor* AmberEngine::ECS::Actor::GetParent() const
 std::vector<AmberEngine::ECS::Actor*>& AmberEngine::ECS::Actor::GetChildren()
 {
 	return m_children;
-}
-
-void AmberEngine::ECS::Actor::SetName(std::string p_name)
-{
-	m_name = std::move(p_name);
-}
-
-std::string AmberEngine::ECS::Actor::GetName()
-{
-	return m_name;
 }
 
 AmberEngine::Maths::Transform& AmberEngine::ECS::Actor::GetTransform()

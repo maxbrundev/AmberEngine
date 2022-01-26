@@ -4,10 +4,6 @@
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
 
-#include "AmberEngine/Resources/Mesh.h"
-#include "AmberEngine/Resources/Shader.h"
-#include "AmberEngine/Resources/Loaders/ShaderLoader.h"
-
 #include "AmberEngine/Eventing/Event.h"
 
 AmberEngine::Resources::Model::Model(const std::string& p_filePath) : path(p_filePath), m_shader(nullptr)
@@ -56,17 +52,31 @@ void AmberEngine::Resources::Model::SetShader(Shader& p_shader)
 	Buffers::UniformBuffer::BindBlockToShader(*m_shader, "EngineUBO");
 }
 
-AmberEngine::Resources::Shader* AmberEngine::Resources::Model::GetShader()
+void AmberEngine::Resources::Model::SetTexture(Texture& p_texture) const
 {
-	return m_shader;
+	for(const auto mesh : m_meshes)
+	{
+		for(auto& texture : mesh->GetTextures())
+		{
+			if(texture->type == p_texture.type)
+			{
+				texture = std::make_shared<Texture>(p_texture);
+			}
+		}
+	}
 }
 
-std::vector<AmberEngine::Resources::Mesh*>& AmberEngine::Resources::Model::GetMeshes()
+AmberEngine::Resources::Shader* AmberEngine::Resources::Model::GetShader() const
 {
-	return m_meshes;
+	return m_shader;
 }
 
 std::vector<std::string>& AmberEngine::Resources::Model::GetMaterialNames()
 {
 	return m_materialNames;
+}
+
+std::vector<AmberEngine::Resources::Mesh*>& AmberEngine::Resources::Model::GetMeshes()
+{
+	return m_meshes;
 }

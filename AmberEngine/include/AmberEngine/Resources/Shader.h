@@ -4,8 +4,6 @@
 
 #include <GL/glew.h>
 
-#include <glm/glm.hpp>
-
 namespace AmberEngine::Resources
 {
 	class API_AMBERENGINE Shader

@@ -2,10 +2,6 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include "AmberEngine/ImGui/imgui.h"
-#include "AmberEngine/ImGui/imgui_impl_glfw.h"
-#include "AmberEngine/ImGui/imgui_impl_opengl3.h"
-
 namespace AmberEngine::Core
 {
 	class API_AMBERENGINE UIManager

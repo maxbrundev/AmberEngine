@@ -1,7 +1,5 @@
 #include "Amberpch.h"
 
-#include <GLFW/glfw3.h>
-
 #include "AmberEngine/Core/UIManager.h"
 
 AmberEngine::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion)
