@@ -4,10 +4,10 @@
 
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
-AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>> p_textures) :
+AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, const std::vector<std::shared_ptr<Texture>>& p_textures) :
 m_vertexCount(p_vertices.size()),
 m_indicesCount(p_indices.size()),
-m_textures(std::move(p_textures))
+m_material(p_textures)
 {
 	InitBuffers(p_vertices, p_indices);
 }
@@ -15,13 +15,6 @@ m_textures(std::move(p_textures))
 AmberEngine::Resources::Mesh::~Mesh()
 {
 	Unbind();
-
-	for(auto& texture : m_textures)
-	{
-		Loaders::TextureLoader::Delete(texture.get());
-	}
-
-	m_textures.clear();
 }
 
 void AmberEngine::Resources::Mesh::Bind() const
@@ -34,33 +27,9 @@ void AmberEngine::Resources::Mesh::Unbind() const
 	m_vertexArray.Unbind();
 }
 
-void AmberEngine::Resources::Mesh::BindMaterialTextures(Texture* p_texture) const
+AmberEngine::Resources::Material& AmberEngine::Resources::Mesh::GetMaterial()
 {
-	if(m_textures.empty())
-	{
-		p_texture->Bind(0);
-		SetTextureUniformCallback("u_DiffuseMap", 0);
-		SetTextureUniformCallback("u_SpecularMap", 0);
-	}
-	else
-	{
-		for (int i = 0; i < m_textures.size(); i++)
-		{
-			m_textures[i]->Bind(i);
-
-			switch (m_textures[i]->type)
-			{
-			case Settings::ETextureType::DIFFUSE:
-				SetTextureUniformCallback("u_DiffuseMap", i);
-				break;
-			case Settings::ETextureType::SPECULAR:
-				SetTextureUniformCallback("u_SpecularMap", i);
-				break;
-			default:
-				break;
-			}
-		}
-	}
+	return m_material;
 }
 
 uint32_t AmberEngine::Resources::Mesh::GetVertexCount() const
@@ -71,11 +40,6 @@ uint32_t AmberEngine::Resources::Mesh::GetVertexCount() const
 uint32_t AmberEngine::Resources::Mesh::GetIndexCount() const
 {
 	return m_indicesCount;
-}
-
-std::vector<std::shared_ptr<AmberEngine::Resources::Texture>>& AmberEngine::Resources::Mesh::GetTextures()
-{
-	return m_textures;
 }
 
 void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices)

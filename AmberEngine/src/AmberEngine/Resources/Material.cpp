@@ -3,8 +3,24 @@
 #include "AmberEngine/Resources/Material.h"
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
+#include "AmberEngine/Resources/Loaders/TextureLoader.h"
+#include "AmberEngine/Resources/Mesh.h"
 
-void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture) const
+AmberEngine::Resources::Material::Material(const std::vector<std::shared_ptr<Texture>>& p_textures) : m_textures(p_textures)
+{
+}
+
+AmberEngine::Resources::Material::~Material()
+{
+	for (auto& texture : m_textures)
+	{
+		Loaders::TextureLoader::Delete(texture.get());
+	}
+
+	m_textures.clear();
+}
+
+void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture)
 {
 	if(HasShader())
 	{
@@ -12,9 +28,9 @@ void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture) const
 
 		uint32_t textureSlot = 0;
 
-		if(!m_texture.empty())
+		if(!m_textures.empty())
 		{
-			for (const auto texture : m_texture)
+			for (auto& texture : m_textures)
 			{
 				texture->Bind(textureSlot);
 
@@ -58,6 +74,11 @@ void AmberEngine::Resources::Material::SetShader(Shader* p_shader)
 	}
 }
 
+void AmberEngine::Resources::Material::SetTexture(Texture* p_texture)
+{
+	// TODO
+}
+
 void AmberEngine::Resources::Material::SetBlendable(bool p_blendable)
 {
 	m_blendable = p_blendable;
@@ -93,9 +114,24 @@ void AmberEngine::Resources::Material::SetGPUInstances(uint64_t p_instances)
 	m_gpuInstances = p_instances;
 }
 
+AmberEngine::Resources::Shader*& AmberEngine::Resources::Material::GetShader()
+{
+	return m_shader;
+}
+
 bool AmberEngine::Resources::Material::HasShader() const
 {
 	return m_shader;
+}
+
+std::vector<std::shared_ptr<AmberEngine::Resources::Texture>>& AmberEngine::Resources::Material::GetTextures()
+{
+	return m_textures;
+}
+
+std::vector<std::string>& AmberEngine::Resources::Material::GetMaterialNames()
+{
+	return m_materialNames;
 }
 
 bool AmberEngine::Resources::Material::IsBlendable() const

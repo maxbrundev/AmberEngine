@@ -63,13 +63,18 @@ void AmberEngine::Core::SceneSystem::Scene::SetDebugNormal(bool p_value)
 	{
 		for (const auto& actor : m_actors)
 		{
-			if (const auto model = actor.second->GetComponent<ECS::Components::ModelComponent>())
+			if (const auto modelComponent = actor.second->GetComponent<ECS::Components::ModelComponent>())
 			{
-				auto shader = model->GetModel()->GetShader();
-				shader->Bind();
+				for (const auto mesh : modelComponent->GetModel()->GetMeshes())
+				{
+					const auto shader = mesh->GetMaterial().GetShader();
 
-				shader->SetUniform1i("u_DebugNormal", p_value);
-				shader->Unbind();
+					shader->Bind();
+
+					shader->SetUniform1i("u_DebugNormal", p_value);
+
+					shader->Unbind();
+				}
 			}
 		}
 

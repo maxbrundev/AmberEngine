@@ -37,18 +37,22 @@ void AmberEngine::ECS::Actor::Update(const std::vector<ECS::Components::LightCom
 
 	if(const auto modelComponent = GetComponent<ECS::Components::ModelComponent>(); modelComponent != nullptr)
 	{
-		const auto shader = modelComponent->GetModel()->GetShader();
-		shader->Bind();
-
-		for(auto& light : p_lights)
+		for(const auto mesh : modelComponent->GetModel()->GetMeshes())
 		{
-			auto lightData = light->GetLightData();
-			shader->SetUniformVec3("light.direction", light->owner.GetTransform().GetWorldForward());
-			shader->SetUniformVec3("light.color", lightData.color);
-			shader->SetUniform1f("light.intensity", lightData.intensity);
-		}
+			const auto shader = mesh->GetMaterial().GetShader();
 
-		shader->Unbind();
+			shader->Bind();
+
+			for (auto& light : p_lights)
+			{
+				auto lightData = light->GetLightData();
+				shader->SetUniformVec3("light.direction", light->owner.GetTransform().GetWorldForward());
+				shader->SetUniformVec3("light.color", lightData.color);
+				shader->SetUniform1f("light.intensity", lightData.intensity);
+			}
+
+			shader->Unbind();
+		}
 	}
 }
 
