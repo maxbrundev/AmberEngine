@@ -299,7 +299,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Resources\ETextureType.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\ModelLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\TextureLoader.h" />
-    <ClInclude Include="include\AmberEngine\Resources\Material.h" />
     <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
     <ClInclude Include="include\AmberEngine\Resources\Model.h" />
     <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h" />
@@ -373,7 +372,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Rendering\Entities\Light.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Loaders\ModelLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Loaders\TextureLoader.cpp" />
-    <ClCompile Include="src\AmberEngine\Resources\Material.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Model.cpp" />
     <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp" />
