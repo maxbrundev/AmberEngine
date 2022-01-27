@@ -10,8 +10,7 @@ namespace AmberEngine::Settings
 		DIFFUSE,
 		SPECULAR,
 		NORMAL_MAP,
-		HEIGHT_MAP,
-		MASK_MAP
+		HEIGHT_MAP
 
 	};
 }

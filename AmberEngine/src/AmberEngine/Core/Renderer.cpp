@@ -1,5 +1,7 @@
 #include "Amberpch.h"
 
+#include <utility>
+
 #include "AmberEngine/Core/Renderer.h"
 
 #include "AmberEngine/Resources/Mesh.h"
@@ -26,33 +28,32 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 cons
 {
 	m_modelMatrixSender(*p_modelMatrix);
 
+	p_model.Bind();
+	
 	for (const auto& mesh : p_model.GetMeshes())
 	{
-		DrawMesh(*mesh, mesh->GetMaterial());
+		DrawMesh(*mesh);
 	}
+
+	p_model.Unbind();
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resources::Material& p_material) const
+void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh) const
 {
-	if(p_material.HasShader())
+	p_mesh.BindMaterialTextures(m_emptyTexture);
+
+	p_mesh.Bind();
+
+	if(p_mesh.GetIndexCount() > 0)
 	{
-		p_material.Bind(m_emptyTexture);
-
-		p_mesh.Bind();
-
-		if (p_mesh.GetIndexCount() > 0)
-		{
-			glDrawElements(GL_TRIANGLES, p_mesh.GetIndexCount(), GL_UNSIGNED_INT, 0);
-		}
-		else
-		{
-			glDrawArrays(GL_TRIANGLES, 0, p_mesh.GetVertexCount());
-		}
-
-		p_mesh.Unbind();
-
-		p_material.Unbind();
+		glDrawElements(GL_TRIANGLES, p_mesh.GetIndexCount(), GL_UNSIGNED_INT, 0);
 	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, p_mesh.GetVertexCount());
+	}
+
+	p_mesh.Unbind();
 }
 
 void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha) const

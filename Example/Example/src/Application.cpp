@@ -135,15 +135,18 @@ void Example::Application::Run()
 	directionalLight->GetComponent<AmberEngine::ECS::Components::LightComponent>()->GetLightData().color = glm::vec3(1.0f, 0.9f, 0.8f);
 
 	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Sponza", "res/Mesh/Sponza/sponza.obj");
-	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(&resourcesManager.GetShader("StandardLighting"));
-	
+	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+
 	testActor->GetTransform().SetWorldScale({ 0.05f, 0.05f, 0.05f });
 
 	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
-	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(&resourcesManager.GetShader("StandardLighting"));
+	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
+
+	//testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetTexture(resourcesManager.GetTexture("diffuse"));
+	//testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetTexture(resourcesManager.GetTexture("specular"));
 
 	testActor3->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "res/Mesh/Nanosuit/nanosuit.obj");
-	testActor3->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(&resourcesManager.GetShader("StandardLighting"));
+	testActor3->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
 	testActor3->SetParent(*testActor2);
 	testActor3->GetTransform().SetLocalPosition({ 10.0f, 0.0f, 0.0f });

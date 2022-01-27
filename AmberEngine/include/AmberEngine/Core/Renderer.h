@@ -29,7 +29,7 @@ namespace AmberEngine::Core
 
 	private:
 		std::function<void(glm::mat4)> m_modelMatrixSender;
-		void DrawMesh(const Resources::Mesh& p_mesh, Resources::Material& p_material) const;
+		void DrawMesh(Resources::Mesh& p_mesh) const;
 
 	private:
 		Context::Driver& m_driver;

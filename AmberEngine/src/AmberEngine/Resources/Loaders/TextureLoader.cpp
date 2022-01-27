@@ -108,7 +108,7 @@ bool AmberEngine::Resources::Loaders::TextureLoader::Destroy(Texture*& p_texture
 
 		return true;
 	}
-	
+
 	return false;
 }
 

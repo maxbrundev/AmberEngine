@@ -24,11 +24,17 @@ bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string&
 		return false;
 	}
 
+	p_model.GetMaterialNames().reserve(scene->mNumMaterials);
+
+	ProcessMaterials(scene, p_model.GetMaterialNames());
+
 	const aiMatrix4x4 identity;
 
 	ProcessNode(&identity, scene->mRootNode, scene, p_model.GetMeshes());
 
 	m_loadedTextures.clear();
+
+	p_model.BindTextureCallback();
 
 	//const auto end = std::chrono::high_resolution_clock::now();
 	//std::chrono::duration<double> elapsed = end - start;
@@ -55,22 +61,33 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessNode(const aiMatrix4x
 {
 	const aiMatrix4x4 nodeTransformation = *p_transform * p_node->mTransformation;
 
+
 	// Process all the node's meshes (if any)
 	for (uint32_t i = 0; i < p_node->mNumMeshes; i++)
 	{
 		const aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
-		
+		//const aiMaterial* material = p_scene->mMaterials[mesh->mMaterialIndex];
+
+		//const uint64_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE)
+		//	+ material->GetTextureCount(aiTextureType_SPECULAR)
+		//	+ material->GetTextureCount(aiTextureType_NORMALS)
+		//	+ material->GetTextureCount(aiTextureType_HEIGHT);
+
 		std::vector<Geometry::Vertex> vertices;
 		std::vector<uint32_t> indices;
 		std::vector<std::shared_ptr<Texture>> textures;
 
+		//vertices.reserve(mesh->mNumVertices);
+		//indices.reserve(mesh->mNumFaces);
+		//textures.reserve(textureCount);
+
 		ProcessMesh(&nodeTransformation, mesh, p_scene, vertices, indices, textures);
 
-		Mesh* currentMesh = new Mesh(vertices, indices, textures);
+		p_meshes.push_back(new Mesh(vertices, indices, std::move(textures))); // The model will handle mesh destruction
 
-		ProcessMaterials(p_scene, currentMesh->GetMaterial().GetMaterialNames());
-
-		p_meshes.emplace_back(currentMesh); // The model will handle mesh destruction
+		//vertices.clear();
+		//indices.clear();
+		//textures.clear();
 	}
 
 	// Then do the same for each of its children
@@ -132,12 +149,6 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessMesh(const aiMatrix4x
 	
 	std::vector<std::shared_ptr<Texture>> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP);
 	p_outTextures.insert(p_outTextures.end(), heightMaps.begin(), heightMaps.end());
-
-	std::vector<std::shared_ptr<Texture>> maskMaps = LoadMaterial(material, aiTextureType_SHININESS, Settings::ETextureType::MASK_MAP);
-	p_outTextures.insert(p_outTextures.end(), maskMaps.begin(), maskMaps.end());
-
-	std::vector<std::shared_ptr<Texture>> unknownMaps = LoadMaterial(material, aiTextureType_UNKNOWN, Settings::ETextureType::NONE);
-	p_outTextures.insert(p_outTextures.end(), unknownMaps.begin(), unknownMaps.end());
 }
 
 std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resources::Parsers::AssimpParser::LoadMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType)
@@ -151,11 +162,11 @@ std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resou
 
 		bool isTextureAlreadyLoaded = false;
 
-		for (auto& texture : m_loadedTextures)
+		for (const auto& texture : m_loadedTextures)
 		{
 			if (std::strcmp(texture->name.data(), str.C_Str()) == 0)
 			{
-				textures.emplace_back(texture);
+				textures.push_back(texture);
 
 				isTextureAlreadyLoaded = true;
 
@@ -174,11 +185,10 @@ std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resou
 				continue;
 			}
 
-			textures.emplace_back(texture);
+			textures.push_back(texture);
 
-			m_loadedTextures.emplace_back(texture);
+			m_loadedTextures.push_back(texture);
 		}
 	}
-
 	return textures;
 }
