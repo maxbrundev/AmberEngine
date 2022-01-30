@@ -78,6 +78,22 @@ AmberEngine::Resources::Texture& AmberEngine::Managers::ResourcesManager::LoadTe
 	return *res.first->second;
 }
 
+// TODO: Do not use for now.
+bool AmberEngine::Managers::ResourcesManager::RemoveModel(const std::string_view p_name)
+{
+	if (auto it = m_modelResources.find(p_name); it != m_modelResources.end())
+	{
+		if(m_modelResources[p_name].use_count() <= 1)
+		{
+			m_modelResources.erase(it);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 AmberEngine::Resources::Shader& AmberEngine::Managers::ResourcesManager::GetShader(const std::string_view p_name) const
 {
 	return *m_shaderResources.at(p_name);

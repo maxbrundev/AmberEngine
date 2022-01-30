@@ -16,7 +16,7 @@ AmberEngine::Resources::Mesh::~Mesh()
 {
 	Unbind();
 
-	for(auto& texture : m_textures)
+	for(const auto& texture : m_textures)
 	{
 		Loaders::TextureLoader::Delete(texture.get());
 	}
@@ -32,6 +32,11 @@ void AmberEngine::Resources::Mesh::Bind() const
 void AmberEngine::Resources::Mesh::Unbind() const
 {
 	m_vertexArray.Unbind();
+
+	for (const auto& m_texture : m_textures)
+	{
+		m_texture->Unbind();
+	}
 }
 
 void AmberEngine::Resources::Mesh::BindMaterialTextures(Texture* p_texture) const
@@ -44,19 +49,17 @@ void AmberEngine::Resources::Mesh::BindMaterialTextures(Texture* p_texture) cons
 	}
 	else
 	{
-		for (int i = 0; i < m_textures.size(); i++)
+		for (uint32_t i = 0; i < m_textures.size(); i++)
 		{
-			m_textures[i]->Bind(i);
-
 			switch (m_textures[i]->type)
 			{
-			case Settings::ETextureType::DIFFUSE:
+			case Settings::ETextureType::DIFFUSE_MAP:
+				m_textures[i]->Bind(i);
 				SetTextureUniformCallback("u_DiffuseMap", i);
 				break;
-			case Settings::ETextureType::SPECULAR:
+			case Settings::ETextureType::SPECULAR_MAP:
+				m_textures[i]->Bind(i);
 				SetTextureUniformCallback("u_SpecularMap", i);
-				break;
-			default:
 				break;
 			}
 		}

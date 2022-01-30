@@ -12,8 +12,8 @@ AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) :
 	m_emptyTexture(Resources::Loaders::TextureLoader::CreateColor
 	(
 	(255 << 24) | (255 << 16) | (255 << 8) | 255,
-	AmberEngine::Settings::ETextureFilteringMode::NEAREST,
-	AmberEngine::Settings::ETextureFilteringMode::NEAREST,
+	Settings::ETextureFilteringMode::NEAREST,
+	Settings::ETextureFilteringMode::NEAREST,
 	false
 	))
 {
@@ -30,7 +30,7 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 cons
 
 	p_model.Bind();
 	
-	for (const auto& mesh : p_model.GetMeshes())
+	for (const auto mesh : p_model.GetMeshes())
 	{
 		DrawMesh(*mesh);
 	}
@@ -38,7 +38,7 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 cons
 	p_model.Unbind();
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(Resources::Mesh& p_mesh) const
+void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh) const
 {
 	p_mesh.BindMaterialTextures(m_emptyTexture);
 

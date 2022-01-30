@@ -22,7 +22,7 @@ namespace AmberEngine::Resources
 		void Unbind() const;
 		void BindMaterialTextures(Texture* p_texture) const;
 
-		std::function<void(std::string, int)> SetTextureUniformCallback;
+		std::function<void(std::string_view, uint32_t)> SetTextureUniformCallback;
 
 		uint32_t GetVertexCount() const;
 		uint32_t GetIndexCount() const;

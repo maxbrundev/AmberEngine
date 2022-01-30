@@ -23,7 +23,7 @@ namespace AmberEngine::Resources
 		void Unbind() const;
 		void BindTextureCallback();
 
-		void SetTextureUniform(const std::string_view p_uniformName, int p_id) const;
+		void SetTextureUniform(const std::string_view p_uniformName, uint32_t p_id) const;
 
 		void SetShader(Shader& p_shader);
 

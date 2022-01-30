@@ -94,9 +94,9 @@ void AmberEngine::UI::SceneView::PrepareCamera()
 void AmberEngine::UI::SceneView::FillEngineUBO()
 {
 	size_t offset = sizeof(glm::mat4); // We skip the model matrix (Which is a special case, modified every draw calls)
-	m_context.engineUBO->SetSubData(m_cameraController.GetCamera().GetViewMatrix(), std::ref(offset));
-	m_context.engineUBO->SetSubData(m_cameraController.GetCamera().GetProjectionMatrix(), std::ref(offset));
-	m_context.engineUBO->SetSubData(m_cameraController.GetPosition(), std::ref(offset));
+	m_context.engineUBO->SetSubData(m_cameraController.GetCamera().GetViewMatrix(), offset);
+	m_context.engineUBO->SetSubData(m_cameraController.GetCamera().GetProjectionMatrix(), offset);
+	m_context.engineUBO->SetSubData(m_cameraController.GetPosition(), offset);
 }
 
 AmberEngine::LowRenderer::CameraController& AmberEngine::UI::SceneView::GetCameraController()

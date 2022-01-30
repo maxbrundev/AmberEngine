@@ -76,7 +76,7 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader:
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	return new Texture("", "ColorTexture", textureID, 1, 1, 32, p_firstFilter, p_secondFilter, Settings::ETextureType::NONE, p_generateMipmap);
+	return new Texture("", "ColorTexture", textureID, 1, 1, 32, p_firstFilter, p_secondFilter, Settings::ETextureType::DIFFUSE_MAP, p_generateMipmap);
 }
 
 void AmberEngine::Resources::Loaders::TextureLoader::Reload(const Texture& p_texture, const std::string& p_filePath, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter, Settings::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)

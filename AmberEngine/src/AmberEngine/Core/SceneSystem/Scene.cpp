@@ -4,6 +4,7 @@
 
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
 #include "AmberEngine/Core/ECS/Components/LightComponent.h"
+
 #include "AmberEngine/Resources/Shader.h"
 
 AmberEngine::Core::SceneSystem::Scene::Scene(std::string p_name) : m_name(std::move(p_name))
@@ -24,7 +25,7 @@ AmberEngine::Core::SceneSystem::Scene::~Scene()
 
 void AmberEngine::Core::SceneSystem::Scene::AddActor(ECS::Actor* p_actor)
 {
-	auto actor = m_actors.emplace(p_actor->GetName(), p_actor);
+	const auto& actor = m_actors.emplace(p_actor->GetName(), p_actor);
 
 	if(auto lightComponent = actor.first->second->GetComponent<ECS::Components::LightComponent>(); lightComponent != nullptr)
 	{
@@ -45,13 +46,13 @@ void AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor*& p_actor)
 	}
 }
 
-void AmberEngine::Core::SceneSystem::Scene::DrawAll(Core::Renderer& p_renderer) const
+void AmberEngine::Core::SceneSystem::Scene::DrawAll(Renderer& p_renderer) const
 {
 	for (const auto& actor : m_actors)
 	{
-		if(actor.second->GetComponent<ECS::Components::ModelComponent>() != nullptr)
+		if(const auto modelComponent = actor.second->GetComponent<ECS::Components::ModelComponent>(); modelComponent != nullptr)
 		{
-			p_renderer.Draw(*actor.second->GetComponent<ECS::Components::ModelComponent>()->GetModel(), &actor.second->GetTransform().GetWorldMatrix());
+			p_renderer.Draw(*modelComponent->GetModel(), &actor.second->GetTransform().GetWorldMatrix());
 		}
 	}
 }
@@ -65,9 +66,8 @@ void AmberEngine::Core::SceneSystem::Scene::SetDebugNormal(bool p_value)
 		{
 			if (const auto model = actor.second->GetComponent<ECS::Components::ModelComponent>())
 			{
-				auto shader = model->GetModel()->GetShader();
+				const auto shader = model->GetModel()->GetShader();
 				shader->Bind();
-
 				shader->SetUniform1i("u_DebugNormal", p_value);
 				shader->Unbind();
 			}

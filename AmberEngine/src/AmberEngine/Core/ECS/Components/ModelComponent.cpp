@@ -7,11 +7,10 @@
 #include "AmberEngine/Managers/ResourcesManager.h"
 //#include "AmberEngine/Tools/Utils/String.h"
 
-AmberEngine::ECS::Components::ModelComponent::ModelComponent(Actor& p_owner, std::string_view p_name, const std::string& p_filePath) : AComponent(p_owner), m_model(nullptr)
+AmberEngine::ECS::Components::ModelComponent::ModelComponent(Actor& p_owner, std::string_view p_name, const std::string& p_filePath) : AComponent(p_owner),
+	m_model(&Managers::ResourcesManager::Instance().LoadModel(p_name, p_filePath)), m_name(p_name)
 {
 	//std::string name = Utils::String::RemoveExtensionFromFileName(Utils::String::ExtractFileNameFromPath(p_filePath));
-	
-	m_model = &Managers::ResourcesManager::Instance().LoadModel(p_name, p_filePath);
 }
 
 AmberEngine::ECS::Components::ModelComponent::~ModelComponent()
@@ -20,6 +19,9 @@ AmberEngine::ECS::Components::ModelComponent::~ModelComponent()
 	{
 		m_model = nullptr;
 	}
+
+	// Require Model to be shared pointer in order to unload the resource if the reference count is <= 1
+	//Managers::ResourcesManager::Instance().RemoveModel(m_name);
 }
 
 void AmberEngine::ECS::Components::ModelComponent::Update(float p_deltaTime)

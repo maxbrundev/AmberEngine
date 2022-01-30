@@ -19,6 +19,7 @@ AmberEngine::Resources::Model::~Model()
 	}
 
 	m_shader = nullptr;
+
 }
 
 void AmberEngine::Resources::Model::Bind() const
@@ -33,14 +34,14 @@ void AmberEngine::Resources::Model::Unbind() const
 
 void AmberEngine::Resources::Model::BindTextureCallback()
 {
-	for (const auto& mesh : m_meshes)
+	for (const auto mesh : m_meshes)
 	{
 		// Template arguments deduction in case of curiosity: <void(__thiscall AmberEngine::Resources::Model::*)(class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> >, int), class AmberEngine::Resources::Model>
 		mesh->SetTextureUniformCallback = Eventing::QuickBind(&Model::SetTextureUniform, this);
 	}
 }
 
-void AmberEngine::Resources::Model::SetTextureUniform(const std::string_view p_uniformName, int p_id) const
+void AmberEngine::Resources::Model::SetTextureUniform(const std::string_view p_uniformName, uint32_t p_id) const
 {
 	m_shader->SetUniform1i(p_uniformName, p_id);
 }
@@ -56,7 +57,7 @@ void AmberEngine::Resources::Model::SetTexture(Texture& p_texture) const
 {
 	for(const auto mesh : m_meshes)
 	{
-		for(auto& texture : mesh->GetTextures())
+		for(auto texture : mesh->GetTextures())
 		{
 			if(texture->type == p_texture.type)
 			{

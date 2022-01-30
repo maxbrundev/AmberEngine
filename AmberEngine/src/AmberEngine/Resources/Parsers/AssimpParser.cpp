@@ -24,9 +24,7 @@ bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string&
 		return false;
 	}
 
-	p_model.GetMaterialNames().reserve(scene->mNumMaterials);
-
-	ProcessMaterials(scene, p_model.GetMaterialNames());
+	//ProcessMaterialsNames(scene, p_model.GetMaterialNames());
 
 	const aiMatrix4x4 identity;
 
@@ -43,61 +41,31 @@ bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string&
 	return true;
 }
 
-void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterials(const aiScene* p_scene, std::vector<std::string>& p_materials)
-{
-	for (uint32_t i = 0; i < p_scene->mNumMaterials; ++i)
-	{
-		if (const aiMaterial* material = p_scene->mMaterials[i])
-		{
-			aiString name;
-
-			aiGetMaterialString(material, AI_MATKEY_NAME, &name);
-			p_materials.emplace_back(name.C_Str());
-		}
-	}
-}
-
-void AmberEngine::Resources::Parsers::AssimpParser::ProcessNode(const aiMatrix4x4* p_transform, const aiNode* p_node, const aiScene * p_scene, std::vector<Mesh*>& p_meshes)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessNode(const aiMatrix4x4* p_transform, const aiNode* p_node, const aiScene* p_scene, std::vector<Mesh*>& p_meshes)
 {
 	const aiMatrix4x4 nodeTransformation = *p_transform * p_node->mTransformation;
 
-
-	// Process all the node's meshes (if any)
 	for (uint32_t i = 0; i < p_node->mNumMeshes; i++)
 	{
 		const aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
-		//const aiMaterial* material = p_scene->mMaterials[mesh->mMaterialIndex];
-
-		//const uint64_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE)
-		//	+ material->GetTextureCount(aiTextureType_SPECULAR)
-		//	+ material->GetTextureCount(aiTextureType_NORMALS)
-		//	+ material->GetTextureCount(aiTextureType_HEIGHT);
 
 		std::vector<Geometry::Vertex> vertices;
 		std::vector<uint32_t> indices;
 		std::vector<std::shared_ptr<Texture>> textures;
 
-		//vertices.reserve(mesh->mNumVertices);
-		//indices.reserve(mesh->mNumFaces);
-		//textures.reserve(textureCount);
+		ProcessMesh(&nodeTransformation, mesh, p_scene, vertices, indices);
+		ProcessMaterial(mesh, p_scene, textures);
 
-		ProcessMesh(&nodeTransformation, mesh, p_scene, vertices, indices, textures);
-
-		p_meshes.push_back(new Mesh(vertices, indices, std::move(textures))); // The model will handle mesh destruction
-
-		//vertices.clear();
-		//indices.clear();
-		//textures.clear();
+		p_meshes.push_back(new Mesh(vertices, indices, std::move(textures)));
 	}
 
-	// Then do the same for each of its children
 	for (uint32_t i = 0; i < p_node->mNumChildren; i++)
 	{
 		ProcessNode(&nodeTransformation, p_node->mChildren[i], p_scene, p_meshes);
 	}
 }
 
-void AmberEngine::Resources::Parsers::AssimpParser::ProcessMesh(const aiMatrix4x4* p_transform, const aiMesh* p_mesh, const aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices, std::vector<std::shared_ptr<Texture>>& p_outTextures)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessMesh(const aiMatrix4x4* p_transform, const aiMesh* p_mesh, const aiScene* p_scene, std::vector<Geometry::Vertex>& p_outVertices, std::vector<uint32_t>& p_outIndices)
 {
 	const aiMatrix4x4 meshTransformation = *p_transform;
 
@@ -133,29 +101,50 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessMesh(const aiMatrix4x
 	for (uint32_t faceID = 0; faceID < p_mesh->mNumFaces; faceID++)
 	{
 		const auto& face = p_mesh->mFaces[faceID];
+
 		p_outIndices.insert(p_outIndices.end(), { face.mIndices[0], face.mIndices[1], face.mIndices[2] });
 	}
-
-	const aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
-
-	std::vector<std::shared_ptr<Texture>> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, Settings::ETextureType::DIFFUSE);
-	p_outTextures.insert(p_outTextures.end(), diffuseMaps.begin(), diffuseMaps.end());
-	
-	std::vector<std::shared_ptr<Texture>> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, Settings::ETextureType::SPECULAR);
-	p_outTextures.insert(p_outTextures.end(), specularMaps.begin(), specularMaps.end());
-	
-	std::vector<std::shared_ptr<Texture>> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, Settings::ETextureType::NORMAL_MAP);
-	p_outTextures.insert(p_outTextures.end(), normalMaps.begin(), normalMaps.end());
-	
-	std::vector<std::shared_ptr<Texture>> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP);
-	p_outTextures.insert(p_outTextures.end(), heightMaps.begin(), heightMaps.end());
 }
 
-std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resources::Parsers::AssimpParser::LoadMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterialsNames(const aiScene* p_scene, std::vector<std::string>& p_outMaterialsNames)
+{
+	for (uint32_t i = 0; i < p_scene->mNumMaterials; ++i)
+	{
+		if (const aiMaterial* material = p_scene->mMaterials[i])
+		{
+			aiString name;
+			aiGetMaterialString(material, AI_MATKEY_NAME, &name);
+
+			p_outMaterialsNames.emplace_back(name.C_Str());
+		}
+	}
+}
+
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterial(const aiMesh* p_mesh, const aiScene* p_scene, std::vector<std::shared_ptr<Texture>>& p_outTextures)
+{
+	const aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
+	
+	std::vector<std::shared_ptr<Texture>> diffuseMaps = LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE, Settings::ETextureType::DIFFUSE_MAP);
+	p_outTextures.insert(p_outTextures.end(), std::make_move_iterator(diffuseMaps.begin()), std::make_move_iterator(diffuseMaps.end()));
+	
+	std::vector<std::shared_ptr<Texture>> specularMaps = LoadTexturesFromMaterial(material, aiTextureType_SPECULAR, Settings::ETextureType::SPECULAR_MAP);
+	p_outTextures.insert(p_outTextures.end(), std::make_move_iterator(specularMaps.begin()), std::make_move_iterator(specularMaps.end()));
+	
+	std::vector<std::shared_ptr<Texture>> normalMaps = LoadTexturesFromMaterial(material, aiTextureType_NORMALS, Settings::ETextureType::NORMAL_MAP);
+	p_outTextures.insert(p_outTextures.end(), std::make_move_iterator(normalMaps.begin()), std::make_move_iterator(normalMaps.end()));
+	
+	std::vector<std::shared_ptr<Texture>> heightMaps = LoadTexturesFromMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP);
+	p_outTextures.insert(p_outTextures.end(), std::make_move_iterator(heightMaps.begin()), std::make_move_iterator(heightMaps.end()));
+
+	std::vector<std::shared_ptr<Texture>> maskMaps = LoadTexturesFromMaterial(material, aiTextureType_OPACITY, Settings::ETextureType::MASK_MAP);
+	p_outTextures.insert(p_outTextures.end(), std::make_move_iterator(maskMaps.begin()), std::make_move_iterator(maskMaps.end()));
+}
+
+std::vector<std::shared_ptr<AmberEngine::Resources::Texture>> AmberEngine::Resources::Parsers::AssimpParser::LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType)
 {
 	std::vector<std::shared_ptr<Texture>> textures;
 
-	for (int i = 0; i < p_mat->GetTextureCount(p_type); i++)
+	for (uint32_t i = 0; i < p_mat->GetTextureCount(p_type); i++)
 	{
 		aiString str;
 		p_mat->GetTexture(p_type, i, &str);

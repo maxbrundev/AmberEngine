@@ -35,7 +35,7 @@ namespace AmberEngine::Core
 		std::unique_ptr<UIManager>						uiManager;
 
 		std::unique_ptr<Buffers::UniformBuffer>			engineUBO;
-		std::unique_ptr<Core::EditorResources>			m_editorResources;
+		//std::unique_ptr<Core::EditorResources>			m_editorResources;
 
 		SceneSystem::Scene m_scene;
 	};

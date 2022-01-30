@@ -33,8 +33,8 @@ void Example::Application::Setup()
 
 	resourcesManager.LoadShader("StandardLighting", "res/shaders/StandardLighting.glsl");
 
-	resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE,true, true);
-	resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::SPECULAR, true, true);
+	//resourcesManager.LoadTexture("diffuse", "crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE_MAP,true, true);
+	//resourcesManager.LoadTexture("specular", "crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::SPECULAR_MAP, true, true);
 }
 
 void Example::Application::Run()
@@ -133,7 +133,7 @@ void Example::Application::Run()
 	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor("Directional Light");
 	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
 	directionalLight->GetComponent<AmberEngine::ECS::Components::LightComponent>()->GetLightData().color = glm::vec3(1.0f, 0.9f, 0.8f);
-
+	
 	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Sponza", "res/Mesh/Sponza/sponza.obj");
 	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("StandardLighting"));
 
@@ -222,10 +222,13 @@ void Example::Application::Run()
 				AmberEngine::Resources::Loaders::ShaderLoader::Recompile(resourcesManager.GetShader("StandardLighting"), "res/shaders/StandardLighting.glsl");
 			}
 
+			//Test
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))
 			{
 				//working
-				m_context.m_scene.DestroyActor(testActor2);
+				//testActor3->RemoveComponent<AmberEngine::ECS::Components::ModelComponent>();
+				//working
+				m_context.m_scene.DestroyActor(testActor3);
 				//working
 				//testActor3->RemoveParent();
 			}

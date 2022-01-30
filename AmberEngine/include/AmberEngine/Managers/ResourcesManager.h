@@ -26,10 +26,9 @@ namespace AmberEngine::Managers
 		Resources::Shader& LoadShader(const std::string_view p_name, const std::string& p_filePath);
 		Resources::Shader& LoadShaderFiles(const std::string_view p_name, const std::string& p_VertexFilePath, const std::string& p_FragmentFilePath);
 
-		Resources::Texture& LoadTexture(const std::string_view p_name,
-			const std::string& p_filePath, AmberEngine::Settings::ETextureFilteringMode p_firstFilter,
-			AmberEngine::Settings::ETextureFilteringMode p_secondFilter, AmberEngine::Settings::ETextureType p_textureType,
-			bool p_flipVertically, bool p_generateMipmap);
+		Resources::Texture& LoadTexture(const std::string_view p_name, const std::string& p_filePath, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter, AmberEngine::Settings::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap);
+
+		bool RemoveModel(const std::string_view p_name);
 
 		[[nodiscard]] Resources::Shader& GetShader(const std::string_view p_name) const;
 		[[nodiscard]] Resources::Texture& GetTexture(const std::string_view p_name) const;
@@ -41,7 +40,7 @@ namespace AmberEngine::Managers
 		ResourcesManager();
 		~ResourcesManager() override = default;
 
-	private:
+	public:
 		std::string m_textureRootDir;
 
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Shader>> m_shaderResources;

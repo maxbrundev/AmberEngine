@@ -1,6 +1,7 @@
 #include "Amberpch.h"
 
 #include "AmberEngine/Core/ECS/Actor.h"
+
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
 
 #include "AmberEngine/Resources/Shader.h"
@@ -23,31 +24,38 @@ AmberEngine::ECS::Actor::~Actor()
 
 	m_components.clear();
 
-	m_transform.RemoveParent();
+	for(auto child : m_children)
+	{
+		child->RemoveParent();
+	}
+
+	m_children.clear();
+
+	RemoveParent();
 
 	DestroyEvent.Invoke(*this);
 }
 
-void AmberEngine::ECS::Actor::Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime)
+void AmberEngine::ECS::Actor::Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime)
 {
 	for (const auto component : m_components)
 	{
 		component->Update(p_deltaTime);
 	}
 
-	if(const auto modelComponent = GetComponent<ECS::Components::ModelComponent>(); modelComponent != nullptr)
+	if(const auto modelComponent = GetComponent<Components::ModelComponent>(); modelComponent != nullptr)
 	{
 		const auto shader = modelComponent->GetModel()->GetShader();
 		shader->Bind();
-
-		for(auto& light : p_lights)
+	
+		for(const auto light : p_lights)
 		{
-			auto lightData = light->GetLightData();
+			auto& lightData = light->GetLightData();
 			shader->SetUniformVec3("light.direction", light->owner.GetTransform().GetWorldForward());
 			shader->SetUniformVec3("light.color", lightData.color);
 			shader->SetUniform1f("light.intensity", lightData.intensity);
 		}
-
+	
 		shader->Unbind();
 	}
 }
@@ -56,10 +64,12 @@ void AmberEngine::ECS::Actor::RemoveParent()
 {
 	if (m_parent)
 	{
-		m_parent->m_children.erase(std::remove_if(m_parent->m_children.begin(), m_parent->m_children.end(), [this](Actor* p_element)
+		auto predicate = [this](Actor* p_element)
 		{
 			return p_element == this;
-		}));
+		};
+
+		m_parent->m_children.erase(std::remove_if(m_parent->m_children.begin(), m_parent->m_children.end(), std::ref(predicate)));
 	}
 
 	m_parent = nullptr;

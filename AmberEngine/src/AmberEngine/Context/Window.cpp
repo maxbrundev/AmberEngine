@@ -20,7 +20,7 @@ AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::
 
 	BindKeyCallback();
 	BindMouseCallback();
-	BindCursorPosCallback();
+	//BindCursorPosCallback();
 	BindResizeCallback();
 	BindFramebufferResizeCallback();
 	

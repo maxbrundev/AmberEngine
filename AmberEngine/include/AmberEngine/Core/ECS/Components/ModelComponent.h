@@ -24,10 +24,11 @@ namespace AmberEngine::ECS::Components
 
 		void Update(float p_deltaTime) override;
 
-		[[nodiscard]] Resources::Model* GetModel() const;
-		[[nodiscard]] std::vector<Resources::Mesh*>& GetMeshes() const;
+		Resources::Model* GetModel() const;
+		std::vector<Resources::Mesh*>& GetMeshes() const;
 
 	private:
 		Resources::Model* m_model;
+		std::string_view m_name;
 	};
 }

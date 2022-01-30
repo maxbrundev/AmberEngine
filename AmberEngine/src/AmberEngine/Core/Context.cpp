@@ -14,7 +14,7 @@ AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings&
 
 	driver = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
 	renderer = std::make_unique<AmberEngine::Core::Renderer>(*driver);
-	m_editorResources = std::make_unique<AmberEngine::Core::EditorResources>(editorAssetsPath);
+	//m_editorResources = std::make_unique<AmberEngine::Core::EditorResources>(editorAssetsPath);
 	uiManager = std::make_unique<AmberEngine::Core::UIManager>(window->GetGlfwWindow());
 	uiManager->EnableDocking(true);
 	inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*window);

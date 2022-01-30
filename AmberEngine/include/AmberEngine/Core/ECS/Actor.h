@@ -21,7 +21,7 @@ namespace AmberEngine::ECS
 		Actor(std::string p_name);
 		~Actor();
 
-		void Update(const std::vector<ECS::Components::LightComponent*>& p_lights, float p_deltaTime);
+		void Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime);
 
 		void RemoveParent();
 
@@ -30,15 +30,44 @@ namespace AmberEngine::ECS
 		{
 			static_assert(std::is_base_of_v<Components::AComponent, T>, "T should inherit from AComponent");
 
-			m_components.emplace_back(p_component);
+			if (auto component = GetComponent<T>(); !component)
+			{
+				m_components.emplace_back(std::move(p_component));
+			}
 		}
 
-		template<typename T, typename ... args>
-		void AddComponent(args ... p_args)
+		template<typename T, typename ... Args>
+		void AddComponent(Args&& ... p_args)
 		{
 			static_assert(std::is_base_of_v<Components::AComponent, T>, "T should inherit from AComponent");
 
-			m_components.emplace_back(new T(*this, p_args ...));
+			if (auto component = GetComponent<T>(); !component)
+			{
+				m_components.emplace_back(std::move(new T(*this, std::forward<Args>(p_args) ...)));
+			}
+		}
+
+		template<typename T>
+		void RemoveComponent()
+		{
+			T* result = nullptr;
+
+			for (auto it = m_components.begin(); it != m_components.end(); ++it)
+			{
+				if(it != m_components.end())
+				{
+					result = static_cast<T*>(*it);
+
+					if (result)
+					{
+						delete result;
+						result = nullptr;
+
+						m_components.erase(it);
+						return;
+					}
+				}
+			}
 		}
 
 		template<typename T>

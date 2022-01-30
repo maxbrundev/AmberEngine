@@ -82,9 +82,9 @@ void AmberEngine::Maths::Transform::SetParent(Transform& p_parent)
 {
 	m_parent = &p_parent;
 
-	m_parentCallbackID = m_parent->AddChildrenCallback([this](auto&& PH1)
+	m_parentCallbackID = m_parent->AddChildrenCallback([this](auto&& p_state)
 	{
-		HandleParentTransformCallback(std::forward<decltype(PH1)>(PH1));
+		HandleParentTransformCallback(std::forward<decltype(p_state)>(p_state));
 	});
 
 	UpdateWorldMatrix();
