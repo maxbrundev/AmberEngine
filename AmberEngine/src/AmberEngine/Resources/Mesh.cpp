@@ -33,10 +33,10 @@ void AmberEngine::Resources::Mesh::Unbind() const
 {
 	m_vertexArray.Unbind();
 
-	for (const auto& m_texture : m_textures)
-	{
-		m_texture->Unbind();
-	}
+	//for (const auto& m_texture : m_textures)
+	//{
+	//	m_texture->Unbind();
+	//}
 }
 
 void AmberEngine::Resources::Mesh::BindMaterialTextures(Texture* p_texture) const

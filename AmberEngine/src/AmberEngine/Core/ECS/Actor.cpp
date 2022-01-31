@@ -77,6 +77,11 @@ void AmberEngine::ECS::Actor::RemoveParent()
 	m_transform.RemoveParent();
 }
 
+bool AmberEngine::ECS::Actor::HasChildren() const
+{
+	return !m_children.empty();
+}
+
 void AmberEngine::ECS::Actor::SetName(std::string p_name)
 {
 	m_name = std::move(p_name);

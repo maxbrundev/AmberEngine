@@ -54,7 +54,7 @@ void AmberEngine::UI::Hierarchy::Draw()
 				continue;
 			}
 
-			flags = !actor.first->GetChildren().empty() ? ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_Leaf;
+			flags = actor.first->HasChildren() ? ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_Leaf;
 
 			if (ImGui::TreeNodeEx((actor.first->GetName() + actor.second).c_str(), flags))
 			{

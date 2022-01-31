@@ -86,6 +86,8 @@ namespace AmberEngine::ECS
 			return nullptr;
 		}
 
+		bool HasChildren() const;
+
 		void SetName(std::string p_name);
 		void SetParent(Actor& p_parent);
 
