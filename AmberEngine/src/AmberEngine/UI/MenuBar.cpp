@@ -43,7 +43,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 
 			m_context.renderer->PolygonModeFill();
 
-			m_context.m_scene.SetDebugNormal(false);
+			NormalsColorsVisualizationCallback(false);
 		}
 
 		if (ImGui::Checkbox("Wireframe", &m_isWireframeDrawMode))
@@ -53,8 +53,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			m_isNormalDebugDrawMode = false;
 
 			m_context.renderer->PolygonModeLine();
-
-			m_context.m_scene.SetDebugNormal(false);
+			NormalsColorsVisualizationCallback(false);
 		}
 
 		if (ImGui::Checkbox("Normals", &m_isNormalDebugDrawMode))
@@ -64,7 +63,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			m_isShadeDrawMode = false;
 
 			m_context.renderer->PolygonModeFill();
-			m_context.m_scene.SetDebugNormal(true);
+			NormalsColorsVisualizationCallback(true);
 		}
 
 		ImGui::EndMenu();

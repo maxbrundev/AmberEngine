@@ -11,6 +11,11 @@
 
 namespace AmberEngine::Core
 {
+	namespace SceneSystem
+	{
+		class Scene;
+	}
+
 	class API_AMBERENGINE Renderer
 	{
 	public:
@@ -21,7 +26,7 @@ namespace AmberEngine::Core
 		void SetClearColor(float p_red, float p_green, float p_blue, float p_alpha = 1.0f) const;
 		void Clear(bool p_colorBuffer = true, bool p_depthBuffer = true, bool p_stencilBuffer = true) const;
 		void Clear(LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer) const;
-
+		std::vector<glm::mat4> FindLightMatrices(SceneSystem::Scene& p_scene);
 		void RegisterModelMatrixSender(std::function<void(glm::mat4)> p_modelMatrixSender);
 
 		void PolygonModeLine() const;
@@ -29,7 +34,7 @@ namespace AmberEngine::Core
 
 	private:
 		std::function<void(glm::mat4)> m_modelMatrixSender;
-		void DrawMesh(const Resources::Mesh& p_mesh) const;
+		void DrawMesh(const Resources::Mesh& p_mesh, Resources::Material* p_material) const;
 
 	private:
 		Context::Driver& m_driver;

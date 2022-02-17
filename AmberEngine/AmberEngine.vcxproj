@@ -255,6 +255,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Buffers\EAccessSpecifier.h" />
     <ClInclude Include="include\AmberEngine\Buffers\FrameBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\IndexBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\ShaderStorageBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\UniformBuffer.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexArray.h" />
     <ClInclude Include="include\AmberEngine\Buffers\VertexBuffer.h" />
@@ -328,6 +329,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\ImGUI\stb_textedit.h" />
     <ClInclude Include="include\ImGUI\stb_truetype.h" />
     <ClInclude Include="include\AmberEngine\Core\Context.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Maths.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Amberpch.cpp">
@@ -342,6 +344,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\ShaderStorageBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\UniformBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\VertexBuffer.cpp" />
@@ -384,6 +387,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Time\Clock.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\ASingleton.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\Maths.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Hierarchy.cpp" />
     <ClCompile Include="src\AmberEngine\UI\MenuBar.cpp" />

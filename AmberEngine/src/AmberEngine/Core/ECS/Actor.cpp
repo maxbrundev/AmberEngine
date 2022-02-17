@@ -2,6 +2,8 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 
+#include <chrono>
+
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
 
 #include "AmberEngine/Resources/Shader.h"
@@ -36,27 +38,11 @@ AmberEngine::ECS::Actor::~Actor()
 	DestroyEvent.Invoke(*this);
 }
 
-void AmberEngine::ECS::Actor::Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime)
+void AmberEngine::ECS::Actor::Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime) const
 {
 	for (const auto component : m_components)
 	{
 		component->Update(p_deltaTime);
-	}
-
-	if(const auto modelComponent = GetComponent<Components::ModelComponent>(); modelComponent != nullptr)
-	{
-		const auto shader = modelComponent->GetModel()->GetShader();
-		shader->Bind();
-	
-		for(const auto light : p_lights)
-		{
-			auto& lightData = light->GetLightData();
-			shader->SetUniformVec3("light.direction", light->owner.GetTransform().GetWorldForward());
-			shader->SetUniformVec3("light.color", lightData.color);
-			shader->SetUniform1f("light.intensity", lightData.intensity);
-		}
-	
-		shader->Unbind();
 	}
 }
 

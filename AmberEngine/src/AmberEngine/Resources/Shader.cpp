@@ -2,7 +2,7 @@
 
 #include "AmberEngine/Resources/Shader.h"
 
-AmberEngine::Resources::Shader::Shader(std::string p_filePath, uint32_t p_id) : path(std::move(p_filePath)), id(p_id)
+AmberEngine::Resources::Shader::Shader(std::string p_filePath, uint32_t p_id) : id(p_id), path(std::move(p_filePath))
 {
 }
 

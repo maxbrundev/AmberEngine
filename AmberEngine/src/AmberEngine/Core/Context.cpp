@@ -2,8 +2,11 @@
 
 #include "AmberEngine/Core/Context.h"
 
-AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
-	editorAssetsPath("..\\..\\Resources\\Editor\\"),
+#include "AmberEngine/Managers/ResourcesManager.h"
+
+AmberEngine::Core::Context::Context(const std::string& p_projectPath, const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
+	engineAssetsPath("..\\..\\Resources\\Engine\\"),
+	projectAssetsPath(p_projectPath + "Assets\\"),
 	m_scene("TestScene")
 {
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
@@ -14,7 +17,7 @@ AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings&
 
 	driver = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
 	renderer = std::make_unique<AmberEngine::Core::Renderer>(*driver);
-	//m_editorResources = std::make_unique<AmberEngine::Core::EditorResources>(editorAssetsPath);
+	m_editorResources = std::make_unique<AmberEngine::Core::EditorResources>(engineAssetsPath);
 	uiManager = std::make_unique<AmberEngine::Core::UIManager>(window->GetGlfwWindow());
 	uiManager->EnableDocking(true);
 	inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*window);
@@ -29,6 +32,10 @@ AmberEngine::Core::Context::Context(const AmberEngine::Settings::DeviceSettings&
 		0, 0,
 		Buffers::EAccessSpecifier::STREAM_DRAW
 		);
+
+	lightSSBO = std::make_unique<Buffers::ShaderStorageBuffer>(Buffers::EAccessSpecifier::STREAM_DRAW);
+
+	Managers::ResourcesManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
 }
 
 AmberEngine::Core::Context::~Context()

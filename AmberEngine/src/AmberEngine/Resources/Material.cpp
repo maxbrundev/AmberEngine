@@ -13,9 +13,12 @@ AmberEngine::Resources::Material::~Material()
 	}
 
 	m_textures.clear();
+
+	m_shader = nullptr;
+	m_previousShader = nullptr;
 }
 
-void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture)
+void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture) const
 {
 	if (HasShader())
 	{
@@ -25,19 +28,17 @@ void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture)
 
 		if (!m_textures.empty())
 		{
-			for (auto& texture : m_textures)
+			for (const auto& texture : m_textures)
 			{
-				texture->Bind(textureSlot);
-
 				switch (texture->type)
 				{
 				case Settings::ETextureType::DIFFUSE_MAP:
+					texture->Bind(textureSlot);
 					m_shader->SetUniform1i("u_DiffuseMap", textureSlot++);
 					break;
 				case Settings::ETextureType::SPECULAR_MAP:
+					texture->Bind(textureSlot);
 					m_shader->SetUniform1i("u_SpecularMap", textureSlot++);
-					break;
-				default:
 					break;
 				}
 			}
@@ -69,9 +70,23 @@ void AmberEngine::Resources::Material::FillTextures(const std::vector<std::share
 	m_textures = p_textures;
 }
 
-void AmberEngine::Resources::Material::SetShader(Shader* p_shader)
+void AmberEngine::Resources::Material::ResetToPreviousShader()
 {
-	m_shader = p_shader;
+	m_shader = m_previousShader;
+
+	if (m_shader)
+	{
+		Buffers::UniformBuffer::BindBlockToShader(*m_shader, "EngineUBO");
+	}
+}
+
+void AmberEngine::Resources::Material::SetShader(Shader& p_shader)
+{
+	if(m_shader == &p_shader)
+		return;
+
+	m_previousShader = m_shader;
+	m_shader = &p_shader;
 
 	if (m_shader)
 	{

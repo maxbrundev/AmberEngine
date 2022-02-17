@@ -33,32 +33,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\Examples\basic_lighting_viewspace.fs" />
-    <None Include="res\shaders\Examples\basic_lighting_viewspace.vs" />
-    <None Include="res\shaders\Examples\basic_lighting_worldspace.fs" />
-    <None Include="res\shaders\Examples\basic_lighting_worldspace.vs" />
-    <None Include="res\shaders\Examples\colors.fs" />
-    <None Include="res\shaders\Examples\colors.vs" />
-    <None Include="res\shaders\Examples\directional_lighting.fs" />
-    <None Include="res\shaders\Examples\directional_lighting.vs" />
-    <None Include="res\shaders\Examples\lambert.glsl" />
-    <None Include="res\shaders\Examples\lamp.fs" />
-    <None Include="res\shaders\Examples\lamp.glsl" />
-    <None Include="res\shaders\Examples\lamp.vs" />
-    <None Include="res\shaders\Examples\light.glsl" />
-    <None Include="res\shaders\Examples\lighting_maps.fs" />
-    <None Include="res\shaders\Examples\lighting_maps.vs" />
-    <None Include="res\shaders\Examples\material.fs" />
-    <None Include="res\shaders\Examples\material.vs" />
-    <None Include="res\shaders\Examples\normal_debug.fs" />
-    <None Include="res\shaders\Examples\normal_debug.gs" />
-    <None Include="res\shaders\Examples\normal_debug.vs" />
-    <None Include="res\shaders\Examples\texture.fs" />
-    <None Include="res\shaders\Examples\texture.vs" />
-    <None Include="res\shaders\StandardLighting.fs" />
-    <None Include="res\shaders\StandardLighting.vs" />
-    <None Include="res\shaders\StandardLighting.glsl" />
-    <None Include="res\shaders\DepthVisualization.glsl" />
-  </ItemGroup>
 </Project>

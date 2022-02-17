@@ -13,14 +13,15 @@ namespace AmberEngine::Resources
 		Material() = default;
 		~Material();
 
-		void Bind(const Texture* p_emptyTexture);
+		void Bind(const Texture* p_emptyTexture) const;
 		void Unbind() const;
 
 		bool HasShader() const;
 
 		void FillTextures(const std::vector<std::shared_ptr<Texture>>& p_textures);
 
-		void SetShader(Shader* p_shader);
+		void ResetToPreviousShader();
+		void SetShader(Shader& p_shader);
 		void SetTexture(Texture* p_texture);
 		void SetBlendable(bool p_blendable);
 		void SetBackfaceCulling(bool p_backfaceCulling);
@@ -44,6 +45,7 @@ namespace AmberEngine::Resources
 		uint64_t GetGPUInstances() const;
 
 	private:
+		Shader* m_previousShader = nullptr;
 		Shader* m_shader = nullptr;
 
 		std::vector<std::shared_ptr<Texture>> m_textures;

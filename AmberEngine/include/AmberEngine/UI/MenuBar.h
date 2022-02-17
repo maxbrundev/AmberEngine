@@ -12,6 +12,8 @@ namespace AmberEngine::UI
 
 		void Draw();
 
+		std::function<void(bool)> NormalsColorsVisualizationCallback;
+
 	private:
 		void DisplayFileMenu() const;
 		void DisplayDrawModeMenu();

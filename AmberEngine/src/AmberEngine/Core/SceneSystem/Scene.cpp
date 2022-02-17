@@ -57,26 +57,6 @@ void AmberEngine::Core::SceneSystem::Scene::DrawAll(Renderer& p_renderer) const
 	}
 }
 
-// TODO: Remove this method and save the previous shader before set the Normal Visualizer.
-void AmberEngine::Core::SceneSystem::Scene::SetDebugNormal(bool p_value)
-{
-	if (m_isDebugingNormal != p_value)
-	{
-		for (const auto& actor : m_actors)
-		{
-			if (const auto model = actor.second->GetComponent<ECS::Components::ModelComponent>())
-			{
-				const auto shader = model->GetModel()->GetShader();
-				shader->Bind();
-				shader->SetUniform1i("u_DebugNormal", p_value);
-				shader->Unbind();
-			}
-		}
-
-		m_isDebugingNormal = p_value;
-	}
-}
-
 void AmberEngine::Core::SceneSystem::Scene::Update(float p_deltaTime) const
 {
 	for (const auto& actor : m_actors)

@@ -21,7 +21,7 @@ namespace AmberEngine::ECS
 		Actor(std::string p_name);
 		~Actor();
 
-		void Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime);
+		void Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime) const;
 
 		void RemoveParent();
 

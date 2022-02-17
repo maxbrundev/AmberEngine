@@ -1,11 +1,9 @@
 #pragma once
 
-
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Resources/Mesh.h"
-#include "AmberEngine/Resources/Texture.h"
-#include "AmberEngine/Resources/Shader.h"
+#include "AmberEngine/Resources/Material.h"
 
 namespace AmberEngine::Resources
 {
@@ -19,24 +17,18 @@ namespace AmberEngine::Resources
 		Model(const std::string& p_filePath);
 		~Model();
 
-		void Bind() const;
-		void Unbind() const;
-		void BindTextureCallback();
+		void SetShader(Shader& p_shader) const;
 
-		void SetTextureUniform(const std::string_view p_uniformName, uint32_t p_id) const;
-
-		void SetShader(Shader& p_shader);
-
-		void SetTexture(Texture& p_texture) const;
-
-		Shader* GetShader() const;
 		std::vector<std::string>& GetMaterialNames();
 		std::vector<Mesh*>& GetMeshes();
-
+		std::array<Material*, 255>& GetMaterials();
+		
 	private:
 		const std::string path;
-		Shader* m_shader;
+
 		std::vector<std::string> m_materialNames;
 		std::vector<Mesh*> m_meshes;
+
+		std::array<Material*, 255> m_materials;
 	};
 }

@@ -4,8 +4,12 @@
 
 AmberEngine::Resources::Parsers::AssimpParser AmberEngine::Resources::Loaders::ModelLoader::__ASSIMP;
 
+std::string AmberEngine::Resources::Loaders::ModelLoader::__FILE_TRACE;
+
 AmberEngine::Resources::Model* AmberEngine::Resources::Loaders::ModelLoader::Create(const std::string& p_filePath)
 {
+	__FILE_TRACE = p_filePath;
+
 	auto model = new Model(p_filePath);
 
 	if(__ASSIMP.LoadModel(p_filePath, *model))

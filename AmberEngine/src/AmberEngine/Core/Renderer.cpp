@@ -4,6 +4,7 @@
 
 #include "AmberEngine/Core/Renderer.h"
 
+#include "AmberEngine/Core/SceneSystem/Scene.h"
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
@@ -27,20 +28,17 @@ AmberEngine::Core::Renderer::~Renderer()
 void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix) const
 {
 	m_modelMatrixSender(*p_modelMatrix);
-
-	p_model.Bind();
 	
 	for (const auto mesh : p_model.GetMeshes())
 	{
-		DrawMesh(*mesh);
+		const auto material = p_model.GetMaterials()[mesh->GetMaterialIndex()];
+		DrawMesh(*mesh, material);
 	}
-
-	p_model.Unbind();
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh) const
+void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resources::Material* p_material) const
 {
-	p_mesh.BindMaterialTextures(m_emptyTexture);
+	p_material->Bind(m_emptyTexture);
 
 	p_mesh.Bind();
 
@@ -54,6 +52,8 @@ void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh) const
 	}
 
 	p_mesh.Unbind();
+
+	p_material->Unbind();
 }
 
 void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha) const
@@ -84,6 +84,18 @@ void AmberEngine::Core::Renderer::Clear(AmberEngine::LowRenderer::Camera& p_came
 
 	/* Reset the OpenGL clear color to the previous clear color (Backuped one) */
 	SetClearColor(previousClearColor[0], previousClearColor[1], previousClearColor[2], previousClearColor[3]);
+}
+
+std::vector<glm::mat4> AmberEngine::Core::Renderer::FindLightMatrices(SceneSystem::Scene& p_scene)
+{
+	std::vector<glm::mat4> result;
+
+	for (const auto light : p_scene.GetLights())
+	{
+		result.push_back(light->GetLightData().GenerateMatrix());
+	}
+
+	return result;
 }
 
 void AmberEngine::Core::Renderer::RegisterModelMatrixSender(std::function<void(glm::mat4)> p_modelMatrixSender)

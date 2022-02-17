@@ -29,7 +29,6 @@ int main()
 
 	const auto listenerId = AmberEngine::Context::Device::ErrorEvent += [](AmberEngine::Context::EDeviceError device_error, std::string error_message)
 	{
-		// Anticipating SSBO addition.
 		error_message = "AmberEngine requires OpenGL 4.3 or newer.\r\n" + error_message;
 		std::cout << error_message.c_str() << std::endl;
 	};

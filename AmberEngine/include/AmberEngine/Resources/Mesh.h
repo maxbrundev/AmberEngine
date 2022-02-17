@@ -15,19 +15,17 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE Mesh
 	{
 	public:
-		Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>> p_textures);
+		Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, uint32_t p_materialIndex);
 		~Mesh();
 
 		void Bind() const;
 		void Unbind() const;
-		void BindMaterialTextures(Texture* p_texture) const;
 
 		std::function<void(std::string_view, uint32_t)> SetTextureUniformCallback;
 
 		uint32_t GetVertexCount() const;
 		uint32_t GetIndexCount() const;
-
-		std::vector<std::shared_ptr<Texture>>& GetTextures();
+		uint32_t GetMaterialIndex() const;
 
 	private:
 		void InitBuffers(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices);
@@ -35,7 +33,7 @@ namespace AmberEngine::Resources
 	private:
 		const uint32_t m_vertexCount;
 		const uint32_t m_indicesCount;
-		std::vector<std::shared_ptr<Texture>> m_textures;
+		const uint32_t m_materialIndex;
 
 		Buffers::VertexArray m_vertexArray;
 		std::unique_ptr<Buffers::VertexBuffer> m_vertexBuffer;

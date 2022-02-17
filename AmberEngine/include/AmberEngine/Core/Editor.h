@@ -19,14 +19,22 @@ namespace AmberEngine::Core
 		void PreUpdate() const;
 		void Update(float p_deltaTime);
 		void PostUpdate() const;
+		void UpdateLights(SceneSystem::Scene& p_scene) const;
 		void RenderViews(float p_deltaTime);
-		void HandleInput();
+		void HandleInput() const;
+
+		void OnNormalsColorsVisualization(bool p_value);
+		void EnableNormalVisualization() const;
+		void DisableNormalVisualization() const;
+
 		
 	public:
 		Context& m_context;
-
+		
 		UI::SceneView m_sceneView;
 		UI::Hierarchy m_hierarchy;
 		UI::MenuBar m_menuBar;
+
+		bool isNormalsColorsVisualization = false;
 	};
 }

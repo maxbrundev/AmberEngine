@@ -19,7 +19,7 @@ AmberEngine::Core::EditorResources::EditorResources(const std::string& p_editorA
 
 	auto normalsSource = Resources::RawShader::GetNormalVisualizer();
 
-	m_shaders["Normals"] = Resources::Loaders::ShaderLoader::CreateFromSource(normalsSource.first, normalsSource.second);
+	m_shaders["NormalsColors"] = Resources::Loaders::ShaderLoader::CreateFromSource(normalsSource.first, normalsSource.second);
 }
 
 AmberEngine::Core::EditorResources::~EditorResources()

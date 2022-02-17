@@ -18,5 +18,6 @@ namespace AmberEngine::Resources::Loaders
 
 	private:
 		static Resources::Parsers::AssimpParser __ASSIMP;
+		static std::string __FILE_TRACE;
 	};
 }

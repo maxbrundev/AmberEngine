@@ -10,6 +10,8 @@ namespace AmberEngine::Rendering::Entities
 	{
 		Light(Maths::Transform& p_tranform, ELightType p_type);
 
+		glm::mat4 GenerateMatrix() const;
+
 		glm::vec3	color		= { 1.0f, 1.0f, 1.0f };
 		float		intensity	= 1.0f;
 		float		constant	= 0.0f;

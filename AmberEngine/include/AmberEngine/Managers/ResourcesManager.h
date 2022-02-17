@@ -28,20 +28,21 @@ namespace AmberEngine::Managers
 
 		Resources::Texture& LoadTexture(const std::string_view p_name, const std::string& p_filePath, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter, AmberEngine::Settings::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap);
 
-		bool RemoveModel(const std::string_view p_name);
+		static void ProvideAssetPaths(const std::string& p_projectAssetsPath, const std::string& p_engineAssetsPath);
+
+		std::string GetRealPath(const std::string& p_path) const;
 
 		[[nodiscard]] Resources::Shader& GetShader(const std::string_view p_name) const;
 		[[nodiscard]] Resources::Texture& GetTexture(const std::string_view p_name) const;
 		[[nodiscard]] Resources::Model& GetModel(const std::string_view p_name) const;
-
-		void SetTextureRootDir(const std::string_view p_directory);
 
 	private:
 		ResourcesManager();
 		~ResourcesManager() override = default;
 
 	public:
-		std::string m_textureRootDir;
+		static std::string __PROJECT_ASSETS_PATH;
+		static std::string __ENGINE_ASSETS_PATH;
 
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Shader>> m_shaderResources;
 		std::unordered_map<std::string_view, std::shared_ptr<Resources::Texture>> m_TextureResources;
