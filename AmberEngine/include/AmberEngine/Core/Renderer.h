@@ -22,7 +22,7 @@ namespace AmberEngine::Core
 		Renderer(Context::Driver& p_driver);
 		~Renderer();
 
-		void Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix) const;
+		void Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix, Resources::Material* p_defaultMaterial) const;
 		void SetClearColor(float p_red, float p_green, float p_blue, float p_alpha = 1.0f) const;
 		void Clear(bool p_colorBuffer = true, bool p_depthBuffer = true, bool p_stencilBuffer = true) const;
 		void Clear(LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer) const;
@@ -34,7 +34,7 @@ namespace AmberEngine::Core
 
 	private:
 		std::function<void(glm::mat4)> m_modelMatrixSender;
-		void DrawMesh(const Resources::Mesh& p_mesh, Resources::Material* p_material) const;
+		void DrawMesh(const Resources::Mesh& p_mesh, Resources::Material& p_material) const;
 
 	private:
 		Context::Driver& m_driver;

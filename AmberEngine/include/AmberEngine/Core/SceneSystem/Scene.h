@@ -16,7 +16,7 @@ namespace AmberEngine::Core::SceneSystem
 		void AddActor(ECS::Actor* p_actor);
 		void DestroyActor(ECS::Actor*& p_actor);
 		
-		void DrawAll(Renderer& p_renderer) const;
+		void DrawAll(Renderer& p_renderer, Resources::Material* p_defaultMaterial) const;
 		void Update(float p_deltaTime) const;
 
 		std::unordered_map<std::string, ECS::Actor*>& GetActors();

@@ -31,7 +31,7 @@ void AmberEngine::Resources::Model::SetShader(Shader& p_shader) const
 	{
 		if(material)
 		{
-			material->SetShader(p_shader);
+			material->SetShader(&p_shader);
 		}
 	}
 }

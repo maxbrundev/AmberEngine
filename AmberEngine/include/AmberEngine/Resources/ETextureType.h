@@ -2,9 +2,9 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace AmberEngine::Settings
+namespace AmberEngine::Resources
 {
-	enum class API_AMBERENGINE ETextureType
+	enum class API_AMBERENGINE ETextureType : uint8_t
 	{
 		DIFFUSE_MAP,
 		SPECULAR_MAP,

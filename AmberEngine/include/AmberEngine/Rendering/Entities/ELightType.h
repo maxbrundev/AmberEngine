@@ -2,7 +2,7 @@
 
 namespace AmberEngine::Rendering::Entities
 {
-	enum class ELightType
+	enum class ELightType : uint8_t
 	{
 		POINT,
 		DIRECTIONAL,

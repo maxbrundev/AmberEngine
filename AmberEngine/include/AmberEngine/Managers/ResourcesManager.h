@@ -26,7 +26,7 @@ namespace AmberEngine::Managers
 		Resources::Shader& LoadShader(const std::string_view p_name, const std::string& p_filePath);
 		Resources::Shader& LoadShaderFiles(const std::string_view p_name, const std::string& p_VertexFilePath, const std::string& p_FragmentFilePath);
 
-		Resources::Texture& LoadTexture(const std::string_view p_name, const std::string& p_filePath, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter, AmberEngine::Settings::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap);
+		Resources::Texture& LoadTexture(const std::string_view p_name, const std::string& p_filePath, Resources::ETextureFilteringMode p_firstFilter, Resources::ETextureFilteringMode p_secondFilter, Resources::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap);
 
 		static void ProvideAssetPaths(const std::string& p_projectAssetsPath, const std::string& p_engineAssetsPath);
 

@@ -10,7 +10,7 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE Texture
 	{
 	public:
-		Texture(std::string p_filePath, std::string p_name, uint32_t p_id, uint32_t p_width, uint32_t p_height, uint32_t p_bitsPerPixel, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter, Settings::ETextureType p_textureType, bool p_generateMipmap);
+		Texture(std::string p_filePath, std::string p_name, uint32_t p_id, uint32_t p_width, uint32_t p_height, uint32_t p_bitsPerPixel, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, ETextureType p_textureType, bool p_generateMipmap);
 		~Texture();
 		
 		void Bind(uint32_t p_slot = 0) const;
@@ -23,9 +23,9 @@ namespace AmberEngine::Resources
 		const uint32_t width;
 		const uint32_t height;
 		const uint32_t bitsPerPixel;
-		const Settings::ETextureFilteringMode firstFilter;
-		const Settings::ETextureFilteringMode secondFilter;
-		const Settings::ETextureType type;
+		const ETextureFilteringMode firstFilter;
+		const ETextureFilteringMode secondFilter;
+		const ETextureType type;
 		const bool isMimapped;
 	};
 }

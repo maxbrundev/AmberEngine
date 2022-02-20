@@ -15,7 +15,7 @@ bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string&
 
 	Assimp::Importer import;
 
-	const aiScene* scene = import.ReadFile(p_filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
+	const aiScene* scene = import.ReadFile(p_filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals | aiProcess_GlobalScale);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -57,8 +57,9 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessNode(const aiMatrix4x
 			std::vector<std::shared_ptr<Texture>> textures;
 		
 			ProcessMaterial(mesh, p_scene, textures);
-			p_materials[mesh->mMaterialIndex] = new Material();
-			p_materials[mesh->mMaterialIndex]->GetTextures() = std::move(textures);
+ 			p_materials[mesh->mMaterialIndex] = new Material();
+
+			p_materials[mesh->mMaterialIndex]->FillTextures(std::move(textures));
 		}
 	}
 
@@ -127,14 +128,14 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterial(const aiMesh
 {
 	const aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE, Settings::ETextureType::DIFFUSE_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_SPECULAR, Settings::ETextureType::SPECULAR_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_NORMALS, Settings::ETextureType::NORMAL_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_HEIGHT, Settings::ETextureType::HEIGHT_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_OPACITY, Settings::ETextureType::MASK_MAP, p_outTextures);
+	LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE, ETextureType::DIFFUSE_MAP, p_outTextures);
+	LoadTexturesFromMaterial(material, aiTextureType_SPECULAR, ETextureType::SPECULAR_MAP, p_outTextures);
+	LoadTexturesFromMaterial(material, aiTextureType_NORMALS, ETextureType::NORMAL_MAP, p_outTextures);
+	LoadTexturesFromMaterial(material, aiTextureType_HEIGHT, ETextureType::HEIGHT_MAP, p_outTextures);
+	LoadTexturesFromMaterial(material, aiTextureType_OPACITY, ETextureType::MASK_MAP, p_outTextures);
 }
 
-void AmberEngine::Resources::Parsers::AssimpParser::LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType, std::vector<std::shared_ptr<Texture>>& p_outTextures)
+void AmberEngine::Resources::Parsers::AssimpParser::LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, ETextureType p_textureType, std::vector<std::shared_ptr<Texture>>& p_outTextures)
 {
 	for (uint32_t i = 0; i < p_mat->GetTextureCount(p_type); i++)
 	{
@@ -159,7 +160,7 @@ void AmberEngine::Resources::Parsers::AssimpParser::LoadTexturesFromMaterial(con
 		{
 			std::string path = m_directory + str.C_Str();
 
-			std::shared_ptr<Texture> texture(Loaders::TextureLoader::Create(std::move(path), Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, Settings::ETextureFilteringMode::NEAREST, p_textureType, false, true));
+			std::shared_ptr<Texture> texture(Loaders::TextureLoader::Create(std::move(path), ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, ETextureFilteringMode::NEAREST, p_textureType, false, true));
 
 			if(texture == nullptr)
 			{

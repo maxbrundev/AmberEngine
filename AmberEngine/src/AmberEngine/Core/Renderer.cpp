@@ -1,7 +1,5 @@
 #include "Amberpch.h"
 
-#include <utility>
-
 #include "AmberEngine/Core/Renderer.h"
 
 #include "AmberEngine/Core/SceneSystem/Scene.h"
@@ -13,8 +11,8 @@ AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) :
 	m_emptyTexture(Resources::Loaders::TextureLoader::CreateColor
 	(
 	(255 << 24) | (255 << 16) | (255 << 8) | 255,
-	Settings::ETextureFilteringMode::NEAREST,
-	Settings::ETextureFilteringMode::NEAREST,
+		Resources::ETextureFilteringMode::NEAREST,
+		Resources::ETextureFilteringMode::NEAREST,
 	false
 	))
 {
@@ -25,20 +23,26 @@ AmberEngine::Core::Renderer::~Renderer()
 	Resources::Loaders::TextureLoader::Destroy(m_emptyTexture);
 }
 
-void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix) const
+void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix, Resources::Material* p_defaultMaterial) const
 {
 	m_modelMatrixSender(*p_modelMatrix);
 	
 	for (const auto mesh : p_model.GetMeshes())
 	{
-		const auto material = p_model.GetMaterials()[mesh->GetMaterialIndex()];
-		DrawMesh(*mesh, material);
+		auto material = p_model.GetMaterials()[mesh->GetMaterialIndex()];
+
+		if(!material || !material->GetShader())
+		{
+			material = p_defaultMaterial;
+		}
+
+		DrawMesh(*mesh, *material);
 	}
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resources::Material* p_material) const
+void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resources::Material& p_material) const
 {
-	p_material->Bind(m_emptyTexture);
+	p_material.Bind(m_emptyTexture);
 
 	p_mesh.Bind();
 
@@ -51,9 +55,9 @@ void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resour
 		glDrawArrays(GL_TRIANGLES, 0, p_mesh.GetVertexCount());
 	}
 
-	p_mesh.Unbind();
-
-	p_material->Unbind();
+	//p_mesh.Unbind();
+	//
+	//p_material.Unbind();
 }
 
 void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha) const

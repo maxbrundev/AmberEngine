@@ -99,9 +99,9 @@ vec3 UnPackColor(float p_Target)
     (
       /* '& 0xff' to get the last 8 bits of the value */
       /* Then divide by 255 to get a value between 0 - 1 */
-      float((uint(p_Target) >> 24) & 0xff) * 0.0039215,
-      float((uint(p_Target) >> 16) & 0xff) * 0.0039215,
-      float((uint(p_Target) >> 8)  & 0xff) * 0.0039215
+      float((uint(p_Target) >> 24) & 0xff) * 0.0039215686274509803921568627451,
+      float((uint(p_Target) >> 16) & 0xff) * 0.0039215686274509803921568627451,
+      float((uint(p_Target) >> 8)  & 0xff) * 0.0039215686274509803921568627451
     );
 }
 

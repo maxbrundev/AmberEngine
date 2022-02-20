@@ -8,8 +8,6 @@
 #include "AmberEngine/Buffers/VertexBuffer.h"
 #include "AmberEngine/Buffers/IndexBuffer.h"
 
-#include "AmberEngine/Resources/Texture.h"
-
 namespace AmberEngine::Resources
 {
 	class API_AMBERENGINE Mesh

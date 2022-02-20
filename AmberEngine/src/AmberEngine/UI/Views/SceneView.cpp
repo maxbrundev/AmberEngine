@@ -46,8 +46,6 @@ void AmberEngine::UI::SceneView::Render()
 
 	m_frameBuffer.Bind();
 	m_context.renderer->Clear(m_cameraController.GetCamera(), true, true, true);
-
-	m_context.m_scene.DrawAll(*m_context.renderer);
 }
 
 void AmberEngine::UI::SceneView::Draw()

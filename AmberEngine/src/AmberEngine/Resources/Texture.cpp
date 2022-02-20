@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Resources/Texture.h"
 
-AmberEngine::Resources::Texture::Texture(std::string p_filePath, std::string p_name, uint32_t p_id, uint32_t p_width, uint32_t p_height, uint32_t p_bitsPerPixel, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter, Settings::ETextureType p_textureType, bool p_generateMipmap) :
+AmberEngine::Resources::Texture::Texture(std::string p_filePath, std::string p_name, uint32_t p_id, uint32_t p_width, uint32_t p_height, uint32_t p_bitsPerPixel, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, ETextureType p_textureType, bool p_generateMipmap) :
 	path(std::move(p_filePath)),
 	name(std::move(p_name)),
 	id(p_id),

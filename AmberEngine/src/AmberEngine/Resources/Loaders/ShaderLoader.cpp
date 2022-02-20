@@ -54,6 +54,8 @@ void AmberEngine::Resources::Loaders::ShaderLoader::Recompile(Shader& p_shader, 
 		/* Store the new program in the shader */
 		*shaderID = newProgramID;
 
+		p_shader.QueryUniforms();
+
 		std::cout<< "[COMPILE] \"" + __FILE_TRACE + "\": Success!" << std::endl;
 	}
 	else

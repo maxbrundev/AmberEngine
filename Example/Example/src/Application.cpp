@@ -12,10 +12,6 @@
 #include <AmberEngine/Rendering/Entities/ELightType.h>
 #include <AmberEngine/Resources/Loaders/ShaderLoader.h>
 
-/*#include <AmberEngine/Resources/Primitives/Cube.h>
-#include <AmberEngine/Buffers/VertexBuffer.h>
-#include <AmberEngine/Buffers/VertexArray.h>*/
-
 #include <AmberEngine/ImGui/imgui.h>
 
 Example::Application::Application(const AmberEngine::Settings::DeviceSettings & p_deviceSettings, const AmberEngine::Settings::WindowSettings & p_windowSettings, const AmberEngine::Settings::DriverSettings & p_driverSettings) :
@@ -28,9 +24,6 @@ Example::Application::Application(const AmberEngine::Settings::DeviceSettings & 
 void Example::Application::Setup()
 {
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
-	
-	resourcesManager.LoadShader("Standard", ":Shaders\\Standard.glsl");
-	resourcesManager.LoadShader("Lambert", ":Shaders\\Lambert.glsl");
 
 	//resourcesManager.LoadTexture("diffuse", "Textures\\crystal.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::DIFFUSE_MAP,true, true);
 	//resourcesManager.LoadTexture("specular", "Textures\\crystal_spec.jpg", AmberEngine::Settings::ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, AmberEngine::Settings::ETextureFilteringMode::NEAREST, AmberEngine::Settings::ETextureType::SPECULAR_MAP, true, true);
@@ -38,89 +31,6 @@ void Example::Application::Setup()
 
 void Example::Application::Run()
 {
-	/*AmberEngine::PrimitivesShapes::Cube::Setup();
-
-	std::vector<float> vertices;
-	std::vector<AmberEngine::PrimitivesShapes::Vertex> verticesCube = AmberEngine::PrimitivesShapes::Cube::GetVertices();
-
-	for (auto& vertex : verticesCube)
-	{
-		vertices.push_back(vertex.position[0]);
-		vertices.push_back(vertex.position[1]);
-		vertices.push_back(vertex.position[2]);
-		vertices.push_back(vertex.textureCoord[0]);
-		vertices.push_back(vertex.textureCoord[1]);
-		vertices.push_back(vertex.normals[0]);
-		vertices.push_back(vertex.normals[1]);
-		vertices.push_back(vertex.normals[2]);
-	}
-
-	AmberEngine::Buffers::VertexArray vao;
-	AmberEngine::Buffers::VertexBuffer vbo(vertices.data(), vertices.size());
-	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), nullptr);
-	vao.BindAttribPointer(2, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<GLvoid*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::textureCoord)));
-	vao.BindAttribPointer(3, GL_FLOAT, GL_FALSE, sizeof(AmberEngine::PrimitivesShapes::Vertex), reinterpret_cast<GLvoid*>(offsetof(AmberEngine::PrimitivesShapes::Vertex, AmberEngine::PrimitivesShapes::Vertex::normals)));
-	vao.Unbind();
-	vbo.Unbind();*/
-
-	/*glm::vec3 verticesVec3[] =
-	{
-		glm::vec3(-1, -1, -1), // 0
-		glm::vec3(1, -1, -1), // 1
-		glm::vec3(1, 1, -1.0f), // 2
-		glm::vec3(-1, 1, -1), // 3
-		glm::vec3(-1, -1, 1), // 4
-		glm::vec3(1, -1, 1), // 5
-		glm::vec3(1, 1, 1), // 6
-		glm::vec3(-1, 1, 1) // 7
-	};
-
-	float vertices[] =
-	{
-		-1, -1, -1, // 0
-
-		1, -1, -1, // 1
-
-		1, 1, -1.0f, // 2
-
-		-1, 1, -1, // 3
-
-		-1, -1, 1, // 4
-
-		1, -1, 1, // 5
-
-		1, 1, 1, // 6
-
-		-1, 1, 1 // 7
-	};
-
-	int indices[36] =
-	{
-		0, 1, 3, 3, 1, 2,
-		1, 5, 2, 2, 5, 6,
-		5, 4, 6, 6, 4, 7,
-		4, 0, 7, 7, 0, 3,
-		3, 2, 7, 7, 2, 6,
-		4, 5, 0, 0, 5, 1
-	};
-
-	//108 vertex positions -> 3 * 36 -> 3 vertex positions (x,y,z) by 1 index
-	float vertexBuffer[108]{ 0.0f };
-	for (int i = 0; i < 36; i++) {
-
-		int indexX = indices[i];
-		int indexY = indices[i];
-		int indexZ = indices[i];
-
-		float verticeX = vertices[(indexX) * 3 + 0];
-		float verticeY = vertices[(indexY) * 3 + 1];
-		float verticeZ = vertices[(indexZ) * 3 + 2];
-
-		vertexBuffer[i * 3 + 0] = verticeX;
-		vertexBuffer[i * 3 + 1] = verticeY;
-		vertexBuffer[i * 3 + 2] = verticeZ;
-	}*/
-
 	Utils::Clock clock;
 
 	auto& resourcesManager = AmberEngine::Managers::ResourcesManager::Instance();
@@ -128,6 +38,7 @@ void Example::Application::Run()
 	AmberEngine::ECS::Actor* testActor = new AmberEngine::ECS::Actor("Actor1");
 	AmberEngine::ECS::Actor* testActor2 = new AmberEngine::ECS::Actor("Actor2");
 	AmberEngine::ECS::Actor* testActor3 = new AmberEngine::ECS::Actor("Actor3");
+	AmberEngine::ECS::Actor* testActor4 = new AmberEngine::ECS::Actor("Actor4");
 
 	AmberEngine::ECS::Actor* directionalLight = new AmberEngine::ECS::Actor("Directional Light");
 	directionalLight->AddComponent<AmberEngine::ECS::Components::LightComponent>(AmberEngine::Rendering::Entities::ELightType::DIRECTIONAL);
@@ -135,8 +46,9 @@ void Example::Application::Run()
 
 	testActor->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Sponza", "Models\\Sponza\\sponza.obj");
 	testActor->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
-
 	testActor->GetTransform().SetWorldScale({ 0.05f, 0.05f, 0.05f });
+
+	testActor4->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Cube", ":Models\\Cube.fbx");
 
 	testActor2->AddComponent<AmberEngine::ECS::Components::ModelComponent>("Nanosuit", "Models\\Nanosuit\\nanosuit.obj");
 	testActor2->GetComponent<AmberEngine::ECS::Components::ModelComponent>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
@@ -150,6 +62,7 @@ void Example::Application::Run()
 	m_context.m_scene.AddActor(testActor);
 	m_context.m_scene.AddActor(testActor2);
 	m_context.m_scene.AddActor(testActor3);
+	m_context.m_scene.AddActor(testActor4);
 	m_context.m_scene.AddActor(directionalLight);
 
 	float rotationX;
@@ -177,64 +90,64 @@ void Example::Application::Run()
 				rotationZ = directionalLight->GetTransform().GetLocalRotationEuler().z;
 				intensity = directionalLight->GetComponent<AmberEngine::ECS::Components::LightComponent>()->GetLightData().intensity;
 			}
-
+			
 			if (testActor2)
 			{
 				positionX2 = testActor2->GetTransform().GetLocalPosition().x;
 				positionY2 = testActor2->GetTransform().GetLocalPosition().y;
 				positionZ2 = testActor2->GetTransform().GetLocalPosition().z;
 			}
-
+			
 			if (testActor3)
 			{
 				positionX3 = testActor3->GetTransform().GetLocalRotationEuler().x;
 				positionY3 = testActor3->GetTransform().GetLocalRotationEuler().y;
 				positionZ3 = testActor3->GetTransform().GetLocalRotationEuler().z;
 			}
-
+			
 			ImGui::Begin("Directional Test");
 			ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
 			ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
 			ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
-
+			
 			ImGui::SliderFloat("Position X2", &positionX2, -100.0f, 100.0f);
 			ImGui::SliderFloat("Position Y2", &positionY2, -100.0f, 100.0f);
 			ImGui::SliderFloat("Position Z2", &positionZ2, -100.0f, 100.0f);
-
+			
 			ImGui::SliderFloat("Position X3", &positionX3, -360.0f, 360.0f);
 			ImGui::SliderFloat("Position Y3", &positionY3, -360.0f, 360.0f);
 			ImGui::SliderFloat("Position Z3", &positionZ3, -360.0f, 360.0f);
-
+			
 			ImGui::SliderFloat("Intensity", &intensity, 0.0f, 1.0f);
 			ImGui::End();
-
+			
 			if (directionalLight)
 			{
 				directionalLight->GetTransform().SetLocalRotation({ rotationX, rotationY, rotationZ });
 				directionalLight->GetComponent<AmberEngine::ECS::Components::LightComponent>()->SetIntensity(intensity);
 			}
-
+			
 			if (testActor2)
 				testActor2->GetTransform().SetLocalPosition({ positionX2, positionY2, positionZ2 });
-
+			
 			if (testActor3)
 				testActor3->GetTransform().SetLocalRotation({ positionX3, positionY3, positionZ3 });
-
+			
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_R))
 			{
 				std::string realPath = AmberEngine::Managers::ResourcesManager::Instance().GetRealPath(":Shaders\\Standard.glsl");
 				AmberEngine::Resources::Loaders::ShaderLoader::Recompile(resourcesManager.GetShader("Standard"), realPath);
 			}
-
+			
 			//Test
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_F))
 			{
 				//working
 				//testActor3->RemoveComponent<AmberEngine::ECS::Components::ModelComponent>();
 				//working
-				//m_context.m_scene.DestroyActor(testActor3);
+				m_context.m_scene.DestroyActor(testActor3);
 				//working
-				testActor3->RemoveParent();
+				//testActor3->RemoveParent();
 			}
 		}
 

@@ -298,6 +298,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Rendering\Entities\Light.h" />
     <ClInclude Include="include\AmberEngine\Resources\ETextureFilteringMode.h" />
     <ClInclude Include="include\AmberEngine\Resources\ETextureType.h" />
+    <ClInclude Include="include\AmberEngine\Resources\EUniformType.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\ModelLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\TextureLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Material.h" />
@@ -309,6 +310,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Resources\Shader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\ShaderLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\Texture.h" />
+    <ClInclude Include="include\AmberEngine\Resources\UniformInfo.h" />
     <ClInclude Include="include\AmberEngine\Settings\DeviceSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
     <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />

@@ -77,7 +77,7 @@ AmberEngine::Resources::Shader& AmberEngine::Managers::ResourcesManager::LoadSha
 	return *res.first->second;
 }
 
-AmberEngine::Resources::Texture& AmberEngine::Managers::ResourcesManager::LoadTexture(const std::string_view p_name, const std::string& p_filePath, Settings::ETextureFilteringMode p_firstFilter, Settings::ETextureFilteringMode p_secondFilter,  Settings::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)
+AmberEngine::Resources::Texture& AmberEngine::Managers::ResourcesManager::LoadTexture(const std::string_view p_name, const std::string& p_filePath, Resources::ETextureFilteringMode p_firstFilter, Resources::ETextureFilteringMode p_secondFilter, Resources::ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)
 {
 	if (m_TextureResources.find(p_name) != m_TextureResources.end())
 		return *m_TextureResources[p_name];

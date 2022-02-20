@@ -46,13 +46,13 @@ void AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor*& p_actor)
 	}
 }
 
-void AmberEngine::Core::SceneSystem::Scene::DrawAll(Renderer& p_renderer) const
+void AmberEngine::Core::SceneSystem::Scene::DrawAll(Renderer& p_renderer, Resources::Material* p_defaultMaterial) const
 {
 	for (const auto& actor : m_actors)
 	{
 		if(const auto modelComponent = actor.second->GetComponent<ECS::Components::ModelComponent>(); modelComponent != nullptr)
 		{
-			p_renderer.Draw(*modelComponent->GetModel(), &actor.second->GetTransform().GetWorldMatrix());
+			p_renderer.Draw(*modelComponent->GetModel(), &actor.second->GetTransform().GetWorldMatrix(), p_defaultMaterial);
 		}
 	}
 }

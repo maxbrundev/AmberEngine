@@ -22,9 +22,10 @@ namespace AmberEngine::Core
 		void UpdateLights(SceneSystem::Scene& p_scene) const;
 		void RenderViews(float p_deltaTime);
 		void HandleInput() const;
-
+		void InitMaterials();
+		void InitUI();
 		void OnNormalsColorsVisualization(bool p_value);
-		void EnableNormalVisualization() const;
+		void ToggleNormalVisualization() const;
 		void DisableNormalVisualization() const;
 
 		
@@ -34,6 +35,8 @@ namespace AmberEngine::Core
 		UI::SceneView m_sceneView;
 		UI::Hierarchy m_hierarchy;
 		UI::MenuBar m_menuBar;
+
+		Resources::Material m_defaultMaterial;
 
 		bool isNormalsColorsVisualization = false;
 	};

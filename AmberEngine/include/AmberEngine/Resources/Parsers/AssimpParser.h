@@ -22,7 +22,7 @@ namespace AmberEngine::Resources::Parsers
 		void ProcessMaterialsNames(const aiScene* p_scene, std::vector<std::string>& p_outMaterialsNames);
 		void ProcessMaterial(const aiMesh* p_mesh, const aiScene* p_scene, std::vector<std::shared_ptr<Texture>>& p_outTextures);
 
-		void LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, Settings::ETextureType p_textureType, std::vector<std::shared_ptr<Texture>>& p_outTextures);
+		void LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, ETextureType p_textureType, std::vector<std::shared_ptr<Texture>>& p_outTextures);
 
 		std::vector<std::shared_ptr<Texture>> m_loadedTextures;
 		std::string m_directory;
