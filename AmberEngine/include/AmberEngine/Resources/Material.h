@@ -13,7 +13,7 @@ namespace AmberEngine::Resources
 	class API_AMBERENGINE Material
 	{
 	public:
-		Material() = default;
+		Material();
 		~Material();
 
 		void Bind(const Texture* p_emptyTexture) const;
@@ -21,7 +21,7 @@ namespace AmberEngine::Resources
 
 		bool HasShader() const;
 		void FillUniform();
-		void FillTextures(std::vector<std::shared_ptr<Texture>> p_textures);
+		void FillTextures(std::unordered_map<ETextureType, std::shared_ptr<Texture>> p_textures);
 
 		template<typename T>
 		void SetUniform(const std::string p_key, const T& p_value)
@@ -51,11 +51,12 @@ namespace AmberEngine::Resources
 		void SetDepthWriting(bool p_depthWriting);
 		void SetColorWriting(bool p_colorWriting);
 		void SetGPUInstances(uint64_t p_instances);
+		void SetName(std::string p_name);
 
-		Shader* GetShader() const;
-		std::vector<std::shared_ptr<Texture>>& GetTextures();
-		std::vector<std::string>& GetMaterialNames();
-		std::map<std::string, std::any>& GetUniformsData();
+		const Shader* GetShader() const;
+		const std::unordered_map<ETextureType, std::shared_ptr<Texture>>& GetTextures();
+		const std::string& GetName();
+		const std::map<std::string, std::any>& GetUniformsData();
 		bool IsBlendable() const;
 		bool HasBackfaceCulling() const;
 		bool HasFrontfaceCulling() const;
@@ -69,8 +70,7 @@ namespace AmberEngine::Resources
 		Shader* m_previousShader = nullptr;
 		Shader* m_shader = nullptr;
 
-		std::vector<std::shared_ptr<Texture>> m_textures;
-		std::vector<std::string> m_materialNames;
+		std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
 		std::map<std::string, std::any> m_uniformsData;
 		bool m_blendable = false;
 		bool m_backfaceCulling = true;
@@ -79,8 +79,10 @@ namespace AmberEngine::Resources
 		bool m_depthWriting = true;
 		bool m_colorWriting = true;
 
-		bool hasSpecularMap = false;
+		bool hasSpecularMap = true;
 
 		uint64_t m_gpuInstances = 1;
+
+		std::string m_name;
 	};
 }

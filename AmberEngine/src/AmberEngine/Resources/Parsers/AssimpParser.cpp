@@ -22,8 +22,6 @@ bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string&
 		return false;
 	}
 
-	//ProcessMaterialsNames(scene, p_model.GetMaterialNames());
-
 	const aiMatrix4x4 identity;
 
 	ProcessNode(&identity, scene->mRootNode, scene, p_model.GetMeshes(), p_model.GetMaterials());
@@ -54,12 +52,8 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessNode(const aiMatrix4x
 
 		if(p_materials[mesh->mMaterialIndex] == nullptr)
 		{
-			std::vector<std::shared_ptr<Texture>> textures;
-		
-			ProcessMaterial(mesh, p_scene, textures);
- 			p_materials[mesh->mMaterialIndex] = new Material();
-
-			p_materials[mesh->mMaterialIndex]->FillTextures(std::move(textures));
+			p_materials[mesh->mMaterialIndex] = new Material();
+			ProcessMaterial(mesh, p_scene, *p_materials[mesh->mMaterialIndex]);
 		}
 	}
 
@@ -110,66 +104,51 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessMesh(const aiMatrix4x
 	}
 }
 
-void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterialsNames(const aiScene* p_scene, std::vector<std::string>& p_outMaterialsNames)
-{
-	for (uint32_t i = 0; i < p_scene->mNumMaterials; ++i)
-	{
-		if (const aiMaterial* material = p_scene->mMaterials[i])
-		{
-			aiString name;
-			aiGetMaterialString(material, AI_MATKEY_NAME, &name);
-
-			p_outMaterialsNames.emplace_back(name.C_Str());
-		}
-	}
-}
-
-void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterial(const aiMesh* p_mesh, const aiScene* p_scene, std::vector<std::shared_ptr<Texture>>& p_outTextures)
+void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterial(const aiMesh* p_mesh, const aiScene* p_scene, Material& p_outMaterial)
 {
 	const aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-	LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE, ETextureType::DIFFUSE_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_SPECULAR, ETextureType::SPECULAR_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_NORMALS, ETextureType::NORMAL_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_HEIGHT, ETextureType::HEIGHT_MAP, p_outTextures);
-	LoadTexturesFromMaterial(material, aiTextureType_OPACITY, ETextureType::MASK_MAP, p_outTextures);
+	aiString name;
+	aiGetMaterialString(material, AI_MATKEY_NAME, &name);
+
+	p_outMaterial.SetName(std::move(std::string(name.C_Str())));
+
+	std::unordered_map<ETextureType, std::shared_ptr<Texture>> textures;
+
+	LoadTexturesFromMaterial(material, aiTextureType_DIFFUSE, ETextureType::DIFFUSE_MAP, textures);
+	LoadTexturesFromMaterial(material, aiTextureType_SPECULAR, ETextureType::SPECULAR_MAP, textures);
+	LoadTexturesFromMaterial(material, aiTextureType_NORMALS, ETextureType::NORMAL_MAP, textures);
+	LoadTexturesFromMaterial(material, aiTextureType_HEIGHT, ETextureType::HEIGHT_MAP, textures);
+	LoadTexturesFromMaterial(material, aiTextureType_OPACITY, ETextureType::MASK_MAP, textures);
+
+	p_outMaterial.FillTextures(std::move(textures));
 }
 
-void AmberEngine::Resources::Parsers::AssimpParser::LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, ETextureType p_textureType, std::vector<std::shared_ptr<Texture>>& p_outTextures)
+void AmberEngine::Resources::Parsers::AssimpParser::LoadTexturesFromMaterial(const aiMaterial* p_mat, aiTextureType p_type, ETextureType p_textureType, std::unordered_map<ETextureType, std::shared_ptr<Texture>>& p_outTextures)
 {
 	for (uint32_t i = 0; i < p_mat->GetTextureCount(p_type); i++)
 	{
 		aiString str;
 		p_mat->GetTexture(p_type, i, &str);
 
-		bool isTextureAlreadyLoaded = false;
-
-		for (const auto& texture : m_loadedTextures)
+		const auto& textureLoaded = std::find_if(m_loadedTextures.begin(), m_loadedTextures.end(), [&](const std::shared_ptr<Texture>& p_texture)
 		{
-			if (std::strcmp(texture->name.data(), str.C_Str()) == 0)
-			{
-				p_outTextures.push_back(texture);
+			return p_texture->name == str.C_Str();
+		});
 
-				isTextureAlreadyLoaded = true;
-
-				break;
-			}
+		if (textureLoaded != m_loadedTextures.end())
+		{
+			p_outTextures[p_textureType] = *textureLoaded;
+			continue;
 		}
 
-		if (!isTextureAlreadyLoaded)
-		{
-			std::string path = m_directory + str.C_Str();
+		std::shared_ptr<Texture> texture(Loaders::TextureLoader::Create(m_directory + str.C_Str(), ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, ETextureFilteringMode::NEAREST, p_textureType, false, true));
 
-			std::shared_ptr<Texture> texture(Loaders::TextureLoader::Create(std::move(path), ETextureFilteringMode::NEAREST_MIPMAP_LINEAR, ETextureFilteringMode::NEAREST, p_textureType, false, true));
+		if (texture == nullptr)
+			continue;
 
-			if(texture == nullptr)
-			{
-				continue;
-			}
+		p_outTextures[texture->type] = texture;
 
-			p_outTextures.push_back(texture);
-
-			m_loadedTextures.push_back(texture);
-		}
+		m_loadedTextures.push_back(texture);
 	}
 }

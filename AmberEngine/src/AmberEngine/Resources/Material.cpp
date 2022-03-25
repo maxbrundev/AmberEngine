@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "Amberpch.h"
 
 #include "AmberEngine/Resources/Material.h"
@@ -5,9 +7,18 @@
 #include "AmberEngine/Buffers/UniformBuffer.h"
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
+AmberEngine::Resources::Material::Material()
+{
+	//m_textures[ETextureType::DIFFUSE_MAP]  = nullptr;
+	//m_textures[ETextureType::SPECULAR_MAP] = nullptr;
+	//m_textures[ETextureType::HEIGHT_MAP]   = nullptr;
+	//m_textures[ETextureType::NORMAL_MAP]   = nullptr;
+	//m_textures[ETextureType::MASK_MAP]     = nullptr;
+}
+
 AmberEngine::Resources::Material::~Material()
 {
-	for (auto& texture : m_textures)
+	for (auto& [type, texture] : m_textures)
 	{
 		Loaders::TextureLoader::Delete(texture.get());
 	}
@@ -40,24 +51,24 @@ void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture) const
 				case EUniformType::UNIFORM_FLOAT_VEC3: if (value.type() == typeid(glm::vec3)) m_shader->SetUniformVec3(name, std::any_cast<glm::vec3>(value)); break;
 				case EUniformType::UNIFORM_FLOAT_VEC4: if (value.type() == typeid(glm::vec4)) m_shader->SetUniformVec4(name, std::any_cast<glm::vec4>(value)); break;
 				case EUniformType::UNIFORM_SAMPLER_2D:
-				{
-					if (value.type() == typeid(Texture*))
 					{
-						if (auto tex = std::any_cast<Texture*>(value); tex)
+						if (value.type() == typeid(Texture*))
 						{
-							tex->Bind(textureSlot);
-							m_shader->SetUniformInt(uniformData->name, textureSlot++);
-						}
-						else if (p_emptyTexture)
-						{
-							if (!hasSpecularMap && uniformData->name == "u_SpecularMap")
-								continue;
+							if (auto tex = std::any_cast<Texture*>(value); tex)
+							{
+								tex->Bind(textureSlot);
+								m_shader->SetUniformInt(uniformData->name, textureSlot++);
+							}
+							else if (p_emptyTexture)
+							{
+								//if (!hasSpecularMap && uniformData->name == "u_SpecularMap")
+								//	continue;
 
-							p_emptyTexture->Bind(textureSlot);
-							m_shader->SetUniformInt(uniformData->name, textureSlot++);
+								p_emptyTexture->Bind(textureSlot);
+								m_shader->SetUniformInt(uniformData->name, textureSlot++);
+							}
 						}
 					}
-				}
 				}
 			}
 		}
@@ -71,13 +82,13 @@ void AmberEngine::Resources::Material::Unbind() const
 		m_shader->Unbind();
 	}
 
-	for(const auto& texture : m_textures)
+	for(const auto& [type, texture] : m_textures)
 	{
 		texture->Unbind();
 	}
 }
 
-void AmberEngine::Resources::Material::FillTextures(std::vector<std::shared_ptr<Texture>> p_textures)
+void AmberEngine::Resources::Material::FillTextures(std::unordered_map<ETextureType, std::shared_ptr<Texture>> p_textures)
 {
 	m_textures = std::move(p_textures);
 }
@@ -114,7 +125,7 @@ void AmberEngine::Resources::Material::SetShader(Shader* p_shader)
 
 void AmberEngine::Resources::Material::SetTexture(Texture* p_texture)
 {
-	for(auto& texture : m_textures)
+	for(auto& [type, texture] : m_textures)
 	{
 		if(texture->type == p_texture->type)
 		{
@@ -158,7 +169,12 @@ void AmberEngine::Resources::Material::SetGPUInstances(uint64_t p_instances)
 	m_gpuInstances = p_instances;
 }
 
-AmberEngine::Resources::Shader* AmberEngine::Resources::Material::GetShader() const
+void AmberEngine::Resources::Material::SetName(std::string p_name)
+{
+	m_name = std::move(p_name);
+}
+
+const AmberEngine::Resources::Shader* AmberEngine::Resources::Material::GetShader() const
 {
 	return m_shader;
 }
@@ -189,28 +205,34 @@ void AmberEngine::Resources::Material::FillUniform()
 				textureType = ETextureType::SPECULAR_MAP;
 			}
 
-			auto predicate = [&](const std::shared_ptr<Texture>& p_texture)
+			auto predicate = [&](const std::pair<ETextureType, std::shared_ptr<Texture>>& p_texture)
 			{
-				return p_texture->type == textureType;
+				return p_texture.first == textureType;
 			};
 
 			switch (textureType)
 			{
 			case ETextureType::DIFFUSE_MAP:
 				{
-					const auto iterator = std::find_if(m_textures.begin(), m_textures.end(), predicate);
+					const auto& iterator = std::find_if(std::begin(m_textures), std::end(m_textures), [&](const auto& pair)
+					{
+						return pair.first == textureType;
+					});
 
-					if (iterator != m_textures.end())
-						uniformDefaultValue = &*iterator->get();
+					if (iterator != m_textures.end() && iterator->second)
+						uniformDefaultValue = &*iterator->second;
 				}
 				break;
 
 			case ETextureType::SPECULAR_MAP:
 				{
-					const auto iterator = std::find_if(m_textures.begin(), m_textures.end(), predicate);
+					const auto& iterator = std::find_if(std::begin(m_textures), std::end(m_textures), [&](const auto& pair)
+					{
+						return pair.first == textureType;
+					});
 
-					if (iterator != m_textures.end())
-						uniformDefaultValue = &*iterator->get();
+					if (iterator != m_textures.end() && iterator->second)
+						uniformDefaultValue = &*iterator->second;
 					else
 						hasSpecularMap = false;
 				}
@@ -222,17 +244,17 @@ void AmberEngine::Resources::Material::FillUniform()
 	}
 }
 
-std::vector<std::shared_ptr<AmberEngine::Resources::Texture>>& AmberEngine::Resources::Material::GetTextures()
+const std::unordered_map<AmberEngine::Resources::ETextureType, std::shared_ptr<AmberEngine::Resources::Texture>>& AmberEngine::Resources::Material::GetTextures()
 {
 	return m_textures;
 }
 
-std::vector<std::string>& AmberEngine::Resources::Material::GetMaterialNames()
+const std::string& AmberEngine::Resources::Material::GetName()
 {
-	return m_materialNames;
+	return m_name;
 }
 
-std::map<std::string, std::any>& AmberEngine::Resources::Material::GetUniformsData()
+const std::map<std::string, std::any>& AmberEngine::Resources::Material::GetUniformsData()
 {
 	return m_uniformsData;
 }
