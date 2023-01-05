@@ -10,17 +10,17 @@ namespace AmberEngine::UI
 		static uint64_t __TREENODE_ID;
 
 	public:
-		Hierarchy(std::string p_title);
+		Hierarchy();
 		~Hierarchy();
 
 	public:
 		void AddActorByInstance(ECS::Actor& p_actor);
 		void DeleteActorByInstance(ECS::Actor& p_actor);
-		void Draw();
+		void Draw() const;
 
 	private:
 		uint64_t m_destroyedListener;
-		std::string m_title;
+		const std::string& m_name;
 		std::string m_rootID;
 		std::unordered_map<ECS::Actor*, std::string> m_actors;
 	};

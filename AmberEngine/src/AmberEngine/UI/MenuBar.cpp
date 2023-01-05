@@ -3,6 +3,7 @@
 #include "AmberEngine/UI/MenuBar.h"
 
 #include "AmberEngine/Context/Window.h"
+#include "AmberEngine/Data/Constants.h"
 
 AmberEngine::UI::MenuBar::MenuBar(Core::Context& p_context) : m_context(p_context)
 {
@@ -20,9 +21,9 @@ void AmberEngine::UI::MenuBar::Draw()
 
 void AmberEngine::UI::MenuBar::DisplayFileMenu() const
 {
-	if (ImGui::BeginMenu("File"))
+	if (ImGui::BeginMenu(Data::Constants::EDITOR_PANEL_MENU_BAR_FILE_NAME.c_str()))
 	{
-		if (ImGui::MenuItem("Exit"))
+		if (ImGui::MenuItem(Data::Constants::EDITOR_PANEL_MENU_ITEM_EXIT_NAME.c_str()))
 		{
 			Context::Window::CloseEvent.Invoke(true);
 		}
@@ -33,9 +34,9 @@ void AmberEngine::UI::MenuBar::DisplayFileMenu() const
 
 void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 {
-	if (ImGui::BeginMenu("Draw Mode"))
+	if (ImGui::BeginMenu(Data::Constants::EDITOR_PANEL_MENU_BAR_DRAW_MODE_NAME.c_str()))
 	{
-		if (ImGui::Checkbox("Shaded", &m_isShadeDrawMode))
+		if (ImGui::MenuItem(Data::Constants::EDITOR_PANEL_MENU_ITEM_SHADED_NAME.c_str(), nullptr, &m_isShadeDrawMode))
 		{
 			m_isShadeDrawMode = true;
 			m_isWireframeDrawMode = false;
@@ -46,7 +47,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			NormalsColorsVisualizationCallback(false);
 		}
 
-		if (ImGui::Checkbox("Wireframe", &m_isWireframeDrawMode))
+		if (ImGui::MenuItem(Data::Constants::EDITOR_PANEL_MENU_ITEM_WIREFRAME_NAME.c_str(), nullptr, &m_isWireframeDrawMode))
 		{
 			m_isWireframeDrawMode = true;
 			m_isShadeDrawMode = false;
@@ -56,7 +57,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			NormalsColorsVisualizationCallback(false);
 		}
 
-		if (ImGui::Checkbox("Normals", &m_isNormalDebugDrawMode))
+		if (ImGui::MenuItem(Data::Constants::EDITOR_PANEL_MENU_ITEM_NORMALS_NAME.c_str(),nullptr, &m_isNormalDebugDrawMode))
 		{
 			m_isNormalDebugDrawMode = true;
 			m_isWireframeDrawMode = false;

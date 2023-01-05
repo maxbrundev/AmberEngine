@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "Amberpch.h"
 
 #include "AmberEngine/Resources/Material.h"
@@ -9,11 +7,11 @@
 
 AmberEngine::Resources::Material::Material()
 {
-	//m_textures[ETextureType::DIFFUSE_MAP]  = nullptr;
-	//m_textures[ETextureType::SPECULAR_MAP] = nullptr;
-	//m_textures[ETextureType::HEIGHT_MAP]   = nullptr;
-	//m_textures[ETextureType::NORMAL_MAP]   = nullptr;
-	//m_textures[ETextureType::MASK_MAP]     = nullptr;
+	m_textures[ETextureType::DIFFUSE_MAP]  = nullptr;
+	m_textures[ETextureType::SPECULAR_MAP] = nullptr;
+	m_textures[ETextureType::HEIGHT_MAP]   = nullptr;
+	m_textures[ETextureType::NORMAL_MAP]   = nullptr;
+	m_textures[ETextureType::MASK_MAP]     = nullptr;
 }
 
 AmberEngine::Resources::Material::~Material()
@@ -61,8 +59,8 @@ void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture) const
 							}
 							else if (p_emptyTexture)
 							{
-								//if (!hasSpecularMap && uniformData->name == "u_SpecularMap")
-								//	continue;
+								if (!hasSpecularMap && uniformData->name == "u_SpecularMap")
+									continue;
 
 								p_emptyTexture->Bind(textureSlot);
 								m_shader->SetUniformInt(uniformData->name, textureSlot++);
@@ -214,10 +212,7 @@ void AmberEngine::Resources::Material::FillUniform()
 			{
 			case ETextureType::DIFFUSE_MAP:
 				{
-					const auto& iterator = std::find_if(std::begin(m_textures), std::end(m_textures), [&](const auto& pair)
-					{
-						return pair.first == textureType;
-					});
+					const auto& iterator = std::find_if(std::begin(m_textures), std::end(m_textures), predicate);
 
 					if (iterator != m_textures.end() && iterator->second)
 						uniformDefaultValue = &*iterator->second;
@@ -226,10 +221,7 @@ void AmberEngine::Resources::Material::FillUniform()
 
 			case ETextureType::SPECULAR_MAP:
 				{
-					const auto& iterator = std::find_if(std::begin(m_textures), std::end(m_textures), [&](const auto& pair)
-					{
-						return pair.first == textureType;
-					});
+					const auto& iterator = std::find_if(std::begin(m_textures), std::end(m_textures), predicate);
 
 					if (iterator != m_textures.end() && iterator->second)
 						uniformDefaultValue = &*iterator->second;

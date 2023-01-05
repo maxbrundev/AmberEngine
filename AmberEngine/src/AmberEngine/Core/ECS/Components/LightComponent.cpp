@@ -14,7 +14,7 @@ void AmberEngine::ECS::Components::LightComponent::Update(float p_deltaTime)
 
 }
 
-void AmberEngine::ECS::Components::LightComponent::SetColor(const glm::vec3& p_color)
+void AmberEngine::ECS::Components::LightComponent::SetColor(const Data::Color& p_color)
 {
 	m_data.color = p_color;
 }

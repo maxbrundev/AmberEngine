@@ -2,9 +2,11 @@
 
 #include "AmberEngine/UI/Hierarchy.h"
 
+#include "AmberEngine/Data/Constants.h"
+
 uint64_t AmberEngine::UI::Hierarchy::__TREENODE_ID = 0;
 
-AmberEngine::UI::Hierarchy::Hierarchy(std::string p_title) : m_title(std::move(p_title))
+AmberEngine::UI::Hierarchy::Hierarchy() : m_name(Data::Constants::EDITOR_PANEL_HIERARCHY_NAME)
 {
 	ECS::Actor::CreatedEvent += std::bind(&Hierarchy::AddActorByInstance, this, std::placeholders::_1);
 	m_destroyedListener = ECS::Actor::DestroyEvent += std::bind(&Hierarchy::DeleteActorByInstance, this, std::placeholders::_1);
@@ -37,15 +39,15 @@ void AmberEngine::UI::Hierarchy::DeleteActorByInstance(ECS::Actor& p_actor)
 }
 
 // TODO: Clean TreeNodeEx usage by creating a dedicated class.
-void AmberEngine::UI::Hierarchy::Draw()
+void AmberEngine::UI::Hierarchy::Draw() const
 {
-	ImGui::Begin(m_title.c_str());
+	ImGui::Begin(m_name.c_str());
 
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
 	flags |= ImGuiTreeNodeFlags_Selected;
 	flags |= ImGuiTreeNodeFlags_DefaultOpen;
 
-	if (ImGui::TreeNodeEx(("Root" + m_rootID).c_str(), flags))
+	if (ImGui::TreeNodeEx((Data::Constants::EDITOR_TREE_NODE_HIERARCHY_LABEL_ROOT + m_rootID).c_str(), flags))
 	{
 		for (auto& actor : m_actors)
 		{

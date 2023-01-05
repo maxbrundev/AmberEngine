@@ -3,6 +3,7 @@
 #include "AmberEngine/Rendering/Entities/ELightType.h"
 
 #include "AmberEngine/Maths/Transform.h"
+#include "AmberEngine/Data/Color.h"
 
 namespace AmberEngine::Rendering::Entities
 {
@@ -12,7 +13,7 @@ namespace AmberEngine::Rendering::Entities
 
 		glm::mat4 GenerateMatrix() const;
 
-		glm::vec3	color		= { 1.0f, 1.0f, 1.0f };
+		Data::Color	color		= { 1.0f, 1.0f, 1.0f };
 		float		intensity	= 1.0f;
 		float		constant	= 0.0f;
 		float		linear		= 0.0f;

@@ -2,8 +2,11 @@
 
 #include "AmberEngine/UI/Views/SceneView.h"
 
+#include "AmberEngine/Data/Constants.h"
+#include "AmberEngine/Tools/Utils/Converter.h"
+
 AmberEngine::UI::SceneView::SceneView(Core::Context& p_context) :
-	AView("Scene"),
+	AView(Data::Constants::EDITOR_PANEL_SCENE_NAME),
 	m_context(p_context),
 	m_cameraController(*m_context.window, *m_context.inputManager, glm::vec3(0.0f, 0.0f, 15.0f)),
 	m_frameBuffer(256, 144)
@@ -50,14 +53,14 @@ void AmberEngine::UI::SceneView::Render()
 
 void AmberEngine::UI::SceneView::Draw()
 {
-	ImGui::Begin("Device");
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::Begin("Device", nullptr);
+	ImGui::TextColored(Utils::Converter::ToImVec4(Data::Color::EditorYellow), "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(0, 0));
 
-	ImGui::Begin(m_title.c_str(), nullptr, ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
 
 	m_isFocused = ImGui::IsWindowFocused();
 	m_isHovered = ImGui::IsWindowHovered();

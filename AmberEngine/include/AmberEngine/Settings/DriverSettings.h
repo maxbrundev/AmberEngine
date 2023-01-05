@@ -1,6 +1,6 @@
 #pragma once
 
-namespace  AmberEngine::Settings
+namespace AmberEngine::Settings
 {
 	struct DriverSettings
 	{

@@ -26,9 +26,7 @@ namespace AmberEngine::Core
 		void InitUI();
 		void OnNormalsColorsVisualization(bool p_value);
 		void ToggleNormalVisualization() const;
-		void DisableNormalVisualization() const;
 
-		
 	public:
 		Context& m_context;
 		

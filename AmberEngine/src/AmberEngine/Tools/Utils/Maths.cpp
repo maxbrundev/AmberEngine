@@ -2,24 +2,25 @@
 
 #include "AmberEngine/Tools/Utils/Maths.h"
 
-uint32_t Utils::Maths::RGBToColor(uint8_t p_red, uint8_t p_green, uint8_t p_blue)
+uint32_t AmberEngine::Utils::Maths::Pack(uint8_t p_value1, uint8_t p_value2, uint8_t p_value3, uint8_t p_value4)
 {
-	return (static_cast<uint8_t>(p_red   * 0.0039215686274509803921568627451) << 24
-		  | static_cast<uint8_t>(p_green * 0.0039215686274509803921568627451) << 16
-		  | static_cast<uint8_t>(p_blue  * 0.0039215686274509803921568627451) << 8);
+	return (p_value1 << 24) | (p_value2 << 16) | (p_value3 << 8) | p_value4;
 }
 
-uint32_t Utils::Maths::ColorToRGB(float p_red, float p_green, float p_blue)
+std::tuple<uint8_t, uint8_t, uint8_t, uint8_t> AmberEngine::Utils::Maths::Unpack(uint32_t p_value)
 {
-	return (static_cast<uint8_t>(p_red * 255) << 24 | static_cast<uint8_t>(p_green * 255) << 16 | static_cast<uint8_t>(p_blue * 255) << 8);
+	return std::make_tuple((p_value >> 24) & 0xff,
+	                           (p_value >> 16) & 0xff,
+		                       (p_value >> 8)  & 0xff,
+		                       (p_value)       & 0xff);
 }
 
-glm::vec3 Utils::Maths::Unpack(uint32_t p_color)
+float AmberEngine::Utils::Maths::ToDegree(float p_radians)
 {
-	return glm::vec3
-	(
-		float((p_color >> 24) & 0xff),
-		float((p_color >> 16) & 0xff),
-		float((p_color >> 8) & 0xff) 
-	);
+	return p_radians * ( 180.0f / glm::pi<float>());
+}
+
+float AmberEngine::Utils::Maths::ToRadians(float p_degree)
+{
+	return p_degree / (glm::pi<float>() * 180.0f);
 }

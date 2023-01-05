@@ -107,12 +107,12 @@ void AmberEngine::Context::Window::Restore() const
 	glfwRestoreWindow(m_glfwWindow);
 }
 
-void AmberEngine::Context::Window::SetIconFromMemory(uint8_t * p_data, uint32_t p_width, uint32_t p_height) const
+void AmberEngine::Context::Window::SetIconFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height) const
 {
 	GLFWimage images[1];
 	images[0].pixels = p_data;
 	images[0].height = p_width;
-	images[0].width = p_height;
+	images[0].width  = p_height;
 
 	glfwSetWindowIcon(m_glfwWindow, 1, images);
 }

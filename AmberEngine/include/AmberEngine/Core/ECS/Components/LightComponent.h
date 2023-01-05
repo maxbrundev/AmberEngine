@@ -25,7 +25,7 @@ namespace AmberEngine::ECS::Components
 
 		void Update(float p_deltaTime) override;
 
-		void SetColor(const glm::vec3& p_color);
+		void SetColor(const Data::Color& p_color);
 		void SetIntensity(float p_intensity);
 		void SetConstant(float p_constant);
 		void SetLinear(float p_linear);

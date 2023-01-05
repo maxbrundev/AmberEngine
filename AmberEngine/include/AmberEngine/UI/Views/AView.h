@@ -18,7 +18,7 @@ namespace AmberEngine::UI
 
 	protected:
 		glm::vec2 m_size;
-		std::string m_title;
+		std::string m_name;
 		bool m_sizeChanged;
 	};
 }

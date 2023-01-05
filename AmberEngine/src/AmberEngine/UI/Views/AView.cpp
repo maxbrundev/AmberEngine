@@ -4,7 +4,7 @@
 
 AmberEngine::UI::AView::AView(std::string p_title) :
 m_size(256, 144),
-m_title(std::move(p_title)),
+m_name(std::move(p_title)),
 m_sizeChanged(false) {}
 
 void AmberEngine::UI::AView::CopyImGuiSize()

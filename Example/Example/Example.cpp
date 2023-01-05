@@ -13,7 +13,7 @@ int main()
 	deviceSettings.debugProfile = true;
 	
 	AmberEngine::Settings::WindowSettings windowSettings;
-	windowSettings.title = "AmberEngine v0.5r1";
+	windowSettings.title = "AmberEngine v0.5.1";
 	windowSettings.width = 1280;
 	windowSettings.height = 720;
 	windowSettings.resizable = true;

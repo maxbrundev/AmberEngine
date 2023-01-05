@@ -56,8 +56,8 @@ void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resour
 	}
 
 	//p_mesh.Unbind();
-	//
-	//p_material.Unbind();
+	
+	p_material.Unbind();
 }
 
 void AmberEngine::Core::Renderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha) const

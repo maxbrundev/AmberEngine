@@ -26,6 +26,7 @@ namespace AmberEngine::Core
 	
 	public:
 		const std::string engineAssetsPath;
+		const std::string editorAssetsPath;
 		const std::string projectAssetsPath;
 
 		std::unique_ptr<AmberEngine::Context::Device>	device;

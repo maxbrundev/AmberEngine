@@ -8,7 +8,7 @@
 AmberEngine::Core::Editor::Editor(Context& p_context) :
 	m_context(p_context),
 	m_sceneView(m_context),
-	m_hierarchy("Hierarchy"),
+	m_hierarchy(),
 	m_menuBar(m_context)
 {
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)

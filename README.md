@@ -1,7 +1,7 @@
 # AmberEngine
 Personal OpenGL C++ Game Engine learning Project
 
-# AmberEngine v0.5r1
+# AmberEngine v0.5.2
 ![alt text](Screens/AmberScreen.PNG?raw=true "AmberEngine")
 
 # Requirements
@@ -23,7 +23,6 @@ Personal OpenGL C++ Game Engine learning Project
 - Some Models downloaded from Morgan McGuire's [Computer Graphics Archive](https://casual-effects.com/data)
 
 # Next Updates
-- ECS
 - Scene System & Scene Graph
 - Gizmos
 - Editor UI (Scene Hierarchy, Components Inspector)
