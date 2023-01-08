@@ -16,6 +16,8 @@
 #include <string_view>
 #include <array>
 #include <any>
+#include <chrono>
+#include <cmath>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

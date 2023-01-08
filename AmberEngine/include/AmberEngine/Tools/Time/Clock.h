@@ -11,8 +11,8 @@ namespace Utils
 	public:
 		void Update();
 
-		float GetFrameRate();
-		float GetDeltaTime();
+		float GetFrameRate() const;
+		float GetDeltaTime() const;
 
 	private:
 		void Initialize();

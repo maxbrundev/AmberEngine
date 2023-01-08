@@ -19,3 +19,11 @@ const std::string AmberEngine::Data::Constants::EDITOR_PANEL_SCENE_NAME     = "S
 const std::string AmberEngine::Data::Constants::EDITOR_PANEL_HIERARCHY_NAME = "Hierarchy";
 
 const std::string AmberEngine::Data::Constants::EDITOR_TREE_NODE_HIERARCHY_LABEL_ROOT = "Root";
+
+const float AmberEngine::Data::Constants::EDITOR_FONT_SIZE_SMALL  = 12;
+const float AmberEngine::Data::Constants::EDITOR_FONT_SIZE_MEDIUM = 14;
+const float AmberEngine::Data::Constants::EDITOR_FONT_SIZE_BIG    = 16;
+
+const char AmberEngine::Data::Constants::BACKSLASH    = '\\';
+const char AmberEngine::Data::Constants::FORWARDSLASH = '/';
+const char AmberEngine::Data::Constants::DOT          = '.';

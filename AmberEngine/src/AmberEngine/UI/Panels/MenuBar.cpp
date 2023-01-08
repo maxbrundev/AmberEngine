@@ -1,11 +1,16 @@
 #include "Amberpch.h"
 
-#include "AmberEngine/UI/MenuBar.h"
+#include "AmberEngine/UI/Panels/MenuBar.h"
+
+#include "AmberEngine/Core/Renderer.h"
 
 #include "AmberEngine/Context/Window.h"
+
 #include "AmberEngine/Data/Constants.h"
 
-AmberEngine::UI::MenuBar::MenuBar(Core::Context& p_context) : m_context(p_context)
+#include "AmberEngine/Tools/Utils/ServiceLocator.h"
+
+AmberEngine::UI::MenuBar::MenuBar()
 {
 }
 
@@ -42,7 +47,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			m_isWireframeDrawMode = false;
 			m_isNormalDebugDrawMode = false;
 
-			m_context.renderer->PolygonModeFill();
+			Utils::ServiceLocator::Get<Core::Renderer>().PolygonModeFill();
 
 			NormalsColorsVisualizationCallback(false);
 		}
@@ -53,7 +58,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			m_isShadeDrawMode = false;
 			m_isNormalDebugDrawMode = false;
 
-			m_context.renderer->PolygonModeLine();
+			Utils::ServiceLocator::Get<Core::Renderer>().PolygonModeLine();
 			NormalsColorsVisualizationCallback(false);
 		}
 
@@ -63,7 +68,7 @@ void AmberEngine::UI::MenuBar::DisplayDrawModeMenu()
 			m_isWireframeDrawMode = false;
 			m_isShadeDrawMode = false;
 
-			m_context.renderer->PolygonModeFill();
+			Utils::ServiceLocator::Get<Core::Renderer>().PolygonModeFill();
 			NormalsColorsVisualizationCallback(true);
 		}
 

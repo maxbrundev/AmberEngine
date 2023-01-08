@@ -37,7 +37,7 @@ namespace AmberEngine::Managers
 		[[nodiscard]] Resources::Model& GetModel(const std::string_view p_name) const;
 
 	private:
-		ResourcesManager();
+		ResourcesManager() = default;
 		~ResourcesManager() override = default;
 
 	public:

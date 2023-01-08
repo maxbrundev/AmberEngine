@@ -321,12 +321,15 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Tools\Utils\ColorsUtility.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Converter.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Lerper.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h" />
-    <ClInclude Include="include\AmberEngine\UI\Hierarchy.h" />
-    <ClInclude Include="include\AmberEngine\UI\MenuBar.h" />
-    <ClInclude Include="include\AmberEngine\UI\Views\AView.h" />
-    <ClInclude Include="include\AmberEngine\UI\Views\SceneView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Canvas.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\APanel.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Hierarchy.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\MenuBar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Views\AView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Views\SceneView.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
     <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
@@ -336,6 +339,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\ImGUI\stb_truetype.h" />
     <ClInclude Include="include\AmberEngine\Core\Context.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Maths.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\ServiceLocator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Amberpch.cpp">
@@ -397,12 +401,16 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Tools\Utils\ASingleton.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\ColorsUtility.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\Converter.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\Lerper.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\Maths.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\ServiceLocator.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
-    <ClCompile Include="src\AmberEngine\UI\Hierarchy.cpp" />
-    <ClCompile Include="src\AmberEngine\UI\MenuBar.cpp" />
-    <ClCompile Include="src\AmberEngine\UI\Views\AView.cpp" />
-    <ClCompile Include="src\AmberEngine\UI\Views\SceneView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Canvas.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\APanel.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Hierarchy.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\MenuBar.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Views\AView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Views\SceneView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl" />

@@ -31,12 +31,12 @@ void Utils::Clock::Update()
 	}
 }
 
-float Utils::Clock::GetFrameRate()
+float Utils::Clock::GetFrameRate() const
 {
 	return 1.0f / (deltaTime);
 }
 
-float Utils::Clock::GetDeltaTime()
+float Utils::Clock::GetDeltaTime() const
 {
 	return deltaTime * timeScale;
 }

@@ -19,11 +19,5 @@ namespace Utils
 		static std::string RemoveAllOcurrences(const std::string& p_target, const char p_character);
 		static std::string ToUpper(const std::string& p_target);
 		static std::string ToMinor(const std::string& p_target);
-
-	public:
-		static const char __BACKSLASH;
-		static const char __FORWARDSLASH;
-		static const char __DOT;
-
 	};
 }

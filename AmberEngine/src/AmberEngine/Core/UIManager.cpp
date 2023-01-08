@@ -106,8 +106,6 @@ void AmberEngine::Core::UIManager::PreDraw() const
 	ImGui::End();
 
 	ImGui::PopStyleVar(3);
-
-	ImGui::ShowDemoWindow();
 }
 
 void AmberEngine::Core::UIManager::PostDraw() const

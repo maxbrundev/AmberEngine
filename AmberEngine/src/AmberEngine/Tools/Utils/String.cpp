@@ -2,31 +2,29 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-constexpr char Utils::String::__BACKSLASH    = '\\';
-constexpr char Utils::String::__FORWARDSLASH = '/';
-constexpr char Utils::String::__DOT          = '.';
+#include "AmberEngine/Data/Constants.h"
 
 std::string Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
 {
-	size_t characterCount = p_path.find_last_of(__FORWARDSLASH) + 1;
+	size_t characterCount = p_path.find_last_of(AmberEngine::Data::Constants::FORWARDSLASH) + 1;
 
-	characterCount = characterCount > 0 ? characterCount :  p_path.find_last_of(__BACKSLASH) + 1;
+	characterCount = characterCount > 0 ? characterCount :  p_path.find_last_of(AmberEngine::Data::Constants::BACKSLASH) + 1;
 
 	return p_path.substr(0, characterCount);
 }
 
 std::string Utils::String::ExtractFileNameFromPath(const std::string& p_path)
 {
-	size_t characterCount = p_path.find_last_of(__FORWARDSLASH) + 1;
+	size_t characterCount = p_path.find_last_of(AmberEngine::Data::Constants::FORWARDSLASH) + 1;
 
-	characterCount = characterCount > 0 ? characterCount : p_path.find_last_of(__BACKSLASH) + 1;
+	characterCount = characterCount > 0 ? characterCount : p_path.find_last_of(AmberEngine::Data::Constants::BACKSLASH) + 1;
 
 	return p_path.substr(characterCount);
 }
 
 std::string Utils::String::RemoveExtensionFromFileName(const std::string& p_file)
 {
-	const size_t characterCount = p_file.find_last_of(__DOT);
+	const size_t characterCount = p_file.find_last_of(AmberEngine::Data::Constants::DOT);
 
 	if(characterCount > 0 && characterCount != std::string::npos)
 	{

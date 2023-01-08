@@ -2,6 +2,11 @@
 
 #include "AmberEngine/Tools/Utils/Maths.h"
 
+float AmberEngine::Utils::Maths::Lerp(const float p_start, const float p_end, const float p_alpha)
+{
+	return p_start + (p_end - p_start) * p_alpha;
+}
+
 uint32_t AmberEngine::Utils::Maths::Pack(uint8_t p_value1, uint8_t p_value2, uint8_t p_value3, uint8_t p_value4)
 {
 	return (p_value1 << 24) | (p_value2 << 16) | (p_value3 << 8) | p_value4;

@@ -1,6 +1,6 @@
 #include "Amberpch.h"
 
-#include "AmberEngine/UI/Hierarchy.h"
+#include "AmberEngine/UI/Panels/Hierarchy.h"
 
 #include "AmberEngine/Data/Constants.h"
 

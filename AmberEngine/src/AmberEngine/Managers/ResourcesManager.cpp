@@ -31,10 +31,6 @@
 std::string AmberEngine::Managers::ResourcesManager::__PROJECT_ASSETS_PATH = "";
 std::string AmberEngine::Managers::ResourcesManager::__ENGINE_ASSETS_PATH = "";
 
-AmberEngine::Managers::ResourcesManager::ResourcesManager()
-{
-}
-
 AmberEngine::Resources::Model& AmberEngine::Managers::ResourcesManager::LoadModel(const std::string_view p_name, const std::string& p_filePath)
 {
 	if (m_modelResources.find(p_name) != m_modelResources.end())

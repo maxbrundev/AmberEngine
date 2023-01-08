@@ -2,9 +2,12 @@
 
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-AmberEngine::LowRenderer::CameraController::CameraController(Context::Window& p_window, Inputs::InputManager& p_inputManager, const glm::vec3& p_position) :
-	m_window(p_window),
-	inputManager(p_inputManager),
+#include "AmberEngine/Tools/Utils/ServiceLocator.h"
+
+AmberEngine::LowRenderer::CameraController::CameraController(Camera& p_camera, glm::vec3& p_position) :
+	m_window(Utils::ServiceLocator::Get<Context::Window>()),
+	inputManager(Utils::ServiceLocator::Get<Inputs::InputManager>()),
+	m_camera(p_camera), 
 	m_position(p_position)
 {
 	m_camera.SetFov(60.0f);

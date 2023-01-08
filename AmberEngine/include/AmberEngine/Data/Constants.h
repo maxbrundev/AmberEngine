@@ -27,5 +27,13 @@ namespace AmberEngine::Data
 		static const std::string EDITOR_PANEL_HIERARCHY_NAME;
 
 		static const std::string EDITOR_TREE_NODE_HIERARCHY_LABEL_ROOT;
+
+		static const float EDITOR_FONT_SIZE_SMALL;
+		static const float EDITOR_FONT_SIZE_MEDIUM;
+		static const float EDITOR_FONT_SIZE_BIG;
+
+		static const char BACKSLASH;
+		static const char FORWARDSLASH;
+		static const char DOT;
 	};
 }

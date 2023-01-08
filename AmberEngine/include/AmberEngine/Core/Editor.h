@@ -4,9 +4,9 @@
 
 #include "AmberEngine/Core/Context.h"
 
-#include "AmberEngine/UI/Views/SceneView.h"
-#include "AmberEngine/UI/Hierarchy.h"
-#include "AmberEngine/UI/MenuBar.h"
+#include "AmberEngine/UI/Panels/Views/SceneView.h"
+#include "AmberEngine/UI/Panels/Hierarchy.h"
+#include "AmberEngine/UI/Panels/MenuBar.h"
 
 namespace AmberEngine::Core
 {
@@ -21,16 +21,17 @@ namespace AmberEngine::Core
 		void PostUpdate() const;
 		void UpdateLights(SceneSystem::Scene& p_scene) const;
 		void RenderViews(float p_deltaTime);
+		void RenderScene();
 		void HandleInput() const;
 		void InitMaterials();
-		void InitUI();
+		void InitializeUI();
 		void OnNormalsColorsVisualization(bool p_value);
 		void ToggleNormalVisualization() const;
 
 	public:
 		Context& m_context;
 		
-		UI::SceneView m_sceneView;
+		std::unique_ptr<UI::SceneView> m_sceneView;
 		UI::Hierarchy m_hierarchy;
 		UI::MenuBar m_menuBar;
 

@@ -7,8 +7,8 @@
 
 AmberEngine::Core::EditorResources::EditorResources(const std::string& p_editorAssetsPath)
 {
-	std::string modelsFolder	= p_editorAssetsPath + "Models\\";
-	std::string shadersFolder	= p_editorAssetsPath + "Shaders\\";
+	const std::string modelsFolder	= p_editorAssetsPath + "Models\\";
+	const std::string shadersFolder	= p_editorAssetsPath + "Shaders\\";
 
 	m_models["Cube"]            = &Managers::ResourcesManager::Instance().LoadModel("Cube", modelsFolder + "Cube.fbx");
 	m_models["Cylinder"]        = &Managers::ResourcesManager::Instance().LoadModel("Cylinder", modelsFolder + "Cylinder.fbx");
@@ -17,7 +17,7 @@ AmberEngine::Core::EditorResources::EditorResources(const std::string& p_editorA
 	m_models["Roll"]            = &Managers::ResourcesManager::Instance().LoadModel("Roll", modelsFolder + "Roll.fbx");
 	m_models["Sphere"]          = &Managers::ResourcesManager::Instance().LoadModel("Sphere", modelsFolder + "Sphere.fbx");
 
-	auto normalsSource = Resources::RawShader::GetNormalVisualizer();
+	const auto normalsSource = Resources::RawShader::GetNormalVisualizer();
 
 	m_shaders["NormalsColors"] = Resources::Loaders::ShaderLoader::CreateFromSource(normalsSource.first, normalsSource.second);
 }

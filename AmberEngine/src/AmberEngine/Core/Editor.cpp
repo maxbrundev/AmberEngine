@@ -3,21 +3,23 @@
 #include "AmberEngine/Core/Editor.h"
 
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
+#include "AmberEngine/Data/Constants.h"
 #include "AmberEngine/Managers/ResourcesManager.h"
+#include "AmberEngine/Tools/Utils/ServiceLocator.h"
 
-AmberEngine::Core::Editor::Editor(Context& p_context) :
-	m_context(p_context),
-	m_sceneView(m_context),
-	m_hierarchy(),
-	m_menuBar(m_context)
+AmberEngine::Core::Editor::Editor(Context& p_context) : m_context(p_context)
 {
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
 	{
 		m_context.engineUBO->SetSubData(p_modelMatrix, 0);
 	});
 
+	m_sceneView = std::make_unique<UI::SceneView>(Data::Constants::EDITOR_PANEL_SCENE_NAME, true);
+
 	InitMaterials();
-	InitUI();
+	InitializeUI();
+
+	Utils::ServiceLocator::Provide(*this);
 }
 
 void AmberEngine::Core::Editor::PreUpdate() const
@@ -32,6 +34,7 @@ void AmberEngine::Core::Editor::PreUpdate() const
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
+	m_context.m_scene.Update(p_deltaTime);
 	RenderViews(p_deltaTime);
 	HandleInput();
 }
@@ -50,19 +53,23 @@ void AmberEngine::Core::Editor::UpdateLights(SceneSystem::Scene& p_scene) const
 
 void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 {
-	m_sceneView.Update(p_deltaTime);
-	m_sceneView.Render();
+	m_sceneView->Update(p_deltaTime);
+	
+	m_sceneView->Render();
+	m_sceneView->Draw();
 
-	UpdateLights(m_context.m_scene);
-	m_context.lightSSBO->Bind(0);
-	m_context.m_scene.DrawAll(*m_context.renderer, &m_defaultMaterial);
-	m_context.lightSSBO->Unbind();
-
-	m_sceneView.Draw();
 	m_hierarchy.Draw();
 	m_menuBar.Draw();
 
 	m_context.uiManager->PostDraw();
+}
+
+void AmberEngine::Core::Editor::RenderScene()
+{
+	UpdateLights(m_context.m_scene);
+	m_context.lightSSBO->Bind(0);
+	m_context.m_scene.DrawAll(*m_context.renderer, &m_defaultMaterial);
+	m_context.lightSSBO->Unbind();
 }
 
 void AmberEngine::Core::Editor::HandleInput() const
@@ -79,7 +86,7 @@ void AmberEngine::Core::Editor::InitMaterials()
 	m_defaultMaterial.SetShader(&Managers::ResourcesManager::Instance().GetShader("Standard"));
 }
 
-void AmberEngine::Core::Editor::InitUI()
+void AmberEngine::Core::Editor::InitializeUI()
 {
 	m_context.uiManager->EnableDocking(true);
 

@@ -73,9 +73,9 @@ void Example::Application::Run()
 	float positionY2;
 	float positionZ2;
 
-	float positionX3;
-	float positionY3;
-	float positionZ3;
+	float rotationX3;
+	float rotationY3;
+	float rotationZ3;
 	float intensity;
 
 	while (IsRunning())
@@ -100,25 +100,25 @@ void Example::Application::Run()
 			
 			if (testActor3)
 			{
-				positionX3 = testActor3->GetTransform().GetLocalRotationEuler().x;
-				positionY3 = testActor3->GetTransform().GetLocalRotationEuler().y;
-				positionZ3 = testActor3->GetTransform().GetLocalRotationEuler().z;
+				rotationX3 = testActor3->GetTransform().GetLocalRotationEuler().x;
+				rotationY3 = testActor3->GetTransform().GetLocalRotationEuler().y;
+				rotationZ3 = testActor3->GetTransform().GetLocalRotationEuler().z;
 			}
 			
 			ImGui::Begin("Directional Test");
-			ImGui::SliderFloat("Rotation X", &rotationX, 0.0f, 360.0f);
-			ImGui::SliderFloat("Rotation Y", &rotationY, 0.0f, 360.0f);
-			ImGui::SliderFloat("Rotation Z", &rotationZ, 0.0f, 360.0f);
+			ImGui::DragFloat("Rotation X", &rotationX);
+			ImGui::DragFloat("Rotation Y", &rotationY);
+			ImGui::DragFloat("Rotation Z", &rotationZ);
 			
-			ImGui::SliderFloat("Position X2", &positionX2, -100.0f, 100.0f);
-			ImGui::SliderFloat("Position Y2", &positionY2, -100.0f, 100.0f);
-			ImGui::SliderFloat("Position Z2", &positionZ2, -100.0f, 100.0f);
+			ImGui::DragFloat("Position X2", &positionX2);
+			ImGui::DragFloat("Position Y2", &positionY2);
+			ImGui::DragFloat("Position Z2", &positionZ2);
 			
-			ImGui::SliderFloat("Position X3", &positionX3, -360.0f, 360.0f);
-			ImGui::SliderFloat("Position Y3", &positionY3, -360.0f, 360.0f);
-			ImGui::SliderFloat("Position Z3", &positionZ3, -360.0f, 360.0f);
+			ImGui::DragFloat("Position X3", &rotationX3);
+			ImGui::DragFloat("Position Y3", &rotationY3);
+			ImGui::DragFloat("Position Z3", &rotationZ3);
 			
-			ImGui::SliderFloat("Intensity", &intensity, 0.0f, 1.0f);
+			ImGui::DragFloat("Intensity", &intensity);
 			ImGui::End();
 			
 			if (directionalLight)
@@ -131,7 +131,7 @@ void Example::Application::Run()
 				testActor2->GetTransform().SetLocalPosition({ positionX2, positionY2, positionZ2 });
 			
 			if (testActor3)
-				testActor3->GetTransform().SetLocalRotation({ positionX3, positionY3, positionZ3 });
+				testActor3->GetTransform().SetLocalRotation({ rotationX3, rotationY3, rotationZ3 });
 			
 			if (m_context.inputManager->IsKeyPressed(AmberEngine::Inputs::EKey::KEY_R))
 			{
