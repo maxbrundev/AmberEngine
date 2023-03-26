@@ -10,6 +10,7 @@
 
 AmberEngine::UI::AView::AView(const std::string& p_title, bool p_opened) :
 APanel(p_title, p_opened),
+m_cameraPosition(0.0f),
 m_frameBuffer(256, 144)
 {}
 
