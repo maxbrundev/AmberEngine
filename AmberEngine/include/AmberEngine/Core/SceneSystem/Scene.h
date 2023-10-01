@@ -11,7 +11,7 @@ namespace AmberEngine::Core::SceneSystem
 	{
 	public:
 		Scene(std::string p_name);
-		~Scene();
+		~Scene() = default;
 
 		void AddActor(ECS::Actor* p_actor);
 		void DestroyActor(ECS::Actor*& p_actor);
@@ -19,8 +19,13 @@ namespace AmberEngine::Core::SceneSystem
 		void DrawAll(Renderer& p_renderer, Resources::Material* p_defaultMaterial) const;
 		void Update(float p_deltaTime) const;
 
+		void Unload();
+
 		std::unordered_map<std::string, ECS::Actor*>& GetActors();
 		const std::vector<ECS::Components::LightComponent*>& GetLights();
+
+	public:
+		Eventing::Event<> SceneUnloadEvent;
 
 	private:
 		bool m_isDebugingNormal = false;

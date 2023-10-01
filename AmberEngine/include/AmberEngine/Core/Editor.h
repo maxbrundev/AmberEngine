@@ -4,9 +4,12 @@
 
 #include "AmberEngine/Core/Context.h"
 
-#include "AmberEngine/UI/Panels/Views/SceneView.h"
-#include "AmberEngine/UI/Panels/Hierarchy.h"
-#include "AmberEngine/UI/Panels/MenuBar.h"
+#include "AmberEngine/UI/Canvas.h"
+
+namespace AmberEngine::Managers
+{
+	class PanelsManager;
+}
 
 namespace AmberEngine::Core
 {
@@ -14,14 +17,15 @@ namespace AmberEngine::Core
 	{
 	public:
 		Editor(Context& p_context);
-		~Editor() = default;
+		~Editor();
 
 		void PreUpdate() const;
 		void Update(float p_deltaTime);
 		void PostUpdate() const;
 		void UpdateLights(SceneSystem::Scene& p_scene) const;
-		void RenderViews(float p_deltaTime);
+		void RenderViews(float p_deltaTime) const;
 		void RenderScene();
+		void RenderUI() const;
 		void HandleInput() const;
 		void InitMaterials();
 		void InitializeUI();
@@ -30,13 +34,14 @@ namespace AmberEngine::Core
 
 	public:
 		Context& m_context;
-		
-		std::unique_ptr<UI::SceneView> m_sceneView;
-		UI::Hierarchy m_hierarchy;
-		UI::MenuBar m_menuBar;
+
+		UI::Canvas m_canvas;
+
+		std::unique_ptr<Managers::PanelsManager> m_panelsManager;
 
 		Resources::Material m_defaultMaterial;
 
+		//TODO: Remove.
 		bool isNormalsColorsVisualization = false;
 	};
 }

@@ -5,23 +5,10 @@
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
 #include "AmberEngine/Core/ECS/Components/LightComponent.h"
 
-#include "AmberEngine/Resources/Shader.h"
-
 AmberEngine::Core::SceneSystem::Scene::Scene(std::string p_name) : m_name(std::move(p_name))
 {
 }
 
-AmberEngine::Core::SceneSystem::Scene::~Scene()
-{
-	for (auto& actor : m_actors)
-	{
-		delete actor.second;
-		actor.second = nullptr;
-	}
-
-	m_actors.clear();
-	m_lights.clear();
-}
 
 void AmberEngine::Core::SceneSystem::Scene::AddActor(ECS::Actor* p_actor)
 {
@@ -64,6 +51,20 @@ void AmberEngine::Core::SceneSystem::Scene::Update(float p_deltaTime) const
 		// TODO: Find a better way to access lights.
 		actor.second->Update(m_lights, p_deltaTime);
 	}
+}
+
+void AmberEngine::Core::SceneSystem::Scene::Unload()
+{
+	for (auto& actor : m_actors)
+	{
+		delete actor.second;
+		actor.second = nullptr;
+	}
+
+	SceneUnloadEvent.Invoke();
+
+	m_actors.clear();
+	m_lights.clear();
 }
 
 std::unordered_map<std::string, AmberEngine::ECS::Actor*>& AmberEngine::Core::SceneSystem::Scene::GetActors()

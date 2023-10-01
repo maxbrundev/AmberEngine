@@ -1,27 +1,32 @@
 #pragma once
 
+#include "AmberEngine/UI/Panels/APanelWindow.h"
 #include "AmberEngine/Core/ECS/Actor.h"
+
+class TreeNode;
 
 namespace AmberEngine::UI
 {
-	class Hierarchy
+	class Hierarchy : public APanelWindow
 	{
 	public:
-		static uint64_t __TREENODE_ID;
+		Hierarchy(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings);
+		~Hierarchy() override = default;
 
-	public:
-		Hierarchy();
-		~Hierarchy();
-
-	public:
+		void Clear();
+		void AttachActorNodeToParentNode(ECS::Actor& p_actor);
+		void DetachActorNodeFromParentNode(ECS::Actor& p_actor);
 		void AddActorByInstance(ECS::Actor& p_actor);
 		void DeleteActorByInstance(ECS::Actor& p_actor);
-		void Draw() const;
+
+	protected:
+		void DrawContent() override;
 
 	private:
 		uint64_t m_destroyedListener;
-		const std::string& m_name;
-		std::string m_rootID;
-		std::unordered_map<ECS::Actor*, std::string> m_actors;
+
+		TreeNode* m_root;
+
+		std::unordered_map<ECS::Actor*, TreeNode*> m_widgetActorLink;
 	};
 }

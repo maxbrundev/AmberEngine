@@ -10,8 +10,7 @@
 AmberEngine::Core::Context::Context(const std::string& p_projectPath, const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
 	engineAssetsPath(Data::Constants::ENGINE_ASSETS_PATH),
 	editorAssetsPath(Data::Constants::EDITOR_ASSETS_PATH),
-	projectAssetsPath(p_projectPath + Data::Constants::PROJECT_ASSETS_PATH),
-	m_scene("TestScene")
+	projectAssetsPath(p_projectPath + Data::Constants::PROJECT_ASSETS_PATH)
 {
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
 	window = std::make_unique<AmberEngine::Context::Window>(*device, p_windowSettings);
@@ -54,6 +53,8 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	lightSSBO = std::make_unique<Buffers::ShaderStorageBuffer>(Buffers::EAccessSpecifier::STREAM_DRAW);
 
 	Managers::ResourcesManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
+
+	m_scene = new SceneSystem::Scene("Test");
 }
 
 AmberEngine::Core::Context::~Context()

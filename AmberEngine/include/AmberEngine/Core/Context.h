@@ -40,6 +40,6 @@ namespace AmberEngine::Core
 		std::unique_ptr<Buffers::ShaderStorageBuffer>	lightSSBO;
 		std::unique_ptr<Core::EditorResources>			m_editorResources;
 
-		SceneSystem::Scene m_scene;
+		SceneSystem::Scene* m_scene;
 	};
 }

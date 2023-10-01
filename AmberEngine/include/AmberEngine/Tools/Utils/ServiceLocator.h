@@ -4,7 +4,7 @@
 
 //#define OVSERVICE(Type) OvCore::Global::ServiceLocator::Get<Type>()
 
-namespace Utils
+namespace AmberEngine::Utils
 {
 	class API_AMBERENGINE ServiceLocator
 	{

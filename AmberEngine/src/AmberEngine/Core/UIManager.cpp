@@ -2,6 +2,8 @@
 
 #include "AmberEngine/Core/UIManager.h"
 
+#include "AmberEngine/UI/Canvas.h"
+
 AmberEngine::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion) : m_dockingState(false)
 {
 	IMGUI_CHECKVERSION();
@@ -83,35 +85,24 @@ void AmberEngine::Core::UIManager::EnableDocking(bool p_value)
 		ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_DockingEnable;
 }
 
-void AmberEngine::Core::UIManager::PreDraw() const
+void AmberEngine::Core::UIManager::SetCanvas(UI::Canvas& p_canvas)
 {
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(viewport->Pos);
-	ImGui::SetNextWindowSize(viewport->Size);
-	ImGui::SetNextWindowViewport(viewport->ID);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-	ImGui::Begin("##dockspace", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking);
-	const ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
-	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
-	ImGui::SetWindowPos({ 0.0f, 0.0f });
-	ImVec2 displaySize = ImGui::GetIO().DisplaySize;
-	ImGui::SetWindowSize({ displaySize.x, displaySize.y });
-	ImGui::End();
-
-	ImGui::PopStyleVar(3);
+	RemoveCanvas();
+	m_canvas = &p_canvas;
 }
 
-void AmberEngine::Core::UIManager::PostDraw() const
+void AmberEngine::Core::UIManager::RemoveCanvas()
 {
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	m_canvas = nullptr;
+}
+
+void AmberEngine::Core::UIManager::Render() const
+{
+	if (m_canvas)
+	{
+		m_canvas->Draw();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
 }
 
 void AmberEngine::Core::UIManager::ApplyStyle()
@@ -119,7 +110,7 @@ void AmberEngine::Core::UIManager::ApplyStyle()
 	ImGui::StyleColorsDark();
 
 	ImGuiStyle* style = &ImGui::GetStyle();
-
+	
 	style->WindowPadding     = ImVec2(15, 15);
 	style->WindowRounding    = 5.0f;
 	style->FramePadding      = ImVec2(5, 5);
@@ -131,7 +122,7 @@ void AmberEngine::Core::UIManager::ApplyStyle()
 	style->ScrollbarRounding = 9.0f;
 	style->GrabMinSize       = 5.0f;
 	style->GrabRounding      = 3.0f;
-
+	
 	style->Colors[ImGuiCol_Text]                 = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
 	style->Colors[ImGuiCol_TextDisabled]         = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	style->Colors[ImGuiCol_WindowBg]             = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
@@ -171,6 +162,6 @@ void AmberEngine::Core::UIManager::ApplyStyle()
 	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
 	style->Colors[ImGuiCol_TextSelectedBg]       = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 	style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
-
+	
 	style->Colors[ImGuiCol_Tab] = style->Colors[ImGuiCol_TabUnfocused];
 }

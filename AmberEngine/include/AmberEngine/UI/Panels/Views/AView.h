@@ -1,35 +1,31 @@
 #pragma once
 
-#include "AmberEngine/UI/Panels/APanel.h"
-
 #include "AmberEngine/LowRenderer/Camera.h"
 
 #include "AmberEngine/Buffers/FrameBuffer.h"
+#include "AmberEngine/UI/Panels/APanelWindow.h"
 
 namespace AmberEngine::UI
 {
-	class AView : public APanel
+	class AView : public APanelWindow
 	{
 	public:
-		AView(const std::string& p_title, bool p_opened);
+		AView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings);
 		~AView() override;
 
-		void UpdateSize();
+		virtual void Update(float p_deltaTime);
+
 		void PrepareCamera();
 		void FillEngineUBO();
-
 		void ResizeFrameBuffer(uint16_t p_width, uint16_t p_height);
-
 		void Render();
-		void Draw();
 
 	protected:
-		virtual void Update(float p_deltaTime) override;
 		virtual void DrawImplementation() override;
-
 		virtual void RenderImplementation() = 0;
 
 	protected:
+		
 		glm::vec3 m_cameraPosition;
 		LowRenderer::Camera m_camera;
 	

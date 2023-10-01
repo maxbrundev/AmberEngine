@@ -2,8 +2,6 @@
 
 #include "AmberEngine/Context/Driver.h"
 
-#include "AmberEngine/Debug/GLDebug.h"
-
 AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSettings)
 {
 	InitGlew();
@@ -18,7 +16,7 @@ AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSet
 		{
 			glEnable(GL_DEBUG_OUTPUT);
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-			glDebugMessageCallback(Debug::GLDebug::GLDebugMessageCallback, nullptr);
+			glDebugMessageCallback(GLDebugMessageCallback, nullptr);
 			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 		}
 	}
@@ -41,7 +39,14 @@ AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSet
 	if(p_driverSettings.enableMultisample)
 		glEnable(GL_MULTISAMPLE);
 
+	m_apiVersion = (char*)glGetString(GL_VERSION);
+	m_libraryVersion = (char*)glewGetString(GLEW_VERSION);
+	m_render = (char*)glGetString(GL_RENDERER);
+	m_vendor = (char*)glGetString(GL_VENDOR);
+	m_shading_language_version = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+
 	DisplayDriverInfo();
+
 }
 
 void AmberEngine::Context::Driver::InitGlew()
@@ -56,12 +61,105 @@ void AmberEngine::Context::Driver::InitGlew()
 	}
 }
 
-void AmberEngine::Context::Driver::DisplayDriverInfo()
+void AmberEngine::Context::Driver::GLDebugMessageCallback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, const char* message, const void* userParam)
 {
-	std::cout << "Using GLEW: " << glewGetString(GLEW_VERSION) << std::endl;
+	// ignore non-significant error/warning codes
+	if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
-	std::cout << glGetString(GL_VERSION) << std::endl;
-	std::cout << glGetString(GL_VENDOR) << std::endl;
-	std::cout << glGetString(GL_RENDERER) << std::endl;
-	std::cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	std::string output;
+
+	output += "OpenGL Debug Message:\n";
+	output += "Debug message (" + std::to_string(id) + "): " + message + "\n";
+
+	switch (source)
+	{
+	case GL_DEBUG_SOURCE_API:				output += "Source: API";				break;
+	case GL_DEBUG_SOURCE_WINDOW_SYSTEM:		output += "Source: Window System";		break;
+	case GL_DEBUG_SOURCE_SHADER_COMPILER:	output += "Source: Shader Compiler";	break;
+	case GL_DEBUG_SOURCE_THIRD_PARTY:		output += "Source: Third Party";		break;
+	case GL_DEBUG_SOURCE_APPLICATION:		output += "Source: Application";		break;
+	case GL_DEBUG_SOURCE_OTHER:				output += "Source: Other";				break;
+	}
+
+	output += "\n";
+
+	switch (type)
+	{
+	case GL_DEBUG_TYPE_ERROR:               output += "Type: Error";				break;
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: output += "Type: Deprecated Behaviour"; break;
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  output += "Type: Undefined Behaviour";	break;
+	case GL_DEBUG_TYPE_PORTABILITY:         output += "Type: Portability";			break;
+	case GL_DEBUG_TYPE_PERFORMANCE:         output += "Type: Performance";			break;
+	case GL_DEBUG_TYPE_MARKER:              output += "Type: Marker";				break;
+	case GL_DEBUG_TYPE_PUSH_GROUP:          output += "Type: Push Group";			break;
+	case GL_DEBUG_TYPE_POP_GROUP:           output += "Type: Pop Group";			break;
+	case GL_DEBUG_TYPE_OTHER:               output += "Type: Other";				break;
+	}
+
+	output += "\n";
+
+	switch (severity)
+	{
+	case GL_DEBUG_SEVERITY_HIGH:			output += "Severity: High";				break;
+	case GL_DEBUG_SEVERITY_MEDIUM:			output += "Severity: Medium";			break;
+	case GL_DEBUG_SEVERITY_LOW:				output += "Severity: Low";				break;
+	case GL_DEBUG_SEVERITY_NOTIFICATION:	output += "Severity: Notification";		break;
+	}
+	output += '\n';
+
+	std::cout << output;
+}
+
+void AmberEngine::Context::Driver::DisplayDriverInfo() const
+{
+	std::string output;
+
+	output += "Using GLEW: ";
+
+	output += m_libraryVersion;
+
+	output += '\n';
+
+	output += m_apiVersion;
+
+	output += '\n';
+
+	output += m_render;
+
+	output += '\n';
+
+	output += m_vendor;
+
+	output += '\n';
+
+	output += m_shading_language_version;
+
+	output += '\n';
+
+	std::cout << output << "\n";
+}
+
+std::string_view AmberEngine::Context::Driver::m_api_version() const
+{
+	return m_apiVersion;
+}
+
+std::string_view AmberEngine::Context::Driver::m_library_version() const
+{
+	return m_libraryVersion;
+}
+
+std::string_view AmberEngine::Context::Driver::m_render1() const
+{
+	return m_render;
+}
+
+std::string_view AmberEngine::Context::Driver::m_vendor1() const
+{
+	return m_vendor;
+}
+
+std::string_view AmberEngine::Context::Driver::m_shading_language_version1() const
+{
+	return m_shading_language_version;
 }

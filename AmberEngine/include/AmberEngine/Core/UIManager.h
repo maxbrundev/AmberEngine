@@ -1,12 +1,15 @@
 #pragma once
 
-#include "AmberEngine/API/Export.h"
-
 #include "AmberEngine/ImGUI/imgui.h"
+
+namespace AmberEngine::UI
+{
+	class Canvas;
+}
 
 namespace AmberEngine::Core
 {
-	class API_AMBERENGINE UIManager
+	class UIManager
 	{
 	public:
 		UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion = "#version 150");
@@ -17,14 +20,16 @@ namespace AmberEngine::Core
 		bool UseFont(const std::string& p_id);
 		void UseDefaultFont();
 		void EnableDocking(bool p_value);
-		void PreDraw() const;
-		void PostDraw() const;
+		void SetCanvas(UI::Canvas& p_canvas);
+		void RemoveCanvas();
+		void Render() const;
 
 	private:
 		void ApplyStyle();
 
 	private:
 		bool m_dockingState;
+		UI::Canvas* m_canvas;
 		std::unordered_map<std::string, ImFont*> m_fonts;
 	};
 }

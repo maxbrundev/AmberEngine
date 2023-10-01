@@ -9,7 +9,7 @@ namespace AmberEngine::Buffers
 	class API_AMBERENGINE FrameBuffer
 	{
 	public:
-		FrameBuffer(uint16_t p_width, uint16_t p_height);
+		FrameBuffer(uint16_t p_width = 0, uint16_t p_height = 0);
 		~FrameBuffer();
 
 		void Bind() const;

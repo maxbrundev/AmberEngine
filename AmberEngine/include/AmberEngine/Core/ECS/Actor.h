@@ -14,16 +14,14 @@ namespace AmberEngine::ECS
 	class API_AMBERENGINE Actor
 	{
 	public:
-		static Eventing::Event<Actor&> CreatedEvent;
-		static Eventing::Event<Actor&> DestroyEvent;
+		static Eventing::Event<Actor&>         CreatedEvent;
+		static Eventing::Event<Actor&>         DestroyEvent;
+		static Eventing::Event<Actor&, Actor&> AttachEvent;
+		static Eventing::Event<Actor&>         DettachEvent;
 
 	public:
 		Actor(std::string p_name);
 		~Actor();
-
-		void Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime) const;
-
-		void RemoveParent();
 
 		template<typename T>
 		void AddComponent(T* p_component)
@@ -86,12 +84,18 @@ namespace AmberEngine::ECS
 			return nullptr;
 		}
 
+		void Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime) const;
+
+	
+		void SetName(std::string p_name);
+	
+		void SetParent(Actor& p_parent);
+		void RemoveParent();
+		bool HasParent() const;
 		bool HasChildren() const;
 
-		void SetName(std::string p_name);
-		void SetParent(Actor& p_parent);
-
 		std::string GetName();
+
 		Actor* GetParent() const;
 
 		std::vector<Actor*>& GetChildren();

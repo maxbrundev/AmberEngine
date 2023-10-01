@@ -3,23 +3,37 @@
 #include "AmberEngine/Core/Editor.h"
 
 #include "AmberEngine/Core/ECS/Components/ModelComponent.h"
-#include "AmberEngine/Data/Constants.h"
-#include "AmberEngine/Managers/ResourcesManager.h"
-#include "AmberEngine/Tools/Utils/ServiceLocator.h"
 
-AmberEngine::Core::Editor::Editor(Context& p_context) : m_context(p_context)
+#include "AmberEngine/Managers/ResourcesManager.h"
+#include "AmberEngine/Managers/PanelsManager.h"
+
+#include "AmberEngine/UI/MenuBar.h"
+#include "AmberEngine/UI/Panels/Hierarchy.h"
+#include "AmberEngine/UI/Panels/Views/SceneView.h"
+
+#include "AmberEngine/Tools/Utils/ServiceLocator.h"
+#include "AmberEngine/UI/DriverInfoPanel.h"
+
+
+AmberEngine::Core::Editor::Editor(Context& p_context) :
+m_context(p_context)
 {
 	m_context.renderer->RegisterModelMatrixSender([this](const glm::mat4& p_modelMatrix)
 	{
 		m_context.engineUBO->SetSubData(p_modelMatrix, 0);
 	});
 
-	m_sceneView = std::make_unique<UI::SceneView>(Data::Constants::EDITOR_PANEL_SCENE_NAME, true);
+	m_panelsManager = std::make_unique<Managers::PanelsManager>(m_canvas);
 
 	InitMaterials();
 	InitializeUI();
 
 	Utils::ServiceLocator::Provide(*this);
+}
+
+AmberEngine::Core::Editor::~Editor()
+{
+	m_context.m_scene->Unload();
 }
 
 void AmberEngine::Core::Editor::PreUpdate() const
@@ -28,14 +42,13 @@ void AmberEngine::Core::Editor::PreUpdate() const
 
 	m_context.renderer->SetClearColor(0.1f, 0.1f, 0.1f);
 	m_context.renderer->Clear(true, true, true);
-
-	m_context.uiManager->PreDraw();
 }
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
-	m_context.m_scene.Update(p_deltaTime);
+	m_context.m_scene->Update(p_deltaTime);
 	RenderViews(p_deltaTime);
+	RenderUI();
 	HandleInput();
 }
 
@@ -51,25 +64,26 @@ void AmberEngine::Core::Editor::UpdateLights(SceneSystem::Scene& p_scene) const
 	m_context.lightSSBO->SendBlocks<glm::mat4>(lightMatrices.data(), lightMatrices.size() * sizeof(glm::mat4));
 }
 
-void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
+void AmberEngine::Core::Editor::RenderViews(float p_deltaTime) const
 {
-	m_sceneView->Update(p_deltaTime);
+	auto& sceneView = m_panelsManager->GetPanelAs<UI::SceneView>("Scene View");
 	
-	m_sceneView->Render();
-	m_sceneView->Draw();
-
-	m_hierarchy.Draw();
-	m_menuBar.Draw();
-
-	m_context.uiManager->PostDraw();
+	sceneView.Update(p_deltaTime);
+	
+	sceneView.Render();
 }
 
 void AmberEngine::Core::Editor::RenderScene()
 {
-	UpdateLights(m_context.m_scene);
+	UpdateLights(*m_context.m_scene);
 	m_context.lightSSBO->Bind(0);
-	m_context.m_scene.DrawAll(*m_context.renderer, &m_defaultMaterial);
+	m_context.m_scene->DrawAll(*m_context.renderer, &m_defaultMaterial);
 	m_context.lightSSBO->Unbind();
+}
+
+void AmberEngine::Core::Editor::RenderUI() const
+{
+	m_context.uiManager->Render();
 }
 
 void AmberEngine::Core::Editor::HandleInput() const
@@ -88,9 +102,18 @@ void AmberEngine::Core::Editor::InitMaterials()
 
 void AmberEngine::Core::Editor::InitializeUI()
 {
-	m_context.uiManager->EnableDocking(true);
+	PanelSettings settings;
+	settings.closable    = true;
+	settings.collapsable = true;
+	settings.dockable    = true;
 
-	m_menuBar.NormalsColorsVisualizationCallback = Eventing::QuickBind(&Editor::OnNormalsColorsVisualization, this);
+	m_panelsManager->CreatePanel<MenuBar>("MenuBar");
+	m_panelsManager->CreatePanel<UI::SceneView>("Scene View", true, settings);
+	m_panelsManager->CreatePanel<UI::Hierarchy>("Hierarchy", true, settings);
+	m_panelsManager->CreatePanel<DriverInfoPanel>("Driver Info", true, settings);
+
+	m_canvas.MakeDockspace(true);
+	m_context.uiManager->SetCanvas(m_canvas);
 }
 
 void AmberEngine::Core::Editor::OnNormalsColorsVisualization(bool p_value)
@@ -105,7 +128,7 @@ void AmberEngine::Core::Editor::OnNormalsColorsVisualization(bool p_value)
 
 void AmberEngine::Core::Editor::ToggleNormalVisualization() const
 {
-	for (const auto& actor : m_context.m_scene.GetActors())
+	for (const auto& actor : m_context.m_scene->GetActors())
 	{
 		if (const auto model = actor.second->GetComponent<ECS::Components::ModelComponent>())
 		{

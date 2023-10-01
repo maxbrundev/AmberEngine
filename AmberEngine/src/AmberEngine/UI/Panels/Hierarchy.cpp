@@ -2,80 +2,100 @@
 
 #include "AmberEngine/UI/Panels/Hierarchy.h"
 
-#include "AmberEngine/Data/Constants.h"
+#include "AmberEngine/Core/Context.h"
 
-uint64_t AmberEngine::UI::Hierarchy::__TREENODE_ID = 0;
+#include "AmberEngine/Tools/Utils/ServiceLocator.h"
 
-AmberEngine::UI::Hierarchy::Hierarchy() : m_name(Data::Constants::EDITOR_PANEL_HIERARCHY_NAME)
+#include "AmberEngine/UI/TreeNode.h"
+
+AmberEngine::UI::Hierarchy::Hierarchy(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
+APanelWindow(p_title, p_opened, p_panelSettings)
 {
 	ECS::Actor::CreatedEvent += std::bind(&Hierarchy::AddActorByInstance, this, std::placeholders::_1);
 	m_destroyedListener = ECS::Actor::DestroyEvent += std::bind(&Hierarchy::DeleteActorByInstance, this, std::placeholders::_1);
+	ECS::Actor::AttachEvent += std::bind(&Hierarchy::AttachActorNodeToParentNode, this, std::placeholders::_1);
+	ECS::Actor::DettachEvent += std::bind(&Hierarchy::DetachActorNodeFromParentNode, this, std::placeholders::_1);
 
-	m_rootID = "##" + std::to_string(__TREENODE_ID++);
+	Utils::ServiceLocator::Get<Core::Context>().m_scene->SceneUnloadEvent += std::bind(&Hierarchy::Clear, this);
+
+	m_root = new TreeNode("Root", true);
 }
 
-AmberEngine::UI::Hierarchy::~Hierarchy()
+void AmberEngine::UI::Hierarchy::Clear()
 {
 	ECS::Actor::DestroyEvent.RemoveListener(m_destroyedListener);
 
-	m_actors.clear();
+	delete m_root;
+	m_root = nullptr;
+
+	m_widgetActorLink.clear();
+}
+
+void AmberEngine::UI::Hierarchy::AttachActorNodeToParentNode(ECS::Actor& p_actor)
+{
+	const auto actorWidget = m_widgetActorLink.find(&p_actor);
+
+	if (actorWidget != m_widgetActorLink.end())
+	{
+		auto widget = actorWidget->second;
+
+		if (widget->HasParent())
+			widget->GetParent()->RemoveChild(*widget);
+
+		if (p_actor.HasParent())
+		{
+			const auto parentWidget = m_widgetActorLink.at(p_actor.GetParent());
+			parentWidget->isLeaf = false;
+			parentWidget->SetChild(*widget);
+		}
+	}
+}
+
+void AmberEngine::UI::Hierarchy::DetachActorNodeFromParentNode(ECS::Actor& p_actor)
+{
+	if (const auto actorWidget = m_widgetActorLink.find(&p_actor); actorWidget != m_widgetActorLink.end())
+	{
+		if (p_actor.HasParent() && p_actor.GetParent()->GetChildren().size() == 1)
+		{
+			if (const auto parentWidget = m_widgetActorLink.find(p_actor.GetParent()); parentWidget != m_widgetActorLink.end())
+			{
+				parentWidget->second->isLeaf = true;
+			}
+		}
+
+		const auto widget = actorWidget->second;
+
+		if (widget->HasParent())
+			widget->GetParent()->RemoveChild(*widget);
+
+		m_root->SetChild(*widget);
+	}
 }
 
 void AmberEngine::UI::Hierarchy::AddActorByInstance(ECS::Actor& p_actor)
 {
-	const std::string actorTreeNodeID = "##" + std::to_string(__TREENODE_ID++);
-	m_actors[&p_actor] = actorTreeNodeID;
+	TreeNode& node = m_root->CreateTreeNodeChild(p_actor.GetName(), true);
+	node.isLeaf = true;
+
+	m_widgetActorLink[&p_actor] = &node;
 }
 
 void AmberEngine::UI::Hierarchy::DeleteActorByInstance(ECS::Actor& p_actor)
 {
-	if(const auto result = m_actors.find(&p_actor); result != m_actors.end())
+	if (const auto result = m_widgetActorLink.find(&p_actor); result != m_widgetActorLink.end())
 	{
-		if (result->first)
+		if (result->second)
 		{
-			m_actors.erase(result->first);
+			m_root->RemoveChild(*result->second);
+
+			delete result->second;
 		}
+
+		m_widgetActorLink.erase(result);
 	}
 }
 
-// TODO: Clean TreeNodeEx usage by creating a dedicated class.
-void AmberEngine::UI::Hierarchy::Draw() const
+void AmberEngine::UI::Hierarchy::DrawContent()
 {
-	ImGui::Begin(m_name.c_str());
-
-	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
-	flags |= ImGuiTreeNodeFlags_Selected;
-	flags |= ImGuiTreeNodeFlags_DefaultOpen;
-
-	if (ImGui::TreeNodeEx((Data::Constants::EDITOR_TREE_NODE_HIERARCHY_LABEL_ROOT + m_rootID).c_str(), flags))
-	{
-		for (auto& actor : m_actors)
-		{
-			if (actor.first->GetTransform().HasParent())
-			{
-				continue;
-			}
-
-			flags = actor.first->HasChildren() ? ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_Leaf;
-
-			if (ImGui::TreeNodeEx((actor.first->GetName() + actor.second).c_str(), flags))
-			{
-				uint64_t childID = 0;
-
-				for(const auto child : actor.first->GetChildren())
-				{
-					if (ImGui::TreeNodeEx((child->GetName() + actor.second + std::to_string(childID++)).c_str(), ImGuiTreeNodeFlags_Leaf))
-					{
-						ImGui::TreePop();
-					}
-				}
-
-				ImGui::TreePop();
-			}
-		}
-
-		ImGui::TreePop();
-	}
-
-	ImGui::End();
+	m_root->Draw();
 }

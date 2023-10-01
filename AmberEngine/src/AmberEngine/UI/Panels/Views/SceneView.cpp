@@ -2,12 +2,13 @@
 
 #include "AmberEngine/UI/Panels/Views/SceneView.h"
 
-#include "AmberEngine/Data/Constants.h"
 #include "AmberEngine/Core/Editor.h"
+#include "AmberEngine/Core/Renderer.h"
+
 #include "AmberEngine/Tools/Utils/ServiceLocator.h"
 
-AmberEngine::UI::SceneView::SceneView(const std::string& p_title, bool p_opened) :
-	AView(Data::Constants::EDITOR_PANEL_SCENE_NAME, p_opened),
+AmberEngine::UI::SceneView::SceneView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
+	AView(p_title, p_opened, p_panelSettings),
 	m_cameraController(m_camera, m_cameraPosition)
 {
 	m_cameraController.GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
@@ -18,7 +19,7 @@ void AmberEngine::UI::SceneView::Update(float p_deltaTime)
 {
 	AView::Update(p_deltaTime);
 
-	if(isHovered)
+	if(IsHovered())
 	{
 		m_cameraController.Update(p_deltaTime);
 	}
@@ -31,7 +32,7 @@ void AmberEngine::UI::SceneView::RenderImplementation()
 	Utils::ServiceLocator::Get<Core::Editor>().RenderScene();
 }
 
-void AmberEngine::UI::SceneView::DrawContentImplementation()
+void AmberEngine::UI::SceneView::DrawContent()
 {
 	auto[winWidth, winHeight] = GetSafeSize();
 
