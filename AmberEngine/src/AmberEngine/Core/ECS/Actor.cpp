@@ -54,7 +54,7 @@ void AmberEngine::ECS::Actor::SetName(std::string p_name)
 
 void AmberEngine::ECS::Actor::SetParent(Actor& p_parent)
 {
-	m_transform.RemoveParent();
+	RemoveParent();
 
 	m_parent = &p_parent;
 	m_transform.SetParent(p_parent.GetTransform());
