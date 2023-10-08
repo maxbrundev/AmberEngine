@@ -1,35 +1,23 @@
-# AmberEngine
-Personal OpenGL C++ Game Engine learning Project
+## AmberEngine
+![AmberEngine](https://github.com/maxbrundev/AmberEngine/assets/32653095/50fbff6e-ee56-4226-9704-76bc2ef00618)
 
-# AmberEngine v0.5.2
-![alt text](Screens/AmberScreen.PNG?raw=true "AmberEngine")
-
-# Requirements
-- OS: Windows 7
-- GPU: Graphics card supporting OpenGL 4.3
+## Description
+Personal Game Engine learning Project.
 
 # Software
 - Visual Studio 2017
 
-# Dependencies
+## Dependencies
 - OpenGL with GLEW (Graphics API)
-- GLFW (Windowing and Inputs)
+- GLFW (Windowing and inputs)
 - Assimp (3D model loader)
-- stb_image (image loader)
 - GLM (OpenGL Mathematics)
+- stb_image (Image Loader)
 - ImGui (GUI)
 
-# References
-- Some Models downloaded from Morgan McGuire's [Computer Graphics Archive](https://casual-effects.com/data)
+## Requirements
+AmberEngine requires:
+- GPU: Graphics card supporting OpenGL 4.3
 
-# Next Updates
-- Scene System & Scene Graph
-- Gizmos
-- Editor UI (Scene Hierarchy, Components Inspector)
-
-# Planned Updates
-- Maths classes and wrappers (Transform, Vectors / Matrices tools...)
-- Renderer (SSBO, UBO, Batch Rendering, Shadows, PBR)
-- Editor UI (Create Primitives, Create Shaders, Import obj)
-## Long-term Goals
-- Voxel Cone Tracing
+## Licence
+OpenSandBox is licenced under an MIT Licence.
