@@ -20,4 +20,4 @@ AmberEngine requires:
 - GPU: Graphics card supporting OpenGL 4.3
 
 ## Licence
-OpenSandBox is licenced under an MIT Licence.
+AmberEngine is licenced under an MIT Licence.
