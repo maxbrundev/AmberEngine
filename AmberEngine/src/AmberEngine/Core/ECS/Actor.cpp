@@ -93,6 +93,22 @@ bool AmberEngine::ECS::Actor::HasChildren() const
 	return !m_children.empty();
 }
 
+bool AmberEngine::ECS::Actor::IsDescendantOf(const Actor* p_actor) const
+{
+	const Actor* currentParentActor = m_parent;
+
+	while (currentParentActor != nullptr)
+	{
+		if (currentParentActor == p_actor)
+		{
+			return true;
+		}
+		currentParentActor = currentParentActor->GetParent();
+	}
+
+	return false;
+}
+
 std::string AmberEngine::ECS::Actor::GetName()
 {
 	return m_name;

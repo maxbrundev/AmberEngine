@@ -2,11 +2,20 @@
 
 #include "AmberEngine/Eventing/Event.h"
 
+namespace AmberEngine::ECS
+{
+	class Actor;
+}
+
 class TreeNode
 {
 public:
 	TreeNode(std::string_view p_name, bool p_arrowClickToOpen = false);
 	~TreeNode();
+
+	void SetActor(AmberEngine::ECS::Actor* p_actor);
+
+	void Update();
 
 	void Open();
 
@@ -40,6 +49,8 @@ public:
 	AmberEngine::Eventing::Event<> OpenedEvent;
 	AmberEngine::Eventing::Event<> ClosedEvent;
 
+	AmberEngine::ECS::Actor* m_actor;
+
 private:
 	bool m_isArrowClickToOpen = false;
 	bool m_isShouldOpen       = false;
@@ -49,4 +60,8 @@ private:
 	TreeNode* m_parent;
 
 	std::vector<TreeNode*> m_childs;
+
+	std::pair<AmberEngine::ECS::Actor*, TreeNode*> m_data;
+
+	ImGuiDragDropFlags target_flags = 0;
 };

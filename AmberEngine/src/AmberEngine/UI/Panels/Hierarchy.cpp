@@ -76,7 +76,7 @@ void AmberEngine::UI::Hierarchy::AddActorByInstance(ECS::Actor& p_actor)
 {
 	TreeNode& node = m_root->CreateTreeNodeChild(p_actor.GetName(), true);
 	node.isLeaf = true;
-
+	node.SetActor(&p_actor);
 	m_widgetActorLink[&p_actor] = &node;
 }
 

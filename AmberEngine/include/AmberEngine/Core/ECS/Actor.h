@@ -93,6 +93,7 @@ namespace AmberEngine::ECS
 		void RemoveParent();
 		bool HasParent() const;
 		bool HasChildren() const;
+		bool IsDescendantOf(const Actor* p_actor) const;
 
 		std::string GetName();
 

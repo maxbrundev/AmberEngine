@@ -2,6 +2,8 @@
 
 #include "AmberEngine/UI/TreeNode.h"
 
+#include "AmberEngine/Core/ECS/Actor.h"
+
 TreeNode::TreeNode(std::string_view p_name, bool p_arrowClickToOpen) : name(p_name),
                                                                        m_isArrowClickToOpen(p_arrowClickToOpen),
                                                                        m_parent(nullptr)
@@ -11,6 +13,66 @@ TreeNode::TreeNode(std::string_view p_name, bool p_arrowClickToOpen) : name(p_na
 TreeNode::~TreeNode()
 {
 	RemoveAllChilds();
+}
+
+void TreeNode::SetActor(AmberEngine::ECS::Actor* p_actor)
+{
+	m_actor = p_actor;
+
+	m_data = std::make_pair(m_actor, this);
+}
+
+void TreeNode::Update()
+{
+	if(m_actor != nullptr)
+	{
+		ImGuiDragDropFlags src_flags = 0;
+		src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     // Keep the source displayed as hovered
+		src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers; // Because our dragging is local, we disable the feature of opening foreign treenodes/tabs while dragging
+
+		if (ImGui::BeginDragDropSource(src_flags))
+		{
+			if (!(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
+				ImGui::Text("Attach to..");
+
+			ImGui::SetDragDropPayload("Actor", &m_data, sizeof(m_data));
+			ImGui::EndDragDropSource();
+		}
+	}
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Actor", ImGuiDragDropFlags_AcceptBeforeDelivery | ImGuiDragDropFlags_AcceptNoDrawDefaultRect))
+		{
+			std::pair<AmberEngine::ECS::Actor*, TreeNode*> data = *static_cast<std::pair<AmberEngine::ECS::Actor*, TreeNode*>*>(payload->Data);
+
+			if (m_actor != nullptr && m_actor->IsDescendantOf(data.first))
+			{
+				target_flags |= ImGuiDragDropFlags_AcceptNoDrawDefaultRect;
+			}
+			else
+			{
+				target_flags = 0;
+			}
+
+			if (ImGui::AcceptDragDropPayload("Actor", target_flags))
+			{
+				if(m_actor == nullptr)
+				{
+					data.first->RemoveParent();
+				}
+				else if (m_actor->IsDescendantOf(data.first))
+				{
+					return;
+				}
+
+				if(m_actor != nullptr)
+					data.first->SetParent(*m_actor);
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
 }
 
 void TreeNode::Open()
@@ -115,6 +177,8 @@ void TreeNode::Draw()
 
 		m_isOpened = true;
 
+		Update();
+
 		for (const auto child : m_childs)
 		{
 			child->Draw();
@@ -128,6 +192,8 @@ void TreeNode::Draw()
 			ClosedEvent.Invoke();
 
 		m_isOpened = false;
+
+		Update();
 	}
 }
 
