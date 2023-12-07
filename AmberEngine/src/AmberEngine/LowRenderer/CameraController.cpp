@@ -2,11 +2,11 @@
 
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-#include "AmberEngine/Tools/Utils/ServiceLocator.h"
+#include "AmberEngine/Tools/Global/ServiceLocator.h"
 
 AmberEngine::LowRenderer::CameraController::CameraController(Camera& p_camera, glm::vec3& p_position) :
-	m_window(Utils::ServiceLocator::Get<Context::Window>()),
-	inputManager(Utils::ServiceLocator::Get<Inputs::InputManager>()),
+	m_window(Tools::Global::ServiceLocator::Get<Context::Window>()),
+	inputManager(Tools::Global::ServiceLocator::Get<Inputs::InputManager>()),
 	m_camera(p_camera), 
 	m_position(p_position)
 {

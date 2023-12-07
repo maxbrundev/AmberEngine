@@ -4,6 +4,6 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 
-AmberEngine::ECS::Components::AComponent::AComponent(Actor& p_owner) : owner(p_owner)
+AmberEngine::Core::ECS::Components::AComponent::AComponent(AmberEngine::Core::ECS::Actor& p_owner) : owner(p_owner)
 {
 }

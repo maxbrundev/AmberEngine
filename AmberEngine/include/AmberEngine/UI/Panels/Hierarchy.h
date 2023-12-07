@@ -2,31 +2,32 @@
 
 #include "AmberEngine/UI/Panels/APanelWindow.h"
 #include "AmberEngine/Core/ECS/Actor.h"
+#include "AmberEngine/UI/Widgets/TreeNode.h"
 
-class TreeNode;
-
-namespace AmberEngine::UI
+namespace AmberEngine::UI::Panels
 {
 	class Hierarchy : public APanelWindow
 	{
 	public:
 		Hierarchy(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings);
-		~Hierarchy() override = default;
+		virtual ~Hierarchy() override = default;
 
 		void Clear();
-		void AttachActorNodeToParentNode(ECS::Actor& p_actor);
-		void DetachActorNodeFromParentNode(ECS::Actor& p_actor);
-		void AddActorByInstance(ECS::Actor& p_actor);
-		void DeleteActorByInstance(ECS::Actor& p_actor);
+		void AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor);
+		void DetachActorNodeFromParentNode(AmberEngine::Core::ECS::Actor& p_actor);
+		void AddActorByInstance(AmberEngine::Core::ECS::Actor& p_actor);
+		void DeleteActorByInstance(AmberEngine::Core::ECS::Actor& p_actor);
 
-	protected:
-		void DrawContent() override;
+		void SelectActor(AmberEngine::Core::ECS::Actor& p_target);
+
+	public:
+		Eventing::Event<AmberEngine::Core::ECS::Actor&> SelectActorEvent;
 
 	private:
 		uint64_t m_destroyedListener;
 
-		TreeNode* m_root;
+		Widgets::TreeNode* m_root;
 
-		std::unordered_map<ECS::Actor*, TreeNode*> m_widgetActorLink;
+		std::unordered_map<AmberEngine::Core::ECS::Actor*, Widgets::TreeNode*> m_widgetActorLink;
 	};
 }

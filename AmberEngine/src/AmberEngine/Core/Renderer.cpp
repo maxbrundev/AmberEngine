@@ -2,9 +2,17 @@
 
 #include "AmberEngine/Core/Renderer.h"
 
-#include "AmberEngine/Core/SceneSystem/Scene.h"
-#include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
+#include "AmberEngine/Resources/Model.h"
+#include "AmberEngine/Resources/Mesh.h"
+#include "AmberEngine/Resources/Texture.h"
+
+#include "AmberEngine/LowRenderer/Camera.h"
+
+#include "AmberEngine/Core/ECS/Actor.h"
+#include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
+#include "AmberEngine/Core/ECS/Components/CLight.h"
+#include "AmberEngine/Core/SceneSystem/Scene.h"
 
 AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) :
 	m_driver(p_driver),
@@ -21,6 +29,22 @@ AmberEngine::Core::Renderer::Renderer(Context::Driver& p_driver) :
 AmberEngine::Core::Renderer::~Renderer()
 {
 	Resources::Loaders::TextureLoader::Destroy(m_emptyTexture);
+}
+
+void AmberEngine::Core::Renderer::RenderScene(SceneSystem::Scene& p_scene, Resources::Material* p_defaultMaterial)
+{
+	for (ECS::Components::CModelRenderer* modelRenderer : p_scene.GetFastAccessComponents().modelRenderers)
+	{
+		if (modelRenderer->owner.IsActive())
+		{
+			if (auto model = modelRenderer->GetModel())
+			{
+				const auto& transform = modelRenderer->owner.transform.GetTransform();
+
+				Draw(*model, &transform.GetWorldMatrix(), p_defaultMaterial);
+			}
+		}
+	}
 }
 
 void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix, Resources::Material* p_defaultMaterial) const
@@ -75,7 +99,7 @@ void AmberEngine::Core::Renderer::Clear(bool p_colorBuffer, bool p_depthBuffer, 
 	);
 }
 
-void AmberEngine::Core::Renderer::Clear(AmberEngine::LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer) const
+void AmberEngine::Core::Renderer::Clear(LowRenderer::Camera& p_camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer) const
 {
 	/* Backup the previous OpenGL clear color */
 	GLfloat previousClearColor[4];
@@ -94,9 +118,14 @@ std::vector<glm::mat4> AmberEngine::Core::Renderer::FindLightMatrices(SceneSyste
 {
 	std::vector<glm::mat4> result;
 
-	for (const auto light : p_scene.GetLights())
+	const auto& facs = p_scene.GetFastAccessComponents();
+
+	for (auto light : facs.lights)
 	{
-		result.push_back(light->GetLightData().GenerateMatrix());
+		if (light->owner.IsActive())
+		{
+			result.push_back(light->GetData().GenerateMatrix());
+		}
 	}
 
 	return result;

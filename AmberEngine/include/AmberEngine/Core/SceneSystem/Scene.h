@@ -1,36 +1,50 @@
 #pragma once
+
 #include "AmberEngine/API/Export.h"
 
-#include "AmberEngine/Core/Renderer.h"
-#include "AmberEngine/Core/ECS/Actor.h"
-#include "AmberEngine/Core/ECS/Components/LightComponent.h"
+namespace AmberEngine::Core::ECS
+{
+	class Actor;
+}
+
+namespace AmberEngine::Core::ECS::Components
+{
+	class AComponent;
+	class CLight;
+	class CModelRenderer;
+
+}
 
 namespace AmberEngine::Core::SceneSystem
 {
 	class API_AMBERENGINE Scene
 	{
 	public:
+		struct FastAccessComponents
+		{
+			std::vector<ECS::Components::CModelRenderer*> modelRenderers;
+			std::vector<ECS::Components::CLight*>         lights;
+		};
+
 		Scene(std::string p_name);
-		~Scene() = default;
+		~Scene();
 
 		void AddActor(ECS::Actor* p_actor);
-		void DestroyActor(ECS::Actor*& p_actor);
-		
-		void DrawAll(Renderer& p_renderer, Resources::Material* p_defaultMaterial) const;
-		void Update(float p_deltaTime) const;
+		ECS::Actor& CreateActor();
+		ECS::Actor& CreateActor(const std::string& p_name, const std::string& p_tag = "");
+		bool DestroyActor(ECS::Actor& p_target);
 
-		void Unload();
+		void OnComponentAdded(ECS::Components::AComponent& p_compononent);
+		void OnComponentRemoved(ECS::Components::AComponent& p_compononent);
 
-		std::unordered_map<std::string, ECS::Actor*>& GetActors();
-		const std::vector<ECS::Components::LightComponent*>& GetLights();
+		std::vector<ECS::Actor*>& GetActors();
 
-	public:
-		Eventing::Event<> SceneUnloadEvent;
+		const FastAccessComponents& GetFastAccessComponents() const;
 
 	private:
-		bool m_isDebugingNormal = false;
+		int64_t m_availableID = 1;
 		std::string m_name;
-		std::unordered_map<std::string, ECS::Actor*> m_actors;
-		std::vector<ECS::Components::LightComponent*> m_lights;
+		std::vector<ECS::Actor*> m_actors;
+		FastAccessComponents m_fastAccessComponents;
 	};
 }

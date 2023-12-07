@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Data/Constants.h"
 
-std::string Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
+std::string Tools::Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
 {
 	size_t characterCount = p_path.find_last_of(AmberEngine::Data::Constants::FORWARDSLASH) + 1;
 
@@ -13,7 +13,7 @@ std::string Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
 	return p_path.substr(0, characterCount);
 }
 
-std::string Utils::String::ExtractFileNameFromPath(const std::string& p_path)
+std::string Tools::Utils::String::ExtractFileNameFromPath(const std::string& p_path)
 {
 	size_t characterCount = p_path.find_last_of(AmberEngine::Data::Constants::FORWARDSLASH) + 1;
 
@@ -22,7 +22,7 @@ std::string Utils::String::ExtractFileNameFromPath(const std::string& p_path)
 	return p_path.substr(characterCount);
 }
 
-std::string Utils::String::RemoveExtensionFromFileName(const std::string& p_file)
+std::string Tools::Utils::String::RemoveExtensionFromFileName(const std::string& p_file)
 {
 	const size_t characterCount = p_file.find_last_of(AmberEngine::Data::Constants::DOT);
 
@@ -34,7 +34,7 @@ std::string Utils::String::RemoveExtensionFromFileName(const std::string& p_file
 	return p_file;
 }
 
-std::string Utils::String::IntToString(int p_number)
+std::string Tools::Utils::String::IntToString(int p_number)
 {
 	std::string result;
 
@@ -62,7 +62,7 @@ std::string Utils::String::IntToString(int p_number)
 	return result;
 }
 
-int Utils::String::StringToInt(const std::string& p_string)
+int Tools::Utils::String::StringToInt(const std::string& p_string)
 {
 	const uint8_t asciiDecimalIndex = 48;
 
@@ -96,7 +96,7 @@ int Utils::String::StringToInt(const std::string& p_string)
 	return result;
 }
 
-int* Utils::String::StringToIntArray(const std::string& p_string)
+int* Tools::Utils::String::StringToIntArray(const std::string& p_string)
 {
 	const uint8_t asciiDecimalIndex = 48;
 
@@ -147,7 +147,7 @@ int* Utils::String::StringToIntArray(const std::string& p_string)
 	return array;
 }
 
-void Utils::String::ParseInputIntoVector(const std::string& p_inputString, std::vector<std::string>& p_outVector)
+void Tools::Utils::String::ParseInputIntoVector(const std::string& p_inputString, std::vector<std::string>& p_outVector)
 {
 	std::stringstream ss(p_inputString);
 
@@ -175,7 +175,7 @@ void Utils::String::ParseInputIntoVector(const std::string& p_inputString, std::
 	}*/
 }
 
-std::string Utils::String::RemoveAllOcurrences(const std::string& p_target, const char p_character)
+std::string Tools::Utils::String::RemoveAllOcurrences(const std::string& p_target, const char p_character)
 {
 	std::string result;
 
@@ -190,7 +190,7 @@ std::string Utils::String::RemoveAllOcurrences(const std::string& p_target, cons
 	return result;
 }
 
-std::string Utils::String::ToUpper(const std::string& p_target)
+std::string Tools::Utils::String::ToUpper(const std::string& p_target)
 {
 	std::string result;
 	const char offset = 'a' - 'A';
@@ -211,7 +211,7 @@ std::string Utils::String::ToUpper(const std::string& p_target)
 	return result;
 }
 
-std::string Utils::String::ToMinor(const std::string& p_target)
+std::string Tools::Utils::String::ToMinor(const std::string& p_target)
 {
 	std::string result;
 	const char offset = 'a' - 'A';

@@ -2,28 +2,21 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 
-#include "AmberEngine/Core/ECS/Components/ModelComponent.h"
+AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::CreatedEvent;
+AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::DestroyEvent;
+AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&, AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::AttachEvent;
+AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::DettachEvent;
 
-AmberEngine::Eventing::Event<AmberEngine::ECS::Actor&> AmberEngine::ECS::Actor::CreatedEvent;
-AmberEngine::Eventing::Event<AmberEngine::ECS::Actor&> AmberEngine::ECS::Actor::DestroyEvent;
-AmberEngine::Eventing::Event<AmberEngine::ECS::Actor&, AmberEngine::ECS::Actor&> AmberEngine::ECS::Actor::AttachEvent;
-AmberEngine::Eventing::Event<AmberEngine::ECS::Actor&> AmberEngine::ECS::Actor::DettachEvent;
-
-AmberEngine::ECS::Actor::Actor(std::string p_name) : m_name(std::move(p_name))
+AmberEngine::Core::ECS::Actor::Actor(int64_t p_actorID, const std::string& p_name, const std::string & p_tag) : m_actorID(p_actorID),
+m_name(p_name),
+m_tag(p_tag),
+transform(AddComponent<Components::CTransform>())
 {
 	CreatedEvent.Invoke(*this);
 }
 
-AmberEngine::ECS::Actor::~Actor()
+AmberEngine::Core::ECS::Actor::~Actor()
 {
-	for (auto& component : m_components)
-	{
-		delete component;
-		component = nullptr;
-	}
-
-	m_components.clear();
-
 	std::vector<Actor*> toDetach = m_children;
 
 	for (const auto child : toDetach)
@@ -37,33 +30,46 @@ AmberEngine::ECS::Actor::~Actor()
 	RemoveParent();
 
 	DestroyEvent.Invoke(*this);
+
+	m_components.clear();
 }
 
-void AmberEngine::ECS::Actor::Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime) const
+bool AmberEngine::Core::ECS::Actor::RemoveComponent(ECS::Components::AComponent& p_component)
 {
-	for (const auto component : m_components)
+	for (auto it = m_components.begin(); it != m_components.end(); ++it)
 	{
-		component->Update(p_deltaTime);
+		if (it->get() == &p_component)
+		{
+			m_components.erase(it);
+			return true;
+		}
 	}
+
+	return false;
 }
 
-void AmberEngine::ECS::Actor::SetName(std::string p_name)
+std::vector<std::shared_ptr<AmberEngine::Core::ECS::Components::AComponent>>& AmberEngine::Core::ECS::Actor::GetComponents()
+{
+	return m_components;
+}
+
+void AmberEngine::Core::ECS::Actor::SetName(std::string p_name)
 {
 	m_name = std::move(p_name);
 }
 
-void AmberEngine::ECS::Actor::SetParent(Actor& p_parent)
+void AmberEngine::Core::ECS::Actor::SetParent(Actor& p_parent)
 {
 	RemoveParent();
 
 	m_parent = &p_parent;
-	m_transform.SetParent(p_parent.GetTransform());
+	transform.SetParent(p_parent.transform);
 	p_parent.m_children.push_back(this);
 
 	AttachEvent.Invoke(*this, p_parent);
 }
 
-void AmberEngine::ECS::Actor::RemoveParent()
+void AmberEngine::Core::ECS::Actor::RemoveParent()
 {
 	DettachEvent.Invoke(*this);
 
@@ -80,20 +86,20 @@ void AmberEngine::ECS::Actor::RemoveParent()
 
 	m_parent = nullptr;
 
-	m_transform.RemoveParent();
+	transform.RemoveParent();
 }
 
-bool AmberEngine::ECS::Actor::HasParent() const
+bool AmberEngine::Core::ECS::Actor::HasParent() const
 {
 	return m_parent != nullptr;
 }
 
-bool AmberEngine::ECS::Actor::HasChildren() const
+bool AmberEngine::Core::ECS::Actor::HasChildren() const
 {
 	return !m_children.empty();
 }
 
-bool AmberEngine::ECS::Actor::IsDescendantOf(const Actor* p_actor) const
+bool AmberEngine::Core::ECS::Actor::IsDescendantOf(const Actor* p_actor) const
 {
 	const Actor* currentParentActor = m_parent;
 
@@ -109,22 +115,45 @@ bool AmberEngine::ECS::Actor::IsDescendantOf(const Actor* p_actor) const
 	return false;
 }
 
-std::string AmberEngine::ECS::Actor::GetName()
+const std::string& AmberEngine::Core::ECS::Actor::GetName() const
 {
 	return m_name;
 }
 
-AmberEngine::ECS::Actor* AmberEngine::ECS::Actor::GetParent() const
+const std::string& AmberEngine::Core::ECS::Actor::GetTag() const
+{
+	return m_tag;
+}
+
+int64_t AmberEngine::Core::ECS::Actor::GetID() const
+{
+	return m_actorID;
+}
+
+AmberEngine::Core::ECS::Actor* AmberEngine::Core::ECS::Actor::GetParent() const
 {
 	return m_parent;
 }
 
-std::vector<AmberEngine::ECS::Actor*>& AmberEngine::ECS::Actor::GetChildren()
+void AmberEngine::Core::ECS::Actor::SetActive(bool p_active)
 {
-	return m_children;
+	if (p_active != m_active)
+	{
+		m_active = p_active;
+	}
 }
 
-AmberEngine::Maths::Transform& AmberEngine::ECS::Actor::GetTransform()
+bool AmberEngine::Core::ECS::Actor::IsSelfActive() const
 {
-	return m_transform;
+	return m_active;
+}
+
+bool AmberEngine::Core::ECS::Actor::IsActive() const
+{
+	return m_active && (m_parent ? m_parent->IsActive() : true);
+}
+
+std::vector<AmberEngine::Core::ECS::Actor*>& AmberEngine::Core::ECS::Actor::GetChildren()
+{
+	return m_children;
 }

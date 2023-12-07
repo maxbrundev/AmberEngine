@@ -10,11 +10,13 @@
 
 #include "AmberEngine/Core/Renderer.h"
 #include "AmberEngine/Core/EditorResources.h"
-#include "AmberEngine/Core/SceneSystem/Scene.h"
-#include "AmberEngine/Core/UIManager.h"
+
+#include "AmberEngine/UI/Core/UIManager.h"
 
 #include "AmberEngine/Buffers/UniformBuffer.h"
 #include "AmberEngine/Buffers/ShaderStorageBuffer.h"
+
+#include "SceneSystem/SceneManager.h"
 
 namespace AmberEngine::Core
 {
@@ -34,12 +36,11 @@ namespace AmberEngine::Core
 		std::unique_ptr<AmberEngine::Context::Driver>	driver;
 		std::unique_ptr<Inputs::InputManager>			inputManager;
 		std::unique_ptr<Renderer>						renderer;
-		std::unique_ptr<UIManager>						uiManager;
-
+		std::unique_ptr<UI::Core::UIManager>						uiManager;
 		std::unique_ptr<Buffers::UniformBuffer>			engineUBO;
 		std::unique_ptr<Buffers::ShaderStorageBuffer>	lightSSBO;
-		std::unique_ptr<Core::EditorResources>			m_editorResources;
+		std::unique_ptr<EditorResources>				editorResources;
 
-		SceneSystem::Scene* m_scene;
+		SceneSystem::SceneManager sceneManager;
 	};
 }

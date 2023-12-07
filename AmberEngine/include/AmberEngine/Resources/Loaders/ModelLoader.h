@@ -17,7 +17,7 @@ namespace AmberEngine::Resources::Loaders
 		static bool Destroy(Model*& p_modelInstance);
 
 	private:
-		static Resources::Parsers::AssimpParser __ASSIMP;
+		static Parsers::AssimpParser __ASSIMP;
 		static std::string __FILE_TRACE;
 	};
 }

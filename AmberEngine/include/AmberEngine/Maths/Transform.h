@@ -53,8 +53,8 @@ namespace AmberEngine::Maths
 		glm::vec3 GetLocalUp() const;
 		glm::vec3 GetLocalRight() const;
 
-		glm::mat4& GetLocalMatrix();
-		glm::mat4& GetWorldMatrix();
+		const glm::mat4& GetLocalMatrix() const;
+		const glm::mat4& GetWorldMatrix() const;
 
 	private:
 		void PreDecomposeWorldMatrix();

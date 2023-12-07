@@ -9,7 +9,7 @@
 
 bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string& p_filePath, Model& p_model)
 {
-	m_directory = Utils::String::ExtractDirectoryFromPath(p_filePath);
+	m_directory = Tools::Utils::String::ExtractDirectoryFromPath(p_filePath);
 
 	//const auto start = std::chrono::high_resolution_clock::now();
 

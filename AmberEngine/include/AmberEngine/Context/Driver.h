@@ -14,11 +14,7 @@ namespace  AmberEngine::Context
 
 		void DisplayDriverInfo() const;
 
-		std::string_view m_api_version() const;
-		std::string_view m_library_version() const;
-		std::string_view m_render1() const;
-		std::string_view m_vendor1() const;
-		std::string_view m_shading_language_version1() const;
+		std::string GetString(GLenum p_parameter);
 		
 	private:
 		void InitGlew();
@@ -26,12 +22,5 @@ namespace  AmberEngine::Context
 
 	private:
 		bool isActive;
-
-		std::string_view m_apiVersion;
-		std::string_view m_libraryVersion;
-		std::string_view m_render;
-		std::string_view m_vendor;
-		std::string_view m_shading_language_version;
-
 	};
 }

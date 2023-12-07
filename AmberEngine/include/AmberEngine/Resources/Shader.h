@@ -3,9 +3,9 @@
 #include "AmberEngine/API/Export.h"
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 #include "AmberEngine/Resources/UniformInfo.h"
-
 
 namespace AmberEngine::Resources
 {

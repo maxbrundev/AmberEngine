@@ -21,7 +21,7 @@ AmberEngine::Resources::Shader* AmberEngine::Resources::Loaders::ShaderLoader::C
 
 AmberEngine::Resources::Shader* AmberEngine::Resources::Loaders::ShaderLoader::CreateFromSource(const std::string& p_vertexShader, const std::string& p_fragmentShader)
 {
-	__FILE_TRACE = Utils::String::ExtractDirectoryFromPath(p_vertexShader) + "/" + Utils::String::ExtractDirectoryFromPath(p_fragmentShader);
+	__FILE_TRACE = Tools::Utils::String::ExtractDirectoryFromPath(p_vertexShader) + "/" + Tools::Utils::String::ExtractDirectoryFromPath(p_fragmentShader);
 
 	const uint32_t programID = CreateShader(p_vertexShader, p_fragmentShader);
 

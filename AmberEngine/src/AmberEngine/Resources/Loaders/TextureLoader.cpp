@@ -41,7 +41,7 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader:
 		stbi_image_free(dataBuffer);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		std::string name = Utils::String::ExtractFileNameFromPath(p_filePath);
+		std::string name = Tools::Utils::String::ExtractFileNameFromPath(p_filePath);
 
 		return new Texture(std::move(p_filePath), std::move(name), textureID, textureWidth, textureHeight, bitsPerPixel, p_firstFilter, p_secondFilter, p_textureType, p_generateMipmap);
 	}

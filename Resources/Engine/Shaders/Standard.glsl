@@ -131,6 +131,30 @@ vec3 Phong(vec3 p_lightDir, vec3 p_lightColor, float p_luminosity)
     return diffuse + specular;
 }
 
+float LuminosityFromAttenuation(mat4 p_Light)
+{
+    const vec3  lightPosition   = p_Light[0].rgb;
+    const float constant        = p_Light[0][3];
+    const float linear          = p_Light[1][3];
+    const float quadratic       = p_Light[2][3];
+
+    const float distanceToLight = length(lightPosition - fs_in.FragPos);
+    const float attenuation     = (constant + linear * distanceToLight + quadratic * (distanceToLight * distanceToLight));
+    return 1.0 / attenuation;
+}
+
+vec3 CalcPointLight(mat4 p_Light)
+{
+    const vec3 lightPosition  = p_Light[0].rgb;
+    const vec3 lightColor     = UnPackColor(p_Light[2][0]);
+    const float intensity     = p_Light[3][3];
+
+    const vec3  lightDirection  = normalize(lightPosition - fs_in.FragPos);
+    const float luminosity      = LuminosityFromAttenuation(p_Light);
+
+    return BlinnPhong(lightDirection, lightColor, intensity * luminosity);
+}
+
 vec3 CalculateDirectionalLight(mat4 p_light)
 {
     return BlinnPhong(-p_light[1].rgb, UnPackColor(p_light[2][0]), p_light[3][3]);
@@ -150,9 +174,9 @@ void main()
   {
       switch(int(ssbo_Lights[i][3][0]))
       {
-          case 1: lightSum += CalculateDirectionalLight(ssbo_Lights[i]);
-          lightSum += vec3(g_DiffuseTexel.rgb * UnPackColor(ssbo_Lights[i][2][0]) * 0.1);
-                  break;
+          case 0: lightSum += CalcPointLight(ssbo_Lights[i]); break;
+          case 1: lightSum += CalculateDirectionalLight(ssbo_Lights[i]);  break;
+          lightSum += vec3(g_DiffuseTexel.rgb * UnPackColor(ssbo_Lights[i][2][0]) * 0.1); break;
       }
   }
 

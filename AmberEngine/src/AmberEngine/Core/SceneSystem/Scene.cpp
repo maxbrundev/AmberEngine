@@ -2,77 +2,103 @@
 
 #include "AmberEngine/Core/SceneSystem/Scene.h"
 
-#include "AmberEngine/Core/ECS/Components/ModelComponent.h"
-#include "AmberEngine/Core/ECS/Components/LightComponent.h"
+#include "AmberEngine/Core/ECS/Actor.h"
+
+#include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
+#include "AmberEngine/Core/ECS/Components/CLight.h"
 
 AmberEngine::Core::SceneSystem::Scene::Scene(std::string p_name) : m_name(std::move(p_name))
 {
 }
 
+AmberEngine::Core::SceneSystem::Scene::~Scene()
+{
+	std::for_each(m_actors.begin(), m_actors.end(), [](ECS::Actor* element)
+	{
+		delete element;
+	});
+
+	m_actors.clear();
+}
 
 void AmberEngine::Core::SceneSystem::Scene::AddActor(ECS::Actor* p_actor)
 {
-	const auto& actor = m_actors.emplace(p_actor->GetName(), p_actor);
+	m_actors.push_back(p_actor);
 
-	if(auto lightComponent = actor.first->second->GetComponent<ECS::Components::LightComponent>(); lightComponent != nullptr)
+	ECS::Actor& instance = *m_actors.back();
+
+	if (const auto result = instance.GetComponent<ECS::Components::CModelRenderer>(); result != nullptr)
 	{
-		m_lights.emplace_back(lightComponent);
+		m_fastAccessComponents.modelRenderers.push_back(result);
 	}
+
+	if (const auto result = instance.GetComponent<ECS::Components::CLight>(); result != nullptr)
+	{
+		m_fastAccessComponents.lights.push_back(result);
+	}
+
+	instance.ComponentAddedEvent   += std::bind(&Scene::OnComponentAdded, this, std::placeholders::_1);
+	instance.ComponentRemovedEvent += std::bind(&Scene::OnComponentRemoved, this, std::placeholders::_1);
 }
 
-void AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor*& p_actor)
+AmberEngine::Core::ECS::Actor& AmberEngine::Core::SceneSystem::Scene::CreateActor()
 {
-	const auto it = m_actors.find(p_actor->GetName());
-	
-	if(it != m_actors.end())
-	{
-		delete p_actor;
-		p_actor = nullptr;
-	
-		m_actors.erase(it->first);
-	}
+	return CreateActor("New Actor");
 }
 
-void AmberEngine::Core::SceneSystem::Scene::DrawAll(Renderer& p_renderer, Resources::Material* p_defaultMaterial) const
+AmberEngine::Core::ECS::Actor& AmberEngine::Core::SceneSystem::Scene::CreateActor(const std::string& p_name, const std::string& p_tag)
 {
-	for (const auto& actor : m_actors)
-	{
-		if(const auto modelComponent = actor.second->GetComponent<ECS::Components::ModelComponent>(); modelComponent != nullptr)
-		{
-			p_renderer.Draw(*modelComponent->GetModel(), &actor.second->GetTransform().GetWorldMatrix(), p_defaultMaterial);
-		}
-	}
+	m_actors.push_back(new ECS::Actor(m_availableID++, p_name, p_tag));
+
+	ECS::Actor& instance = *m_actors.back();
+
+	instance.ComponentAddedEvent += std::bind(&Scene::OnComponentAdded, this, std::placeholders::_1);
+	instance.ComponentRemovedEvent += std::bind(&Scene::OnComponentRemoved, this, std::placeholders::_1);
+
+	return instance;
 }
 
-void AmberEngine::Core::SceneSystem::Scene::Update(float p_deltaTime) const
-{
-	for (const auto& actor : m_actors)
-	{
-		// TODO: Find a better way to access lights.
-		actor.second->Update(m_lights, p_deltaTime);
-	}
-}
-
-void AmberEngine::Core::SceneSystem::Scene::Unload()
-{
-	for (auto& actor : m_actors)
-	{
-		delete actor.second;
-		actor.second = nullptr;
-	}
-
-	SceneUnloadEvent.Invoke();
-
-	m_actors.clear();
-	m_lights.clear();
-}
-
-std::unordered_map<std::string, AmberEngine::ECS::Actor*>& AmberEngine::Core::SceneSystem::Scene::GetActors()
+std::vector<AmberEngine::Core::ECS::Actor*>& AmberEngine::Core::SceneSystem::Scene::GetActors()
 {
 	return m_actors;
 }
 
-const std::vector<AmberEngine::ECS::Components::LightComponent*>& AmberEngine::Core::SceneSystem::Scene::GetLights()
+const AmberEngine::Core::SceneSystem::Scene::FastAccessComponents& AmberEngine::Core::SceneSystem::Scene::GetFastAccessComponents() const
 {
-	return m_lights;
+	return m_fastAccessComponents;
+}
+
+bool AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor& p_target)
+{
+	auto found = std::find_if(m_actors.begin(), m_actors.end(), [&p_target](ECS::Actor* element)
+	{
+		return element == &p_target;
+	});
+
+	if (found != m_actors.end())
+	{
+		delete *found;
+		m_actors.erase(found);
+		return true;
+	}
+
+	return false;
+}
+
+void AmberEngine::Core::SceneSystem::Scene::OnComponentAdded(ECS::Components::AComponent& p_compononent)
+{
+	if(auto result = dynamic_cast<ECS::Components::CModelRenderer*>(&p_compononent))
+		m_fastAccessComponents.modelRenderers.push_back(result);
+
+	if (auto result = dynamic_cast<ECS::Components::CLight*>(&p_compononent))
+		m_fastAccessComponents.lights.push_back(result);
+}
+
+void AmberEngine::Core::SceneSystem::Scene::OnComponentRemoved(ECS::Components::AComponent& p_compononent)
+{
+	if (auto result = dynamic_cast<ECS::Components::CModelRenderer*>(&p_compononent))
+		m_fastAccessComponents.modelRenderers.erase(std::remove(m_fastAccessComponents.modelRenderers.begin(), m_fastAccessComponents.modelRenderers.end(), result), m_fastAccessComponents.modelRenderers.end());
+
+	if (auto result = dynamic_cast<ECS::Components::CLight*>(&p_compononent))
+		m_fastAccessComponents.lights.erase(std::remove(m_fastAccessComponents.lights.begin(), m_fastAccessComponents.lights.end(), result), m_fastAccessComponents.lights.end());
 }

@@ -5,10 +5,11 @@
 #include "AmberEngine/Core/Editor.h"
 #include "AmberEngine/Core/Renderer.h"
 
-#include "AmberEngine/Tools/Utils/ServiceLocator.h"
+#include "AmberEngine/Tools/Global/ServiceLocator.h"
 
-AmberEngine::UI::SceneView::SceneView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
+AmberEngine::UI::SceneView::SceneView(const std::string& p_title, bool p_opened, Panels::PanelSettings p_panelSettings) :
 	AView(p_title, p_opened, p_panelSettings),
+	m_sceneManager(Tools::Global::ServiceLocator::Get<AmberEngine::Core::SceneSystem::SceneManager>()),
 	m_cameraController(m_camera, m_cameraPosition)
 {
 	m_cameraController.GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
@@ -25,20 +26,25 @@ void AmberEngine::UI::SceneView::Update(float p_deltaTime)
 	}
 }
 
-void AmberEngine::UI::SceneView::RenderImplementation()
+void AmberEngine::UI::SceneView::RenderScene()
 {
+	auto& baseRenderer = Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().renderer;
+
+	auto& currentScene = *m_sceneManager.GetCurrentScene();
+	m_editorRenderer.UpdateLights(currentScene);
+
 	m_frameBuffer.Bind();
-	Utils::ServiceLocator::Get<Core::Renderer>().Clear(m_cameraController.GetCamera(), true, true, true);
-	Utils::ServiceLocator::Get<Core::Editor>().RenderScene();
+	baseRenderer->Clear(m_camera);
+	m_editorRenderer.RenderScene(m_cameraPosition, m_camera);
+
+	m_frameBuffer.Unbind();
 }
 
-void AmberEngine::UI::SceneView::DrawContent()
+void AmberEngine::UI::SceneView::RenderImplementation()
 {
-	auto[winWidth, winHeight] = GetSafeSize();
+	PrepareCamera();
 
-	const uint64_t textureID = m_frameBuffer.GetTextureID();
-
-	ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ static_cast<float>(winWidth), static_cast<float>(winHeight) }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+	RenderScene();
 }
 
 AmberEngine::LowRenderer::CameraController& AmberEngine::UI::SceneView::GetCameraController()

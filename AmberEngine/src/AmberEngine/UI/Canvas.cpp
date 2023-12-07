@@ -63,9 +63,12 @@ void AmberEngine::UI::Canvas::Draw() const
 
 		for (auto& panel : m_panels)
 			panel.get().Draw();
-
-		ImGui::Render();
 	}
+}
+
+void AmberEngine::UI::Canvas::PostDraw() const
+{
+	ImGui::Render();
 }
 
 bool AmberEngine::UI::Canvas::IsDockspace() const

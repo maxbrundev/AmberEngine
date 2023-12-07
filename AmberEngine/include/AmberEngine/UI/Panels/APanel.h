@@ -1,12 +1,14 @@
 #pragma once
 
+#include "AmberEngine/UI/WidgetContainer.h"
+
 namespace AmberEngine::UI
 {
-	class APanel
+	class APanel : public WidgetContainer
 	{
 	public:
 		APanel();
-		virtual ~APanel() = default;
+		virtual ~APanel() override = default;
 
 		void Draw();
 

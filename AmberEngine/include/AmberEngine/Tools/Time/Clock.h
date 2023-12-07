@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AmberEngine/API/Export.h"
-
 #include <chrono>
 
-namespace Utils
+#include "AmberEngine/API/Export.h"
+
+namespace Tools::Time
 {
 	class API_AMBERENGINE Clock
 	{
@@ -27,6 +27,5 @@ namespace Utils
 		float timeScale = 1.0f;
 		float deltaTime = 0.0f;
 		float timeSinceStart = 0.0f;
-
 	};
 }

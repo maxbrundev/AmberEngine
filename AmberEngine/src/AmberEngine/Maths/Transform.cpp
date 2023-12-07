@@ -222,12 +222,12 @@ glm::vec3 AmberEngine::Maths::Transform::GetLocalRight() const
 	return m_localRotationQuat * glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
-glm::mat4& AmberEngine::Maths::Transform::GetLocalMatrix()
+const glm::mat4& AmberEngine::Maths::Transform::GetLocalMatrix() const
 {
 	return m_localMatrix;
 }
 
-glm::mat4& AmberEngine::Maths::Transform::GetWorldMatrix()
+const glm::mat4& AmberEngine::Maths::Transform::GetWorldMatrix() const
 {
 	return m_worldMatrix;
 }

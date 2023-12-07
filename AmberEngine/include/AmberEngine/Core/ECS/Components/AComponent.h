@@ -1,24 +1,28 @@
 #pragma once
 
+#include "AmberEngine/Core/API/IInspectorItem.h"
+
 namespace AmberEngine
 {
-	namespace ECS
+	namespace Core
 	{
-		class Actor;
+		namespace ECS
+		{
+			class Actor;
+		}
 	}
 }
-
-namespace AmberEngine::ECS::Components
+namespace AmberEngine::Core::ECS::Components
 {
-	class AComponent
+	class AComponent : public API::IInspectorItem
 	{
 	public:
 		AComponent(Actor& p_owner);
 		virtual ~AComponent() = default;
 
-		virtual void Update(float p_deltaTime) = 0;
+		virtual std::string GetName() = 0;
+		virtual void OnInspector(UI::WidgetContainer& p_root) override = 0;
 
-	public:
 		Actor& owner;
 	};
 }

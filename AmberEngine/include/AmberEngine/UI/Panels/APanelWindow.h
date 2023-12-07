@@ -1,16 +1,17 @@
 #pragma once
-#include "AmberEngine/Eventing/Event.h"
-#include "AmberEngine/UI/Panels/PanelSettings.h"
+
 #include "AmberEngine/UI/Panels/APanel.h"
+#include "AmberEngine/UI/Panels/PanelSettings.h"
 
+#include "AmberEngine/Eventing/Event.h"
 
-namespace AmberEngine::UI
+namespace AmberEngine::UI::Panels
 {
 	class APanelWindow : public APanel
 	{
 	public:
 		APanelWindow(const std::string& p_title = "", bool p_opened = true, const PanelSettings p_panelSettings = PanelSettings{});
-		virtual ~APanelWindow() = default;
+		virtual ~APanelWindow() override = default;
 
 		void Update();
 		void UpdateSize();
@@ -32,7 +33,6 @@ namespace AmberEngine::UI
 
 	protected:
 		void DrawImplementation() override;
-		virtual void DrawContent() = 0;
 
 	public:
 		std::string title;

@@ -5,7 +5,8 @@
 #include "AmberEngine/Data/Constants.h"
 
 #include "AmberEngine/Managers/ResourcesManager.h"
-#include "AmberEngine/Tools/Utils/ServiceLocator.h"
+
+#include "AmberEngine/Tools/Global/ServiceLocator.h"
 
 AmberEngine::Core::Context::Context(const std::string& p_projectPath, const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
 	engineAssetsPath(Data::Constants::ENGINE_ASSETS_PATH),
@@ -20,11 +21,11 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	window->SetIconFromMemory(reinterpret_cast<uint8_t*>(iconRaw.data()), 120, 120);
 
 	driver   = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
-	renderer = std::make_unique<AmberEngine::Core::Renderer>(*driver);
+	renderer = std::make_unique<Renderer>(*driver);
 	
-	m_editorResources = std::make_unique<AmberEngine::Core::EditorResources>(editorAssetsPath);
+	editorResources = std::make_unique<EditorResources>(editorAssetsPath);
 	
-	uiManager = std::make_unique<UIManager>(window->GetGlfwWindow());
+	uiManager = std::make_unique<UI::Core::UIManager>(window->GetGlfwWindow());
 
 	uiManager->LoadFont("Ruda_Small", Data::Constants::EDITOR_FONT_PATH, Data::Constants::EDITOR_FONT_SIZE_SMALL);
 	uiManager->LoadFont("Ruda_Medium", Data::Constants::EDITOR_FONT_PATH, Data::Constants::EDITOR_FONT_SIZE_MEDIUM);
@@ -34,10 +35,12 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 
 	inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*window);
 
-	Utils::ServiceLocator::Provide(*window);
-	Utils::ServiceLocator::Provide(*inputManager);
-	Utils::ServiceLocator::Provide(*renderer);
-	Utils::ServiceLocator::Provide(*this);
+	Tools::Global::ServiceLocator::Provide(*window);
+	Tools::Global::ServiceLocator::Provide(*inputManager);
+	Tools::Global::ServiceLocator::Provide(*renderer);
+	Tools::Global::ServiceLocator::Provide<SceneSystem::SceneManager>(sceneManager);
+
+	Tools::Global::ServiceLocator::Provide(*this);
 
 	engineUBO = std::make_unique<Buffers::UniformBuffer>
 	(
@@ -53,8 +56,6 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	lightSSBO = std::make_unique<Buffers::ShaderStorageBuffer>(Buffers::EAccessSpecifier::STREAM_DRAW);
 
 	Managers::ResourcesManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
-
-	m_scene = new SceneSystem::Scene("Test");
 }
 
 AmberEngine::Core::Context::~Context()

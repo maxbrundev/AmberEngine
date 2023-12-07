@@ -4,15 +4,14 @@
 
 #include "AmberEngine/Data/Constants.h"
 #include "AmberEngine/Tools/Utils/Converter.h"
-#include "AmberEngine/UI/Panels/PanelSettings.h"
 
-AmberEngine::UI::APanelWindow::APanelWindow(const std::string& p_title, bool p_opened, const PanelSettings p_panelSettings) :
+AmberEngine::UI::Panels::APanelWindow::APanelWindow(const std::string& p_title, bool p_opened, const PanelSettings p_panelSettings) :
 	title(p_title),
 	settings(p_panelSettings), m_opened(true), m_size(256, 144)
 {
 }
 
-void AmberEngine::UI::APanelWindow::Update()
+void AmberEngine::UI::Panels::APanelWindow::Update()
 {
 	if (!m_firstFrame)
 	{
@@ -27,7 +26,7 @@ void AmberEngine::UI::APanelWindow::Update()
 	m_firstFrame = false;
 }
 
-void AmberEngine::UI::APanelWindow::UpdateSize()
+void AmberEngine::UI::Panels::APanelWindow::UpdateSize()
 {
 	if (m_sizeChanged)
 	{
@@ -36,15 +35,15 @@ void AmberEngine::UI::APanelWindow::UpdateSize()
 	}
 }
 
-void AmberEngine::UI::APanelWindow::UpdatePosition()
+void AmberEngine::UI::Panels::APanelWindow::UpdatePosition()
 {
 }
 
-void AmberEngine::UI::APanelWindow::CopyImGuiPosition()
+void AmberEngine::UI::Panels::APanelWindow::CopyImGuiPosition()
 {
 }
 
-void AmberEngine::UI::APanelWindow::SetOpened(bool p_value)
+void AmberEngine::UI::Panels::APanelWindow::SetOpened(bool p_value)
 {
 	if (p_value != m_opened)
 	{
@@ -57,44 +56,44 @@ void AmberEngine::UI::APanelWindow::SetOpened(bool p_value)
 	}
 }
 
-bool AmberEngine::UI::APanelWindow::IsHovered() const
+bool AmberEngine::UI::Panels::APanelWindow::IsHovered() const
 {
 	return m_hovered;
 }
 
-bool AmberEngine::UI::APanelWindow::IsFocused() const
+bool AmberEngine::UI::Panels::APanelWindow::IsFocused() const
 {
 	return m_focused;
 }
 
-bool AmberEngine::UI::APanelWindow::IsOpened() const
+bool AmberEngine::UI::Panels::APanelWindow::IsOpened() const
 {
 	return m_opened;
 }
 
-void AmberEngine::UI::APanelWindow::CopyImGuiSize()
+void AmberEngine::UI::Panels::APanelWindow::CopyImGuiSize()
 {
 	m_size = glm::vec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 }
 
-std::pair<uint16_t, uint16_t> AmberEngine::UI::APanelWindow::GetSafeSize() const
+std::pair<uint16_t, uint16_t> AmberEngine::UI::Panels::APanelWindow::GetSafeSize() const
 {
 	const auto result = GetSize() - glm::vec2(0.0f, Data::Constants::EDITOR_FONT_SIZE_MEDIUM + ImGui::GetStyle().FramePadding.y * 2);
 	return { static_cast<uint16_t>(result.x), static_cast<uint16_t>(result.y) };
 }
 
-void AmberEngine::UI::APanelWindow::SetSize(const glm::vec2& p_size)
+void AmberEngine::UI::Panels::APanelWindow::SetSize(const glm::vec2& p_size)
 {
 	m_size = p_size;
 	m_sizeChanged = true;
 }
 
-const glm::vec2 AmberEngine::UI::APanelWindow::GetSize() const
+const glm::vec2 AmberEngine::UI::Panels::APanelWindow::GetSize() const
 {
 	return m_size;
 }
 
-void AmberEngine::UI::APanelWindow::DrawImplementation()
+void AmberEngine::UI::Panels::APanelWindow::DrawImplementation()
 {
 	if (m_opened)
 	{
@@ -155,7 +154,7 @@ void AmberEngine::UI::APanelWindow::DrawImplementation()
 				m_mustScrollToTop = false;
 			}
 
-			DrawContent();
+			DrawWidgets();
 		}
 		ImGui::End();
 	}

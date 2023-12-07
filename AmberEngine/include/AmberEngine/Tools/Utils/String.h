@@ -2,7 +2,7 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace Utils
+namespace Tools::Utils
 {
 	class API_AMBERENGINE String
 	{

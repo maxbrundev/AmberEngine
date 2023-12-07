@@ -2,8 +2,6 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include <glm/glm.hpp>
-
 namespace AmberEngine::LowRenderer
 {
 	class API_AMBERENGINE Camera

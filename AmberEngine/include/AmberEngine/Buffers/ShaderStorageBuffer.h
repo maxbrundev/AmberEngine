@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Context/Driver.h"

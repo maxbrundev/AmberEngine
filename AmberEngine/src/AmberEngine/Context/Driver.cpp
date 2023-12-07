@@ -39,14 +39,7 @@ AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSet
 	if(p_driverSettings.enableMultisample)
 		glEnable(GL_MULTISAMPLE);
 
-	m_apiVersion = (char*)glGetString(GL_VERSION);
-	m_libraryVersion = (char*)glewGetString(GLEW_VERSION);
-	m_render = (char*)glGetString(GL_RENDERER);
-	m_vendor = (char*)glGetString(GL_VENDOR);
-	m_shading_language_version = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-
 	DisplayDriverInfo();
-
 }
 
 void AmberEngine::Context::Driver::InitGlew()
@@ -112,54 +105,35 @@ void AmberEngine::Context::Driver::GLDebugMessageCallback(uint32_t source, uint3
 
 void AmberEngine::Context::Driver::DisplayDriverInfo() const
 {
-	std::string output;
-
-	output += "Using GLEW: ";
-
-	output += m_libraryVersion;
-
-	output += '\n';
-
-	output += m_apiVersion;
-
-	output += '\n';
-
-	output += m_render;
-
-	output += '\n';
-
-	output += m_vendor;
-
-	output += '\n';
-
-	output += m_shading_language_version;
-
-	output += '\n';
-
-	std::cout << output << "\n";
+	//std::string output;
+	//
+	//output += "Using GLEW: ";
+	//
+	//output += m_libraryVersion;
+	//
+	//output += '\n';
+	//
+	//output += m_apiVersion;
+	//
+	//output += '\n';
+	//
+	//output += m_render;
+	//
+	//output += '\n';
+	//
+	//output += m_vendor;
+	//
+	//output += '\n';
+	//
+	//output += m_shading_language_version;
+	//
+	//output += '\n';
+	//
+	//std::cout << output << "\n";
 }
 
-std::string_view AmberEngine::Context::Driver::m_api_version() const
+std::string AmberEngine::Context::Driver::GetString(GLenum p_parameter)
 {
-	return m_apiVersion;
-}
-
-std::string_view AmberEngine::Context::Driver::m_library_version() const
-{
-	return m_libraryVersion;
-}
-
-std::string_view AmberEngine::Context::Driver::m_render1() const
-{
-	return m_render;
-}
-
-std::string_view AmberEngine::Context::Driver::m_vendor1() const
-{
-	return m_vendor;
-}
-
-std::string_view AmberEngine::Context::Driver::m_shading_language_version1() const
-{
-	return m_shading_language_version;
+	const GLubyte* result = glGetString(p_parameter);
+	return result ? reinterpret_cast<const char*>(result) : std::string();
 }

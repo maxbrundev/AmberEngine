@@ -15,6 +15,7 @@ namespace AmberEngine::UI
 		void RemoveAllPanels();
 		void MakeDockspace(bool p_value);
 		void Draw() const;
+		void PostDraw() const;
 		bool IsDockspace() const;
 
 	private:

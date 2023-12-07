@@ -4,12 +4,10 @@
 
 #include "AmberEngine/Eventing/Event.h"
 
-#include "AmberEngine/Maths/Transform.h"
-
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
-#include "AmberEngine/Core/ECS/Components/LightComponent.h"
+#include "AmberEngine/Core/ECS/Components/CTransform.h"
 
-namespace AmberEngine::ECS
+namespace AmberEngine::Core::ECS
 {
 	class API_AMBERENGINE Actor
 	{
@@ -19,74 +17,88 @@ namespace AmberEngine::ECS
 		static Eventing::Event<Actor&, Actor&> AttachEvent;
 		static Eventing::Event<Actor&>         DettachEvent;
 
+		Eventing::Event<Components::AComponent&>	ComponentAddedEvent;
+		Eventing::Event<Components::AComponent&>	ComponentRemovedEvent;
+
 	public:
-		Actor(std::string p_name);
+		Actor(int64_t p_actorID, const std::string & p_name, const std::string & p_tag);
 		~Actor();
 
-		template<typename T>
-		void AddComponent(T* p_component)
+		template<typename T, typename ...Args>
+		inline T& AddComponent(Args&& ...p_args)
 		{
-			static_assert(std::is_base_of_v<Components::AComponent, T>, "T should inherit from AComponent");
+			static_assert(std::is_base_of<Components::AComponent, T>::value, "T should derive from AComponent");
 
-			if (auto component = GetComponent<T>(); !component)
+			if (auto found = GetComponent<T>(); !found)
 			{
-				m_components.emplace_back(std::move(p_component));
+				m_components.insert(m_components.begin(), std::make_shared<T>(*this, p_args...));
+				T& instance = *dynamic_cast<T*>(m_components.front().get());
+
+				ComponentAddedEvent.Invoke(instance);
+
+				return instance;
+			}
+			else
+			{
+				return *found;
 			}
 		}
 
-		template<typename T, typename ... Args>
-		void AddComponent(Args&& ... p_args)
-		{
-			static_assert(std::is_base_of_v<Components::AComponent, T>, "T should inherit from AComponent");
-
-			if (auto component = GetComponent<T>(); !component)
-			{
-				m_components.emplace_back(std::move(new T(*this, std::forward<Args>(p_args) ...)));
-			}
-		}
+		//template<typename T, typename ... Args>
+		//void AddComponent(Args&& ... p_args)
+		//{
+		//	static_assert(std::is_base_of<Components::AComponent, T>::value, "T should derive from AComponent");
+		//
+		//	if (auto found = GetComponent<T>(); !found)
+		//	{
+		//		m_components.insert(m_components.begin(), std::make_shared<T>(*this, p_args...));
+		//		T& instance = *dynamic_cast<T*>(m_components.front().get());
+		//	}
+		//}
 
 		template<typename T>
 		void RemoveComponent()
 		{
-			T* result = nullptr;
+			static_assert(std::is_base_of<Components::AComponent, T>::value, "T should derive from AComponent");
+
+			std::shared_ptr<T> result(nullptr);
 
 			for (auto it = m_components.begin(); it != m_components.end(); ++it)
 			{
-				if(it != m_components.end())
+				result = std::dynamic_pointer_cast<T>(*it);
+
+				if (result)
 				{
-					result = static_cast<T*>(*it);
+					ComponentRemovedEvent.Invoke(*result.get());
 
-					if (result)
-					{
-						delete result;
-						result = nullptr;
-
-						m_components.erase(it);
-						return;
-					}
+					m_components.erase(it);
 				}
 			}
 		}
 
 		template<typename T>
-		T* GetComponent()
+		inline T* GetComponent()
 		{
-			static_assert(std::is_base_of_v<Components::AComponent, T>, "T should inherit from AComponent");
+			static_assert(std::is_base_of<Components::AComponent, T>::value, "T should derive from AComponent");
 
-			for (auto& component : m_components)
+			std::shared_ptr<T> result(nullptr);
+
+			for (auto it = m_components.begin(); it != m_components.end(); ++it)
 			{
-				if(typeid(*component) == typeid(T))
+				result = std::dynamic_pointer_cast<T>(*it);
+				if (result)
 				{
-					return static_cast<T*>(component);
+					return result.get();
 				}
 			}
 
 			return nullptr;
 		}
 
-		void Update(const std::vector<Components::LightComponent*>& p_lights, float p_deltaTime) const;
+		bool RemoveComponent(ECS::Components::AComponent& p_component);
 
-	
+		std::vector<std::shared_ptr<Components::AComponent>>& GetComponents();
+
 		void SetName(std::string p_name);
 	
 		void SetParent(Actor& p_parent);
@@ -95,19 +107,31 @@ namespace AmberEngine::ECS
 		bool HasChildren() const;
 		bool IsDescendantOf(const Actor* p_actor) const;
 
-		std::string GetName();
+		const std::string& GetName() const;
+		const std::string& GetTag() const;
+
+		int64_t GetID() const;
 
 		Actor* GetParent() const;
 
-		std::vector<Actor*>& GetChildren();
+		void SetActive(bool p_active);
+		bool IsSelfActive() const;
+		bool IsActive() const;
 
-		Maths::Transform& GetTransform();
+		std::vector<Actor*>& GetChildren();
 
 	private:
 		std::string m_name;
-		Maths::Transform m_transform;
+		std::string m_tag;
+
+		int64_t	m_actorID;
+
+		bool m_active = true;
 		Actor* m_parent = nullptr;
 		std::vector<Actor*> m_children;
-		std::vector<Components::AComponent*> m_components;
+		std::vector<std::shared_ptr<Components::AComponent>> m_components;
+
+	public:
+		Components::CTransform& transform;
 	};
 }

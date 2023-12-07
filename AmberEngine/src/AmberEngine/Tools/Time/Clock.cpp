@@ -2,7 +2,7 @@
 
 #include "AmberEngine\Tools\Time\Clock.h"
 
-void Utils::Clock::Initialize()
+void Tools::Time::Clock::Initialize()
 {
 	deltaTime = 0.0f;
 
@@ -12,7 +12,7 @@ void Utils::Clock::Initialize()
 	isInitialized = true;
 }
 
-void Utils::Clock::Update()
+void Tools::Time::Clock::Update()
 {
 	currentTime = std::chrono::steady_clock::now();
 	elapsedTime = currentTime - lastTime;
@@ -31,12 +31,12 @@ void Utils::Clock::Update()
 	}
 }
 
-float Utils::Clock::GetFrameRate() const
+float Tools::Time::Clock::GetFrameRate() const
 {
 	return 1.0f / (deltaTime);
 }
 
-float Utils::Clock::GetDeltaTime() const
+float Tools::Time::Clock::GetDeltaTime() const
 {
 	return deltaTime * timeScale;
 }
