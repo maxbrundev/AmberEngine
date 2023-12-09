@@ -26,7 +26,7 @@ void AmberEngine::UI::Panels::MenuBar::CreateWindowMenu()
 	m_windowMenu->CreateWidget<Widgets::MenuItem>("Close all").ClickedEvent += std::bind(&AmberEngine::UI::Panels::MenuBar::OpenEveryWindows, this, false);
 	m_windowMenu->CreateWidget<Widgets::MenuItem>("Open all").ClickedEvent += std::bind(&AmberEngine::UI::Panels::MenuBar::OpenEveryWindows, this, true);
 	m_windowMenu->CreateWidget<Widgets::Separator>();
-
+	
 	/* When the menu is opened, we update which window is marked as "Opened" or "Closed" */
 	m_windowMenu->ClickedEvent += std::bind(&AmberEngine::UI::Panels::MenuBar::UpdateToggleableItems, this);
 }
@@ -48,10 +48,10 @@ void AmberEngine::UI::Panels::MenuBar::OpenEveryWindows(bool p_state)
 		panel.first.get().SetOpened(p_state);
 }
 
-void AmberEngine::UI::Panels::MenuBar::RegisterPanel(const std::string& p_name, APanelWindow& p_panel)
+void AmberEngine::UI::Panels::MenuBar::RegisterPanel(const std::string& p_name, AmberEngine::UI::Panels::APanelWindow& p_panel)
 {
 	auto& menuItem = m_windowMenu->CreateWidget<Widgets::MenuItem>(p_name, "", true, true);
-	menuItem.ValueChangedEvent += std::bind(&APanelWindow::SetOpened, &p_panel, std::placeholders::_1);
-
+	menuItem.ValueChangedEvent += std::bind(&AmberEngine::UI::Panels::APanelWindow::SetOpened, &p_panel, std::placeholders::_1);
+	
 	m_panels.emplace(p_name, std::make_pair(std::ref(p_panel), std::ref(menuItem)));
 }

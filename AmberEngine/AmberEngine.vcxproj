@@ -299,6 +299,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\Renderer.h" />
     <ClInclude Include="include\AmberEngine\Core\PanelsManager.h" />
     <ClInclude Include="include\AmberEngine\Managers\ResourcesManager.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\NumberFormat.h" />
     <ClInclude Include="include\AmberEngine\UI\Core\UIManager.h" />
     <ClInclude Include="include\AmberEngine\Maths\ETransformState.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
@@ -330,6 +331,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Tools\Utils\Lerper.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\FrameInfo.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\AButton.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Button.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ColorEdit.h" />
@@ -371,6 +373,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\Context.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Maths.h" />
     <ClInclude Include="include\AmberEngine\Tools\Global\ServiceLocator.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\CallbackQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Amberpch.cpp">
@@ -418,6 +421,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Renderer.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\ResourcesManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\NumberFormat.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
     <ClCompile Include="src\AmberEngine\Rendering\Entities\Light.cpp" />
@@ -440,6 +444,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Tools\Utils\Maths.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Global\ServiceLocator.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\FrameInfo.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Button.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Canvas.cpp" />
     <ClCompile Include="src\AmberEngine\Core\PanelsManager.cpp" />

@@ -47,7 +47,7 @@ void AmberEngine::Core::Renderer::RenderScene(SceneSystem::Scene& p_scene, Resou
 	}
 }
 
-void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix, Resources::Material* p_defaultMaterial) const
+void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 const* p_modelMatrix, Resources::Material* p_defaultMaterial)
 {
 	m_modelMatrixSender(*p_modelMatrix);
 	
@@ -64,8 +64,13 @@ void AmberEngine::Core::Renderer::Draw(Resources::Model& p_model, glm::mat4 cons
 	}
 }
 
-void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resources::Material& p_material) const
+void AmberEngine::Core::Renderer::DrawMesh(const Resources::Mesh& p_mesh, Resources::Material& p_material)
 {
+	++m_frameInfo.batchCount;
+	m_frameInfo.instanceCount += 1;
+	m_frameInfo.polyCount += p_mesh.GetIndexCount() / 3 * 1;
+	m_frameInfo.vertexCount += p_mesh.GetVertexCount() * 1;
+
 	p_material.Bind(m_emptyTexture);
 
 	p_mesh.Bind();
@@ -144,4 +149,17 @@ void AmberEngine::Core::Renderer::PolygonModeLine() const
 void AmberEngine::Core::Renderer::PolygonModeFill() const
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void AmberEngine::Core::Renderer::ClearFrameInfo()
+{
+	m_frameInfo.batchCount    = 0;
+	m_frameInfo.instanceCount = 0;
+	m_frameInfo.polyCount     = 0;
+	m_frameInfo.vertexCount   = 0;
+}
+
+const AmberEngine::Core::Renderer::FrameInfo& AmberEngine::Core::Renderer::GetFrameInfo() const
+{
+	return m_frameInfo;
 }

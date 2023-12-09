@@ -53,17 +53,17 @@ void AmberEngine::Core::ECS::Components::CPointLight::OnInspector(UI::WidgetCont
 	UI::GUIDrawer::CreateTitle(p_root, "Fall-off presets");
 	auto& presetsRoot = p_root.CreateWidget<UI::Widgets::Group>();
 
-	auto& constantPreset = presetsRoot.CreateWidget<UI::Widgets::Buttons::Button>("Constant");
+	auto& constantPreset = presetsRoot.CreateWidget<UI::Widgets::Button>("Constant");
 	constantPreset.ClickedEvent += [this] { m_data.constant = 1.0f; m_data.linear = m_data.quadratic = 0.0f; };
 	constantPreset.lineBreak = false;
 	constantPreset.idleBackgroundColor = { 0.7f, 0.5f, 0.0f };
 
-	auto& linearPreset = presetsRoot.CreateWidget<UI::Widgets::Buttons::Button>("Linear");
+	auto& linearPreset = presetsRoot.CreateWidget<UI::Widgets::Button>("Linear");
 	linearPreset.ClickedEvent += [this] { m_data.linear = 1.0f; m_data.constant = m_data.quadratic = 0.0f; };
 	linearPreset.lineBreak = false;
 	linearPreset.idleBackgroundColor = { 0.7f, 0.5f, 0.0f };
 
-	auto& quadraticPreset = presetsRoot.CreateWidget<UI::Widgets::Buttons::Button>("Quadratic");
+	auto& quadraticPreset = presetsRoot.CreateWidget<UI::Widgets::Button>("Quadratic");
 	quadraticPreset.ClickedEvent += [this] { m_data.quadratic = 1.0f; m_data.constant = m_data.linear = 0.0f; };
 	quadraticPreset.idleBackgroundColor = { 0.7f, 0.5f, 0.0f };
 

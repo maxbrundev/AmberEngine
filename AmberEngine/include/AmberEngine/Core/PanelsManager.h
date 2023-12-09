@@ -1,30 +1,26 @@
 #pragma once
 
-#include "AmberEngine/UI/Canvas.h"
 #include "AmberEngine/UI/Panels/MenuBar.h"
-
-namespace AmberEngine::UI
-{
-	class APanel;
-	class APanelWindow;
-}
+#include "AmberEngine/UI/Panels/APanel.h"
+#include "AmberEngine/UI/Panels/APanelWindow.h"
+#include "AmberEngine/UI/Canvas.h"
 
 namespace AmberEngine::Core
 {
 	class PanelsManager
 	{
 	public:
-		PanelsManager(UI::Canvas& p_canvas);
+		PanelsManager(AmberEngine::UI::Canvas& p_canvas);
 
 		template<typename T, typename... Args>
 		void CreatePanel(const std::string& p_id, Args&&... p_args)
 		{
-			if constexpr (std::is_base_of<UI::Panels::APanelWindow, T>::value)
+			if constexpr (std::is_base_of<AmberEngine::UI::Panels::APanelWindow, T>::value)
 			{
 				m_panels.emplace(p_id, std::make_unique<T>(p_id, std::forward<Args>(p_args)...));
 
 				T& instance = *static_cast<T*>(m_panels.at(p_id).get());
-				GetPanelAs<UI::Panels::MenuBar>("MenuBar").RegisterPanel(instance.title, instance);
+				GetPanelAs<AmberEngine::UI::Panels::MenuBar>("MenuBar").RegisterPanel(instance.title, instance);
 			}
 			else
 			{
@@ -41,7 +37,7 @@ namespace AmberEngine::Core
 		}
 
 	private:
-		std::unordered_map<std::string, std::unique_ptr<UI::APanel>> m_panels;
+		std::unordered_map<std::string, std::unique_ptr<AmberEngine::UI::Panels::APanel>> m_panels;
 		UI::Canvas& m_canvas;
 	};
 }

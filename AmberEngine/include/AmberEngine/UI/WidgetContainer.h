@@ -1,39 +1,33 @@
 #pragma once
+
 #include "AmberEngine/UI/Widgets/AWidget.h"
 
 namespace AmberEngine::UI
 {
-	enum class EMemoryMode
-	{
-		INTERNAL_MANAGMENT,
-		EXTERNAL_MANAGMENT
-	};
-
 	class WidgetContainer
 	{
 	public:
 		WidgetContainer() = default;
 		virtual ~WidgetContainer();
 
-		void RemoveWidget(AWidget& p_widget);
+		void RemoveWidget(Widgets::AWidget& p_widget);
 		void RemoveAllWidgets();
-		void ConsiderWidget(AWidget& p_widget, bool p_manageMemory = true);
-		void UnconsiderWidget(AWidget& p_widget);
+		void TransferOwnership(Widgets::AWidget& p_widget, WidgetContainer& p_widgetCoontainer);
 		void CollectGarbages();
 		void DrawWidgets();
 
 		template <typename T, typename ... Args>
 		T& CreateWidget(Args&&... p_args)
 		{
-			m_widgets.emplace_back(new T(p_args...), EMemoryMode::INTERNAL_MANAGMENT);
-			T& instance = *reinterpret_cast<T*>(m_widgets.back().first);
+			m_widgets.emplace_back(std::make_unique<T>(p_args...));
+			T& instance = *static_cast<T*>(m_widgets.back().get());
 			instance.SetParent(this);
 			return instance;
 		}
 
-		std::vector<std::pair<AWidget*, EMemoryMode>>& GetWidgets();
+		std::vector<std::unique_ptr<Widgets::AWidget>>& GetWidgets();
 
-	protected:
-		std::vector<std::pair<AWidget*, EMemoryMode>> m_widgets;
+	public:
+		std::vector<std::unique_ptr<Widgets::AWidget>> m_widgets;
 	};
 }

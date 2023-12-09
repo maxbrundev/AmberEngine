@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Data/Color.h"
 
-namespace AmberEngine::UI::Widgets::Buttons
+namespace AmberEngine::UI::Widgets
 {
 	class Button : public AButton
 	{

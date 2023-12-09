@@ -11,7 +11,6 @@ namespace AmberEngine::UI::Widgets
 	public:
 		MenuList(const std::string& p_name, bool p_locked = false);
 		virtual ~MenuList() override = default;
-
 	protected:
 		virtual void DrawImplementation() override;
 

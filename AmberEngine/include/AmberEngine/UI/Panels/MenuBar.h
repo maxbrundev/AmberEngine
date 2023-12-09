@@ -10,13 +10,13 @@ namespace AmberEngine::UI::Panels
 {
 	class MenuBar : public PanelMenuBar
 	{
-		using PanelMap = std::unordered_map<std::string, std::pair<std::reference_wrapper<APanelWindow>, std::reference_wrapper<Widgets::MenuItem>>>;
+		using PanelMap = std::unordered_map<std::string, std::pair<std::reference_wrapper<AmberEngine::UI::Panels::APanelWindow>, std::reference_wrapper<AmberEngine::UI::Widgets::MenuItem>>>;
 
 	public:
 		MenuBar();
 		virtual ~MenuBar() override = default;
 
-		void RegisterPanel(const std::string& p_name, APanelWindow& p_panel);
+		void RegisterPanel(const std::string& p_name, AmberEngine::UI::Panels::APanelWindow& p_panel);
 
 	private:
 		void CreateFileMenu();

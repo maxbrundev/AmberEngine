@@ -4,7 +4,7 @@
 
 #include "AmberEngine/Eventing/Event.h"
 
-namespace AmberEngine::UI::Widgets::Buttons
+namespace AmberEngine::UI::Widgets
 {
 	class AButton : public AWidget
 	{

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AmberEngine/UI/Widgets/AWidget.h"
 #include "AmberEngine/UI/WidgetContainer.h"
 
 namespace AmberEngine::UI::Widgets
@@ -10,7 +9,6 @@ namespace AmberEngine::UI::Widgets
 	public:
 		Group() = default;
 		virtual ~Group() override = default;
-
 	protected:
 		virtual void DrawImplementation() override;
 	};

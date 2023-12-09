@@ -7,7 +7,7 @@
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
-AmberEngine::UI::SceneView::SceneView(const std::string& p_title, bool p_opened, Panels::PanelSettings p_panelSettings) :
+AmberEngine::UI::Panels::SceneView::SceneView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
 	AView(p_title, p_opened, p_panelSettings),
 	m_sceneManager(Tools::Global::ServiceLocator::Get<AmberEngine::Core::SceneSystem::SceneManager>()),
 	m_cameraController(m_camera, m_cameraPosition)
@@ -16,7 +16,7 @@ AmberEngine::UI::SceneView::SceneView(const std::string& p_title, bool p_opened,
 	m_cameraController.GetCamera().SetFar(5000.0f);
 }
 
-void AmberEngine::UI::SceneView::Update(float p_deltaTime)
+void AmberEngine::UI::Panels::SceneView::Update(float p_deltaTime)
 {
 	AView::Update(p_deltaTime);
 
@@ -26,7 +26,7 @@ void AmberEngine::UI::SceneView::Update(float p_deltaTime)
 	}
 }
 
-void AmberEngine::UI::SceneView::RenderScene()
+void AmberEngine::UI::Panels::SceneView::RenderScene()
 {
 	auto& baseRenderer = Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().renderer;
 
@@ -40,14 +40,14 @@ void AmberEngine::UI::SceneView::RenderScene()
 	m_frameBuffer.Unbind();
 }
 
-void AmberEngine::UI::SceneView::RenderImplementation()
+void AmberEngine::UI::Panels::SceneView::RenderImplementation()
 {
 	PrepareCamera();
 
 	RenderScene();
 }
 
-AmberEngine::LowRenderer::CameraController& AmberEngine::UI::SceneView::GetCameraController()
+AmberEngine::LowRenderer::CameraController& AmberEngine::UI::Panels::SceneView::GetCameraController()
 {
 	return m_cameraController;
 }

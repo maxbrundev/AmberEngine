@@ -4,7 +4,7 @@
 
 #include "AmberEngine/ImGUI/imgui_internal.h"
 
-AmberEngine::UI::Widgets::Buttons::Button::Button(const std::string& p_label, const glm::vec2& p_size, bool p_disabled) : label(p_label), size(p_size), disabled(p_disabled)
+AmberEngine::UI::Widgets::Button::Button(const std::string& p_label, const glm::vec2& p_size, bool p_disabled) : label(p_label), size(p_size), disabled(p_disabled)
 {
 	const auto& style = ImGui::GetStyle();
 
@@ -14,7 +14,7 @@ AmberEngine::UI::Widgets::Buttons::Button::Button(const std::string& p_label, co
 	textColor              = Data::Color(style.Colors[ImGuiCol_Text].x, style.Colors[ImGuiCol_Text].y, style.Colors[ImGuiCol_Text].z);
 }
 
-void AmberEngine::UI::Widgets::Buttons::Button::DrawImplementation()
+void AmberEngine::UI::Widgets::Button::DrawImplementation()
 {
 	auto& style = ImGui::GetStyle();
 

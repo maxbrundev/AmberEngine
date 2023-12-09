@@ -5,7 +5,7 @@
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::CreatedEvent;
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::DestroyEvent;
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&, AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::AttachEvent;
-AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::DettachEvent;
+AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&, AmberEngine::Core::ECS::Actor*> AmberEngine::Core::ECS::Actor::DettachEvent;
 
 AmberEngine::Core::ECS::Actor::Actor(int64_t p_actorID, const std::string& p_name, const std::string & p_tag) : m_actorID(p_actorID),
 m_name(p_name),
@@ -17,6 +17,8 @@ transform(AddComponent<Components::CTransform>())
 
 AmberEngine::Core::ECS::Actor::~Actor()
 {
+	DestroyEvent.Invoke(*this);
+
 	std::vector<Actor*> toDetach = m_children;
 
 	for (const auto child : toDetach)
@@ -29,12 +31,12 @@ AmberEngine::Core::ECS::Actor::~Actor()
 
 	RemoveParent();
 
-	DestroyEvent.Invoke(*this);
+	std::for_each(m_components.begin(), m_components.end(), [&](const std::shared_ptr<Components::AComponent>& p_component) { ComponentRemovedEvent.Invoke(*p_component); });
 
 	m_components.clear();
 }
 
-bool AmberEngine::Core::ECS::Actor::RemoveComponent(ECS::Components::AComponent& p_component)
+bool AmberEngine::Core::ECS::Actor::RemoveComponent(Components::AComponent& p_component)
 {
 	for (auto it = m_components.begin(); it != m_components.end(); ++it)
 	{
@@ -71,7 +73,7 @@ void AmberEngine::Core::ECS::Actor::SetParent(Actor& p_parent)
 
 void AmberEngine::Core::ECS::Actor::RemoveParent()
 {
-	DettachEvent.Invoke(*this);
+	DettachEvent.Invoke(*this, m_parent);
 
 	if (m_parent)
 	{

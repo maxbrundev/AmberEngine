@@ -9,7 +9,7 @@
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
-AmberEngine::UI::AView::AView(const std::string& p_title, bool p_opened, Panels::PanelSettings p_panelSettings) :
+AmberEngine::UI::Panels::AView::AView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
 APanelWindow(p_title, p_opened, p_panelSettings),
 m_cameraPosition(0.0f),
 m_frameBuffer(256, 144),
@@ -18,31 +18,31 @@ m_editorRenderer(Tools::Global::ServiceLocator::Get<AmberEngine::Core::Editor>()
 	m_image = &CreateWidget<Widgets::Image>(m_frameBuffer.GetTextureID(), glm::vec2{ 0.f, 0.f });
 }
 
-AmberEngine::UI::AView::~AView()
+AmberEngine::UI::Panels::AView::~AView()
 {
 	m_frameBuffer.Unbind();
 }
 
-void AmberEngine::UI::AView::PrepareCamera()
+void AmberEngine::UI::Panels::AView::PrepareCamera()
 {
 	auto[winWidth, winHeight] = GetSafeSize();
 	m_camera.CalculateMatrices(winWidth, winHeight, m_cameraPosition);
 }
 
-void AmberEngine::UI::AView::FillEngineUBO()
+void AmberEngine::UI::Panels::AView::FillEngineUBO()
 {
 	size_t offset = sizeof(glm::mat4); // We skip the model matrix (Which is a special case, modified every draw calls)
-	Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().engineUBO->SetSubData(m_camera.GetViewMatrix(), offset);
+	AmberEngine::Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().engineUBO->SetSubData(m_camera.GetViewMatrix(), offset);
 	Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().engineUBO->SetSubData(m_camera.GetProjectionMatrix(), offset);
 	Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().engineUBO->SetSubData(m_cameraPosition, offset);
 }
 
-void AmberEngine::UI::AView::ResizeFrameBuffer(uint16_t p_width, uint16_t p_height)
+void AmberEngine::UI::Panels::AView::ResizeFrameBuffer(uint16_t p_width, uint16_t p_height)
 {
 	m_frameBuffer.Resize(p_width, p_height);
 }
 
-void AmberEngine::UI::AView::Update(float p_deltaTime)
+void AmberEngine::UI::Panels::AView::Update(float p_deltaTime)
 {
 	auto[winWidth, winHeight] = GetSafeSize();
 
@@ -54,7 +54,7 @@ void AmberEngine::UI::AView::Update(float p_deltaTime)
 	}
 }
 
-void AmberEngine::UI::AView::DrawImplementation()
+void AmberEngine::UI::Panels::AView::DrawImplementation()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(0, 0));
@@ -64,7 +64,7 @@ void AmberEngine::UI::AView::DrawImplementation()
 	ImGui::PopStyleVar();
 }
 
-void AmberEngine::UI::AView::Render()
+void AmberEngine::UI::Panels::AView::Render()
 {
 	FillEngineUBO();
 

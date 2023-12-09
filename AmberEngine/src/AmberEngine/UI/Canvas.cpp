@@ -7,14 +7,14 @@ AmberEngine::UI::Canvas::~Canvas()
 	RemoveAllPanels();
 }
 
-void AmberEngine::UI::Canvas::AddPanel(APanel& p_panel)
+void AmberEngine::UI::Canvas::AddPanel(Panels::APanel& p_panel)
 {
 	m_panels.push_back(std::ref(p_panel));
 }
 
-void AmberEngine::UI::Canvas::RemovePanel(APanel& p_panel)
+void AmberEngine::UI::Canvas::RemovePanel(Panels::APanel& p_panel)
 {
-	const auto& predicate = [&p_panel](std::reference_wrapper<APanel>& p_item)
+	const auto& predicate = [&p_panel](std::reference_wrapper<Panels::APanel>& p_item)
 	{
 		return &p_panel == &p_item.get();
 	};

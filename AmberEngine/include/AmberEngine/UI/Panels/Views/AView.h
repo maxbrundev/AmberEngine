@@ -9,13 +9,13 @@
 #include "AmberEngine/LowRenderer/Camera.h"
 #include "AmberEngine/UI/Widgets/Image.h"
 
-namespace AmberEngine::UI
+namespace AmberEngine::UI::Panels
 {
-	class AView : public Panels::APanelWindow
+	class AView : public APanelWindow
 	{
 	public:
-		AView(const std::string& p_title, bool p_opened, Panels::PanelSettings p_panelSettings);
-		~AView() override;
+		AView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings);
+		virtual ~AView() override;
 
 		virtual void Update(float p_deltaTime);
 

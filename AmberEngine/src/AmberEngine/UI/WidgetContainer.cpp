@@ -7,17 +7,16 @@ AmberEngine::UI::WidgetContainer::~WidgetContainer()
 	RemoveAllWidgets();
 }
 
-void AmberEngine::UI::WidgetContainer::RemoveWidget(AWidget& p_widget)
+void AmberEngine::UI::WidgetContainer::RemoveWidget(Widgets::AWidget& p_widget)
 {
-	auto found = std::find_if(m_widgets.begin(), m_widgets.end(), [&p_widget](std::pair<AWidget*, EMemoryMode>& p_pair)
+	auto found = std::find_if(m_widgets.begin(), m_widgets.end(), [&p_widget](std::unique_ptr<Widgets::AWidget>& p_instance)
 	{
-		return p_pair.first == &p_widget;
+		return p_instance.get() == &p_widget;
 	});
 
 	if (found != m_widgets.end())
 	{
-		if (found->second == EMemoryMode::INTERNAL_MANAGMENT)
-			delete found->first;
+		p_widget.SetParent(nullptr);
 
 		m_widgets.erase(found);
 	}
@@ -25,45 +24,31 @@ void AmberEngine::UI::WidgetContainer::RemoveWidget(AWidget& p_widget)
 
 void AmberEngine::UI::WidgetContainer::RemoveAllWidgets()
 {
-	std::for_each(m_widgets.begin(), m_widgets.end(), [](auto& pair)
-	{
-		if (pair.second == EMemoryMode::INTERNAL_MANAGMENT)
-			delete pair.first;
-	});
-
 	m_widgets.clear();
 }
 
-void AmberEngine::UI::WidgetContainer::ConsiderWidget(AWidget& p_widget, bool p_manageMemory)
+void AmberEngine::UI::WidgetContainer::TransferOwnership(Widgets::AWidget& p_widget, WidgetContainer& p_widgetCoontainer)
 {
-	m_widgets.emplace_back(std::make_pair(&p_widget, p_manageMemory ? EMemoryMode::INTERNAL_MANAGMENT : EMemoryMode::EXTERNAL_MANAGMENT));
-	p_widget.SetParent(this);
-}
-
-void AmberEngine::UI::WidgetContainer::UnconsiderWidget(AWidget& p_widget)
-{
-	auto found = std::find_if(m_widgets.begin(), m_widgets.end(), [&p_widget](std::pair<AWidget*, EMemoryMode>& p_pair)
+	auto found = std::find_if(m_widgets.begin(), m_widgets.end(), [&p_widget](std::unique_ptr<Widgets::AWidget>& p_instance)
 	{
-		return p_pair.first == &p_widget;
+		return p_instance.get() == &p_widget;
 	});
 
 	if (found != m_widgets.end())
 	{
-		p_widget.SetParent(nullptr);
+		p_widget.SetParent(&p_widgetCoontainer);
+
+		p_widgetCoontainer.m_widgets.push_back(std::move(*found));
+
 		m_widgets.erase(found);
 	}
 }
 
 void AmberEngine::UI::WidgetContainer::CollectGarbages()
 {
-	m_widgets.erase(std::remove_if(m_widgets.begin(), m_widgets.end(), [](std::pair<AWidget*, EMemoryMode>& p_item)
+	m_widgets.erase(std::remove_if(m_widgets.begin(), m_widgets.end(), [](std::unique_ptr<Widgets::AWidget>& p_instance)
 	{
-		bool toDestroy = p_item.first && p_item.first->IsDestroyed();
-
-		if (toDestroy && p_item.second == EMemoryMode::INTERNAL_MANAGMENT)
-			delete p_item.first;
-
-		return toDestroy;
+		return p_instance && p_instance->IsDestroyed();
 	}), m_widgets.end());
 }
 
@@ -73,11 +58,11 @@ void AmberEngine::UI::WidgetContainer::DrawWidgets()
 
 	for (const auto& widget : m_widgets)
 	{
-		widget.first->Draw();
+		widget->Draw();
 	}
 }
 
-std::vector<std::pair<AmberEngine::UI::AWidget*, AmberEngine::UI::EMemoryMode>>& AmberEngine::UI::WidgetContainer::GetWidgets()
+std::vector<std::unique_ptr<AmberEngine::UI::Widgets::AWidget>>& AmberEngine::UI::WidgetContainer::GetWidgets()
 {
 	return m_widgets;
 }

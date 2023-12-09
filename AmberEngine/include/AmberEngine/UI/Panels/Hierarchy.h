@@ -1,8 +1,9 @@
 #pragma once
 
 #include "AmberEngine/UI/Panels/APanelWindow.h"
-#include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/UI/Widgets/TreeNode.h"
+
+#include "AmberEngine/Core/ECS/Actor.h"
 
 namespace AmberEngine::UI::Panels
 {
@@ -13,11 +14,10 @@ namespace AmberEngine::UI::Panels
 		virtual ~Hierarchy() override = default;
 
 		void Clear();
-		void AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor);
-		void DetachActorNodeFromParentNode(AmberEngine::Core::ECS::Actor& p_actor);
+		void AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor& p_parentActor);
+		void DetachActorNodeFromParentNode(AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor* p_parentActor);
 		void AddActorByInstance(AmberEngine::Core::ECS::Actor& p_actor);
 		void DeleteActorByInstance(AmberEngine::Core::ECS::Actor& p_actor);
-
 		void SelectActor(AmberEngine::Core::ECS::Actor& p_target);
 
 	public:

@@ -5,7 +5,7 @@ namespace  AmberEngine::UI
 	class WidgetContainer;
 }
 
-namespace AmberEngine::UI
+namespace AmberEngine::UI::Widgets
 {
 	class AWidget
 	{
@@ -36,5 +36,7 @@ namespace AmberEngine::UI
 	private:
 		static uint64_t __WIDGET_ID_INCREMENT;
 		bool m_destroyed = false;
+
+		
 	};
 }

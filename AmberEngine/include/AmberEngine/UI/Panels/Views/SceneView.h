@@ -5,13 +5,12 @@
 
 #include "AmberEngine/LowRenderer/CameraController.h"
 
-namespace AmberEngine::UI
+namespace AmberEngine::UI::Panels
 {
 	class SceneView : public AView
 	{
 	public:
-		SceneView(const std::string& p_title, bool p_opened, Panels::PanelSettings p_panelSettings);
-		~SceneView() override = default;
+		SceneView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings);
 
 		void Update(float p_deltaTime) override;
 		void RenderScene();

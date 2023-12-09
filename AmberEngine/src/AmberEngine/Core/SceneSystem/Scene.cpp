@@ -78,7 +78,10 @@ bool AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor& p_target)
 	if (found != m_actors.end())
 	{
 		delete *found;
+		*found = nullptr;
+
 		m_actors.erase(found);
+
 		return true;
 	}
 

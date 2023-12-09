@@ -9,10 +9,25 @@
 AmberEngine::UI::Panels::Hierarchy::Hierarchy(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
 APanelWindow(p_title, p_opened, p_panelSettings)
 {
-	AmberEngine::Core::ECS::Actor::CreatedEvent += std::bind(&Hierarchy::AddActorByInstance, this, std::placeholders::_1);
-	m_destroyedListener = AmberEngine::Core::ECS::Actor::DestroyEvent += std::bind(&Hierarchy::DeleteActorByInstance, this, std::placeholders::_1);
-	AmberEngine::Core::ECS::Actor::AttachEvent += std::bind(&Hierarchy::AttachActorNodeToParentNode, this, std::placeholders::_1);
-	AmberEngine::Core::ECS::Actor::DettachEvent += std::bind(&Hierarchy::DetachActorNodeFromParentNode, this, std::placeholders::_1);
+	AmberEngine::Core::ECS::Actor::CreatedEvent += [this](AmberEngine::Core::ECS::Actor& p_actor)
+	{
+		m_callbackQueue.push([this, &p_actor] { this->AddActorByInstance(p_actor); });
+	};
+
+	m_destroyedListener = AmberEngine::Core::ECS::Actor::DestroyEvent += [this](AmberEngine::Core::ECS::Actor& p_actor)
+	{
+		m_callbackQueue.push([this, &p_actor] { this->DeleteActorByInstance(p_actor); });
+	};
+
+	AmberEngine::Core::ECS::Actor::AttachEvent += [this](AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor& p_parentActor)
+	{
+		m_callbackQueue.push([this, &p_actor, &p_parentActor] { this->AttachActorNodeToParentNode(p_actor, p_parentActor); });
+	};
+
+	AmberEngine::Core::ECS::Actor::DettachEvent += [this](AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor* p_parentActor)
+	{
+		m_callbackQueue.push([this, &p_actor, p_parentActor] { this->DetachActorNodeFromParentNode(p_actor, p_parentActor); });
+	};
 
 	Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().sceneManager.SceneUnloadEvent += std::bind(&Hierarchy::Clear, this);
 
@@ -28,33 +43,30 @@ void AmberEngine::UI::Panels::Hierarchy::Clear()
 	m_widgetActorLink.clear();
 }
 
-void AmberEngine::UI::Panels::Hierarchy::AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor)
+void AmberEngine::UI::Panels::Hierarchy::AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor& p_parentActor)
 {
 	const auto actorWidget = m_widgetActorLink.find(&p_actor);
+	
 
 	if (actorWidget != m_widgetActorLink.end())
 	{
 		auto widget = actorWidget->second;
 
-		if (widget->HasParent())
-			widget->GetParent()->UnconsiderWidget(*widget);
+		const auto parentWidget = m_widgetActorLink.at(p_actor.GetParent());
+		parentWidget->isLeaf = false;
 
-		if (p_actor.HasParent())
-		{
-			const auto parentWidget = m_widgetActorLink.at(p_actor.GetParent());
-			parentWidget->isLeaf = false;
-			parentWidget->ConsiderWidget(*widget);
-		}
+		widget->GetParent()->TransferOwnership(*widget, *parentWidget);
+		
 	}
 }
 
-void AmberEngine::UI::Panels::Hierarchy::DetachActorNodeFromParentNode(AmberEngine::Core::ECS::Actor& p_actor)
+void AmberEngine::UI::Panels::Hierarchy::DetachActorNodeFromParentNode(AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor* p_parentActor)
 {
 	if (const auto actorWidget = m_widgetActorLink.find(&p_actor); actorWidget != m_widgetActorLink.end())
 	{
-		if (p_actor.HasParent() && p_actor.GetParent()->GetChildren().size() == 1)
+		if (p_parentActor && p_parentActor->GetChildren().size() <= 1)
 		{
-			if (const auto parentWidget = m_widgetActorLink.find(p_actor.GetParent()); parentWidget != m_widgetActorLink.end())
+			if (const auto parentWidget = m_widgetActorLink.find(p_parentActor); parentWidget != m_widgetActorLink.end())
 			{
 				parentWidget->second->isLeaf = true;
 			}
@@ -62,10 +74,8 @@ void AmberEngine::UI::Panels::Hierarchy::DetachActorNodeFromParentNode(AmberEngi
 
 		const auto widget = actorWidget->second;
 
-		if (widget->HasParent())
-			widget->GetParent()->UnconsiderWidget(*widget);
-
-		m_root->ConsiderWidget(*widget);
+		if(widget->GetParent() != m_root)
+			widget->GetParent()->TransferOwnership(*widget, *m_root);
 	}
 }
 

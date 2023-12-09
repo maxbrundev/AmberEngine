@@ -2,7 +2,9 @@
 
 #include "AmberEngine/UI/WidgetContainer.h"
 
-namespace AmberEngine::UI
+#include "AmberEngine/Tools/Utils/CallbackQueue.h"
+
+namespace AmberEngine::UI::Panels
 {
 	class APanel : public WidgetContainer
 	{
@@ -17,5 +19,8 @@ namespace AmberEngine::UI
 
 	public:
 		bool enabled = true;
+
+	protected:
+		Tools::Utils::CallbackQueue m_callbackQueue;
 	};
 }

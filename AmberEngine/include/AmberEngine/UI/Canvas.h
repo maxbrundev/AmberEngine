@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Panels/APanel.h"
+#include "AmberEngine/UI/Panels/APanel.h"
 
 namespace AmberEngine::UI
 {
@@ -10,8 +10,8 @@ namespace AmberEngine::UI
 		Canvas() = default;
 		~Canvas();
 
-		void AddPanel(APanel& p_panel);
-		void RemovePanel(APanel& p_panel);
+		void AddPanel(Panels::APanel& p_panel);
+		void RemovePanel(Panels::APanel& p_panel);
 		void RemoveAllPanels();
 		void MakeDockspace(bool p_value);
 		void Draw() const;
@@ -21,6 +21,6 @@ namespace AmberEngine::UI
 	private:
 		bool m_isDockspace = false;
 
-		std::vector<std::reference_wrapper<APanel>> m_panels;
+		std::vector<std::reference_wrapper<Panels::APanel>> m_panels;
 	};
 }
