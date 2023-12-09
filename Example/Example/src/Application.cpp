@@ -42,10 +42,6 @@ void Example::Application::Run()
 	auto& testActor3 = m_context.sceneManager.GetCurrentScene()->CreateActor("Actor3");
 	auto& testActor4 = m_context.sceneManager.GetCurrentScene()->CreateActor("Actor4");
 	auto& testActor5 = m_context.sceneManager.GetCurrentScene()->CreateActor("Actor5");
-	auto& directionalLight = m_context.sceneManager.GetCurrentScene()->CreateActor("Directional Light");
-
-	directionalLight.AddComponent<AmberEngine::Core::ECS::Components::CDirectionalLight>();
-	directionalLight.GetComponent<AmberEngine::Core::ECS::Components::CLight>()->SetIntensity(0.750f);
 
 	testActor.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Sponza", "Models\\Sponza\\sponza.obj");
 	testActor.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
@@ -53,7 +49,7 @@ void Example::Application::Run()
 
 	testActor4.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Cube", ":Models\\Cube.fbx");
 
-	testActor2.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Nanosuit", "Models\\DamagedHelmet\\glTF\\DamagedHelmet.gltf");
+	testActor2.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("DamagedHelmet", "Models\\DamagedHelmet\\glTF\\DamagedHelmet.gltf");
 	testActor2.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
 
 	testActor3.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Nanosuit", "Models\\Nanosuit\\nanosuit.obj");
@@ -63,7 +59,6 @@ void Example::Application::Run()
 	testActor4.SetParent(testActor2);
 	testActor.SetParent(testActor2);
 	testActor5.AddComponent<AmberEngine::Core::ECS::Components::CPointLight>();
-	directionalLight.SetParent(testActor2);
 
 	testActor3.transform.SetLocalPosition({ 10.0f, 0.0f, 0.0f });
 
