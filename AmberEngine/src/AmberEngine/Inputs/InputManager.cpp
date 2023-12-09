@@ -78,6 +78,13 @@ bool AmberEngine::Inputs::InputManager::IsMouseButtonReleased(EMouseButton p_but
 	return m_mouseEvents.find(p_button) != m_mouseEvents.end() && m_mouseEvents.at(p_button) == EMouseButtonState::MOUSE_UP;
 }
 
+std::pair<double, double> AmberEngine::Inputs::InputManager::GetMousePosition() const
+{
+	std::pair<double, double> result;
+	glfwGetCursorPos(m_window.GetGlfwWindow(), &result.first, &result.second);
+	return result;
+}
+
 void AmberEngine::Inputs::InputManager::OnKeyPressed(int p_key)
 {
 	m_keyEvents[static_cast<EKey>(p_key)] = EKeyState::KEY_DOWN;

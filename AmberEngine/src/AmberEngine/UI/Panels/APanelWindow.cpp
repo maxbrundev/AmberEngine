@@ -2,7 +2,7 @@
 
 #include "AmberEngine/UI/Panels/APanelWindow.h"
 
-#include "AmberEngine/Data/Constants.h"
+#include "AmberEngine/Data/EditorConstants.h"
 #include "AmberEngine/Tools/Utils/Converter.h"
 
 AmberEngine::UI::Panels::APanelWindow::APanelWindow(const std::string& p_title, bool p_opened, const PanelSettings p_panelSettings) :
@@ -78,7 +78,7 @@ void AmberEngine::UI::Panels::APanelWindow::CopyImGuiSize()
 
 std::pair<uint16_t, uint16_t> AmberEngine::UI::Panels::APanelWindow::GetSafeSize() const
 {
-	const auto result = GetSize() - glm::vec2(0.0f, Data::Constants::EDITOR_FONT_SIZE_MEDIUM + ImGui::GetStyle().FramePadding.y * 2);
+	const auto result = GetSize() - glm::vec2(0.0f, Data::EditorConstants::EDITOR_FONT_SIZE_MEDIUM + ImGui::GetStyle().FramePadding.y * 2);
 	return { static_cast<uint16_t>(result.x), static_cast<uint16_t>(result.y) };
 }
 

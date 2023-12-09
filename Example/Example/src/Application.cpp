@@ -47,17 +47,17 @@ void Example::Application::Run()
 	directionalLight.AddComponent<AmberEngine::Core::ECS::Components::CDirectionalLight>();
 	directionalLight.GetComponent<AmberEngine::Core::ECS::Components::CLight>()->SetIntensity(0.750f);
 
-	//testActor.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Sponza", "Models\\Sponza\\sponza.obj");
-	//testActor.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
+	testActor.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Sponza", "Models\\Sponza\\sponza.obj");
+	testActor.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
 	testActor.transform.SetWorldScale({ 0.05f, 0.05f, 0.05f });
 
 	testActor4.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Cube", ":Models\\Cube.fbx");
 
-	//testActor2.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Nanosuit", "Models\\DamagedHelmet\\glTF\\DamagedHelmet.gltf");
-	//testActor2.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
+	testActor2.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Nanosuit", "Models\\DamagedHelmet\\glTF\\DamagedHelmet.gltf");
+	testActor2.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
 
-	//testActor3.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Nanosuit", "Models\\Nanosuit\\nanosuit.obj");
-	//testActor3.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
+	testActor3.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>("Nanosuit", "Models\\Nanosuit\\nanosuit.obj");
+	testActor3.GetComponent<AmberEngine::Core::ECS::Components::CModelRenderer>()->GetModel()->SetShader(resourcesManager.GetShader("Standard"));
 
 	testActor3.SetParent(testActor2);
 	testActor4.SetParent(testActor2);

@@ -6,7 +6,7 @@
 
 AmberEngine::LowRenderer::CameraController::CameraController(Camera& p_camera, glm::vec3& p_position) :
 	m_window(Tools::Global::ServiceLocator::Get<Context::Window>()),
-	inputManager(Tools::Global::ServiceLocator::Get<Inputs::InputManager>()),
+	m_inputManager(Tools::Global::ServiceLocator::Get<Inputs::InputManager>()),
 	m_camera(p_camera), 
 	m_position(p_position)
 {
@@ -101,13 +101,13 @@ void AmberEngine::LowRenderer::CameraController::Update(float p_deltaTime)
 	HandleInputs(p_deltaTime);
 	HandleMouse();
 
-	if (inputManager.IsMouseButtonPressed(Inputs::EMouseButton::MOUSE_BUTTON_RIGHT))
+	if (m_inputManager.IsMouseButtonPressed(Inputs::EMouseButton::MOUSE_BUTTON_RIGHT))
 	{
 		m_rightMousePressed = true;
 		m_window.SetCursorMode(Context::ECursorMode::DISABLED);
 	}
 
-	if (inputManager.IsMouseButtonReleased(Inputs::EMouseButton::MOUSE_BUTTON_RIGHT))
+	if (m_inputManager.IsMouseButtonReleased(Inputs::EMouseButton::MOUSE_BUTTON_RIGHT))
 	{
 		m_isFirstMouse = true;
 		m_rightMousePressed = false;
@@ -139,32 +139,32 @@ void AmberEngine::LowRenderer::CameraController::HandleInputs(float p_deltaTime)
 {
 	if (m_rightMousePressed) 
 	{
-		if (inputManager.GetKey(Inputs::EKey::KEY_W) == Inputs::EKeyState::KEY_DOWN)
+		if (m_inputManager.GetKey(Inputs::EKey::KEY_W) == Inputs::EKeyState::KEY_DOWN)
 		{
 			ProcessKeyboard(cameraMovement::FORWARD, p_deltaTime);
 		}
 
-		if (inputManager.GetKey(Inputs::EKey::KEY_S) == Inputs::EKeyState::KEY_DOWN)
+		if (m_inputManager.GetKey(Inputs::EKey::KEY_S) == Inputs::EKeyState::KEY_DOWN)
 		{
 			ProcessKeyboard(cameraMovement::BACKWARD, p_deltaTime);
 		}
 
-		if (inputManager.GetKey(Inputs::EKey::KEY_A) == Inputs::EKeyState::KEY_DOWN)
+		if (m_inputManager.GetKey(Inputs::EKey::KEY_A) == Inputs::EKeyState::KEY_DOWN)
 		{
 			ProcessKeyboard(cameraMovement::LEFT, p_deltaTime);
 		}
 
-		if (inputManager.GetKey(Inputs::EKey::KEY_D) == Inputs::EKeyState::KEY_DOWN)
+		if (m_inputManager.GetKey(Inputs::EKey::KEY_D) == Inputs::EKeyState::KEY_DOWN)
 		{
 			ProcessKeyboard(cameraMovement::RIGHT, p_deltaTime);
 		}
 
-		if (inputManager.GetKey(Inputs::EKey::KEY_SPACE) == Inputs::EKeyState::KEY_DOWN)
+		if (m_inputManager.GetKey(Inputs::EKey::KEY_SPACE) == Inputs::EKeyState::KEY_DOWN)
 		{
 			ProcessKeyboard(cameraMovement::UP, p_deltaTime);
 		}
 
-		if (inputManager.GetKey(Inputs::EKey::KEY_LEFT_CONTROL) == Inputs::EKeyState::KEY_DOWN)
+		if (m_inputManager.GetKey(Inputs::EKey::KEY_LEFT_CONTROL) == Inputs::EKeyState::KEY_DOWN)
 		{
 			ProcessKeyboard(cameraMovement::DOWN, p_deltaTime);
 		}
@@ -175,29 +175,21 @@ void AmberEngine::LowRenderer::CameraController::HandleMouse()
 {
 	if (m_rightMousePressed)
 	{
-		double posX;
-		double posY;
-
-		glfwGetCursorPos(m_window.GetGlfwWindow(), &posX, &posY);
+		auto[xPos, yPos] = m_inputManager.GetMousePosition();
 
 		if (m_isFirstMouse)
 		{
-			m_lastMousePosX = posX;
-			m_lastMousePosY = posY;
+			m_lastMousePosX = xPos;
+			m_lastMousePosY = yPos;
 			m_isFirstMouse = false;
 		}
 
-		const float offsetX = posX - m_lastMousePosX;
-		const float offsetY = m_lastMousePosY - posY;
+		const double offsetX = xPos - m_lastMousePosX;
+		const double offsetY = m_lastMousePosY - yPos;
 
-		m_lastMousePosX = posX;
-		m_lastMousePosY = posY;
+		m_lastMousePosX = xPos;
+		m_lastMousePosY = yPos;
 
 		ProcessMouseMovement(offsetX, offsetY);
 	}
-}
-
-AmberEngine::LowRenderer::Camera& AmberEngine::LowRenderer::CameraController::GetCamera()
-{
-	return m_camera;
 }

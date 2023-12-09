@@ -2,16 +2,16 @@
 
 #include "AmberEngine/Core/Context.h"
 
-#include "AmberEngine/Data/Constants.h"
+#include "AmberEngine/Data/EditorConstants.h"
 
 #include "AmberEngine/Managers/ResourcesManager.h"
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
 AmberEngine::Core::Context::Context(const std::string& p_projectPath, const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
-	engineAssetsPath(Data::Constants::ENGINE_ASSETS_PATH),
-	editorAssetsPath(Data::Constants::EDITOR_ASSETS_PATH),
-	projectAssetsPath(p_projectPath + Data::Constants::PROJECT_ASSETS_PATH)
+	engineAssetsPath(Data::EditorConstants::ENGINE_ASSETS_PATH),
+	editorAssetsPath(Data::EditorConstants::EDITOR_ASSETS_PATH),
+	projectAssetsPath(p_projectPath + Data::EditorConstants::PROJECT_ASSETS_PATH)
 {
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
 	window = std::make_unique<AmberEngine::Context::Window>(*device, p_windowSettings);
@@ -27,9 +27,9 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	
 	uiManager = std::make_unique<UI::Core::UIManager>(window->GetGlfwWindow());
 
-	uiManager->LoadFont("Ruda_Small", Data::Constants::EDITOR_FONT_PATH, Data::Constants::EDITOR_FONT_SIZE_SMALL);
-	uiManager->LoadFont("Ruda_Medium", Data::Constants::EDITOR_FONT_PATH, Data::Constants::EDITOR_FONT_SIZE_MEDIUM);
-	uiManager->LoadFont("Ruda_Big", Data::Constants::EDITOR_FONT_PATH, Data::Constants::EDITOR_FONT_SIZE_BIG);
+	uiManager->LoadFont("Ruda_Small", Data::EditorConstants::EDITOR_FONT_PATH, Data::EditorConstants::EDITOR_FONT_SIZE_SMALL);
+	uiManager->LoadFont("Ruda_Medium", Data::EditorConstants::EDITOR_FONT_PATH, Data::EditorConstants::EDITOR_FONT_SIZE_MEDIUM);
+	uiManager->LoadFont("Ruda_Big", Data::EditorConstants::EDITOR_FONT_PATH, Data::EditorConstants::EDITOR_FONT_SIZE_BIG);
 	uiManager->UseFont("Ruda_Medium");
 	uiManager->EnableDocking(true);
 

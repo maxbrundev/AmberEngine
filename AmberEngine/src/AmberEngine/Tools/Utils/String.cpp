@@ -2,232 +2,59 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-#include "AmberEngine/Data/Constants.h"
+#include "AmberEngine/Data/EditorConstants.h"
 
 std::string Tools::Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
 {
-	size_t characterCount = p_path.find_last_of(AmberEngine::Data::Constants::FORWARDSLASH) + 1;
+	size_t end_pos = p_path.find_last_of(AmberEngine::Data::EditorConstants::FORWARDSLASH) + 1;
 
-	characterCount = characterCount > 0 ? characterCount :  p_path.find_last_of(AmberEngine::Data::Constants::BACKSLASH) + 1;
+	end_pos = end_pos > 0 ? end_pos :  p_path.find_last_of(AmberEngine::Data::EditorConstants::BACKSLASH) + 1;
 
-	return p_path.substr(0, characterCount);
+	return p_path.substr(0, end_pos);
 }
 
 std::string Tools::Utils::String::ExtractFileNameFromPath(const std::string& p_path)
 {
-	size_t characterCount = p_path.find_last_of(AmberEngine::Data::Constants::FORWARDSLASH) + 1;
+	size_t characterCount = p_path.find_last_of(AmberEngine::Data::EditorConstants::FORWARDSLASH) + 1;
 
-	characterCount = characterCount > 0 ? characterCount : p_path.find_last_of(AmberEngine::Data::Constants::BACKSLASH) + 1;
+	characterCount = characterCount > 0 ? characterCount : p_path.find_last_of(AmberEngine::Data::EditorConstants::BACKSLASH) + 1;
 
 	return p_path.substr(characterCount);
 }
 
 std::string Tools::Utils::String::RemoveExtensionFromFileName(const std::string& p_file)
 {
-	const size_t characterCount = p_file.find_last_of(AmberEngine::Data::Constants::DOT);
+	const size_t end_pos = p_file.find_last_of(AmberEngine::Data::EditorConstants::DOT);
 
-	if(characterCount > 0 && characterCount != std::string::npos)
+	if(end_pos > 0 && end_pos != std::string::npos)
 	{
-		return p_file.substr(0, characterCount);
+		return p_file.substr(0, end_pos);
 	}
 
 	return p_file;
 }
 
-std::string Tools::Utils::String::IntToString(int p_number)
+bool Tools::Utils::String::Replace(std::string& p_target, const std::string& p_from, const std::string& p_to)
 {
-	std::string result;
+	const size_t start_pos = p_target.find(p_from);
 
-	unsigned int devider = 1;
-
-	if (p_number < 0)
+	if (start_pos != std::string::npos)
 	{
-		result += "-";
-
-		p_number = -p_number;
+		p_target.replace(start_pos, p_from.length(), p_to);
+		return true;
 	}
 
-	while (p_number / devider > 9)
-	{
-		devider *= 10;
-	}
-
-	while (devider > 0)
-	{
-		result += '0' + (p_number / devider) % 10;
-
-		devider /= 10;
-	}
-
-	return result;
+	return false;
 }
 
-int Tools::Utils::String::StringToInt(const std::string& p_string)
+void Tools::Utils::String::ReplaceAll(std::string& p_target, const std::string& p_from, const std::string& p_to)
 {
-	const uint8_t asciiDecimalIndex = 48;
+	if (p_from.empty()) return;
 
-	int result = 0;
-	int multiplier = 10;
-
-	bool isNegative = false;
-
-	for (uint32_t i = 0; i < p_string.size(); i++)
+	size_t start_pos = 0;
+	while ((start_pos = p_target.find(p_from, start_pos)) != std::string::npos)
 	{
-		if (p_string[i] == '-')
-		{
-			multiplier = -multiplier;
-			isNegative = true;
-
-			continue;
-		}
-
-		if (!isNegative)
-		{
-			result = result * multiplier + (p_string[i] - asciiDecimalIndex);
-		}
-		else
-		{
-			result = result * multiplier - (p_string[i] - asciiDecimalIndex);
-		}
-
-		multiplier = 10;
+		p_target.replace(start_pos, p_from.length(), p_to);
+		start_pos += p_to.length();
 	}
-
-	return result;
-}
-
-int* Tools::Utils::String::StringToIntArray(const std::string& p_string)
-{
-	const uint8_t asciiDecimalIndex = 48;
-
-	const size_t size = p_string.size();
-
-	int* array = new int[size] {0};
-
-	int multiplier = 10;
-
-	int currentIndex = 0;
-
-	bool isNegative = false;
-
-	for (uint32_t i = 0; i < p_string[i] != '\0'; i++)
-	{
-		if (p_string[i] == ' ')
-		{
-			continue;
-		}
-
-		if (p_string[i] == '-')
-		{
-			multiplier = -multiplier;
-			isNegative = true;
-			continue;
-		}
-
-		if (p_string[i] == ',')
-		{
-			currentIndex++;
-			isNegative = false;
-		}
-		else
-		{
-			if (!isNegative)
-			{
-				array[currentIndex] = array[currentIndex] * multiplier + (p_string[i] - asciiDecimalIndex);
-			}
-			else
-			{
-				array[currentIndex] = array[currentIndex] * multiplier - (p_string[i] - asciiDecimalIndex);
-			}
-		}
-
-		multiplier = 10;
-	}
-
-	return array;
-}
-
-void Tools::Utils::String::ParseInputIntoVector(const std::string& p_inputString, std::vector<std::string>& p_outVector)
-{
-	std::stringstream ss(p_inputString);
-
-	while (ss.good())
-	{
-		std::string token;
-
-		ss >> token;
-		p_outVector.push_back(std::move(token));
-	}
-
-	/*std::string result;
-
-	for (uint32_t i = 0; i < p_inputString.size(); i++)
-	{
-		if (p_inputString[i] != ' ')
-		{
-			result += p_inputString[i];
-		}
-		else
-		{
-			p_outVector.push_back(result);
-			result = "";
-		}
-	}*/
-}
-
-std::string Tools::Utils::String::RemoveAllOcurrences(const std::string& p_target, const char p_character)
-{
-	std::string result;
-
-	for (uint32_t i = 0; i < p_target.size(); i++)
-	{
-		if (p_target[i] != p_character)
-		{
-			result += p_target[i];
-		}
-	}
-
-	return result;
-}
-
-std::string Tools::Utils::String::ToUpper(const std::string& p_target)
-{
-	std::string result;
-	const char offset = 'a' - 'A';
-
-	for (uint32_t i = 0; i < p_target.size(); i++)
-	{
-		if (p_target[i] >= 'a' && p_target[i] <= 'z')
-		{
-			result += p_target[i] - offset;
-		}
-		else
-		{
-			result += p_target[i];
-		}
-
-	}
-
-	return result;
-}
-
-std::string Tools::Utils::String::ToMinor(const std::string& p_target)
-{
-	std::string result;
-	const char offset = 'a' - 'A';
-
-	for (uint32_t i = 0; i < p_target.size(); i++)
-	{
-		if (p_target[i] >= 'a' && p_target[i] <= 'z')
-		{
-			result += p_target[i];
-		}
-		else
-		{
-			result += p_target[i] + offset;
-		}
-
-	}
-
-	return result;
 }

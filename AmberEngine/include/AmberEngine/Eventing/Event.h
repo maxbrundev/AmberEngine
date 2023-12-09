@@ -26,7 +26,7 @@ namespace AmberEngine::Eventing
 	};
 
 	template <typename Func, typename Instance>
-	auto QuickBind(Func function, Instance* instance)
+	inline auto QuickBind(Func function, Instance* instance)
 	{
 		return [=](auto&&... args)
 		{

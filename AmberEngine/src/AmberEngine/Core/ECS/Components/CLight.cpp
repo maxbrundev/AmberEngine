@@ -37,5 +37,5 @@ AmberEngine::Rendering::Entities::Light& AmberEngine::Core::ECS::Components::CLi
 void AmberEngine::Core::ECS::Components::CLight::OnInspector(UI::WidgetContainer& p_root)
 {
 	UI::GUIDrawer::DrawColor(p_root, "Color", m_data.color);
-	UI::GUIDrawer::DrawScalar<float>(p_root, "Intensity", m_data.intensity, 0.005f, UI::GUIDrawer::_MIN_FLOAT, UI::GUIDrawer::_MAX_FLOAT);
+	UI::GUIDrawer::DrawScalar<float>(p_root, "Intensity", m_data.intensity, 0.005f, UI::GUIDrawer::MIN_FLOAT, UI::GUIDrawer::MAX_FLOAT);
 }

@@ -1,13 +1,12 @@
 #pragma once
 
-
 #include "AmberEngine/API/Export.h"
 
-
+#include "AmberEngine/Core/Context.h"
 #include "AmberEngine/Core/EditorRenderer.h"
 #include "AmberEngine/Core/PanelsManager.h"
+
 #include "AmberEngine/UI/Canvas.h"
-#include "AmberEngine/Core/Context.h"
 
 namespace AmberEngine::Core
 {
@@ -36,9 +35,10 @@ namespace AmberEngine::Core
 		EditorRenderer& GetRenderer();
 
 	public:
-		AmberEngine::UI::Canvas m_canvas;
 		Context& m_context;
 		EditorRenderer m_editorRenderer;
 		PanelsManager m_panelsManager;
+
+		UI::Canvas m_canvas;
 	};
 }

@@ -28,6 +28,8 @@ namespace AmberEngine::Inputs
 		bool IsMouseButtonPressed(EMouseButton p_button) const;
 		bool IsMouseButtonReleased(EMouseButton p_button) const;
 
+		std::pair<double, double> GetMousePosition() const;
+
 	private:
 		void OnKeyPressed(int p_key);
 		void OnKeyReleased(int p_key);

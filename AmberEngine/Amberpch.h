@@ -30,5 +30,3 @@
 #include "AmberEngine/ImGUI/imgui.h"
 #include "AmberEngine/ImGUI/imgui_impl_glfw.h"
 #include "AmberEngine/ImGUI/imgui_impl_opengl3.h"
-
-#include "AmberEngine/Tools/Utils/voxelizer.h"

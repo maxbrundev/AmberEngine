@@ -45,8 +45,8 @@ namespace AmberEngine::Resources
 		void SetShader(Shader* p_shader);
 		void SetTexture(Texture* p_texture);
 		void SetBlendable(bool p_blendable);
-		void SetBackfaceCulling(bool p_backfaceCulling);
-		void SetFrontfaceCulling(bool p_frontfaceCulling);
+		void SetBackFaceCulling(bool p_backFaceCulling);
+		void SetFrontFaceCulling(bool p_frontFaceCulling);
 		void SetDepthTest(bool p_depthTest);
 		void SetDepthWriting(bool p_depthWriting);
 		void SetColorWriting(bool p_colorWriting);
@@ -58,8 +58,8 @@ namespace AmberEngine::Resources
 		const std::string& GetName();
 		const std::map<std::string, std::any>& GetUniformsData();
 		bool IsBlendable() const;
-		bool HasBackfaceCulling() const;
-		bool HasFrontfaceCulling() const;
+		bool HasBackFaceCulling() const;
+		bool HasFrontFaceCulling() const;
 		bool HasDepthTest() const;
 		bool HasDepthWriting() const;
 		bool HasColorWriting() const;
@@ -68,18 +68,18 @@ namespace AmberEngine::Resources
 
 	private:
 		Shader* m_previousShader = nullptr;
-		Shader* m_shader = nullptr;
+		Shader* m_shader         = nullptr;
 
 		std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
 		std::map<std::string, std::any> m_uniformsData;
-		bool m_blendable = false;
-		bool m_backfaceCulling = true;
-		bool m_frontfaceCulling = false;
-		bool m_depthTest = true;
-		bool m_depthWriting = true;
-		bool m_colorWriting = true;
 
-		bool hasSpecularMap = true;
+		bool m_blendable        = false;
+		bool m_backFaceCulling  = true;
+		bool m_frontFaceCulling = false;
+		bool m_depthTest        = true;
+		bool m_depthWriting     = true;
+		bool m_colorWriting     = true;
+		bool hasSpecularMap     = true;
 
 		uint64_t m_gpuInstances = 1;
 

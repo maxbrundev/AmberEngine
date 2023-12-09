@@ -4,6 +4,7 @@
 #include "AmberEngine/UI/Panels/APanel.h"
 #include "AmberEngine/UI/Panels/APanelWindow.h"
 #include "AmberEngine/UI/Canvas.h"
+#include "AmberEngine/Data/EditorConstants.h"
 
 namespace AmberEngine::Core
 {
@@ -20,7 +21,7 @@ namespace AmberEngine::Core
 				m_panels.emplace(p_id, std::make_unique<T>(p_id, std::forward<Args>(p_args)...));
 
 				T& instance = *static_cast<T*>(m_panels.at(p_id).get());
-				GetPanelAs<AmberEngine::UI::Panels::MenuBar>("MenuBar").RegisterPanel(instance.title, instance);
+				GetPanelAs<AmberEngine::UI::Panels::MenuBar>(Data::EditorConstants::EDITOR_PANEL_MENU_BAR_TITLE).RegisterPanel(instance.title, instance);
 			}
 			else
 			{

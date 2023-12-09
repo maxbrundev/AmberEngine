@@ -40,11 +40,9 @@ namespace AmberEngine::LowRenderer
 		void HandleInputs(float p_deltaTime);
 		void HandleMouse();
 
-		Camera& GetCamera();
-
 	private:
 		Context::Window& m_window;
-		Inputs::InputManager& inputManager;
+		Inputs::InputManager& m_inputManager;
 
 		Camera& m_camera;
 

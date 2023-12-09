@@ -12,8 +12,8 @@ AmberEngine::UI::Panels::SceneView::SceneView(const std::string& p_title, bool p
 	m_sceneManager(Tools::Global::ServiceLocator::Get<AmberEngine::Core::SceneSystem::SceneManager>()),
 	m_cameraController(m_camera, m_cameraPosition)
 {
-	m_cameraController.GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
-	m_cameraController.GetCamera().SetFar(5000.0f);
+	m_camera.SetClearColor({ 0.098f, 0.098f, 0.098f });
+	m_camera.SetFar(5000.0f);
 }
 
 void AmberEngine::UI::Panels::SceneView::Update(float p_deltaTime)

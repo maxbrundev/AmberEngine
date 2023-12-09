@@ -137,14 +137,14 @@ void AmberEngine::Resources::Material::SetBlendable(bool p_blendable)
 	m_blendable = p_blendable;
 }
 
-void AmberEngine::Resources::Material::SetBackfaceCulling(bool p_backfaceCulling)
+void AmberEngine::Resources::Material::SetBackFaceCulling(bool p_backFaceCulling)
 {
-	m_backfaceCulling = p_backfaceCulling;
+	m_backFaceCulling = p_backFaceCulling;
 }
 
-void AmberEngine::Resources::Material::SetFrontfaceCulling(bool p_frontfaceCulling)
+void AmberEngine::Resources::Material::SetFrontFaceCulling(bool p_frontFaceCulling)
 {
-	m_frontfaceCulling = p_frontfaceCulling;
+	m_frontFaceCulling = p_frontFaceCulling;
 }
 
 void AmberEngine::Resources::Material::SetDepthTest(bool p_depthTest)
@@ -256,14 +256,14 @@ bool AmberEngine::Resources::Material::IsBlendable() const
 	return m_blendable;
 }
 
-bool AmberEngine::Resources::Material::HasBackfaceCulling() const
+bool AmberEngine::Resources::Material::HasBackFaceCulling() const
 {
-	return m_backfaceCulling;
+	return m_backFaceCulling;
 }
 
-bool AmberEngine::Resources::Material::HasFrontfaceCulling() const
+bool AmberEngine::Resources::Material::HasFrontFaceCulling() const
 {
-	return m_frontfaceCulling;
+	return m_frontFaceCulling;
 }
 
 bool AmberEngine::Resources::Material::HasDepthTest() const

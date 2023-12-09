@@ -4,7 +4,7 @@
 
 #include <glm/gtc/quaternion.hpp>
 
-#include "ETransformState.h"
+#include "AmberEngine/Maths/ETransformState.h"
 
 namespace AmberEngine::Maths
 {
@@ -78,6 +78,7 @@ namespace AmberEngine::Maths
 
 		uint64_t m_childCallbackID  = 0;
 		uint64_t m_parentCallbackID = 0;
+
 		std::unordered_map<uint64_t, std::function<void(ETransformState)>> m_childrenTransfromCallbacks;
 	};
 }

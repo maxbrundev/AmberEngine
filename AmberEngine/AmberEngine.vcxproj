@@ -278,7 +278,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\SceneSystem\Scene.h" />
     <ClInclude Include="include\AmberEngine\Core\SceneSystem\SceneManager.h" />
     <ClInclude Include="include\AmberEngine\Data\Color.h" />
-    <ClInclude Include="include\AmberEngine\Data\Constants.h" />
+    <ClInclude Include="include\AmberEngine\Data\EditorConstants.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
     <ClInclude Include="include\AmberEngine\ImGUI\imconfig.h" />
@@ -328,9 +328,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Tools\Utils\ColorsUtility.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Converter.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
-    <ClInclude Include="include\AmberEngine\Tools\Utils\Lerper.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
-    <ClInclude Include="include\AmberEngine\Tools\Utils\voxelizer.h" />
     <ClInclude Include="include\AmberEngine\UI\Panels\FrameInfo.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\AButton.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Button.h" />
@@ -409,7 +407,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\Scene.cpp" />
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\SceneManager.cpp" />
     <ClCompile Include="src\AmberEngine\Data\Color.cpp" />
-    <ClCompile Include="src\AmberEngine\Data\Constants.cpp" />
+    <ClCompile Include="src\AmberEngine\Data\EditorConstants.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_draw.cpp" />
@@ -440,7 +438,6 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Tools\Utils\ASingleton.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\ColorsUtility.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\Converter.cpp" />
-    <ClCompile Include="src\AmberEngine\Tools\Utils\Lerper.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\Maths.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Global\ServiceLocator.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />

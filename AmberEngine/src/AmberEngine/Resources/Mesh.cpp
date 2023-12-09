@@ -3,8 +3,8 @@
 #include "AmberEngine/Resources/Mesh.h"
 
 AmberEngine::Resources::Mesh::Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, uint32_t p_materialIndex) :
-m_vertexCount(p_vertices.size()),
-m_indicesCount(p_indices.size()),
+m_vertexCount(static_cast<uint32_t>(p_vertices.size())),
+m_indicesCount(static_cast<uint32_t>(p_indices.size())),
 m_materialIndex(p_materialIndex)
 {
 	InitBuffers(p_vertices, p_indices);

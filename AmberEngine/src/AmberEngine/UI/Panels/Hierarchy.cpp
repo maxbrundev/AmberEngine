@@ -32,6 +32,7 @@ APanelWindow(p_title, p_opened, p_panelSettings)
 	Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().sceneManager.SceneUnloadEvent += std::bind(&Hierarchy::Clear, this);
 
 	m_root = &CreateWidget<Widgets::TreeNode>("Root", true);
+	m_root->Open();
 }
 
 void AmberEngine::UI::Panels::Hierarchy::Clear()
@@ -64,7 +65,7 @@ void AmberEngine::UI::Panels::Hierarchy::DetachActorNodeFromParentNode(AmberEngi
 {
 	if (const auto actorWidget = m_widgetActorLink.find(&p_actor); actorWidget != m_widgetActorLink.end())
 	{
-		if (p_parentActor && p_parentActor->GetChildren().size() <= 1)
+		if (p_parentActor && p_parentActor->GetChildren().size() <= 0)
 		{
 			if (const auto parentWidget = m_widgetActorLink.find(p_parentActor); parentWidget != m_widgetActorLink.end())
 			{

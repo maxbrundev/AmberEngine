@@ -2,10 +2,7 @@
 
 #include "AmberEngine/Core/Editor.h"
 
-#include "AmberEngine/Core/PanelsManager.h"
-#include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
-
-
+#include "AmberEngine/Data/EditorConstants.h"
 #include "AmberEngine/UI/Panels/MenuBar.h"
 #include "AmberEngine/UI/Panels/Hierarchy.h"
 #include "AmberEngine/UI/Panels/Views/SceneView.h"
@@ -15,9 +12,10 @@
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
-
 AmberEngine::Core::Editor::Editor(Context& p_context) :
-m_context(p_context), m_editorRenderer(p_context), m_panelsManager(m_canvas)
+m_context(p_context),
+m_editorRenderer(p_context),
+m_panelsManager(m_canvas)
 {
 	Tools::Global::ServiceLocator::Provide(*this);
 
@@ -62,7 +60,7 @@ void AmberEngine::Core::Editor::RenderEditorUI(float p_deltaTime)
 
 void AmberEngine::Core::Editor::UpdateEditorPanels(float p_deltaTime)
 {
-	auto& frameInfo = m_panelsManager.GetPanelAs<UI::Panels::FrameInfo>("Frame Info");
+	const auto& frameInfo = m_panelsManager.GetPanelAs<UI::Panels::FrameInfo>(Data::EditorConstants::EDITOR_PANEL_FRAME_INFO_TITLE);
 	
 	if (frameInfo.IsOpened())
 	{
@@ -80,7 +78,7 @@ void AmberEngine::Core::Editor::PostUpdate() const
 
 void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 {
-	auto& sceneView = m_panelsManager.GetPanelAs<UI::Panels::SceneView>("Scene View");
+	auto& sceneView = m_panelsManager.GetPanelAs<UI::Panels::SceneView>(Data::EditorConstants::EDITOR_PANEL_SCENE_VIEW_TITLE);
 	
 	sceneView.Update(p_deltaTime);
 	
@@ -104,15 +102,15 @@ void AmberEngine::Core::Editor::InitializeUI()
 	settings.collapsable = true;
 	settings.dockable    = true;
 	
-	m_panelsManager.CreatePanel<UI::Panels::MenuBar>("MenuBar");
-	m_panelsManager.CreatePanel<UI::Panels::SceneView>("Scene View", true, settings);
-	m_panelsManager.CreatePanel<UI::Panels::Hierarchy>("Hierarchy", true, settings);
-	m_panelsManager.CreatePanel<UI::Panels::Inspector>("Inspector", true, settings);
-	m_panelsManager.CreatePanel<UI::Panels::FrameInfo>("Frame Info", true, settings);
+	m_panelsManager.CreatePanel<UI::Panels::MenuBar>(Data::EditorConstants::EDITOR_PANEL_MENU_BAR_TITLE);
+	m_panelsManager.CreatePanel<UI::Panels::SceneView>(Data::EditorConstants::EDITOR_PANEL_SCENE_VIEW_TITLE, true, settings);
+	m_panelsManager.CreatePanel<UI::Panels::Hierarchy>(Data::EditorConstants::EDITOR_PANEL_HIERARCHY_TITLE, true, settings);
+	m_panelsManager.CreatePanel<UI::Panels::Inspector>(Data::EditorConstants::EDITOR_PANEL_INSPECTOR_TITLE, true, settings);
+	m_panelsManager.CreatePanel<UI::Panels::FrameInfo>(Data::EditorConstants::EDITOR_PANEL_FRAME_INFO_TITLE, true, settings);
 	m_panelsManager.CreatePanel<UI::Panels::DriverInfoPanel>("Driver Info", true, settings);
 	
-	auto& hierarchy = m_panelsManager.GetPanelAs<UI::Panels::Hierarchy>("Hierarchy");
-	auto& inspector = m_panelsManager.GetPanelAs<UI::Panels::Inspector>("Inspector");
+	auto& hierarchy = m_panelsManager.GetPanelAs<UI::Panels::Hierarchy>(Data::EditorConstants::EDITOR_PANEL_HIERARCHY_TITLE);
+	auto& inspector = m_panelsManager.GetPanelAs<UI::Panels::Inspector>(Data::EditorConstants::EDITOR_PANEL_INSPECTOR_TITLE);
 	
 	hierarchy.SelectActorEvent += [&](ECS::Actor& actor)
 	{
