@@ -7,7 +7,7 @@
 AmberEngine::Core::ECS::Components::CTransform::CTransform(Actor& p_owner, glm::vec3 p_localPosition,
                                                            glm::vec3 p_localRotation, glm::vec3 p_localScale) : AComponent(p_owner)
 {
-	m_transform.GenerateMatrices(p_localPosition, p_localRotation, p_localScale);
+	m_transform.GenerateMatricesLocal(p_localPosition, p_localRotation, p_localScale);
 }
 
 void AmberEngine::Core::ECS::Components::CTransform::SetParent(CTransform& p_parent)

@@ -14,8 +14,10 @@ namespace AmberEngine::Maths
 		Transform(const glm::vec3& p_position = glm::vec3 { 0.0f, 0.0f, 0.0f }, const glm::vec3& p_rotation = glm::vec3 { 0.0f, 0.0f, 0.0f },const glm::vec3& p_scale = glm::vec3 { 1.0f, 1.0f, 1.0f });
 		~Transform();
 
-		void GenerateMatrices(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
+		void GenerateMatricesWorld(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
+		void GenerateMatricesLocal(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
 		void UpdateWorldMatrix();
+		void UpdateLocalMatrix();
 
 		bool HasParent() const;
 
@@ -58,6 +60,7 @@ namespace AmberEngine::Maths
 
 	private:
 		void PreDecomposeWorldMatrix();
+		void PreDecomposeLocalMatrix();
 
 	private:
 		glm::vec3 m_localPosition;
@@ -79,6 +82,6 @@ namespace AmberEngine::Maths
 		uint64_t m_childCallbackID  = 0;
 		uint64_t m_parentCallbackID = 0;
 
-		std::unordered_map<uint64_t, std::function<void(ETransformState)>> m_childrenTransfromCallbacks;
+		std::unordered_map<uint64_t, std::function<void(ETransformState)>> m_childrenTransformCallbacks;
 	};
 }
