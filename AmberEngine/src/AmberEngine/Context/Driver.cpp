@@ -38,8 +38,153 @@ AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSet
 
 	if(p_driverSettings.enableMultisample)
 		glEnable(GL_MULTISAMPLE);
+}
 
-	DisplayDriverInfo();
+void AmberEngine::Context::Driver::SetRasterizationLinesWidth(float p_width)
+{
+	glLineWidth(p_width);
+}
+
+void AmberEngine::Context::Driver::SetRasterizationMode(Rendering::Settings::ERasterizationMode p_rasterizationMode)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(p_rasterizationMode));
+}
+
+void AmberEngine::Context::Driver::SetCapability(Rendering::Settings::ERenderingCapability p_capability, bool p_value)
+{
+	(p_value ? glEnable : glDisable)(static_cast<GLenum>(p_capability));
+}
+
+bool AmberEngine::Context::Driver::GetCapability(Rendering::Settings::ERenderingCapability p_capability)
+{
+	return glIsEnabled(static_cast<GLenum>(p_capability));
+}
+
+void AmberEngine::Context::Driver::SetStencilAlgorithm(Rendering::Settings::EComparisonAlgorithm p_algorithm, int32_t p_reference, uint32_t p_mask)
+{
+	glStencilFunc(static_cast<GLenum>(p_algorithm), p_reference, p_mask);
+}
+
+void AmberEngine::Context::Driver::SetDepthAlgorithm(Rendering::Settings::EComparisonAlgorithm p_algorithm)
+{
+	glDepthFunc(static_cast<GLenum>(p_algorithm));
+}
+
+void AmberEngine::Context::Driver::SetStencilMask(uint32_t p_mask)
+{
+	glStencilMask(p_mask);
+}
+
+void AmberEngine::Context::Driver::SetStencilOperations(Rendering::Settings::EOperation p_stencilFail, Rendering::Settings::EOperation p_depthFail, Rendering::Settings::EOperation p_bothPass)
+{
+	glStencilOp(static_cast<GLenum>(p_stencilFail), static_cast<GLenum>(p_depthFail), static_cast<GLenum>(p_bothPass));
+}
+
+void AmberEngine::Context::Driver::SetCullFace(Rendering::Settings::ECullFace p_cullFace)
+{
+	glCullFace(static_cast<GLenum>(p_cullFace));
+}
+
+void AmberEngine::Context::Driver::SetDepthWriting(bool p_enable)
+{
+	glDepthMask(p_enable);
+}
+
+void AmberEngine::Context::Driver::SetColorWriting(bool p_enableRed, bool p_enableGreen, bool p_enableBlue, bool p_enableAlpha)
+{
+	glColorMask(p_enableRed, p_enableGreen, p_enableBlue, p_enableAlpha);
+}
+
+void AmberEngine::Context::Driver::SetColorWriting(bool p_enable)
+{
+	glColorMask(p_enable, p_enable, p_enable, p_enable);
+}
+
+void AmberEngine::Context::Driver::ReadPixels(uint32_t x, uint32_t y, uint32_t width, uint32_t height, Rendering::Settings::EPixelDataFormat format, Rendering::Settings::EPixelDataType type, void* data)
+{
+	glReadPixels(x, y, width, height, static_cast<GLenum>(format), static_cast<GLenum>(type), data);
+}
+
+bool AmberEngine::Context::Driver::GetBool(GLenum p_parameter)
+{
+	GLboolean result;
+	glGetBooleanv(p_parameter, &result);
+	return static_cast<bool>(result);
+}
+
+bool AmberEngine::Context::Driver::GetBool(GLenum p_parameter, uint32_t p_index)
+{
+	GLboolean result;
+	glGetBooleani_v(p_parameter, p_index, &result);
+	return static_cast<bool>(result);
+}
+
+int AmberEngine::Context::Driver::GetInt(GLenum p_parameter)
+{
+	GLint result;
+	glGetIntegerv(p_parameter, &result);
+	return static_cast<int>(result);
+}
+
+int AmberEngine::Context::Driver::GetInt(GLenum p_parameter, uint32_t p_index)
+{
+	GLint result;
+	glGetIntegeri_v(p_parameter, p_index, &result);
+	return static_cast<int>(result);
+}
+
+float AmberEngine::Context::Driver::GetFloat(GLenum p_parameter)
+{
+	GLfloat result;
+	glGetFloatv(p_parameter, &result);
+	return static_cast<float>(result);
+}
+
+float AmberEngine::Context::Driver::GetFloat(GLenum p_parameter, uint32_t p_index)
+{
+	GLfloat result;
+	glGetFloati_v(p_parameter, p_index, &result);
+	return static_cast<float>(result);
+}
+
+double AmberEngine::Context::Driver::GetDouble(GLenum p_parameter)
+{
+	GLdouble result;
+	glGetDoublev(p_parameter, &result);
+	return static_cast<double>(result);
+}
+
+double AmberEngine::Context::Driver::GetDouble(GLenum p_parameter, uint32_t p_index)
+{
+	GLdouble result;
+	glGetDoublei_v(p_parameter, p_index, &result);
+	return static_cast<double>(result);
+}
+
+int64_t AmberEngine::Context::Driver::GetInt64(GLenum p_parameter)
+{
+	GLint64 result;
+	glGetInteger64v(p_parameter, &result);
+	return static_cast<int64_t>(result);
+}
+
+int64_t AmberEngine::Context::Driver::GetInt64(GLenum p_parameter, uint32_t p_index)
+{
+	GLint64 result;
+	glGetInteger64i_v(p_parameter, p_index, &result);
+	return static_cast<int64_t>(result);
+}
+
+std::string AmberEngine::Context::Driver::GetString(GLenum p_parameter)
+{
+	const GLubyte* result = glGetString(p_parameter);
+	return result ? reinterpret_cast<const char*>(result) : std::string();
+}
+
+std::string AmberEngine::Context::Driver::GetString(GLenum p_parameter, uint32_t p_index)
+{
+	const GLubyte* result = glGetStringi(p_parameter, p_index);
+	return result ? reinterpret_cast<const char*>(result) : std::string();
 }
 
 void AmberEngine::Context::Driver::InitGlew()
@@ -101,39 +246,4 @@ void AmberEngine::Context::Driver::GLDebugMessageCallback(uint32_t source, uint3
 	output += '\n';
 
 	std::cout << output;
-}
-
-void AmberEngine::Context::Driver::DisplayDriverInfo() const
-{
-	//std::string output;
-	//
-	//output += "Using GLEW: ";
-	//
-	//output += m_libraryVersion;
-	//
-	//output += '\n';
-	//
-	//output += m_apiVersion;
-	//
-	//output += '\n';
-	//
-	//output += m_render;
-	//
-	//output += '\n';
-	//
-	//output += m_vendor;
-	//
-	//output += '\n';
-	//
-	//output += m_shading_language_version;
-	//
-	//output += '\n';
-	//
-	//std::cout << output << "\n";
-}
-
-std::string AmberEngine::Context::Driver::GetString(GLenum p_parameter)
-{
-	const GLubyte* result = glGetString(p_parameter);
-	return result ? reinterpret_cast<const char*>(result) : std::string();
 }

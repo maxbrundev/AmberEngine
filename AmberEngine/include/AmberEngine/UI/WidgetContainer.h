@@ -13,7 +13,7 @@ namespace AmberEngine::UI
 		void RemoveWidget(Widgets::AWidget& p_widget);
 		void RemoveAllWidgets();
 		void TransferOwnership(Widgets::AWidget& p_widget, WidgetContainer& p_widgetCoontainer);
-		void CollectGarbages();
+		void CollectGarbage();
 		void DrawWidgets();
 
 		template <typename T, typename ... Args>

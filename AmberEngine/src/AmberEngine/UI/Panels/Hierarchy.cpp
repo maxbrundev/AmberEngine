@@ -47,7 +47,6 @@ void AmberEngine::UI::Panels::Hierarchy::Clear()
 void AmberEngine::UI::Panels::Hierarchy::AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor& p_parentActor)
 {
 	const auto actorWidget = m_widgetActorLink.find(&p_actor);
-	
 
 	if (actorWidget != m_widgetActorLink.end())
 	{
@@ -57,7 +56,6 @@ void AmberEngine::UI::Panels::Hierarchy::AttachActorNodeToParentNode(AmberEngine
 		parentWidget->isLeaf = false;
 
 		widget->GetParent()->TransferOwnership(*widget, *parentWidget);
-		
 	}
 }
 

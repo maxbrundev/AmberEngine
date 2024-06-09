@@ -12,8 +12,10 @@ AmberEngine::Resources::Model* AmberEngine::Resources::Loaders::ModelLoader::Cre
 
 	auto model = new Model(p_filePath);
 
-	if(__ASSIMP.LoadModel(p_filePath, *model))
+	if(__ASSIMP.LoadModel(p_filePath, model->m_meshes, model->m_materialNames))
 	{
+
+		model->LoadedTextureData = std::move(__ASSIMP.textureData);
 		return model;
 	}
 

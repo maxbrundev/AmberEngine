@@ -44,7 +44,7 @@ void AmberEngine::UI::WidgetContainer::TransferOwnership(Widgets::AWidget& p_wid
 	}
 }
 
-void AmberEngine::UI::WidgetContainer::CollectGarbages()
+void AmberEngine::UI::WidgetContainer::CollectGarbage()
 {
 	m_widgets.erase(std::remove_if(m_widgets.begin(), m_widgets.end(), [](std::unique_ptr<Widgets::AWidget>& p_instance)
 	{
@@ -54,7 +54,7 @@ void AmberEngine::UI::WidgetContainer::CollectGarbages()
 
 void AmberEngine::UI::WidgetContainer::DrawWidgets()
 {
-	CollectGarbages();
+	CollectGarbage();
 
 	for (const auto& widget : m_widgets)
 	{

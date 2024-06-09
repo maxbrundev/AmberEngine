@@ -6,7 +6,7 @@
 #include "AmberEngine/Buffers/FrameBuffer.h"
 #include "AmberEngine/Core/EditorRenderer.h"
 
-#include "AmberEngine/LowRenderer/Camera.h"
+#include "AmberEngine/Rendering/Entities/Camera.h"
 #include "AmberEngine/UI/Widgets/Image.h"
 
 namespace AmberEngine::UI::Panels
@@ -30,7 +30,7 @@ namespace AmberEngine::UI::Panels
 
 	protected:
 		glm::vec3 m_cameraPosition;
-		LowRenderer::Camera m_camera;
+		Rendering::Entities::Camera m_camera;
 		Widgets::Image* m_image;
 		Buffers::FrameBuffer m_frameBuffer;
 		AmberEngine::Core::EditorRenderer& m_editorRenderer;

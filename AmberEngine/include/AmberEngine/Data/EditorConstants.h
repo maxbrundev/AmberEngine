@@ -1,30 +1,19 @@
 #pragma once
 
-#include "AmberEngine/API/Export.h"
-
-namespace AmberEngine::Data
+namespace AmberEngine::Data::EditorConstants
 {
-	struct API_AMBERENGINE EditorConstants
-	{
-		EditorConstants() = delete;
+	constexpr const char* ENGINE_ASSETS_PATH = "..\\..\\Resources\\Engine\\";
+	constexpr const char* EDITOR_ASSETS_PATH = "..\\..\\Resources\\Editor\\";
+	constexpr const char* PROJECT_ASSETS_PATH = "Assets\\";
+	constexpr const char* EDITOR_FONT_PATH = "..\\..\\Resources\\Editor\\Fonts\\Ruda-Bold.ttf";
 
-		static const std::string ENGINE_ASSETS_PATH;
-		static const std::string EDITOR_ASSETS_PATH;
-		static const std::string PROJECT_ASSETS_PATH;
-		static const std::string EDITOR_FONT_PATH;
+	constexpr const char* EDITOR_PANEL_SCENE_VIEW_TITLE = "Scene View";
+	constexpr const char* EDITOR_PANEL_HIERARCHY_TITLE = "Hierarchy";
+	constexpr const char* EDITOR_PANEL_MENU_BAR_TITLE = "Menu Bar";
+	constexpr const char* EDITOR_PANEL_INSPECTOR_TITLE = "Inspector";
+	constexpr const char* EDITOR_PANEL_FRAME_INFO_TITLE = "Frame Info";
 
-		static const std::string EDITOR_PANEL_SCENE_VIEW_TITLE;
-		static const std::string EDITOR_PANEL_HIERARCHY_TITLE;
-		static const std::string EDITOR_PANEL_MENU_BAR_TITLE;
-		static const std::string EDITOR_PANEL_INSPECTOR_TITLE;
-		static const std::string EDITOR_PANEL_FRAME_INFO_TITLE;
-
-		static const float EDITOR_FONT_SIZE_SMALL;
-		static const float EDITOR_FONT_SIZE_MEDIUM;
-		static const float EDITOR_FONT_SIZE_BIG;
-
-		static const char BACKSLASH;
-		static const char FORWARDSLASH;
-		static const char DOT;
-	};
+	constexpr float EDITOR_FONT_SIZE_SMALL = 12;
+	constexpr float EDITOR_FONT_SIZE_MEDIUM = 14;
+	constexpr float EDITOR_FONT_SIZE_BIG = 16;
 }

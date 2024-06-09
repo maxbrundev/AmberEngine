@@ -1,6 +1,6 @@
 #pragma once
 
-namespace AmberEngine::Rendering::Entities
+namespace AmberEngine::Rendering::Settings
 {
 	enum class ELightType : uint8_t
 	{

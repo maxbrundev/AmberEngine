@@ -16,6 +16,7 @@ m_frameBuffer(256, 144),
 m_editorRenderer(Tools::Global::ServiceLocator::Get<AmberEngine::Core::Editor>().GetRenderer())
 {
 	m_image = &CreateWidget<Widgets::Image>(m_frameBuffer.GetTextureID(), glm::vec2{ 0.f, 0.f });
+	settings.scrollable = false;
 }
 
 AmberEngine::UI::Panels::AView::~AView()
@@ -26,7 +27,7 @@ AmberEngine::UI::Panels::AView::~AView()
 void AmberEngine::UI::Panels::AView::PrepareCamera()
 {
 	auto[winWidth, winHeight] = GetSafeSize();
-	m_camera.CalculateMatrices(winWidth, winHeight, m_cameraPosition);
+	m_camera.ComputeMatrices(winWidth, winHeight, m_cameraPosition);
 }
 
 void AmberEngine::UI::Panels::AView::FillEngineUBO()

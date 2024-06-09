@@ -11,10 +11,11 @@ namespace AmberEngine::Core
 	public:
 		EditorRenderer(Context& p_context);
 		void InitMaterials();
-		void RenderScene(const glm::vec3& p_cameraPosition, const LowRenderer::Camera& p_camera);
-		void RenderUI();
-		void UpdateLights(SceneSystem::Scene& p_scene);
-
+		void RenderScene(const glm::vec3& p_cameraPosition, const Rendering::Entities::Camera& p_camera);
+		void RenderUI() const;
+		
+		void UpdateLights(SceneSystem::Scene& p_scene) const;
+		
 	private:
 		Context& m_context;
 		Resources::Material m_emptyMaterial;

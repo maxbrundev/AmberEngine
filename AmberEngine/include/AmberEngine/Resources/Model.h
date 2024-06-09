@@ -5,30 +5,31 @@
 #include "AmberEngine/Resources/Mesh.h"
 #include "AmberEngine/Resources/Material.h"
 
+namespace  AmberEngine::Resources::Loaders
+{
+	class ModelLoader;
+}
+
 namespace AmberEngine::Resources
 {
-	namespace Loaders { class ModelLoader; }
-	
 	class API_AMBERENGINE Model
 	{
 		friend class Loaders::ModelLoader;
 
 	public:
+		std::vector<std::string>& GetMaterialNames();
+		std::vector<Mesh*>& GetMeshes();
+
+	private:
 		Model(const std::string& p_filePath);
 		~Model();
 
-		void SetShader(Shader& p_shader) const;
+	public:
+		const std::string Path;
+		std::map<int, std::vector<std::tuple<ETextureType, std::string>>> LoadedTextureData;
 
-		std::vector<std::string>& GetMaterialNames();
-		std::vector<Mesh*>& GetMeshes();
-		std::array<Material*, 255>& GetMaterials();
-		
 	private:
-		const std::string path;
-
 		std::vector<std::string> m_materialNames;
 		std::vector<Mesh*> m_meshes;
-
-		std::array<Material*, 255> m_materials;
 	};
 }

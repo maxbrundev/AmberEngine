@@ -2,19 +2,22 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 #include "AmberEngine/Resources/UniformInfo.h"
+
+namespace AmberEngine::Resources::Loaders
+{
+	class ShaderLoader;
+}
 
 namespace AmberEngine::Resources
 {
 	class API_AMBERENGINE Shader
 	{
-	public:
-		Shader(std::string p_filePath, uint32_t p_id);
-		~Shader();
+		friend class Loaders::ShaderLoader;
 
+	public:
 		void QueryUniforms();
 
 		void Bind() const;
@@ -39,13 +42,16 @@ namespace AmberEngine::Resources
 		const UniformInfo* GetUniformInfo(const std::string& p_name) const;
 
 	private:
+		Shader(std::string p_filePath, uint32_t p_id);
+		~Shader();
+
 		bool IsEngineUBOUniform(const std::string& p_uniformName);
 		uint32_t GetUniformLocation(const std::string_view p_name);
 
 	public:
-		const uint32_t id;
-		const std::string path;
-		std::vector<UniformInfo> uniforms;
+		const uint32_t ID;
+		const std::string Path;
+		std::vector<UniformInfo> Uniforms;
 
 	private:
 		std::unordered_map<std::string_view, uint32_t> m_uniformLocationCache;

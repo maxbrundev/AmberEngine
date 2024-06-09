@@ -4,9 +4,11 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 
-AmberEngine::UI::Widgets::TreeNode::TreeNode(const std::string& p_name, bool p_arrowClickToOpen) : name(p_name), m_actorName(name),
-                                                                                          m_actor(nullptr),
-                                                                                          m_isArrowClickToOpen(p_arrowClickToOpen)
+AmberEngine::UI::Widgets::TreeNode::TreeNode(const std::string& p_name, bool p_arrowClickToOpen) :
+name(p_name),
+m_actorName(name),
+m_actor(nullptr),
+m_isArrowClickToOpen(p_arrowClickToOpen)
 {
 }
 
@@ -88,7 +90,6 @@ bool AmberEngine::UI::Widgets::TreeNode::IsOpened() const
 {
 	return m_isOpened;
 }
-
 
 void AmberEngine::UI::Widgets::TreeNode::DrawImplementation()
 {

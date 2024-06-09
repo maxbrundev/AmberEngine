@@ -2,9 +2,6 @@
 
 #include "AmberEngine/API/Export.h"
 
-#include <map>
-#include <any>
-
 #include "AmberEngine/Resources/Texture.h"
 #include "AmberEngine/Resources/Shader.h"
 
@@ -21,8 +18,7 @@ namespace AmberEngine::Resources
 
 		bool HasShader() const;
 		void FillUniform();
-		void FillTextures(std::unordered_map<ETextureType, std::shared_ptr<Texture>> p_textures);
-
+	
 		template<typename T>
 		void SetUniform(const std::string p_key, const T& p_value)
 		{
@@ -41,9 +37,7 @@ namespace AmberEngine::Resources
 			return std::any_cast<T>(m_uniformsData.at(p_key));
 		}
 
-		void ResetToPreviousShader();
 		void SetShader(Shader* p_shader);
-		void SetTexture(Texture* p_texture);
 		void SetBlendable(bool p_blendable);
 		void SetBackFaceCulling(bool p_backFaceCulling);
 		void SetFrontFaceCulling(bool p_frontFaceCulling);
@@ -54,7 +48,6 @@ namespace AmberEngine::Resources
 		void SetName(std::string p_name);
 
 		const Shader* GetShader() const;
-		const std::unordered_map<ETextureType, std::shared_ptr<Texture>>& GetTextures();
 		const std::string& GetName();
 		const std::map<std::string, std::any>& GetUniformsData();
 		bool IsBlendable() const;
@@ -64,13 +57,16 @@ namespace AmberEngine::Resources
 		bool HasDepthWriting() const;
 		bool HasColorWriting() const;
 
-		uint64_t GetGPUInstances() const;
+		int GetGPUInstances() const;
+
+		uint8_t GenerateStateMask() const;
+
+	public:
+		const std::string path;
 
 	private:
-		Shader* m_previousShader = nullptr;
 		Shader* m_shader         = nullptr;
 
-		std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
 		std::map<std::string, std::any> m_uniformsData;
 
 		bool m_blendable        = false;
@@ -81,7 +77,7 @@ namespace AmberEngine::Resources
 		bool m_colorWriting     = true;
 		bool hasSpecularMap     = true;
 
-		uint64_t m_gpuInstances = 1;
+		int m_gpuInstances = 1;
 
 		std::string m_name;
 	};

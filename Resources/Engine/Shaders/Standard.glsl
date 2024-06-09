@@ -182,5 +182,5 @@ void main()
 
 
 
-  FragColor = vec4(lightSum, 1.0f);
+  FragColor = vec4(lightSum, g_DiffuseTexel.a);
 }

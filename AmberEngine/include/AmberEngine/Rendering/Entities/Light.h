@@ -1,26 +1,27 @@
 #pragma once
 
-#include "AmberEngine/Rendering/Entities/ELightType.h"
-
 #include "AmberEngine/Maths/Transform.h"
+
+#include "AmberEngine/Rendering/Settings/ELightType.h"
+
 #include "AmberEngine/Data/Color.h"
 
 namespace AmberEngine::Rendering::Entities
 {
 	struct Light
 	{
-		Light(Maths::Transform& p_tranform, ELightType p_type);
+		Light(Maths::Transform& p_transform, Settings::ELightType p_type);
 
 		glm::mat4 GenerateMatrix() const;
 
-		Data::Color	color		= { 1.0f, 1.0f, 1.0f };
-		float		intensity	= 1.0f;
-		float		constant	= 0.0f;
-		float		linear		= 0.0f;
-		float		quadratic	= 1.0f;
-		float		cutoff		= 12.0f;
-		float		outerCutoff = 15.0f;
-		float		type		= 0.0f;
+		Data::Color Color = { 1.0f, 1.0f, 1.0f };
+		float Intensity   = 1.0f;
+		float Constant    = 0.0f;
+		float Linear      = 0.0f;
+		float Quadratic   = 1.0f;
+		float Cutoff      = 12.0f;
+		float OuterCutoff = 15.0f;
+		float Type        = 0.0f;
 
 	private:
 		Maths::Transform& m_transform;

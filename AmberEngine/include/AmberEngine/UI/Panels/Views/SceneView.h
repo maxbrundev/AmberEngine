@@ -3,7 +3,7 @@
 #include "AmberEngine/Core/SceneSystem/SceneManager.h"
 #include "AmberEngine/UI/Panels/Views/AView.h"
 
-#include "AmberEngine/LowRenderer/CameraController.h"
+#include "AmberEngine/Core/CameraController.h"
 
 namespace AmberEngine::UI::Panels
 {
@@ -15,13 +15,13 @@ namespace AmberEngine::UI::Panels
 		void Update(float p_deltaTime) override;
 		void RenderScene();
 
-		LowRenderer::CameraController& GetCameraController();
+		AmberEngine::Core::CameraController& GetCameraController();
 
 	protected:
 		void RenderImplementation() override;
 		
 	private:
 		AmberEngine::Core::SceneSystem::SceneManager& m_sceneManager;
-		LowRenderer::CameraController m_cameraController;
+		AmberEngine::Core::CameraController m_cameraController;
 	};
 }

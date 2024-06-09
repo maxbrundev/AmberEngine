@@ -2,24 +2,28 @@
 
 #include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
 
-#include "AmberEngine/Managers/ResourcesManager.h"
-//#include "AmberEngine/Tools/Utils/String.h"
+#include "AmberEngine/Core/ECS/Actor.h"
+#include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
+#include "AmberEngine/Managers/ModelManager.h"
+#include "AmberEngine/Tools/Global/ServiceLocator.h"
+#include "AmberEngine/Tools/Utils/PathParser.h"
 
-AmberEngine::Core::ECS::Components::CModelRenderer::CModelRenderer(Actor& p_owner, std::string_view p_name, const std::string& p_filePath) : AComponent(p_owner),
-	m_model(&Managers::ResourcesManager::Instance().LoadModel(p_name, p_filePath)), m_name(p_name)
+#include "AmberEngine/UI/GUIDrawer.h"
+
+
+AmberEngine::Core::ECS::Components::CModelRenderer::CModelRenderer(Actor& p_owner) : AComponent(p_owner)
 {
-	//std::string name = Utils::String::RemoveExtensionFromFileName(Utils::String::ExtractFileNameFromPath(p_filePath));
+	m_modelChangedEvent += [this]
+	{
+		if (const auto materialRenderer = owner.GetComponent<CMaterialRenderer>())
+			materialRenderer->UpdateMaterialList();
+	};
 }
 
-AmberEngine::Core::ECS::Components::CModelRenderer::~CModelRenderer()
+void AmberEngine::Core::ECS::Components::CModelRenderer::SetModel(Resources::Model* p_model)
 {
-	if(m_model != nullptr)
-	{
-		m_model = nullptr;
-	}
-
-	// Require Model to be shared pointer in order to unload the resource if the reference count is <= 1
-	//Managers::ResourcesManager::Instance().RemoveModel(m_name);
+	m_model = p_model;
+	m_modelChangedEvent.Invoke();
 }
 
 AmberEngine::Resources::Model* AmberEngine::Core::ECS::Components::CModelRenderer::GetModel() const
@@ -27,17 +31,12 @@ AmberEngine::Resources::Model* AmberEngine::Core::ECS::Components::CModelRendere
 	return m_model;
 }
 
-std::vector<AmberEngine::Resources::Mesh*>& AmberEngine::Core::ECS::Components::CModelRenderer::GetMeshes() const
-{
-	return m_model->GetMeshes();
-}
-
 std::string AmberEngine::Core::ECS::Components::CModelRenderer::GetName()
 {
-	return "Model";
+	return "Model Renderer";
 }
 
 void AmberEngine::Core::ECS::Components::CModelRenderer::OnInspector(UI::WidgetContainer& p_root)
 {
-
+	UI::GUIDrawer::DrawMesh(p_root, "Model", m_model, &m_modelChangedEvent);
 }

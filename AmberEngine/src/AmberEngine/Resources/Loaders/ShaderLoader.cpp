@@ -2,6 +2,8 @@
 
 #include "AmberEngine/Resources/Loaders/ShaderLoader.h"
 
+#include <GL/glew.h>
+
 #include "AmberEngine/Tools/Utils/String.h"
 
 std::string AmberEngine::Resources::Loaders::ShaderLoader::__FILE_TRACE;
@@ -44,7 +46,7 @@ void AmberEngine::Resources::Loaders::ShaderLoader::Recompile(Shader& p_shader, 
 	{
 		/* Pointer to the shaderID (const data member, tricks to access it) */
 		/* Only work with the first public member of a class */
-		std::uint32_t* shaderID = reinterpret_cast<uint32_t*>(&p_shader) + offsetof(Shader, id);
+		std::uint32_t* shaderID = reinterpret_cast<uint32_t*>(&p_shader) + offsetof(Shader, ID);
 
 		//uint32_t* shaderID = const_cast<uint32_t*>(&p_shader.id);
 
@@ -68,8 +70,6 @@ bool AmberEngine::Resources::Loaders::ShaderLoader::Destroy(Shader*& p_shaderIns
 {
 	if (p_shaderInstance)
 	{
-		glDeleteProgram(p_shaderInstance->id);
-
 		delete p_shaderInstance;
 		p_shaderInstance = nullptr;
 
@@ -83,7 +83,7 @@ bool AmberEngine::Resources::Loaders::ShaderLoader::Delete(Shader* p_shaderInsta
 {
 	if (p_shaderInstance)
 	{
-		glDeleteProgram(p_shaderInstance->id);
+		glDeleteProgram(p_shaderInstance->ID);
 
 		return true;
 	}

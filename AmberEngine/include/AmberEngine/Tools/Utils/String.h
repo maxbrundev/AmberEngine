@@ -2,7 +2,7 @@
 
 #include "AmberEngine/API/Export.h"
 
-namespace Tools::Utils
+namespace AmberEngine::Tools::Utils
 {
 	class API_AMBERENGINE String
 	{

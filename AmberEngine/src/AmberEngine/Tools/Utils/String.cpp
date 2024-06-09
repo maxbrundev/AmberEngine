@@ -2,29 +2,27 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-#include "AmberEngine/Data/EditorConstants.h"
-
-std::string Tools::Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
+std::string AmberEngine::Tools::Utils::String::ExtractDirectoryFromPath(const std::string& p_path)
 {
-	size_t end_pos = p_path.find_last_of(AmberEngine::Data::EditorConstants::FORWARDSLASH) + 1;
+	size_t end_pos = p_path.find_last_of('/') + 1;
 
-	end_pos = end_pos > 0 ? end_pos :  p_path.find_last_of(AmberEngine::Data::EditorConstants::BACKSLASH) + 1;
+	end_pos = end_pos > 0 ? end_pos :  p_path.find_last_of('\\') + 1;
 
 	return p_path.substr(0, end_pos);
 }
 
-std::string Tools::Utils::String::ExtractFileNameFromPath(const std::string& p_path)
+std::string AmberEngine::Tools::Utils::String::ExtractFileNameFromPath(const std::string& p_path)
 {
-	size_t characterCount = p_path.find_last_of(AmberEngine::Data::EditorConstants::FORWARDSLASH) + 1;
+	size_t characterCount = p_path.find_last_of('/') + 1;
 
-	characterCount = characterCount > 0 ? characterCount : p_path.find_last_of(AmberEngine::Data::EditorConstants::BACKSLASH) + 1;
+	characterCount = characterCount > 0 ? characterCount : p_path.find_last_of('\\') + 1;
 
 	return p_path.substr(characterCount);
 }
 
-std::string Tools::Utils::String::RemoveExtensionFromFileName(const std::string& p_file)
+std::string AmberEngine::Tools::Utils::String::RemoveExtensionFromFileName(const std::string& p_file)
 {
-	const size_t end_pos = p_file.find_last_of(AmberEngine::Data::EditorConstants::DOT);
+	const size_t end_pos = p_file.find_last_of('.');
 
 	if(end_pos > 0 && end_pos != std::string::npos)
 	{
@@ -34,7 +32,7 @@ std::string Tools::Utils::String::RemoveExtensionFromFileName(const std::string&
 	return p_file;
 }
 
-bool Tools::Utils::String::Replace(std::string& p_target, const std::string& p_from, const std::string& p_to)
+bool AmberEngine::Tools::Utils::String::Replace(std::string& p_target, const std::string& p_from, const std::string& p_to)
 {
 	const size_t start_pos = p_target.find(p_from);
 
@@ -47,7 +45,7 @@ bool Tools::Utils::String::Replace(std::string& p_target, const std::string& p_f
 	return false;
 }
 
-void Tools::Utils::String::ReplaceAll(std::string& p_target, const std::string& p_from, const std::string& p_to)
+void AmberEngine::Tools::Utils::String::ReplaceAll(std::string& p_target, const std::string& p_from, const std::string& p_to)
 {
 	if (p_from.empty()) return;
 

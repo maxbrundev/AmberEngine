@@ -3,7 +3,6 @@
 #include "AmberEngine/UI/Panels/Views/SceneView.h"
 
 #include "AmberEngine/Core/Editor.h"
-#include "AmberEngine/Core/Renderer.h"
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
@@ -47,7 +46,7 @@ void AmberEngine::UI::Panels::SceneView::RenderImplementation()
 	RenderScene();
 }
 
-AmberEngine::LowRenderer::CameraController& AmberEngine::UI::Panels::SceneView::GetCameraController()
+AmberEngine::Core::CameraController& AmberEngine::UI::Panels::SceneView::GetCameraController()
 {
 	return m_cameraController;
 }

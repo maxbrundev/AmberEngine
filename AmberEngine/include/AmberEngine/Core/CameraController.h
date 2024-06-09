@@ -6,29 +6,15 @@
 
 #include "AmberEngine/Inputs/InputManager.h"
 
-#include "AmberEngine/LowRenderer/Camera.h"
+#include "AmberEngine/Rendering/Entities/Camera.h"
 
-namespace AmberEngine::LowRenderer
+namespace AmberEngine::Core
 {
 	class API_AMBERENGINE CameraController
 	{
-		enum class cameraMovement
-		{
-			FORWARD,
-			BACKWARD,
-			LEFT,
-			RIGHT,
-			UP,
-			DOWN
-		};
-
 	public:
-		CameraController(Camera& p_camera,  glm::vec3& p_position);
+		CameraController(Rendering::Entities::Camera& p_camera,  glm::vec3& p_position);
 		~CameraController() = default;
-
-		void ProcessKeyboard(cameraMovement p_direction, float p_deltaTime);
-		void ProcessMouseMovement(float p_offsetX, float p_offsetY);
-		void ProcessMouseScroll(float p_offsetY);
 
 		void Update(float p_deltaTime);
 		
@@ -36,15 +22,17 @@ namespace AmberEngine::LowRenderer
 		void SetPosition(float p_posX, float p_posY, float p_posZ);
 		
 		const glm::vec3& GetPosition() const;
-		
-		void HandleInputs(float p_deltaTime);
-		void HandleMouse();
 
 	private:
-		Context::Window& m_window;
-		Inputs::InputManager& m_inputManager;
+		void HandleInputs(float p_deltaTime);
+		void HandleMouse();
+		void HandleCameraZoom();
 
-		Camera& m_camera;
+	private:
+		AmberEngine::Context::Window& m_window;
+		AmberEngine::Inputs::InputManager& m_inputManager;
+
+		Rendering::Entities::Camera& m_camera;
 
 		glm::vec3& m_position;
 
@@ -56,5 +44,8 @@ namespace AmberEngine::LowRenderer
 
 		bool m_isFirstMouse = true;
 		bool m_rightMousePressed = false;
+
+		glm::vec3 m_targetPosition;
+		glm::vec3 m_currentMovement;
 	};
 }

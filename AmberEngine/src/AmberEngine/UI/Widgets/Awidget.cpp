@@ -2,11 +2,11 @@
 
 #include "AmberEngine/UI/Widgets/AWidget.h"
 
-uint64_t AmberEngine::UI::Widgets::AWidget::__WIDGET_ID_INCREMENT = 0;
+uint64_t AmberEngine::UI::Widgets::AWidget::WIDGET_ID_INCREMENT = 0;
 
 AmberEngine::UI::Widgets::AWidget::AWidget()
 {
-	m_widgetID = "##" + std::to_string(__WIDGET_ID_INCREMENT++);
+	m_widgetID = "##" + std::to_string(WIDGET_ID_INCREMENT++);
 }
 
 void AmberEngine::UI::Widgets::AWidget::Draw()

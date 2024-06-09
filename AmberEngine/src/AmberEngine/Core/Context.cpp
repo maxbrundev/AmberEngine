@@ -4,8 +4,6 @@
 
 #include "AmberEngine/Data/EditorConstants.h"
 
-#include "AmberEngine/Managers/ResourcesManager.h"
-
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
 AmberEngine::Core::Context::Context(const std::string& p_projectPath, const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings) :
@@ -13,6 +11,10 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	editorAssetsPath(Data::EditorConstants::EDITOR_ASSETS_PATH),
 	projectAssetsPath(p_projectPath + Data::EditorConstants::PROJECT_ASSETS_PATH)
 {
+	ResourceManagement::ModelManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
+	ResourceManagement::TextureManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
+	ResourceManagement::ShaderManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
+	
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
 	window = std::make_unique<AmberEngine::Context::Window>(*device, p_windowSettings);
 
@@ -21,7 +23,17 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	window->SetIconFromMemory(reinterpret_cast<uint8_t*>(iconRaw.data()), 120, 120);
 
 	driver   = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
-	renderer = std::make_unique<Renderer>(*driver);
+	renderer = std::make_unique<ECSRenderer>(*driver);
+
+	Tools::Global::ServiceLocator::Provide(*window);
+	Tools::Global::ServiceLocator::Provide(*inputManager);
+	Tools::Global::ServiceLocator::Provide(*renderer);
+	Tools::Global::ServiceLocator::Provide(modelManager);
+	Tools::Global::ServiceLocator::Provide(textureManager);
+	Tools::Global::ServiceLocator::Provide(shaderManager);
+	Tools::Global::ServiceLocator::Provide<SceneSystem::SceneManager>(sceneManager);
+
+	Tools::Global::ServiceLocator::Provide(*this);
 	
 	editorResources = std::make_unique<EditorResources>(editorAssetsPath);
 	
@@ -38,6 +50,9 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	Tools::Global::ServiceLocator::Provide(*window);
 	Tools::Global::ServiceLocator::Provide(*inputManager);
 	Tools::Global::ServiceLocator::Provide(*renderer);
+	Tools::Global::ServiceLocator::Provide(modelManager);
+	Tools::Global::ServiceLocator::Provide(textureManager);
+	Tools::Global::ServiceLocator::Provide(shaderManager);
 	Tools::Global::ServiceLocator::Provide<SceneSystem::SceneManager>(sceneManager);
 
 	Tools::Global::ServiceLocator::Provide(*this);
@@ -54,11 +69,11 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 		);
 
 	lightSSBO = std::make_unique<Buffers::ShaderStorageBuffer>(Buffers::EAccessSpecifier::STREAM_DRAW);
-
-	Managers::ResourcesManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
 }
 
 AmberEngine::Core::Context::~Context()
 {
-	//Managers::ResourcesManager::Dispose();
+	modelManager.UnloadResources();
+	textureManager.UnloadResources();
+	shaderManager.UnloadResources();
 }

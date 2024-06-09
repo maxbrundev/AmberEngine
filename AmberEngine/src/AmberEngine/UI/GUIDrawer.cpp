@@ -2,17 +2,28 @@
 
 #include "AmberEngine/UI/GUIDrawer.h"
 
+#include "AmberEngine/Managers/ModelManager.h"
+#include "AmberEngine/UI/Widgets/ButtonSmall.h"
 #include "AmberEngine/UI/Widgets/ColorEdit.h"
 #include "AmberEngine/UI/Widgets/InputText.h"
 #include "AmberEngine/UI/Widgets/DataWidget.h"
 #include "AmberEngine/UI/Widgets/DragMultipleScalars.h"
+#include "AmberEngine/UI/Widgets/Group.h"
 #include "AmberEngine/UI/Widgets/TextColored.h"
+
 
 const AmberEngine::Data::Color AmberEngine::UI::GUIDrawer::TITLE_COLOR        = { 0.85f, 0.65f, 0.0f };
 const AmberEngine::Data::Color AmberEngine::UI::GUIDrawer::CLEAR_BUTTON_COLOR = { 0.5f, 0.0f, 0.0f };
 
 const float AmberEngine::UI::GUIDrawer::MIN_FLOAT = -999999999.0f;
 const float AmberEngine::UI::GUIDrawer::MAX_FLOAT = +999999999.0f;
+
+AmberEngine::Resources::Texture* AmberEngine::UI::GUIDrawer::S_EMPTY_TEXTURE = nullptr;
+
+void AmberEngine::UI::GUIDrawer::ProvideEmptyTexture(Resources::Texture& p_emptyTexture)
+{
+	S_EMPTY_TEXTURE = &p_emptyTexture;
+}
 
 void AmberEngine::UI::GUIDrawer::CreateTitle(WidgetContainer& p_root, const std::string& p_title)
 {
@@ -50,4 +61,28 @@ void AmberEngine::UI::GUIDrawer::DrawVec3(WidgetContainer& p_root, const std::st
 	});
 
 	widget.SetGathererAndProvider(RegisterGatherer, RegisterProvider);
+}
+
+AmberEngine::UI::Widgets::TextDropTarget& AmberEngine::UI::GUIDrawer::DrawMesh(WidgetContainer& p_root, const std::string& p_title, Resources::Model*& p_data, Eventing::Event<>* p_updateNotifier)
+{
+	CreateTitle(p_root, p_title);
+
+	std::string displayedText = (p_data ? p_data->Path : std::string("Empty"));
+	auto& rightSide = p_root.CreateWidget<Widgets::Group>();
+
+	auto& widget = rightSide.CreateWidget<Widgets::TextDropTarget>(displayedText, p_updateNotifier);
+
+	widget.lineBreak = false;
+
+	auto& resetButton = rightSide.CreateWidget<Widgets::ButtonSmall>("Clear");
+	resetButton.idleBackgroundColor = CLEAR_BUTTON_COLOR;
+	resetButton.ClickedEvent += [&widget, &p_data, p_updateNotifier]
+	{
+		p_data = nullptr;
+		widget.content = "Empty";
+		if (p_updateNotifier)
+			p_updateNotifier->Invoke();
+	};
+
+	return widget;
 }

@@ -12,25 +12,25 @@ m_materialIndex(p_materialIndex)
 
 AmberEngine::Resources::Mesh::~Mesh()
 {
-	Unbind();
+	Mesh::Unbind();
 }
 
-void AmberEngine::Resources::Mesh::Bind() const
+void AmberEngine::Resources::Mesh::Bind()
 {
 	m_vertexArray.Bind();
 }
 
-void AmberEngine::Resources::Mesh::Unbind() const
+void AmberEngine::Resources::Mesh::Unbind()
 {
 	m_vertexArray.Unbind();
 }
 
-uint32_t AmberEngine::Resources::Mesh::GetVertexCount() const
+uint32_t AmberEngine::Resources::Mesh::GetVertexCount()
 {
 	return m_vertexCount;
 }
 
-uint32_t AmberEngine::Resources::Mesh::GetIndexCount() const
+uint32_t AmberEngine::Resources::Mesh::GetIndexCount()
 {
 	return m_indicesCount;
 }

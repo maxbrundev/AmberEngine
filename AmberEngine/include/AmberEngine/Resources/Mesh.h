@@ -7,22 +7,24 @@
 #include "AmberEngine/Buffers/VertexArray.h"
 #include "AmberEngine/Buffers/VertexBuffer.h"
 #include "AmberEngine/Buffers/IndexBuffer.h"
+#include "AmberEngine/Resources/IMesh.h"
 
 namespace AmberEngine::Resources
 {
-	class API_AMBERENGINE Mesh
+	class API_AMBERENGINE Mesh : public IMesh
 	{
 	public:
 		Mesh(const std::vector<Geometry::Vertex>& p_vertices, const std::vector<uint32_t>& p_indices, uint32_t p_materialIndex);
-		~Mesh();
+		virtual ~Mesh() override;
 
-		void Bind() const;
-		void Unbind() const;
+		virtual void Bind() override;
+		virtual void Unbind() override;
 
 		std::function<void(std::string_view, uint32_t)> SetTextureUniformCallback;
 
-		uint32_t GetVertexCount() const;
-		uint32_t GetIndexCount() const;
+		virtual uint32_t GetVertexCount() override;
+		virtual uint32_t GetIndexCount() override;
+
 		uint32_t GetMaterialIndex() const;
 
 	private:

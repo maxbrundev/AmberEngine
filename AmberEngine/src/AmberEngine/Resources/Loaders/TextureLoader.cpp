@@ -7,11 +7,11 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-std::string AmberEngine::Resources::Loaders::TextureLoader::__FILE_TRACE;
+std::string AmberEngine::Resources::Loaders::TextureLoader::FILE_TRACE;
 
 AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader::Create(std::string p_filePath, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)
 {
-	__FILE_TRACE = p_filePath;
+	FILE_TRACE = p_filePath;
 
 	GLuint textureID;
 	int textureWidth;
@@ -47,7 +47,7 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader:
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << __FILE_TRACE << std::endl;
+		std::cout << "Texture failed to load at path: " << FILE_TRACE << std::endl;
 
 		stbi_image_free(dataBuffer);
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -79,19 +79,42 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader:
 	return new Texture("", "ColorTexture", textureID, 1, 1, 32, p_firstFilter, p_secondFilter, ETextureType::DIFFUSE_MAP, p_generateMipmap);
 }
 
+AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader::CreateFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, bool p_generateMipmap)
+{
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, p_width, p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_data);
+
+	if (p_generateMipmap)
+	{
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(p_firstFilter));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(p_secondFilter));
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return new Texture("", "", textureID, 1, 1, 32, p_firstFilter, p_secondFilter, ETextureType::DIFFUSE_MAP, p_generateMipmap);
+}
+
 void AmberEngine::Resources::Loaders::TextureLoader::Reload(const Texture& p_texture, const std::string& p_filePath, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)
 {
 	if (Texture* newTexture = Create(p_filePath, p_firstFilter, p_secondFilter, p_textureType, p_flipVertically, p_generateMipmap))
 	{
-		glDeleteTextures(1, &p_texture.id);
+		glDeleteTextures(1, &p_texture.ID);
 
-		*const_cast<uint32_t*>(&p_texture.id)                                  = newTexture->id;
-		*const_cast<uint32_t*>(&p_texture.width)                               = newTexture->width;
-		*const_cast<uint32_t*>(&p_texture.height)                              = newTexture->height;
-		*const_cast<uint32_t*>(&p_texture.bitsPerPixel)                        = newTexture->bitsPerPixel;
-		*const_cast<ETextureFilteringMode*>(&p_texture.firstFilter)            = newTexture->firstFilter;
-		*const_cast<ETextureFilteringMode*>(&p_texture.secondFilter)           = newTexture->secondFilter;
-		*const_cast<bool*>(&p_texture.isMimapped)                              = newTexture->isMimapped;
+		*const_cast<uint32_t*>(&p_texture.ID)                                  = newTexture->ID;
+		*const_cast<uint32_t*>(&p_texture.Width)                               = newTexture->Width;
+		*const_cast<uint32_t*>(&p_texture.Height)                              = newTexture->Height;
+		*const_cast<uint32_t*>(&p_texture.BitsPerPixel)                        = newTexture->BitsPerPixel;
+		*const_cast<ETextureFilteringMode*>(&p_texture.FirstFilter)            = newTexture->FirstFilter;
+		*const_cast<ETextureFilteringMode*>(&p_texture.SecondFilter)           = newTexture->SecondFilter;
+		*const_cast<bool*>(&p_texture.HasMipmaps)                              = newTexture->HasMipmaps;
 
 		delete newTexture;
 	}
@@ -101,7 +124,7 @@ bool AmberEngine::Resources::Loaders::TextureLoader::Destroy(Texture*& p_texture
 {
 	if (p_textureInstance)
 	{
-		glDeleteTextures(1, &p_textureInstance->id);
+		glDeleteTextures(1, &p_textureInstance->ID);
 
 		delete p_textureInstance;
 		p_textureInstance = nullptr;
@@ -116,7 +139,7 @@ bool AmberEngine::Resources::Loaders::TextureLoader::Delete(Texture* p_textureIn
 {
 	if (p_textureInstance)
 	{
-		glDeleteTextures(1, &p_textureInstance->id);
+		glDeleteTextures(1, &p_textureInstance->ID);
 
 		return true;
 	}

@@ -2,9 +2,7 @@
 
 #include "AmberEngine/Rendering/Entities/Light.h"
 
-#include "AmberEngine/Tools/Utils/ColorsUtility.h"
-
-AmberEngine::Rendering::Entities::Light::Light(Maths::Transform& p_tranform, ELightType p_type) : type(static_cast<float>(p_type)), m_transform(p_tranform)
+AmberEngine::Rendering::Entities::Light::Light(Maths::Transform& p_transform, Settings::ELightType p_type) : Type(static_cast<float>(p_type)), m_transform(p_transform)
 {
 }
 
@@ -22,16 +20,16 @@ glm::mat4 AmberEngine::Rendering::Entities::Light::GenerateMatrix() const
 	result[1][1] = forward.y;
 	result[1][2] = forward.z;
 
-	result[2][0] = static_cast<float>(Utils::ColorsUtility::PackNormalizedToRGBA(color));
+	result[2][0] = static_cast<float>(Color.Pack());
 
-	result[3][0] = type;
-	result[3][1] = cutoff;
-	result[3][2] = outerCutoff;
+	result[3][0] = Type;
+	result[3][1] = Cutoff;
+	result[3][2] = OuterCutoff;
 
-	result[0][3] = constant;
-	result[1][3] = linear;
-	result[2][3] = quadratic;
-	result[3][3] = intensity;
+	result[0][3] = Constant;
+	result[1][3] = Linear;
+	result[2][3] = Quadratic;
+	result[3][3] = Intensity;
 
 	return result;
 }

@@ -2,26 +2,28 @@
 
 #include "AmberEngine/Resources/Shader.h"
 
+#include <GL/glew.h>
+
 #include "AmberEngine/Resources/EUniformType.h"
 #include "AmberEngine/Resources/Texture.h"
 
-AmberEngine::Resources::Shader::Shader(std::string p_filePath, uint32_t p_id) : id(p_id), path(std::move(p_filePath))
+AmberEngine::Resources::Shader::Shader(std::string p_filePath, uint32_t p_id) : ID(p_id), Path(std::move(p_filePath))
 {
 	QueryUniforms();
 }
 
 AmberEngine::Resources::Shader::~Shader()
 {
-	glDeleteProgram(id);
+	glDeleteProgram(ID);
 }
 
 void AmberEngine::Resources::Shader::QueryUniforms()
 {
-	uniforms.clear();
+	Uniforms.clear();
 
 	GLint activeUniformsCount = 0;
 
-	glGetProgramiv(id, GL_ACTIVE_UNIFORMS, &activeUniformsCount);
+	glGetProgramiv(ID, GL_ACTIVE_UNIFORMS, &activeUniformsCount);
 
 	std::vector<GLchar> nameData(256);
 
@@ -31,7 +33,7 @@ void AmberEngine::Resources::Shader::QueryUniforms()
 		GLenum type          = 0;
 		GLsizei length       = 0;
 
-		glGetActiveUniform(id, i, static_cast<GLsizei>(nameData.size()), &length, &arraySize, &type, &nameData[0]);
+		glGetActiveUniform(ID, i, static_cast<GLsizei>(nameData.size()), &length, &arraySize, &type, &nameData[0]);
 
 		const std::string uniformName((nameData.data()), length);
 
@@ -52,7 +54,7 @@ void AmberEngine::Resources::Shader::QueryUniforms()
 
 			if (defaultValue.has_value())
 			{
-				uniforms.push_back
+				Uniforms.push_back
 				({
 					static_cast<EUniformType>(type),
 					uniformName,
@@ -66,7 +68,7 @@ void AmberEngine::Resources::Shader::QueryUniforms()
 
 void AmberEngine::Resources::Shader::Bind() const
 {
-	glUseProgram(id);
+	glUseProgram(ID);
 }
 
 void AmberEngine::Resources::Shader::Unbind() const
@@ -117,42 +119,42 @@ void AmberEngine::Resources::Shader::SetUniformMat4(const std::string_view p_nam
 int AmberEngine::Resources::Shader::GetUniformInt(const std::string& p_name)
 {
 	int value;
-	glGetUniformiv(id, GetUniformLocation(p_name), &value);
+	glGetUniformiv(ID, GetUniformLocation(p_name), &value);
 	return value;
 }
 
 float AmberEngine::Resources::Shader::GetUniformFloat(const std::string& p_name)
 {
 	float value;
-	glGetUniformfv(id, GetUniformLocation(p_name), &value);
+	glGetUniformfv(ID, GetUniformLocation(p_name), &value);
 	return value;
 }
 
 glm::vec2 AmberEngine::Resources::Shader::GetUniformVec2(const std::string& p_name)
 {
 	GLfloat values[2];
-	glGetUniformfv(id, GetUniformLocation(p_name), values);
+	glGetUniformfv(ID, GetUniformLocation(p_name), values);
 	return reinterpret_cast<glm::vec2&>(values);
 }
 
 glm::vec3 AmberEngine::Resources::Shader::GetUniformVec3(const std::string& p_name)
 {
 	GLfloat values[3];
-	glGetUniformfv(id, GetUniformLocation(p_name), values);
+	glGetUniformfv(ID, GetUniformLocation(p_name), values);
 	return reinterpret_cast<glm::vec3&>(values);
 }
 
 glm::vec4 AmberEngine::Resources::Shader::GetUniformVec4(const std::string& p_name)
 {
 	GLfloat values[4];
-	glGetUniformfv(id, GetUniformLocation(p_name), values);
+	glGetUniformfv(ID, GetUniformLocation(p_name), values);
 	return reinterpret_cast<glm::vec4&>(values);
 }
 
 glm::mat4 AmberEngine::Resources::Shader::GetUniformMat4(const std::string& p_name)
 {
 	GLfloat values[16];
-	glGetUniformfv(id, GetUniformLocation(p_name), values);
+	glGetUniformfv(ID, GetUniformLocation(p_name), values);
 	return reinterpret_cast<glm::mat4&>(values);
 }
 
@@ -163,9 +165,9 @@ const AmberEngine::Resources::UniformInfo* AmberEngine::Resources::Shader::GetUn
 		return p_name == p_element.name;
 	};
 
-	const auto result = std::find_if(uniforms.begin(), uniforms.end(), predicate);
+	const auto result = std::find_if(Uniforms.begin(), Uniforms.end(), predicate);
 
-	if (result != uniforms.end())
+	if (result != Uniforms.end())
 		return &*result;
 
 	return nullptr;
@@ -181,7 +183,7 @@ uint32_t AmberEngine::Resources::Shader::GetUniformLocation(const std::string_vi
 	if (m_uniformLocationCache.find(p_name) != m_uniformLocationCache.end())
 		return m_uniformLocationCache[p_name];
 
-	const int32_t location = glGetUniformLocation(id, static_cast<std::string>(p_name).c_str());
+	const int32_t location = glGetUniformLocation(ID, static_cast<std::string>(p_name).c_str());
 	if (location == -1)
 		std::cout << "warning uniform doesn't exist" << std::endl;
 

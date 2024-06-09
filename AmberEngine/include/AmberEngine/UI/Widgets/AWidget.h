@@ -1,6 +1,6 @@
 #pragma once
 
-namespace  AmberEngine::UI
+namespace AmberEngine::UI
 {
 	class WidgetContainer;
 }
@@ -34,9 +34,7 @@ namespace AmberEngine::UI::Widgets
 		bool m_autoExecutePlugins = true;
 
 	private:
-		static uint64_t __WIDGET_ID_INCREMENT;
+		static uint64_t WIDGET_ID_INCREMENT;
 		bool m_destroyed = false;
-
-		
 	};
 }

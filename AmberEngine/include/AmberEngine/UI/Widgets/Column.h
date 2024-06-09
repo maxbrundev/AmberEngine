@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AmberEngine/UI/Widgets/AWidget.h"
+
 #include "AmberEngine/UI/WidgetContainer.h"
 
 namespace AmberEngine::UI::Widgets
@@ -23,7 +24,7 @@ namespace AmberEngine::UI::Widgets
 
 			int counter = 0;
 
-			CollectGarbages();
+			CollectGarbage();
 
 			for (auto it = m_widgets.begin(); it != m_widgets.end();)
 			{
@@ -33,7 +34,7 @@ namespace AmberEngine::UI::Widgets
 
 				if (it != m_widgets.end())
 				{
-					if (widths[counter] != -1.f)
+					if (widths[counter] != -1.0f)
 						ImGui::SetColumnWidth(counter, widths[counter]);
 
 					ImGui::NextColumn();

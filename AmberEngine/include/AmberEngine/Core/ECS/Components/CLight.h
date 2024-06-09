@@ -4,8 +4,9 @@
 
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
 
-#include "AmberEngine/Rendering/Entities/ELightType.h"
 #include "AmberEngine/Rendering/Entities/Light.h"
+
+#include "AmberEngine/Rendering/Settings/ELightType.h"
 
 namespace AmberEngine
 {
@@ -23,7 +24,7 @@ namespace AmberEngine::Core::ECS::Components
 	class API_AMBERENGINE CLight : public AComponent
 	{
 	public:
-		CLight(Actor& p_owner, Rendering::Entities::ELightType p_type);
+		CLight(Actor& p_owner, Rendering::Settings::ELightType p_type);
 		virtual ~CLight() override = default;
 
 		void SetColor(const Data::Color& p_color);
