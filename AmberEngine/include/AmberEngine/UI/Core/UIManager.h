@@ -25,6 +25,8 @@ namespace AmberEngine::UI::Core
 		void Render() const;
 		void PostRender() const;
 
+		void ResetLayout(const std::string & p_config) const;
+
 	private:
 		void ApplyStyle();
 

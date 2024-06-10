@@ -114,6 +114,11 @@ void AmberEngine::UI::Core::UIManager::PostRender() const
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void AmberEngine::UI::Core::UIManager::ResetLayout(const std::string& p_config) const
+{
+	ImGui::LoadIniSettingsFromDisk(p_config.c_str());
+}
+
 void AmberEngine::UI::Core::UIManager::ApplyStyle()
 {
 	ImGui::StyleColorsDark();

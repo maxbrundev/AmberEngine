@@ -71,6 +71,11 @@ void AmberEngine::UI::Panels::Inspector::CreateActorInspector(AmberEngine::Core:
 		DrawComponent(*instance);
 }
 
+AmberEngine::Core::ECS::Actor* AmberEngine::UI::Panels::Inspector::GetTargetActor() const
+{
+	return m_targetActor;
+}
+
 void AmberEngine::UI::Panels::Inspector::DrawComponent(AmberEngine::Core::ECS::Components::AComponent& p_component)
 {
 	if (auto inspectorItem = dynamic_cast<AmberEngine::Core::API::IInspectorItem*>(&p_component); inspectorItem)

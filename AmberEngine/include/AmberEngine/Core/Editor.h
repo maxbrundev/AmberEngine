@@ -5,6 +5,7 @@
 #include "AmberEngine/Core/Context.h"
 #include "AmberEngine/Core/EditorRenderer.h"
 #include "AmberEngine/Core/PanelsManager.h"
+#include "AmberEngine/Core/EditorAction.h"
 
 #include "AmberEngine/UI/Canvas.h"
 
@@ -27,7 +28,7 @@ namespace AmberEngine::Core
 		void RenderEditorUI(float p_deltaTime);
 		void UpdateEditorPanels(float p_deltaTime);
 		void PostUpdate() const;
-	
+		void UpdateCurrentEditorMode(float p_deltaTime);
 		void RenderViews(float p_deltaTime);
 		void PostRenderUI() const;
 		void InitializeUI();
@@ -38,7 +39,7 @@ namespace AmberEngine::Core
 		Context& m_context;
 		EditorRenderer m_editorRenderer;
 		PanelsManager m_panelsManager;
-
+		Core::EditorAction	m_editorActions;
 		UI::Canvas m_canvas;
 	};
 }

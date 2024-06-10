@@ -9,7 +9,7 @@
 AmberEngine::UI::Panels::SceneView::SceneView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
 	AView(p_title, p_opened, p_panelSettings),
 	m_sceneManager(Tools::Global::ServiceLocator::Get<AmberEngine::Core::SceneSystem::SceneManager>()),
-	m_cameraController(m_camera, m_cameraPosition)
+	m_cameraController(m_camera, m_cameraPosition, m_cameraRotation)
 {
 	m_camera.SetClearColor({ 0.098f, 0.098f, 0.098f });
 	m_camera.SetFar(5000.0f);

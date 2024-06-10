@@ -2,6 +2,7 @@
 
 #include "AmberEngine/Core/Editor.h"
 
+#include "AmberEngine/Core/SceneSystem/Scene.h"
 #include "AmberEngine/Data/EditorConstants.h"
 #include "AmberEngine/UI/Panels/MenuBar.h"
 #include "AmberEngine/UI/Panels/Hierarchy.h"
@@ -15,7 +16,8 @@
 AmberEngine::Core::Editor::Editor(Context& p_context) :
 m_context(p_context),
 m_editorRenderer(p_context),
-m_panelsManager(m_canvas)
+m_panelsManager(m_canvas),
+m_editorActions(m_context, m_editorRenderer, m_panelsManager)
 {
 	Tools::Global::ServiceLocator::Provide(*this);
 
@@ -42,10 +44,13 @@ void AmberEngine::Core::Editor::PreUpdate() const
 
 void AmberEngine::Core::Editor::Update(float p_deltaTime)
 {
+	UpdateCurrentEditorMode(p_deltaTime);
 	PrepareRendering(p_deltaTime);
 	RenderViews(p_deltaTime);
 	UpdateEditorPanels(p_deltaTime);
 	RenderEditorUI(p_deltaTime);
+
+	m_editorActions.ExecuteDelayedActions();
 }
 
 void AmberEngine::Core::Editor::PrepareRendering(float p_deltaTime)
@@ -75,6 +80,10 @@ void AmberEngine::Core::Editor::PostUpdate() const
 	m_context.inputManager->clearEvents();
 }
 
+void AmberEngine::Core::Editor::UpdateCurrentEditorMode(float p_deltaTime)
+{
+	m_context.sceneManager.GetCurrentScene()->CollectGarbage();
+}
 
 void AmberEngine::Core::Editor::RenderViews(float p_deltaTime)
 {

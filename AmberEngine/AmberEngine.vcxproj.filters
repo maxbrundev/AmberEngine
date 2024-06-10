@@ -435,6 +435,27 @@
     <ClInclude Include="include\AmberEngine\Core\CameraController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Core\EditorAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Managers\MaterialManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Tools\FileSystem\IniFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Tools\FileSystem\tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\MaterialLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\Core\API\ISerializable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -707,6 +728,24 @@
     <ClCompile Include="src\AmberEngine\Core\CameraController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Core\EditorAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Managers\MaterialManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\MaterialLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Tools\FileSystem\IniFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Tools\FileSystem\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl">
@@ -716,6 +755,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="include\AmberEngine\UI\GUIDrawer.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="include\AmberEngine\Tools\FileSystem\IniFile.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

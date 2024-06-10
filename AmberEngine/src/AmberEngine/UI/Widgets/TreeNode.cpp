@@ -2,7 +2,11 @@
 
 #include "AmberEngine/UI/Widgets/TreeNode.h"
 
+#include "AmberEngine/Core/EditorAction.h"
 #include "AmberEngine/Core/ECS/Actor.h"
+#include "AmberEngine/Tools/Global/ServiceLocator.h"
+#include "AmberEngine/UI/Widgets/ContextualMenu.h"
+#include "AmberEngine/UI/Widgets/MenuItem.h"
 
 AmberEngine::UI::Widgets::TreeNode::TreeNode(const std::string& p_name, bool p_arrowClickToOpen) :
 name(p_name),
@@ -17,6 +21,15 @@ void AmberEngine::UI::Widgets::TreeNode::SetActor(AmberEngine::Core::ECS::Actor*
 	m_actor = p_actor;
 
 	m_data = std::make_pair(m_actor, this);
+
+	auto& test = CreateWidget<AmberEngine::UI::Widgets::ContextualMenu>();
+
+	auto& testt = test.CreateWidget<MenuItem>("Delete");
+	testt.ClickedEvent += [this]
+	{
+		EDITOR_EXEC(DestroyActor(std::ref(*m_actor)));
+	};
+	test.CreateWidget<MenuItem>("Duplicate");
 }
 
 void AmberEngine::UI::Widgets::TreeNode::Update()
@@ -37,6 +50,9 @@ void AmberEngine::UI::Widgets::TreeNode::Update()
 			ImGui::SetDragDropPayload("Actor", &m_data, sizeof(m_data));
 			ImGui::EndDragDropSource();
 		}
+
+
+
 	}
 
 	if (ImGui::BeginDragDropTarget())

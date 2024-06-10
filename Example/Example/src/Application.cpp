@@ -129,7 +129,6 @@ void Example::Application::Run()
 			}
 		}
 
-		ImGui::ShowDemoWindow();
 		m_editor.PostUpdate();
 
 		clock.Update();

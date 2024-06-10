@@ -5,9 +5,11 @@
 #include "AmberEngine/Resources/Texture.h"
 #include "AmberEngine/Resources/Shader.h"
 
+#include "AmberEngine/Core/API/ISerializable.h"
+
 namespace AmberEngine::Resources
 {
-	class API_AMBERENGINE Material
+	class API_AMBERENGINE Material : public Core::API::ISerializable
 	{
 	public:
 		Material();
@@ -61,7 +63,9 @@ namespace AmberEngine::Resources
 
 		uint8_t GenerateStateMask() const;
 
-	public:
+		void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+
 		const std::string path;
 
 	private:

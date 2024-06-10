@@ -265,6 +265,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
     <ClInclude Include="include\AmberEngine\Context\Window.h" />
     <ClInclude Include="include\AmberEngine\Core\API\IInspectorItem.h" />
+    <ClInclude Include="include\AmberEngine\Core\API\ISerializable.h" />
     <ClInclude Include="include\AmberEngine\Core\ECSRenderer.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\AComponent.h" />
@@ -275,6 +276,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CModelRenderer.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CLight.h" />
     <ClInclude Include="include\AmberEngine\Core\Editor.h" />
+    <ClInclude Include="include\AmberEngine\Core\EditorAction.h" />
     <ClInclude Include="include\AmberEngine\Core\EditorRenderer.h" />
     <ClInclude Include="include\AmberEngine\Core\EditorResources.h" />
     <ClInclude Include="include\AmberEngine\Core\SceneSystem\Scene.h" />
@@ -295,6 +297,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Inputs\EKeyState.h" />
     <ClInclude Include="include\AmberEngine\Inputs\EMouseButton.h" />
     <ClInclude Include="include\AmberEngine\Inputs\EMouseButtonState.h" />
+    <ClInclude Include="include\AmberEngine\Managers\MaterialManager.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Entities\Camera.h" />
     <ClInclude Include="include\AmberEngine\Core\CameraController.h" />
     <ClInclude Include="include\AmberEngine\Inputs\InputManager.h" />
@@ -314,7 +317,10 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\Rendering\Settings\EPrimitiveMode.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Settings\ERasterizationMode.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Settings\ERenderingCapability.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\MaterialLoader.h" />
     <ClInclude Include="include\AmberEngine\Resources\RawTextures.h" />
+    <ClInclude Include="include\AmberEngine\Tools\FileSystem\IniFile.h" />
+    <ClInclude Include="include\AmberEngine\Tools\FileSystem\tinyxml2.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\NumberFormat.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\PathParser.h" />
     <ClInclude Include="include\AmberEngine\UI\Core\UIManager.h" />
@@ -351,6 +357,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClInclude Include="include\AmberEngine\UI\Widgets\ButtonSmall.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ColorEdit.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Column.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenu.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DataWidget.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DragingScalar.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DragMultipleScalars.h" />
@@ -422,6 +429,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CModelRenderer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CLight.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\EditorAction.cpp" />
     <ClCompile Include="src\AmberEngine\Core\EditorRenderer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\EditorResources.cpp" />
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\Scene.cpp" />
@@ -433,6 +441,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="src\AmberEngine\Managers\MaterialManager.cpp" />
     <ClCompile Include="src\AmberEngine\Rendering\Entities\Camera.cpp" />
     <ClCompile Include="src\AmberEngine\Core\CameraController.cpp" />
     <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp" />
@@ -440,6 +449,9 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Managers\ShaderManager.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\TextureManager.cpp" />
     <ClCompile Include="src\AmberEngine\Rendering\Core\Renderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\MaterialLoader.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\FileSystem\IniFile.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\FileSystem\tinyxml2.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\NumberFormat.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\PathParser.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Core\UIManager.cpp" />
@@ -468,6 +480,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
     <ClCompile Include="src\AmberEngine\Core\PanelsManager.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ButtonSmall.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ColorEdit.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenu.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Group.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\GroupCollapsable.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Image.cpp" />
@@ -495,6 +508,7 @@ xcopy "$(SolutionDir)..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)
   <ItemGroup>
     <None Include="include\AmberEngine\Eventing\Event.inl" />
     <None Include="include\AmberEngine\Managers\AResourceManager.inl" />
+    <None Include="include\AmberEngine\Tools\FileSystem\IniFile.inl" />
     <None Include="include\AmberEngine\UI\GUIDrawer.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

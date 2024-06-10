@@ -14,7 +14,8 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	ResourceManagement::ModelManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
 	ResourceManagement::TextureManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
 	ResourceManagement::ShaderManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
-	
+	ResourceManagement::MaterialManager::ProvideAssetPaths(projectAssetsPath, engineAssetsPath);
+
 	device = std::make_unique<AmberEngine::Context::Device>(p_deviceSettings);
 	window = std::make_unique<AmberEngine::Context::Window>(*device, p_windowSettings);
 
@@ -24,16 +25,6 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 
 	driver   = std::make_unique<AmberEngine::Context::Driver>(p_driverSettings);
 	renderer = std::make_unique<ECSRenderer>(*driver);
-
-	Tools::Global::ServiceLocator::Provide(*window);
-	Tools::Global::ServiceLocator::Provide(*inputManager);
-	Tools::Global::ServiceLocator::Provide(*renderer);
-	Tools::Global::ServiceLocator::Provide(modelManager);
-	Tools::Global::ServiceLocator::Provide(textureManager);
-	Tools::Global::ServiceLocator::Provide(shaderManager);
-	Tools::Global::ServiceLocator::Provide<SceneSystem::SceneManager>(sceneManager);
-
-	Tools::Global::ServiceLocator::Provide(*this);
 	
 	editorResources = std::make_unique<EditorResources>(editorAssetsPath);
 	
@@ -53,6 +44,7 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	Tools::Global::ServiceLocator::Provide(modelManager);
 	Tools::Global::ServiceLocator::Provide(textureManager);
 	Tools::Global::ServiceLocator::Provide(shaderManager);
+	Tools::Global::ServiceLocator::Provide(materialManager);
 	Tools::Global::ServiceLocator::Provide<SceneSystem::SceneManager>(sceneManager);
 
 	Tools::Global::ServiceLocator::Provide(*this);
@@ -76,4 +68,5 @@ AmberEngine::Core::Context::~Context()
 	modelManager.UnloadResources();
 	textureManager.UnloadResources();
 	shaderManager.UnloadResources();
+	materialManager.UnloadResources();
 }

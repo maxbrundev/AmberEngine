@@ -11,10 +11,12 @@
 
 AmberEngine::UI::Panels::AView::AView(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
 APanelWindow(p_title, p_opened, p_panelSettings),
-m_cameraPosition(0.0f),
 m_frameBuffer(256, 144),
 m_editorRenderer(Tools::Global::ServiceLocator::Get<AmberEngine::Core::Editor>().GetRenderer())
 {
+	m_cameraPosition = { -10.0f, 3.0f, 10.0f };
+	m_cameraRotation = glm::quat({ 0.0f, 135.0f, 0.0f });
+
 	m_image = &CreateWidget<Widgets::Image>(m_frameBuffer.GetTextureID(), glm::vec2{ 0.f, 0.f });
 	settings.scrollable = false;
 }
@@ -27,7 +29,7 @@ AmberEngine::UI::Panels::AView::~AView()
 void AmberEngine::UI::Panels::AView::PrepareCamera()
 {
 	auto[winWidth, winHeight] = GetSafeSize();
-	m_camera.ComputeMatrices(winWidth, winHeight, m_cameraPosition);
+	m_camera.ComputeMatrices(winWidth, winHeight, m_cameraPosition, m_cameraRotation);
 }
 
 void AmberEngine::UI::Panels::AView::FillEngineUBO()
@@ -73,4 +75,29 @@ void AmberEngine::UI::Panels::AView::Render()
 	Tools::Global::ServiceLocator::Get<Context::Window>().SetViewport(winWidth, winHeight);
 
 	RenderImplementation();
+}
+
+void AmberEngine::UI::Panels::AView::SetCameraPosition(const glm::vec3& p_position)
+{
+	m_cameraPosition = p_position;
+}
+
+void AmberEngine::UI::Panels::AView::SetCameraRotation(const glm::quat& p_rotation)
+{
+	m_cameraRotation = p_rotation;
+}
+
+const glm::vec3& AmberEngine::UI::Panels::AView::GetCameraPosition() const
+{
+	return m_cameraPosition;
+}
+
+const glm::quat& AmberEngine::UI::Panels::AView::GetCameraRotation() const
+{
+	return m_cameraRotation;
+}
+
+AmberEngine::Rendering::Entities::Camera& AmberEngine::UI::Panels::AView::GetCamera()
+{
+	return m_camera;
 }

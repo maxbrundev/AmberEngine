@@ -88,6 +88,32 @@ bool AmberEngine::Core::SceneSystem::Scene::DestroyActor(ECS::Actor& p_target)
 	return false;
 }
 
+AmberEngine::Core::ECS::Actor* AmberEngine::Core::SceneSystem::Scene::FindActorByID(int64_t p_id)
+{
+	auto result = std::find_if(m_actors.begin(), m_actors.end(), [p_id](ECS::Actor* element)
+	{
+		return element->GetID() == p_id;
+	});
+
+	if (result != m_actors.end())
+		return *result;
+	else
+		return nullptr;
+}
+
+void AmberEngine::Core::SceneSystem::Scene::CollectGarbage()
+{
+	m_actors.erase(std::remove_if(m_actors.begin(), m_actors.end(), [this](ECS::Actor* element)
+	{
+		bool isGarbage = !element->IsAlive();
+		if (isGarbage)
+		{
+			delete element;
+		}
+		return isGarbage;
+	}), m_actors.end());
+}
+
 void AmberEngine::Core::SceneSystem::Scene::OnComponentAdded(ECS::Components::AComponent& p_compononent)
 {
 	if(auto result = dynamic_cast<ECS::Components::CModelRenderer*>(&p_compononent))

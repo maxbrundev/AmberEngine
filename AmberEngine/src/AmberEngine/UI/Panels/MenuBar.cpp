@@ -3,6 +3,7 @@
 #include "AmberEngine/UI/Panels/MenuBar.h"
 
 #include "AmberEngine/Core/Context.h"
+#include "AmberEngine/Core/EditorAction.h"
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
@@ -12,6 +13,7 @@ AmberEngine::UI::Panels::MenuBar::MenuBar()
 {
 	CreateFileMenu();
 	CreateWindowMenu();
+	CreateLayoutMenu();
 }
 
 void AmberEngine::UI::Panels::MenuBar::CreateFileMenu()
@@ -34,6 +36,12 @@ void AmberEngine::UI::Panels::MenuBar::CreateWindowMenu()
 void AmberEngine::UI::Panels::MenuBar::CreateActorsMenu()
 {
 	auto& actorsMenu = CreateWidget<Widgets::MenuList>("Actors");
+}
+
+void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
+{
+	auto& layoutMenu = CreateWidget<Widgets::MenuList>("Layout");
+	layoutMenu.CreateWidget<Widgets::MenuItem>("Reset").ClickedEvent += EDITOR_BIND(ResetLayout);
 }
 
 void AmberEngine::UI::Panels::MenuBar::UpdateToggleableItems()

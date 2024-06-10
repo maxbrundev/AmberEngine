@@ -7,9 +7,10 @@ AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&, AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::AttachEvent;
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&, AmberEngine::Core::ECS::Actor*> AmberEngine::Core::ECS::Actor::DettachEvent;
 
-AmberEngine::Core::ECS::Actor::Actor(int64_t p_actorID, const std::string& p_name, const std::string & p_tag) : m_actorID(p_actorID),
+AmberEngine::Core::ECS::Actor::Actor(int64_t p_actorID, const std::string& p_name, const std::string & p_tag) :
 m_name(p_name),
 m_tag(p_tag),
+m_actorID(p_actorID),
 transform(AddComponent<Components::CTransform>())
 {
 	CreatedEvent.Invoke(*this);
@@ -60,11 +61,17 @@ void AmberEngine::Core::ECS::Actor::SetName(std::string p_name)
 	m_name = std::move(p_name);
 }
 
+void AmberEngine::Core::ECS::Actor::SetID(int64_t p_id)
+{
+	m_parentID = p_id;
+}
+
 void AmberEngine::Core::ECS::Actor::SetParent(Actor& p_parent)
 {
 	RemoveParent();
 
 	m_parent = &p_parent;
+	m_parentID = p_parent.m_actorID;
 	transform.SetParent(p_parent.transform);
 	p_parent.m_children.push_back(this);
 
@@ -87,6 +94,7 @@ void AmberEngine::Core::ECS::Actor::RemoveParent()
 	}
 
 	m_parent = nullptr;
+	m_parentID = 0;
 
 	transform.RemoveParent();
 }
@@ -117,6 +125,19 @@ bool AmberEngine::Core::ECS::Actor::IsDescendantOf(const Actor* p_actor) const
 	return false;
 }
 
+void AmberEngine::Core::ECS::Actor::MarkAsDestroy()
+{
+	m_destroyed = true;
+
+	for (auto child : m_children)
+		child->MarkAsDestroy();
+}
+
+bool AmberEngine::Core::ECS::Actor::IsAlive() const
+{
+	return !m_destroyed;
+}
+
 const std::string& AmberEngine::Core::ECS::Actor::GetName() const
 {
 	return m_name;
@@ -135,6 +156,11 @@ int64_t AmberEngine::Core::ECS::Actor::GetID() const
 AmberEngine::Core::ECS::Actor* AmberEngine::Core::ECS::Actor::GetParent() const
 {
 	return m_parent;
+}
+
+int64_t AmberEngine::Core::ECS::Actor::GetParentID() const
+{
+	return m_parentID;
 }
 
 void AmberEngine::Core::ECS::Actor::SetActive(bool p_active)

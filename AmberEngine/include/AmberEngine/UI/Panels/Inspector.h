@@ -16,7 +16,7 @@ namespace AmberEngine::UI::Panels
 		void UnFocus();
 
 		void CreateActorInspector(AmberEngine::Core::ECS::Actor& p_target);
-
+		AmberEngine::Core::ECS::Actor* GetTargetActor() const;
 	private:
 		void DrawComponent(AmberEngine::Core::ECS::Components::AComponent& p_component);
 

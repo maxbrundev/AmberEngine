@@ -205,3 +205,11 @@ uint8_t AmberEngine::Resources::Material::GenerateStateMask() const
 
 	return result;
 }
+
+void AmberEngine::Resources::Material::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+}
+
+void AmberEngine::Resources::Material::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+}

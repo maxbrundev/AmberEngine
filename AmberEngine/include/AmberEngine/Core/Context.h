@@ -17,9 +17,11 @@
 #include "AmberEngine/Buffers/UniformBuffer.h"
 #include "AmberEngine/Buffers/ShaderStorageBuffer.h"
 
+
 #include "AmberEngine/Managers/ModelManager.h"
 #include "AmberEngine/Managers/ShaderManager.h"
 #include "AmberEngine/Managers/TextureManager.h"
+#include "AmberEngine/Managers/MaterialManager.h"
 
 #include "SceneSystem/SceneManager.h"
 
@@ -54,6 +56,7 @@ namespace AmberEngine::Core
 		ResourceManagement::ModelManager modelManager;
 		ResourceManagement::TextureManager textureManager;
 		ResourceManagement::ShaderManager shaderManager;
+		ResourceManagement::MaterialManager	materialManager;
 
 		SceneSystem::SceneManager sceneManager;
 	};

@@ -11,9 +11,8 @@ namespace AmberEngine::Rendering::Entities
 	public:
 		Camera();
 		~Camera() = default;
-		
-		void UpdateCameraVectors();
-		void ComputeMatrices(uint16_t p_windowWidth, uint16_t p_windowHeight, const glm::vec3& p_position);
+
+		void ComputeMatrices(uint16_t p_windowWidth, uint16_t p_windowHeight, const glm::vec3& p_position, const glm::quat& p_rotation);
 
 		void SetProjectionMode(Rendering::Settings::EProjectionMode p_projectionMode);
 
@@ -24,15 +23,9 @@ namespace AmberEngine::Rendering::Entities
 
 		void SetClearColor(const glm::vec3& p_clearColor);
 
-		Rendering::Settings::EProjectionMode GetProjectionMode() const;
+		Settings::EProjectionMode GetProjectionMode() const;
 
-		float& GetYaw();
-		float& GetPitch();
 		float& GetCameraFov();
-		
-		const glm::vec3& GetForward() const;
-		const glm::vec3& GetRight() const;
-		const glm::vec3& GetUp() const;
 
 		const glm::vec3& GetClearColor() const;
 
@@ -40,7 +33,7 @@ namespace AmberEngine::Rendering::Entities
 		glm::mat4& GetProjectionMatrix();
 		
 	private:
-		void ComputeViewMatrix(const glm::vec3& p_position, const  glm::vec3& p_up);
+		void ComputeViewMatrix(const glm::vec3& p_position, const glm::quat& p_rotation);
 		void ComputeProjectionMatrix(uint16_t p_windowWidth, uint16_t p_windowHeight);
 
 	private:
@@ -55,12 +48,5 @@ namespace AmberEngine::Rendering::Entities
 		float m_far;
 
 		Settings::EProjectionMode m_projectionMode;
-
-		glm::vec3 m_forward;
-		glm::vec3 m_up;
-		glm::vec3 m_right;
-
-		float m_yaw;
-		float m_pitch;
 	};
 }

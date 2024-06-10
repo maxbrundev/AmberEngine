@@ -33,6 +33,8 @@ namespace AmberEngine::Core::SceneSystem
 		ECS::Actor& CreateActor();
 		ECS::Actor& CreateActor(const std::string& p_name, const std::string& p_tag = "");
 		bool DestroyActor(ECS::Actor& p_target);
+		ECS::Actor* FindActorByID(int64_t p_id);
+		void CollectGarbage();
 
 		void OnComponentAdded(ECS::Components::AComponent& p_compononent);
 		void OnComponentRemoved(ECS::Components::AComponent& p_compononent);

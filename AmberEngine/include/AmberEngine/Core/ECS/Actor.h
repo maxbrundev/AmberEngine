@@ -91,6 +91,7 @@ namespace AmberEngine::Core::ECS
 		std::vector<std::shared_ptr<Components::AComponent>>& GetComponents();
 
 		void SetName(std::string p_name);
+		void SetID(int64_t p_id);
 	
 		void SetParent(Actor& p_parent);
 		void RemoveParent();
@@ -98,12 +99,17 @@ namespace AmberEngine::Core::ECS
 		bool HasChildren() const;
 		bool IsDescendantOf(const Actor* p_actor) const;
 
+		void MarkAsDestroy();
+
+		bool IsAlive() const;
+
 		const std::string& GetName() const;
 		const std::string& GetTag() const;
 
 		int64_t GetID() const;
 
 		Actor* GetParent() const;
+		int64_t GetParentID() const;
 
 		void SetActive(bool p_active);
 		bool IsSelfActive() const;
@@ -115,10 +121,11 @@ namespace AmberEngine::Core::ECS
 		std::string m_name;
 		std::string m_tag;
 
-		int64_t	m_actorID;
-
+		int64_t m_actorID;
+		bool m_destroyed = false;
 		bool m_active = true;
 		Actor* m_parent = nullptr;
+		int64_t	m_parentID = 0;
 		std::vector<Actor*> m_children;
 		std::vector<std::shared_ptr<Components::AComponent>> m_components;
 
