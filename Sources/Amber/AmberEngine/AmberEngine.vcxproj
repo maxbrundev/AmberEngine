@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{AE520B00-2613-49C7-804D-EF391D9D933B}</ProjectGuid>
+    <RootNamespace>AmberEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\include"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)"
+xcopy "$(ProjectDir)include\$(ProjectName)" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(ProjectDir)*.h" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(OutDir)*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /y /i
+xcopy "$(OutDir)*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /y /i
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\include"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)"
+xcopy "$(ProjectDir)include\$(ProjectName)" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(ProjectDir)*.h" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(OutDir)*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /y /i
+xcopy "$(OutDir)*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /y /i
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\include"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)"
+xcopy "$(ProjectDir)include\$(ProjectName)" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(ProjectDir)*.h" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(OutDir)*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /y /i
+xcopy "$(OutDir)*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /y /i
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>AMBERENGINE_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Amberpch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\include"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)"
+RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)"
+xcopy "$(ProjectDir)include\$(ProjectName)" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(ProjectDir)*.h" "$(SolutionDir)..\..\Build\$(ProjectName)\include\$(ProjectName)" /e /y /i /r
+xcopy "$(OutDir)*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /y /i
+xcopy "$(OutDir)*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /y /i
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
+
+xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Amberpch.h" />
+    <ClInclude Include="include\AmberEngine\API\Export.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\EAccessSpecifier.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\FrameBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\IndexBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\ShaderStorageBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\UniformBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\VertexArray.h" />
+    <ClInclude Include="include\AmberEngine\Buffers\VertexBuffer.h" />
+    <ClInclude Include="include\AmberEngine\Context\Device.h" />
+    <ClInclude Include="include\AmberEngine\Context\Driver.h" />
+    <ClInclude Include="include\AmberEngine\Context\ECursorMode.h" />
+    <ClInclude Include="include\AmberEngine\Context\EDeviceError.h" />
+    <ClInclude Include="include\AmberEngine\Context\Window.h" />
+    <ClInclude Include="include\AmberEngine\Core\API\IInspectorItem.h" />
+    <ClInclude Include="include\AmberEngine\Core\API\ISerializable.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECSRenderer.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\AComponent.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CDirectionalLight.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CMaterialRenderer.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CPointLight.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CTransform.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CModelRenderer.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CLight.h" />
+    <ClInclude Include="include\AmberEngine\Core\Editor.h" />
+    <ClInclude Include="include\AmberEngine\Core\EditorAction.h" />
+    <ClInclude Include="include\AmberEngine\Core\EditorRenderer.h" />
+    <ClInclude Include="include\AmberEngine\Core\EditorResources.h" />
+    <ClInclude Include="include\AmberEngine\Core\SceneSystem\Scene.h" />
+    <ClInclude Include="include\AmberEngine\Core\SceneSystem\SceneManager.h" />
+    <ClInclude Include="include\AmberEngine\Data\Color.h" />
+    <ClInclude Include="include\AmberEngine\Data\EditorConstants.h" />
+    <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
+    <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imconfig.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imgui.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imgui_impl_glfw.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imgui_impl_opengl3.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imgui_internal.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="include\AmberEngine\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="include\AmberEngine\Inputs\EKey.h" />
+    <ClInclude Include="include\AmberEngine\Inputs\EKeyState.h" />
+    <ClInclude Include="include\AmberEngine\Inputs\EMouseButton.h" />
+    <ClInclude Include="include\AmberEngine\Inputs\EMouseButtonState.h" />
+    <ClInclude Include="include\AmberEngine\Managers\MaterialManager.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Entities\Camera.h" />
+    <ClInclude Include="include\AmberEngine\Core\CameraController.h" />
+    <ClInclude Include="include\AmberEngine\Inputs\InputManager.h" />
+    <ClInclude Include="include\AmberEngine\Managers\AResourceManager.h" />
+    <ClInclude Include="include\AmberEngine\Managers\ModelManager.h" />
+    <ClInclude Include="include\AmberEngine\Managers\ShaderManager.h" />
+    <ClInclude Include="include\AmberEngine\Managers\TextureManager.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Core\Renderer.h" />
+    <ClInclude Include="include\AmberEngine\Core\PanelsManager.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\EProjectionMode.h" />
+    <ClInclude Include="include\AmberEngine\Resources\IMesh.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\EComparisonAlgorithm.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\ECullFace.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\EOperation.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\EPixelDataFormat.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\EPixelDataType.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\EPrimitiveMode.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\ERasterizationMode.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\ERenderingCapability.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\MaterialLoader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\RawTextures.h" />
+    <ClInclude Include="include\AmberEngine\Tools\FileSystem\IniFile.h" />
+    <ClInclude Include="include\AmberEngine\Tools\FileSystem\tinyxml2.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\NumberFormat.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\PathParser.h" />
+    <ClInclude Include="include\AmberEngine\UI\Core\UIManager.h" />
+    <ClInclude Include="include\AmberEngine\Maths\ETransformState.h" />
+    <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Settings\ELightType.h" />
+    <ClInclude Include="include\AmberEngine\Rendering\Entities\Light.h" />
+    <ClInclude Include="include\AmberEngine\Resources\ETextureFilteringMode.h" />
+    <ClInclude Include="include\AmberEngine\Resources\ETextureType.h" />
+    <ClInclude Include="include\AmberEngine\Resources\EUniformType.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\ModelLoader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\TextureLoader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Material.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Mesh.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Model.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\AssimpParser.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Primitives\Cube.h" />
+    <ClInclude Include="include\AmberEngine\Resources\RawShaders.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Shader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Loaders\ShaderLoader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Texture.h" />
+    <ClInclude Include="include\AmberEngine\Resources\UniformInfo.h" />
+    <ClInclude Include="include\AmberEngine\Settings\DeviceSettings.h" />
+    <ClInclude Include="include\AmberEngine\Settings\DriverSettings.h" />
+    <ClInclude Include="include\AmberEngine\Settings\WindowSettings.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Time\Clock.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\ASingleton.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Converter.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\FrameInfo.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\AButton.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Button.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ButtonSmall.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ColorEdit.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Column.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenu.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\DataWidget.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\DragingScalar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\DragMultipleScalars.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\DriverInfoPanel.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Group.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\GroupCollapsable.h" />
+    <ClInclude Include="include\AmberEngine\UI\GUIDrawer.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Image.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\InputText.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\APanelWindow.h" />
+    <ClInclude Include="include\AmberEngine\UI\Canvas.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\MenuBar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\MenuItem.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\MenuList.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\APanel.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Hierarchy.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Inspector.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\PanelMenuBar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\PanelSettings.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Views\AView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Views\SceneView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Separator.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Text.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\TextColored.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\TextDropTarget.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\TreeNode.h" />
+    <ClInclude Include="include\AmberEngine\UI\WidgetContainer.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\AWidget.h" />
+    <ClInclude Include="include\ImGUI\imconfig.h" />
+    <ClInclude Include="include\ImGUI\imgui.h" />
+    <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="include\ImGUI\imgui_internal.h" />
+    <ClInclude Include="include\ImGUI\stb_rect_pack.h" />
+    <ClInclude Include="include\ImGUI\stb_textedit.h" />
+    <ClInclude Include="include\ImGUI\stb_truetype.h" />
+    <ClInclude Include="include\AmberEngine\Core\Context.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\Maths.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Global\ServiceLocator.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\CallbackQueue.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Amberpch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Amberpch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Amberpch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Amberpch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Amberpch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Buffers\FrameBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\ShaderStorageBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\UniformBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\VertexArray.cpp" />
+    <ClCompile Include="src\AmberEngine\Buffers\VertexBuffer.cpp" />
+    <ClCompile Include="src\AmberEngine\Context\Device.cpp" />
+    <ClCompile Include="src\AmberEngine\Context\Driver.cpp" />
+    <ClCompile Include="src\AmberEngine\Context\Window.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Context.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECSRenderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Actor.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\AComponent.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CDirectionalLight.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CMaterialRenderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CPointLight.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CTransform.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CModelRenderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CLight.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Editor.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\EditorAction.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\EditorRenderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\EditorResources.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\SceneSystem\Scene.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\SceneSystem\SceneManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Data\Color.cpp" />
+    <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
+    <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="src\AmberEngine\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\AmberEngine\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="src\AmberEngine\Managers\MaterialManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Rendering\Entities\Camera.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\CameraController.cpp" />
+    <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Managers\ModelManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Managers\ShaderManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Managers\TextureManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Rendering\Core\Renderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\MaterialLoader.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\FileSystem\IniFile.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\FileSystem\tinyxml2.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\NumberFormat.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\PathParser.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Core\UIManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
+    <ClCompile Include="src\AmberEngine\Rendering\Entities\Light.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\ModelLoader.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\TextureLoader.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Material.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Mesh.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Model.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Parsers\AssimpParser.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Primitives\Cube.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\RawShaders.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Shader.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Loaders\ShaderLoader.cpp" />
+    <ClCompile Include="src\AmberEngine\Resources\Texture.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Time\Clock.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\ASingleton.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\Converter.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\Maths.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Global\ServiceLocator.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\FrameInfo.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Button.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Canvas.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\PanelsManager.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ButtonSmall.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ColorEdit.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenu.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Group.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\GroupCollapsable.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Image.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\InputText.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\MenuBar.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\MenuItem.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\MenuList.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\APanel.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\APanelWindow.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\DriverInfoPanel.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Hierarchy.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Inspector.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\PanelMenuBar.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Views\AView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Views\SceneView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\GUIDrawer.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Separator.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Text.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\TextColored.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\TextDropTarget.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\TreeNode.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\WidgetContainer.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Awidget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\AmberEngine\Eventing\Event.inl" />
+    <None Include="include\AmberEngine\Managers\AResourceManager.inl" />
+    <None Include="include\AmberEngine\Tools\FileSystem\IniFile.inl" />
+    <None Include="include\AmberEngine\UI\GUIDrawer.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
