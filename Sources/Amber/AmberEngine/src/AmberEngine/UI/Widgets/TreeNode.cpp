@@ -44,7 +44,8 @@ void AmberEngine::UI::Widgets::TreeNode::SetActor(AmberEngine::Core::ECS::Actor*
 	
 	nameEditor.EnterPressedEvent += [this](std::string p_newName)
 	{
-		m_actor->SetName(p_newName);
+		if(!p_newName.empty())
+			m_actor->SetName(p_newName);
 	};
 }
 

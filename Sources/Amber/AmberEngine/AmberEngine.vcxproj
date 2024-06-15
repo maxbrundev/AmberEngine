@@ -402,6 +402,7 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\Tools\Utils\Maths.h" />
     <ClInclude Include="include\AmberEngine\Tools\Global\ServiceLocator.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\CallbackQueue.h" />
+    <ClInclude Include="include\AmberEngine\Core\Helpers\Serializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Amberpch.cpp">
@@ -438,6 +439,7 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\Core\EditorAction.cpp" />
     <ClCompile Include="src\AmberEngine\Core\EditorRenderer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\EditorResources.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\Helpers\Serializer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\Scene.cpp" />
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\SceneManager.cpp" />
     <ClCompile Include="src\AmberEngine\Data\Color.cpp" />

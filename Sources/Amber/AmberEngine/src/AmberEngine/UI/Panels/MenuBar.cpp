@@ -62,6 +62,9 @@ void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
 	layoutInputText.selectAllOnClick = true;
 	layoutInputText.EnterPressedEvent += [this](std::string basic_string)
 	{
+		if (basic_string.empty())
+			return;
+
 		EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::SaveLayout, manager, m_layoutsPath + basic_string + ".ini"), 1));
 	};
 
@@ -103,6 +106,9 @@ void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
 
 				renameInputText.EnterPressedEvent += [this, layoutFileName, &contextualMenu, &layoutMenuItem](std::string p_newName)
 				{
+					if (p_newName.empty())
+						return;
+
 					layoutMenuItem.name = p_newName;
 					//EDITOR_EXEC(ResetToDefaultLayout);
 					std::string oldFileName = m_layoutsPath + *layoutFileName;

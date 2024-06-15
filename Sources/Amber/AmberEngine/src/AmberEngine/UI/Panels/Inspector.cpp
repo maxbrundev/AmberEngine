@@ -20,7 +20,13 @@ AmberEngine::UI::Panels::Inspector::Inspector(const std::string& p_title, bool p
 	auto& headerColumns = m_inspectorHeader->CreateWidget<Widgets::Columns<2>>();
 
 	auto nameGatherer = [this] { return m_targetActor ? m_targetActor->GetName() : "%undef%"; };
-	auto nameProvider = [this](const std::string& p_newName) { if (m_targetActor) m_targetActor->SetName(p_newName); };
+	auto nameProvider = [this](const std::string& p_newName)
+	{
+		if (m_targetActor && !p_newName.empty())
+		{
+			m_targetActor->SetName(p_newName);
+		}
+	};
 
 	GUIDrawer::DrawString(headerColumns, "Name", nameGatherer, nameProvider);
 

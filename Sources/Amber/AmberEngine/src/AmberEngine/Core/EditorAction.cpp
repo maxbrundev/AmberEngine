@@ -117,7 +117,7 @@ AmberEngine::Core::ECS::Actor& AmberEngine::Core::EditorAction::CreateActorWithM
 		modelRenderer.SetModel(model);
 
 	auto& materialRenderer = instance.AddComponent<ECS::Components::CMaterialRenderer>();
-	const auto material = m_context.materialManager[":Materials\\Default.ovmat"];
+	const auto material = m_context.materialManager[":Materials\\Default.abmat"];
 	if (material)
 		materialRenderer.FillWithMaterial(*material);
 
