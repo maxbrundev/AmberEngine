@@ -456,6 +456,9 @@
     <ClInclude Include="include\AmberEngine\Core\API\ISerializable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\AmberEngine\Core\ActorCreationMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp">
@@ -744,6 +747,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Tools\FileSystem\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\Core\ActorCreationMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

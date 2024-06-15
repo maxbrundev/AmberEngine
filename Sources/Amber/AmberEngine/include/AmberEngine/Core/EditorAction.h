@@ -31,7 +31,11 @@ namespace AmberEngine::Core
 		void SetActorSpawnAtOrigin(bool p_value);
 
 		void SetActorSpawnMode(EActorSpawnMode p_value);
-		void ResetLayout();
+		void ResetToDefaultLayout();
+		void SaveLayout(const std::string& p_fileName);
+		void SaveCurrentLayout();
+
+		void SetLayout(const std::string& p_fileName);
 		void SetSceneViewCameraSpeed(int p_value);
 		int GetSceneViewCameraSpeed();
 

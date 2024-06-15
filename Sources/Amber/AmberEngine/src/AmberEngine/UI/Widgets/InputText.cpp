@@ -21,5 +21,7 @@ void AmberEngine::UI::Widgets::InputText::DrawImplementation()
 	}
 
 	if (enterPressed)
+	{
 		EnterPressedEvent.Invoke(content);
+	}
 }

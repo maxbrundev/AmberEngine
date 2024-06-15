@@ -29,9 +29,14 @@ namespace AmberEngine::UI::Core
 		bool IsEditorLayoutSaveEnabled() const;
 		void SetEditorLayoutSaveFilename(const std::string& p_filename);
 		void SetEditorLayoutAutosaveFrequency(float p_frequency);
-		float GetEditorLayoutAutosaveFrequency(float p_frequeny);
+		float GetEditorLayoutAutosaveFrequency();
 
-		void ResetLayout(const std::string & p_config) const;
+		void LoadLayout(const std::string & p_fileName);
+		void SaveLayout(const std::string & p_fileName);
+		void SaveCurrentLayout();
+		void SetLayout(const std::string & p_fileName);
+		void DeleteLayout(const std::string & p_fileName);
+		void RenameLayout(const std::string& p_fileName, const std::string& p_newFileName);
 
 	private:
 		void ApplyStyle();
@@ -41,5 +46,7 @@ namespace AmberEngine::UI::Core
 		Canvas* m_canvas;
 		std::unordered_map<std::string, ImFont*> m_fonts;
 		std::string m_layoutSaveFilename = "imgui.ini";
+		const std::string m_defaultLayout;
+		const std::string m_layoutsPath;
 	};
 }

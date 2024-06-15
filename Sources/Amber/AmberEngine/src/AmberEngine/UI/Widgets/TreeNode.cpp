@@ -6,6 +6,7 @@
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 #include "AmberEngine/UI/Widgets/ContextualMenu.h"
+#include "AmberEngine/UI/Widgets/InputText.h"
 #include "AmberEngine/UI/Widgets/MenuItem.h"
 
 AmberEngine::UI::Widgets::TreeNode::TreeNode(const std::string& p_name, bool p_arrowClickToOpen) :
@@ -30,11 +31,26 @@ void AmberEngine::UI::Widgets::TreeNode::SetActor(AmberEngine::Core::ECS::Actor*
 		EDITOR_EXEC(DestroyActor(std::ref(*m_actor)));
 	};
 	test.CreateWidget<MenuItem>("Duplicate");
+	auto& renameMenu = test.CreateWidget<MenuList>("Rename to...");
+
+	auto& nameEditor = renameMenu.CreateWidget<Widgets::InputText>("");
+
+	nameEditor.selectAllOnClick = true;
+	
+	renameMenu.ClickedEvent += [this, &nameEditor]
+	{
+		nameEditor.content = m_actor->GetName();
+	};
+	
+	nameEditor.EnterPressedEvent += [this](std::string p_newName)
+	{
+		m_actor->SetName(p_newName);
+	};
 }
 
 void AmberEngine::UI::Widgets::TreeNode::Update()
 {
-	if(m_actor != nullptr)
+	if(m_actor != nullptr && m_actor->IsAlive())
 	{
 		m_actorName = m_actor->GetName();
 

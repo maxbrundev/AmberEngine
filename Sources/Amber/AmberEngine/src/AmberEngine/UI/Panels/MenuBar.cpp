@@ -6,13 +6,20 @@
 #include "AmberEngine/Core/EditorAction.h"
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
+#include "AmberEngine/UI/Widgets/ContextualMenu.h"
+#include "AmberEngine/UI/Widgets/InputText.h"
 
 #include "AmberEngine/UI/Widgets/Separator.h"
 
+#include "AmberEngine/Core/ActorCreationMenu.h"
+#include "AmberEngine/Tools/Utils/String.h"
+
 AmberEngine::UI::Panels::MenuBar::MenuBar()
 {
+	manager = &Tools::Global::ServiceLocator::Get<Core::UIManager>();
 	CreateFileMenu();
 	CreateWindowMenu();
+	CreateActorsMenu();
 	CreateLayoutMenu();
 }
 
@@ -36,12 +43,80 @@ void AmberEngine::UI::Panels::MenuBar::CreateWindowMenu()
 void AmberEngine::UI::Panels::MenuBar::CreateActorsMenu()
 {
 	auto& actorsMenu = CreateWidget<Widgets::MenuList>("Actors");
+	Utils::ActorCreationMenu::GenerateActorCreationMenu(actorsMenu);
 }
 
 void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
 {
-	auto& layoutMenu = CreateWidget<Widgets::MenuList>("Layout");
-	layoutMenu.CreateWidget<Widgets::MenuItem>("Reset").ClickedEvent += EDITOR_BIND(ResetLayout);
+	std::filesystem::path dirPath = std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\";
+
+	m_layoutsPath = dirPath.string();
+
+	auto& layoutMenuList = CreateWidget<Widgets::MenuList>("Layout");
+
+	auto& saveMenuItem = layoutMenuList.CreateWidget<Widgets::MenuItem>("Save");
+	saveMenuItem.ClickedEvent += EDITOR_BIND(SaveCurrentLayout);
+
+	auto& saveNewMenuList = layoutMenuList.CreateWidget<Widgets::MenuList>("Save New");
+	auto& layoutInputText = saveNewMenuList.CreateWidget<Widgets::InputText>("Layout Name");
+	layoutInputText.selectAllOnClick = true;
+	layoutInputText.EnterPressedEvent += [this](std::string basic_string)
+	{
+		EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::SaveLayout, manager, m_layoutsPath + basic_string + ".ini"), 1));
+	};
+
+	auto& loadMenuList = layoutMenuList.CreateWidget<Widgets::MenuList>("Load");
+
+	loadMenuList.ClickedEvent += [&]
+	{
+		loadMenuList.m_widgets.clear();
+
+		for (const auto& entry : std::filesystem::directory_iterator(m_layoutsPath))
+		{
+			if (entry.is_regular_file() && entry.path().extension() == ".ini")
+			{
+				std::shared_ptr<std::string> layoutFileName = std::make_shared<std::string>(entry.path().filename().string());
+
+				auto& layoutMenuItem = loadMenuList.CreateWidget<Widgets::MenuItem>(*layoutFileName);
+				layoutMenuItem.name = Tools::Utils::String::RemoveExtensionFromFileName(*layoutFileName);
+
+				layoutMenuItem.ClickedEvent += [this, layoutFileName]
+				{
+					EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::SetLayout, manager, m_layoutsPath + *layoutFileName), 1));
+				};
+
+				auto& contextualMenu = layoutMenuItem.CreateWidget<Widgets::ContextualMenu>();
+				auto& deleteMenuItem = contextualMenu.CreateWidget<Widgets::MenuItem>("Delete");
+
+				deleteMenuItem.ClickedEvent += [this, layoutFileName, &layoutMenuItem]
+				{
+					//EDITOR_EXEC(ResetToDefaultLayout);
+					EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::DeleteLayout, manager, m_layoutsPath + *layoutFileName), 1));
+					layoutMenuItem.enabled = false;
+					
+				};
+				auto& renameToMenuList = contextualMenu.CreateWidget<Widgets::MenuList>("Rename to...");
+
+				auto& renameInputText = renameToMenuList.CreateWidget<Widgets::InputText>("");
+				renameInputText.content = Tools::Utils::String::RemoveExtensionFromFileName(*layoutFileName);
+				renameInputText.selectAllOnClick = true;
+
+				renameInputText.EnterPressedEvent += [this, layoutFileName, &contextualMenu, &layoutMenuItem](std::string p_newName)
+				{
+					layoutMenuItem.name = p_newName;
+					//EDITOR_EXEC(ResetToDefaultLayout);
+					std::string oldFileName = m_layoutsPath + *layoutFileName;
+					std::string newFileName = m_layoutsPath + p_newName + ".ini";
+					EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::RenameLayout, manager, oldFileName, newFileName), 1));
+
+					*layoutFileName = p_newName + ".ini";
+					contextualMenu.Close();
+				};
+			}
+		}
+	};
+
+	layoutMenuList.CreateWidget<Widgets::MenuItem>("Reset").ClickedEvent += EDITOR_BIND(ResetToDefaultLayout);
 }
 
 void AmberEngine::UI::Panels::MenuBar::UpdateToggleableItems()

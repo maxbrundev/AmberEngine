@@ -18,4 +18,7 @@ void AmberEngine::UI::Widgets::MenuItem::DrawImplementation()
 	{
 		ValueChangedEvent.Invoke(checked);
 	}
+
+	//TODO
+	DrawWidgets();
 }

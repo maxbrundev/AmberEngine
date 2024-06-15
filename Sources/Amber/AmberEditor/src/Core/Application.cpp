@@ -54,11 +54,11 @@ void Core::Application::Run()
 	//testActor4.AddComponent<AmberEngine::Core::ECS::Components::CMaterialRenderer>();
 
 	{
-		auto& modelComponent = testActor.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>();
-		modelComponent.SetModel(m_context.modelManager.GetResource("Models\\Sponza\\sponza.obj"));
+		//auto& modelComponent = testActor.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>();
+		//modelComponent.SetModel(m_context.modelManager.GetResource("Models\\Sponza\\sponza.obj"));
 
-		auto& materialRenderer = testActor.AddComponent<AmberEngine::Core::ECS::Components::CMaterialRenderer>();
-		materialRenderer.FillTextureData(modelComponent.GetModel()->LoadedTextureData);
+		//auto& materialRenderer = testActor.AddComponent<AmberEngine::Core::ECS::Components::CMaterialRenderer>();
+		//materialRenderer.FillTextureData(modelComponent.GetModel()->LoadedTextureData);
 		//for (const auto& material : materialRenderer.GetMaterials())
 		//{
 		//	if (material)
@@ -124,9 +124,10 @@ void Core::Application::Run()
 				//working
 				//testActor3.RemoveComponent<AmberEngine::Core::ECS::Components::CModelRenderer>();
 				//working
-				//m_context.sceneManager.GetCurrentScene()->DestroyActor(testActor2);
+				testActor2.MarkAsDestroy();
+				
 				//working
-				testActor3.RemoveParent();
+				//testActor3.RemoveParent();
 			}
 		}
 

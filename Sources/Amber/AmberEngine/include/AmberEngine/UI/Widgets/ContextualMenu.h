@@ -10,6 +10,8 @@ namespace AmberEngine::UI::Widgets
 		ContextualMenu() = default;
 		virtual ~ContextualMenu() override = default;
 
+		void Close();
+
 	protected:
 		void DrawImplementation() override;
 	};

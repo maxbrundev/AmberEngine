@@ -1,7 +1,12 @@
 #pragma once
 
+
+#include <map>
+
+#include "AmberEngine/UI/Core/UIManager.h"
 #include "AmberEngine/UI/Panels/PanelMenuBar.h"
 #include "AmberEngine/UI/Panels/APanelWindow.h"
+#include "AmberEngine/UI/Widgets/Button.h"
 
 #include "AmberEngine/UI/Widgets/MenuList.h"
 #include "AmberEngine/UI/Widgets/MenuItem.h"
@@ -31,5 +36,7 @@ namespace AmberEngine::UI::Panels
 		PanelMap m_panels;
 		std::vector<Widgets::MenuList*> m_lists;
 		Widgets::MenuList* m_windowMenu = nullptr;
+		Core::UIManager* manager;
+		std::string m_layoutsPath;
 	};
 }

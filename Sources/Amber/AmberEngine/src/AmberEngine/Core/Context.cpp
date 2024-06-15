@@ -40,7 +40,7 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	uiManager->EnableDocking(true);
 
 	if (!std::filesystem::exists(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\layout.ini"))
-		uiManager->ResetLayout("Config\\layout.ini");
+		uiManager->LoadLayout("Config\\layout.ini");
 
 	inputManager = std::make_unique<AmberEngine::Inputs::InputManager>(*window);
 
@@ -52,6 +52,7 @@ AmberEngine::Core::Context::Context(const std::string& p_projectPath, const Ambe
 	Tools::Global::ServiceLocator::Provide(shaderManager);
 	Tools::Global::ServiceLocator::Provide(materialManager);
 	Tools::Global::ServiceLocator::Provide<SceneSystem::SceneManager>(sceneManager);
+	Tools::Global::ServiceLocator::Provide<UI::Core::UIManager>(*uiManager);
 
 	Tools::Global::ServiceLocator::Provide(*this);
 

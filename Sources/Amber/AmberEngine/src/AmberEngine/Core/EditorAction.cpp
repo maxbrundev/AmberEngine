@@ -48,9 +48,24 @@ void AmberEngine::Core::EditorAction::SetActorSpawnMode(EActorSpawnMode p_value)
 	m_actorSpawnMode = p_value;
 }
 
-void AmberEngine::Core::EditorAction::ResetLayout()
+void AmberEngine::Core::EditorAction::ResetToDefaultLayout()
 {
-	DelayAction([this]() {m_context.uiManager->ResetLayout("Config\\layout.ini"); });
+	DelayAction([this]() {m_context.uiManager->LoadLayout("Config\\layout.ini"); });
+}
+
+void AmberEngine::Core::EditorAction::SaveLayout(const std::string& p_fileName)
+{
+	DelayAction([&]() {m_context.uiManager->SaveLayout(std::ref(p_fileName)); });
+}
+
+void AmberEngine::Core::EditorAction::SaveCurrentLayout()
+{
+	DelayAction([&]() {m_context.uiManager->SaveCurrentLayout(); });
+}
+
+void AmberEngine::Core::EditorAction::SetLayout(const std::string& p_fileName)
+{
+	DelayAction([&]() {m_context.uiManager->SetLayout(std::ref(p_fileName)); });
 }
 
 void AmberEngine::Core::EditorAction::SetSceneViewCameraSpeed(int p_value)

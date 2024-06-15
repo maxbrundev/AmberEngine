@@ -23,6 +23,12 @@ AmberEngine::UI::Panels::Inspector::Inspector(const std::string& p_title, bool p
 	auto nameProvider = [this](const std::string& p_newName) { if (m_targetActor) m_targetActor->SetName(p_newName); };
 
 	GUIDrawer::DrawString(headerColumns, "Name", nameGatherer, nameProvider);
+
+	Core::ECS::Actor::DestroyEvent += [this](Core::ECS::Actor& p_destroyed)
+	{
+		if (&p_destroyed == m_targetActor)
+			UnFocus();
+	};
 }
 
 AmberEngine::UI::Panels::Inspector::~Inspector()

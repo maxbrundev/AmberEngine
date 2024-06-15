@@ -74,6 +74,5 @@ namespace AmberEngine::UI::Panels
 		bool m_mustScrollToTop = false;
 		bool m_scrolledToBottom = false;
 		bool m_scrolledToTop = false;
-
 	};
 }

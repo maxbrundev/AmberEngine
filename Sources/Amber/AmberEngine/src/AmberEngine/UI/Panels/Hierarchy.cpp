@@ -14,7 +14,7 @@ APanelWindow(p_title, p_opened, p_panelSettings)
 		m_callbackQueue.push([this, &p_actor] { this->AddActorByInstance(p_actor); });
 	};
 
-	m_destroyedListener = AmberEngine::Core::ECS::Actor::DestroyEvent += [this](AmberEngine::Core::ECS::Actor& p_actor)
+	AmberEngine::Core::ECS::Actor::DestroyEvent += [this](AmberEngine::Core::ECS::Actor& p_actor)
 	{
 		m_callbackQueue.push([this, &p_actor] { this->DeleteActorByInstance(p_actor); });
 	};
@@ -37,8 +37,6 @@ APanelWindow(p_title, p_opened, p_panelSettings)
 
 void AmberEngine::UI::Panels::Hierarchy::Clear()
 {
-	AmberEngine::Core::ECS::Actor::DestroyEvent.RemoveListener(m_destroyedListener);
-
 	m_root->RemoveAllWidgets();
 
 	m_widgetActorLink.clear();

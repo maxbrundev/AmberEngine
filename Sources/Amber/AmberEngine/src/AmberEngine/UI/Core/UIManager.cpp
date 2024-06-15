@@ -4,7 +4,7 @@
 
 #include "AmberEngine/UI/Canvas.h"
 
-AmberEngine::UI::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion) : m_dockingState(false)
+AmberEngine::UI::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion) : m_dockingState(false), m_defaultLayout("Config\\layout.ini"), m_layoutsPath(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\")
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -130,6 +130,7 @@ bool AmberEngine::UI::Core::UIManager::IsEditorLayoutSaveEnabled() const
 void AmberEngine::UI::Core::UIManager::SetEditorLayoutSaveFilename(const std::string& p_filename)
 {
 	m_layoutSaveFilename = p_filename;
+
 	if (IsEditorLayoutSaveEnabled())
 		ImGui::GetIO().IniFilename = m_layoutSaveFilename.c_str();
 }
@@ -139,14 +140,53 @@ void AmberEngine::UI::Core::UIManager::SetEditorLayoutAutosaveFrequency(float p_
 	ImGui::GetIO().IniSavingRate = p_frequency;
 }
 
-float AmberEngine::UI::Core::UIManager::GetEditorLayoutAutosaveFrequency(float p_frequeny)
+float AmberEngine::UI::Core::UIManager::GetEditorLayoutAutosaveFrequency()
 {
-	return ImGui::GetIO().IniSavingRate;
+	return ImGui::GetIO().IniSavingRate; 
 }
 
-void AmberEngine::UI::Core::UIManager::ResetLayout(const std::string& p_config) const
+void AmberEngine::UI::Core::UIManager::LoadLayout(const std::string& p_fileName)
 {
-	ImGui::LoadIniSettingsFromDisk(p_config.c_str());
+	ImGui::LoadIniSettingsFromDisk(p_fileName.c_str());
+}
+
+void AmberEngine::UI::Core::UIManager::SaveLayout(const std::string& p_fileName)
+{
+	SetEditorLayoutSaveFilename(p_fileName);
+
+	ImGui::SaveIniSettingsToDisk(m_layoutSaveFilename.c_str());
+}
+
+void AmberEngine::UI::Core::UIManager::SaveCurrentLayout()
+{
+	if(!std::filesystem::exists(m_layoutSaveFilename))
+	{
+		m_layoutSaveFilename = m_layoutsPath + "layout.ini";
+		SetEditorLayoutSaveFilename(m_layoutSaveFilename);
+	}
+	ImGui::SaveIniSettingsToDisk(m_layoutSaveFilename.c_str());
+}
+
+void AmberEngine::UI::Core::UIManager::SetLayout(const std::string& p_fileName)
+{
+	SetEditorLayoutSaveFilename(p_fileName);
+
+	ImGui::LoadIniSettingsFromDisk(p_fileName.c_str());
+}
+
+void AmberEngine::UI::Core::UIManager::DeleteLayout(const std::string& p_fileName)
+{
+	std::filesystem::remove(p_fileName);
+}
+
+void AmberEngine::UI::Core::UIManager::RenameLayout(const std::string& p_fileName, const std::string& p_newFileName)
+{
+	std::filesystem::rename(p_fileName, p_newFileName);
+
+	if(m_layoutSaveFilename == p_fileName)
+	{
+		SetEditorLayoutSaveFilename(p_newFileName);
+	}
 }
 
 void AmberEngine::UI::Core::UIManager::ApplyStyle()
