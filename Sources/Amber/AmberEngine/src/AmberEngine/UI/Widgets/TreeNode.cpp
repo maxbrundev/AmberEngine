@@ -2,10 +2,11 @@
 
 #include "AmberEngine/UI/Widgets/TreeNode.h"
 
+#include "AmberEngine/Core/ActorCreationMenu.h"
 #include "AmberEngine/Core/EditorAction.h"
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
-#include "AmberEngine/UI/Widgets/ContextualMenu.h"
+#include "AmberEngine/UI/Widgets/ContextualMenuItem.h"
 #include "AmberEngine/UI/Widgets/InputText.h"
 #include "AmberEngine/UI/Widgets/MenuItem.h"
 
@@ -21,32 +22,44 @@ void AmberEngine::UI::Widgets::TreeNode::SetActor(AmberEngine::Core::ECS::Actor*
 {
 	m_actor = p_actor;
 
-	m_data = std::make_pair(m_actor, this);
-
-	auto& test = CreateWidget<AmberEngine::UI::Widgets::ContextualMenu>();
-
-	auto& testt = test.CreateWidget<MenuItem>("Delete");
-	testt.ClickedEvent += [this]
-	{
-		EDITOR_EXEC(DestroyActor(std::ref(*m_actor)));
-	};
-	test.CreateWidget<MenuItem>("Duplicate");
-	auto& renameMenu = test.CreateWidget<MenuList>("Rename to...");
-
-	auto& nameEditor = renameMenu.CreateWidget<Widgets::InputText>("");
-
-	nameEditor.selectAllOnClick = true;
+	auto& contextualMenu = CreateWidget<ContextualMenuItem>();
 	
-	renameMenu.ClickedEvent += [this, &nameEditor]
+	if(m_actor)
 	{
-		nameEditor.content = m_actor->GetName();
-	};
+		m_data = std::make_pair(m_actor, this);
+
+		auto& duplicateMenuItem = contextualMenu.CreateWidget<MenuItem>("Duplicate");
+		duplicateMenuItem.ClickedEvent += [this]
+		{
+			EDITOR_EXEC(DelayAction(EDITOR_BIND(DuplicateActor, std::ref(*m_actor), nullptr, true), 0));
+		};
+
+		auto& deleteMenuItem = contextualMenu.CreateWidget<MenuItem>("Delete");
+		deleteMenuItem.ClickedEvent += [this]
+		{
+			EDITOR_EXEC(DestroyActor(std::ref(*m_actor)));
+		};
+
+		auto& renameMenuList = contextualMenu.CreateWidget<MenuList>("Rename to...");
+
+		auto& renameInputText = renameMenuList.CreateWidget<InputText>("");
+		renameInputText.selectAllOnClick = true;
+		renameMenuList.ClickedEvent += [this, &renameInputText]
+		{
+			renameInputText.content = m_actor->GetName();
+		};
 	
-	nameEditor.EnterPressedEvent += [this](std::string p_newName)
-	{
-		if(!p_newName.empty())
+		renameInputText.EnterPressedEvent += [this](std::string p_newName)
+		{
+			if (p_newName.empty())
+				return;
+
 			m_actor->SetName(p_newName);
-	};
+		};
+	}
+
+	auto& createActor = contextualMenu.CreateWidget<MenuList>("Create...");
+	Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, m_actor, std::bind(&TreeNode::Open, this));
 }
 
 void AmberEngine::UI::Widgets::TreeNode::Update()
@@ -67,9 +80,6 @@ void AmberEngine::UI::Widgets::TreeNode::Update()
 			ImGui::SetDragDropPayload("Actor", &m_data, sizeof(m_data));
 			ImGui::EndDragDropSource();
 		}
-
-
-
 	}
 
 	if (ImGui::BeginDragDropTarget())

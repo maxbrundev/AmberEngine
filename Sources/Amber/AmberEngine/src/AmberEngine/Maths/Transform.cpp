@@ -39,9 +39,9 @@ void AmberEngine::Maths::Transform::GenerateMatricesWorld(glm::vec3 p_position, 
 
 	m_worldMatrix =  glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
 	m_worldPosition	= p_position;
-	m_worldRotation = p_rotation;
+	m_worldRotationEuler = p_rotation;
 	m_worldScale	= p_scale;
-	m_worldRotationQuat = glm::quat_cast(rotationMatrix);
+	m_worldRotation = glm::quat_cast(rotationMatrix);
 
 	UpdateLocalMatrix();
 }
@@ -65,9 +65,9 @@ void AmberEngine::Maths::Transform::GenerateMatricesLocal(glm::vec3 p_position, 
 
 	m_localMatrix = glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
 	m_localPosition = p_position;
-	m_localRotation = p_rotation;
+	m_localRotationEuler = p_rotation;
 	m_localScale = p_scale;
-	m_localRotationQuat = glm::quat_cast(rotationMatrix);
+	m_localRotation = glm::quat_cast(rotationMatrix);
 
 	UpdateWorldMatrix();
 }
@@ -106,7 +106,7 @@ void AmberEngine::Maths::Transform::TranslateLocal(const glm::vec3& p_translatio
 
 void AmberEngine::Maths::Transform::RotateLocal(const glm::vec3& p_rotation)
 {
-	SetLocalRotation(m_localRotation + p_rotation);
+	SetLocalRotationEuler(m_localRotationEuler + p_rotation);
 }
 
 void AmberEngine::Maths::Transform::ScaleLocal(const glm::vec3& p_scale)
@@ -166,32 +166,42 @@ uint64_t AmberEngine::Maths::Transform::AddChildrenCallback(const std::function<
 
 void AmberEngine::Maths::Transform::SetLocalPosition(glm::vec3 p_newPosition)
 {
-	GenerateMatricesLocal(p_newPosition, m_localRotation, m_localScale);
+	GenerateMatricesLocal(p_newPosition, m_localRotationEuler, m_localScale);
 }
 
-void AmberEngine::Maths::Transform::SetLocalRotation(glm::vec3 p_newRotation)
+void AmberEngine::Maths::Transform::SetLocalRotationEuler(glm::vec3 p_newRotation)
 {
 	GenerateMatricesLocal(m_localPosition, p_newRotation, m_localScale);
 }
 
+void AmberEngine::Maths::Transform::SetLocalRotation(glm::quat p_newRotation)
+{
+	GenerateMatricesLocal(m_localPosition, glm::degrees(glm::eulerAngles(p_newRotation)), m_localScale);
+}
+
 void AmberEngine::Maths::Transform::SetLocalScale(glm::vec3 p_newScale)
 {
-	GenerateMatricesLocal(m_localPosition, m_localRotation, p_newScale);
+	GenerateMatricesLocal(m_localPosition, m_localRotationEuler, p_newScale);
 }
 
 void AmberEngine::Maths::Transform::SetWorldPosition(glm::vec3 p_newPosition)
 {
-	GenerateMatricesWorld(p_newPosition, m_worldRotation, m_worldScale);
+	GenerateMatricesWorld(p_newPosition, m_worldRotationEuler, m_worldScale);
 }
 
-void AmberEngine::Maths::Transform::SetWorldRotation(glm::vec3 p_newRotation)
+void AmberEngine::Maths::Transform::SetWorldRotationEuler(glm::vec3 p_newRotation)
 {
 	GenerateMatricesWorld(m_worldPosition, p_newRotation, m_worldScale);
 }
 
+void AmberEngine::Maths::Transform::SetWorldRotation(glm::quat p_newRotation)
+{
+	GenerateMatricesWorld(m_worldPosition, glm::degrees(glm::eulerAngles(p_newRotation)), m_worldScale);
+}
+
 void AmberEngine::Maths::Transform::SetWorldScale(glm::vec3 p_newScale)
 {
-	GenerateMatricesWorld(m_worldPosition, m_worldRotation, p_newScale);
+	GenerateMatricesWorld(m_worldPosition, m_worldRotationEuler, p_newScale);
 }
 
 const glm::vec3& AmberEngine::Maths::Transform::GetLocalPosition() const
@@ -200,6 +210,11 @@ const glm::vec3& AmberEngine::Maths::Transform::GetLocalPosition() const
 }
 
 const glm::vec3& AmberEngine::Maths::Transform::GetLocalRotationEuler() const
+{
+	return m_localRotationEuler;
+}
+
+const glm::quat& AmberEngine::Maths::Transform::GetLocalRotation() const
 {
 	return m_localRotation;
 }
@@ -216,6 +231,11 @@ const glm::vec3& AmberEngine::Maths::Transform::GetWorldPosition() const
 
 const glm::vec3& AmberEngine::Maths::Transform::GetWorldRotationEuler() const
 {
+	return m_worldRotationEuler;
+}
+
+const glm::quat& AmberEngine::Maths::Transform::GetWorldRotation() const
+{
 	return m_worldRotation;
 }
 
@@ -226,36 +246,36 @@ const glm::vec3& AmberEngine::Maths::Transform::GetWorldScale() const
 
 glm::vec3 AmberEngine::Maths::Transform::GetWorldForward() const
 {
-	const glm::vec3 forward = m_worldRotationQuat * glm::vec3(0.0f, 0.0f, 1.0f);
+	const glm::vec3 forward = m_worldRotation * glm::vec3(0.0f, 0.0f, 1.0f);
 
 	return forward;
 }
 
 glm::vec3 AmberEngine::Maths::Transform::GetWorldUp() const
 {
-	return m_worldRotationQuat * glm::vec3(0.0f, 1.0f, 0.0f);
+	return m_worldRotation * glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 glm::vec3 AmberEngine::Maths::Transform::GetWorldRight() const
 {
-	return m_worldRotationQuat * glm::vec3(1.0f, 0.0f, 0.0f);
+	return m_worldRotation * glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
 glm::vec3 AmberEngine::Maths::Transform::GetLocalForward() const
 {
-	const glm::vec3 forward = m_localRotationQuat * glm::vec3(0.0f, 0.0f, 1.0f);
+	const glm::vec3 forward = m_localRotation * glm::vec3(0.0f, 0.0f, 1.0f);
 
 	return forward;
 }
 
 glm::vec3 AmberEngine::Maths::Transform::GetLocalUp() const
 {
-	return m_localRotationQuat * glm::vec3(0.0f, 1.0f, 0.0f);
+	return m_localRotation * glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 glm::vec3 AmberEngine::Maths::Transform::GetLocalRight() const
 {
-	return m_localRotationQuat * glm::vec3(1.0f, 0.0f, 0.0f);
+	return m_localRotation * glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
 const glm::mat4& AmberEngine::Maths::Transform::GetLocalMatrix() const
@@ -304,9 +324,9 @@ void AmberEngine::Maths::Transform::PreDecomposeWorldMatrix()
 										  rotationY.x, rotationY.y, rotationY.z,
 										  rotationZ.x, rotationZ.y, rotationZ.z };
 	
-	m_worldRotationQuat = glm::quat_cast(worldRotationMatrix);
+	m_worldRotation = glm::quat_cast(worldRotationMatrix);
 	
-	m_worldRotation = glm::eulerAngles(m_worldRotationQuat) * (180.0f / glm::pi<float>());
+	m_worldRotationEuler = glm::eulerAngles(m_worldRotation) * (180.0f / glm::pi<float>());
 }
 
 void AmberEngine::Maths::Transform::PreDecomposeLocalMatrix()
@@ -344,7 +364,7 @@ void AmberEngine::Maths::Transform::PreDecomposeLocalMatrix()
 										  rotationY.x, rotationY.y, rotationY.z,
 										  rotationZ.x, rotationZ.y, rotationZ.z };
 
-	m_localRotationQuat = glm::quat_cast(localRotationMatrix);
+	m_localRotation = glm::quat_cast(localRotationMatrix);
 
-	m_localRotation = glm::eulerAngles(m_localRotationQuat) * (180.0f / glm::pi<float>());
+	m_localRotationEuler = glm::eulerAngles(m_localRotation) * (180.0f / glm::pi<float>());
 }

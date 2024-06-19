@@ -56,16 +56,9 @@ void Core::Application::Run()
 	{
 		//auto& modelComponent = testActor.AddComponent<AmberEngine::Core::ECS::Components::CModelRenderer>();
 		//modelComponent.SetModel(m_context.modelManager.GetResource("Models\\Sponza\\sponza.obj"));
-
+		//
 		//auto& materialRenderer = testActor.AddComponent<AmberEngine::Core::ECS::Components::CMaterialRenderer>();
-		//materialRenderer.FillTextureData(modelComponent.GetModel()->LoadedTextureData);
-		//for (const auto& material : materialRenderer.GetMaterials())
-		//{
-		//	if (material)
-		//	{
-		//		material->SetShader(m_context.shaderManager.GetResource(":Shaders\\Standard.glsl"));
-		//	}
-		//}
+		//materialRenderer.GenerateModelMaterials();
 	}
 
 	{
@@ -73,12 +66,11 @@ void Core::Application::Run()
 		modelComponent.SetModel(m_context.modelManager.GetResource("Models\\DamagedHelmet\\glTF\\DamagedHelmet.gltf"));
 
 		auto& materialRenderer = testActor2.AddComponent<AmberEngine::Core::ECS::Components::CMaterialRenderer>();
-		materialRenderer.FillTextureData(modelComponent.GetModel()->LoadedTextureData);
+		materialRenderer.GenerateModelMaterials();
 		for (const auto& material : materialRenderer.GetMaterials())
 		{
 			if(material)
 			{
-				material->SetShader(m_context.shaderManager.GetResource(":Shaders\\Standard.glsl"));
 				material->SetBlendable(true);
 				material->SetUniform("u_Diffuse", glm::vec4(1.f, 0.f, 0.f, 0.5f));
 			}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ContextualMenuItem.h"
 #include "AmberEngine/UI/Widgets/AWidget.h"
 #include "AmberEngine/UI/WidgetContainer.h"
 
@@ -54,5 +55,7 @@ namespace AmberEngine::UI::Widgets
 		std::pair<AmberEngine::Core::ECS::Actor*, TreeNode*> m_data;
 
 		ImGuiDragDropFlags target_flags = 0;
+
+		ContextualMenuItem* m_contextualMenu;
 	};
 }

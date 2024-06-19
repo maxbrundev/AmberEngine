@@ -4,6 +4,7 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
+#include "AmberEngine/Core/Helpers/Serializer.h"
 #include "AmberEngine/Managers/ModelManager.h"
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 #include "AmberEngine/Tools/Utils/PathParser.h"
@@ -34,6 +35,16 @@ AmberEngine::Resources::Model* AmberEngine::Core::ECS::Components::CModelRendere
 std::string AmberEngine::Core::ECS::Components::CModelRenderer::GetName()
 {
 	return "Model Renderer";
+}
+
+void AmberEngine::Core::ECS::Components::CModelRenderer::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	Helpers::Serializer::SerializeModel(p_doc, p_node, "model", m_model);
+}
+
+void AmberEngine::Core::ECS::Components::CModelRenderer::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	Helpers::Serializer::DeserializeModel(p_doc, p_node, "model", m_model);
 }
 
 void AmberEngine::Core::ECS::Components::CModelRenderer::OnInspector(UI::WidgetContainer& p_root)

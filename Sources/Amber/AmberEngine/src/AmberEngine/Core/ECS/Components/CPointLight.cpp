@@ -2,6 +2,7 @@
 
 #include "AmberEngine/Core/ECS/Components/CPointLight.h"
 
+#include "AmberEngine/Core/Helpers/Serializer.h"
 #include "AmberEngine/UI/GUIDrawer.h"
 
 #include "AmberEngine/UI/Widgets/Button.h"
@@ -44,6 +45,24 @@ void AmberEngine::Core::ECS::Components::CPointLight::SetQuadratic(float p_quadr
 std::string AmberEngine::Core::ECS::Components::CPointLight::GetName()
 {
 	return "Point Light";
+}
+
+void AmberEngine::Core::ECS::Components::CPointLight::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	CLight::OnSerialize(p_doc, p_node);
+
+	Helpers::Serializer::SerializeFloat(p_doc, p_node, "constant", m_data.Constant);
+	Helpers::Serializer::SerializeFloat(p_doc, p_node, "linear", m_data.Linear);
+	Helpers::Serializer::SerializeFloat(p_doc, p_node, "quadratic", m_data.Quadratic);
+}
+
+void AmberEngine::Core::ECS::Components::CPointLight::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	CLight::OnDeserialize(p_doc, p_node);
+
+	Helpers::Serializer::DeserializeFloat(p_doc, p_node, "constant", m_data.Constant);
+	Helpers::Serializer::DeserializeFloat(p_doc, p_node, "linear", m_data.Linear);
+	Helpers::Serializer::DeserializeFloat(p_doc, p_node, "quadratic", m_data.Quadratic);
 }
 
 void AmberEngine::Core::ECS::Components::CPointLight::OnInspector(UI::WidgetContainer& p_root)

@@ -24,7 +24,8 @@ namespace AmberEngine::Core::ECS::Components
 	{
 	public:
 		CTransform(Actor& p_owner, glm::vec3 p_localPosition = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_localRotation = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 p_localScale = glm::vec3(1.0f, 1.0f, 1.0f));
-	
+		virtual ~CTransform() override = default;
+
 		void SetParent(CTransform& p_parent);
 		bool RemoveParent();
 		bool HasParent() const;
@@ -38,10 +39,12 @@ namespace AmberEngine::Core::ECS::Components
 		void RotateLocal(const glm::vec3& p_rotation);
 		void ScaleLocal(const glm::vec3& p_scale);
 		const glm::vec3& GetLocalPosition() const;
-		const glm::vec3& GetLocalRotation() const;
+		const glm::vec3& GetLocalRotationEuler() const;
+		const glm::quat& GetLocalRotation() const;
 		const glm::vec3& GetLocalScale() const;
 		const glm::vec3& GetWorldPosition() const;
-		const glm::vec3& GetWorldRotation() const;
+		const glm::vec3& GetWorldRotationEuler() const;
+		const glm::quat& GetWorldRotation() const;
 		const glm::vec3& GetWorldScale() const;
 		const glm::mat4& GetLocalMatrix() const;
 		const glm::mat4& GetWorldMatrix() const;
@@ -56,7 +59,12 @@ namespace AmberEngine::Core::ECS::Components
 		Maths::Transform& GetTransform();
 
 		std::string GetName() override;
-		void OnInspector(UI::WidgetContainer& p_root) override;
+
+		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+
+		virtual void OnInspector(UI::WidgetContainer& p_root) override;
+		
 
 	private:
 		Maths::Transform m_transform;

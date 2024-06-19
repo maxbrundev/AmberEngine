@@ -57,6 +57,13 @@ namespace AmberEngine::Core
 
 		void ExecuteDelayedActions();
 
+		std::string GetRealPath(const std::string& p_path);
+		std::string GetResourcePath(const std::string& p_path, bool p_isFromEngine = false);
+
+		void CompileShaders();
+
+		void GenerateModelMaterialFiles(const std::string& materialName);
+
 	private:
 		std::string FindDuplicatedActorUniqueName(ECS::Actor& p_duplicated, ECS::Actor& p_newActor, SceneSystem::Scene& p_scene);
 

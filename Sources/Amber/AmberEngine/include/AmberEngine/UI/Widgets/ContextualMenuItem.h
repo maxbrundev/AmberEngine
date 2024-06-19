@@ -4,11 +4,11 @@
 
 namespace AmberEngine::UI::Widgets
 {
-	class ContextualMenu : public AWidget, public WidgetContainer
+	class ContextualMenuItem : public AWidget, public WidgetContainer
 	{
 	public:
-		ContextualMenu() = default;
-		virtual ~ContextualMenu() override = default;
+		ContextualMenuItem() = default;
+		virtual ~ContextualMenuItem() override = default;
 
 		void Close();
 

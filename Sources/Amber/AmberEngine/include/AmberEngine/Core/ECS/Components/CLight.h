@@ -36,7 +36,10 @@ namespace AmberEngine::Core::ECS::Components
 
 		Rendering::Entities::Light& GetData();
 
-		void OnInspector(UI::WidgetContainer& p_root) override;
+		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+
+		virtual void OnInspector(UI::WidgetContainer& p_root) override;
 
 	protected:
 		Rendering::Entities::Light m_data;

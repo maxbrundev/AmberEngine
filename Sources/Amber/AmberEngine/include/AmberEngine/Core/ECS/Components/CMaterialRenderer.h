@@ -30,7 +30,7 @@ namespace AmberEngine::Core::ECS::Components
 		CMaterialRenderer(Actor& p_owner);
 		virtual ~CMaterialRenderer() override = default;
 
-		void FillTextureData(std::map<int, std::vector<std::tuple<Resources::ETextureType, std::string>>> p_textureData);
+		void GenerateModelMaterials();
 		void FillWithMaterial(Resources::Material& p_material);
 		void FillWithMaterials(const MaterialList& p_materialList);
 		void SetMaterialAtIndex(uint8_t p_index, Resources::Material& p_material);
@@ -46,8 +46,12 @@ namespace AmberEngine::Core::ECS::Components
 		const MaterialList& GetMaterials() const;
 		const glm::mat4& GetUserMatrix() const;
 
-		std::string GetName() override;
-		void OnInspector(UI::WidgetContainer& p_root) override;
+		virtual std::string GetName() override;
+
+		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+
+		virtual void OnInspector(UI::WidgetContainer& p_root) override;
 
 	private:
 		MaterialList m_materials;

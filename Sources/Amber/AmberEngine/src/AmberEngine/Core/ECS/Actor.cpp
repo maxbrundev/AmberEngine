@@ -2,6 +2,12 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 
+#include "AmberEngine/Core/ECS/Components/CDirectionalLight.h"
+#include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
+#include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
+#include "AmberEngine/Core/ECS/Components/CPointLight.h"
+#include "AmberEngine/Core/Helpers/Serializer.h"
+
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::CreatedEvent;
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::DestroyEvent;
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&, AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::AttachEvent;
@@ -184,4 +190,71 @@ bool AmberEngine::Core::ECS::Actor::IsActive() const
 std::vector<AmberEngine::Core::ECS::Actor*>& AmberEngine::Core::ECS::Actor::GetChildren()
 {
 	return m_children;
+}
+
+void AmberEngine::Core::ECS::Actor::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	tinyxml2::XMLNode* actorNode = p_doc.NewElement("actor");
+	p_node->InsertEndChild(actorNode);
+
+	Helpers::Serializer::SerializeString(p_doc, actorNode, "name", m_name);
+	Helpers::Serializer::SerializeString(p_doc, actorNode, "tag", m_tag);
+	Helpers::Serializer::SerializeBoolean(p_doc, actorNode, "active", m_active);
+	Helpers::Serializer::SerializeInt64(p_doc, actorNode, "id", m_actorID);
+	Helpers::Serializer::SerializeInt64(p_doc, actorNode, "parent", m_parentID);
+
+	tinyxml2::XMLNode* componentsNode = p_doc.NewElement("components");
+	actorNode->InsertEndChild(componentsNode);
+
+	for (auto& component : m_components)
+	{
+		/* Current component root */
+		tinyxml2::XMLNode* componentNode = p_doc.NewElement("component");
+		componentsNode->InsertEndChild(componentNode);
+
+		/* Component type */
+		Helpers::Serializer::SerializeString(p_doc, componentNode, "type", typeid(*component).name());
+
+		/* Data node (Will be passed to the component) */
+		tinyxml2::XMLElement* data = p_doc.NewElement("data");
+		componentNode->InsertEndChild(data);
+
+		/* Data serialization of the component */
+		component->OnSerialize(p_doc, data);
+	}
+}
+
+void AmberEngine::Core::ECS::Actor::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	Helpers::Serializer::DeserializeString(p_doc, p_node, "name", m_name);
+	Helpers::Serializer::DeserializeString(p_doc, p_node, "tag", m_tag);
+	Helpers::Serializer::DeserializeBoolean(p_doc, p_node, "active", m_active);
+	Helpers::Serializer::DeserializeInt64(p_doc, p_node, "id", m_actorID);
+	Helpers::Serializer::DeserializeInt64(p_doc, p_node, "parent", m_parentID);
+
+	{
+		tinyxml2::XMLNode* componentsRoot = p_node->FirstChildElement("components");
+		if (componentsRoot)
+		{
+			tinyxml2::XMLElement* currentComponent = componentsRoot->FirstChildElement("component");
+
+			while (currentComponent)
+			{
+				std::string componentType = currentComponent->FirstChildElement("type")->GetText();
+				ECS::Components::AComponent* component = nullptr;
+
+				// TODO: Use component name instead of typeid (unsafe)
+				if (componentType == typeid(Components::CTransform).name())			component = &transform;
+				else if (componentType == typeid(Components::CModelRenderer).name())			component = &AddComponent<ECS::Components::CModelRenderer>();
+				else if (componentType == typeid(Components::CMaterialRenderer).name())		component = &AddComponent<ECS::Components::CMaterialRenderer>();
+				else if (componentType == typeid(Components::CPointLight).name())			component = &AddComponent<ECS::Components::CPointLight>();
+				else if (componentType == typeid(Components::CDirectionalLight).name())		component = &AddComponent<ECS::Components::CDirectionalLight>();
+
+				if (component)
+					component->OnDeserialize(p_doc, currentComponent->FirstChildElement("data"));
+
+				currentComponent = currentComponent->NextSiblingElement("component");
+			}
+		}
+	}
 }

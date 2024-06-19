@@ -24,7 +24,10 @@ namespace AmberEngine::Core::ECS::Components
 		CDirectionalLight(Actor& p_owner);
 		virtual ~CDirectionalLight() override = default;
 
-		std::string GetName() override;
+		virtual std::string GetName() override;
+
+		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 
 		virtual void OnInspector(UI::WidgetContainer& p_root) override;
 	};

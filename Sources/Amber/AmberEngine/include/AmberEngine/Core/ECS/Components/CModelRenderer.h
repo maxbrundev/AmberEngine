@@ -29,8 +29,12 @@ namespace AmberEngine::Core::ECS::Components
 		void SetModel(Resources::Model* p_model);
 		Resources::Model* GetModel() const;
 		
-		std::string GetName() override;
-		void OnInspector(UI::WidgetContainer& p_root) override;
+		virtual std::string GetName() override;
+
+		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+
+		virtual void OnInspector(UI::WidgetContainer& p_root) override;
 
 	private:
 		Resources::Model* m_model;

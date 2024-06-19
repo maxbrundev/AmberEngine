@@ -435,9 +435,6 @@
     <ClInclude Include="include\AmberEngine\Core\CameraController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\AmberEngine\Core\EditorAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -460,6 +457,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AmberEngine\Core\Helpers\Serializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenuItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenuWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -734,9 +737,6 @@
     <ClCompile Include="src\AmberEngine\Core\CameraController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AmberEngine\Core\EditorAction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -756,6 +756,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AmberEngine\Core\Helpers\Serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenuItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenuWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

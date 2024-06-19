@@ -4,6 +4,7 @@
 
 #include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
 #include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
+#include "AmberEngine/Resources/Loaders/ShaderLoader.h"
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 #include "AmberEngine/UI/Panels/Views/SceneView.h"
 #include "AmberEngine/Core/SceneSystem/Scene.h"
@@ -136,39 +137,39 @@ bool AmberEngine::Core::EditorAction::DestroyActor(ECS::Actor& p_actor)
 
 void AmberEngine::Core::EditorAction::DuplicateActor(ECS::Actor& p_toDuplicate, ECS::Actor* p_forcedParent, bool p_focus)
 {
-	//tinyxml2::XMLDocument doc;
-	//tinyxml2::XMLNode* actorsRoot = doc.NewElement("actors");
-	//p_toDuplicate.OnSerialize(doc, actorsRoot);
-	//auto& newActor = CreateEmptyActor(false);
-	//int64_t idToUse = newActor.GetID();
-	//tinyxml2::XMLElement* currentActor = actorsRoot->FirstChildElement("actor");
-	//newActor.OnDeserialize(doc, currentActor);
-	//
-	//newActor.SetID(idToUse);
-	//
-	//if (p_forcedParent)
-	//	newActor.SetParent(*p_forcedParent);
-	//else
-	//{
-	//	auto currentScene = m_context.sceneManager.GetCurrentScene();
-	//
-	//	if (newActor.GetParentID() > 0)
-	//	{
-	//		if (auto found = currentScene->FindActorByID(newActor.GetParentID()); found)
-	//		{
-	//			newActor.SetParent(*found);
-	//		}
-	//	}
-	//
-	//	const auto uniqueName = FindDuplicatedActorUniqueName(p_toDuplicate, newActor, *currentScene);
-	//	newActor.SetName(uniqueName);
-	//}
-	//
-	//if (p_focus)
-	//	SelectActor(newActor);
-	//
-	//for (auto& child : p_toDuplicate.GetChildren())
-	//	DuplicateActor(*child, &newActor, false);
+	tinyxml2::XMLDocument doc;
+	tinyxml2::XMLNode* actorsRoot = doc.NewElement("actors");
+	p_toDuplicate.OnSerialize(doc, actorsRoot);
+	auto& newActor = CreateEmptyActor(false);
+	int64_t idToUse = newActor.GetID();
+	tinyxml2::XMLElement* currentActor = actorsRoot->FirstChildElement("actor");
+	newActor.OnDeserialize(doc, currentActor);
+	
+	newActor.SetID(idToUse);
+	
+	if (p_forcedParent)
+		newActor.SetParent(*p_forcedParent);
+	else
+	{
+		auto currentScene = m_context.sceneManager.GetCurrentScene();
+	
+		if (newActor.GetParentID() > 0)
+		{
+			if (auto found = currentScene->FindActorByID(newActor.GetParentID()); found)
+			{
+				newActor.SetParent(*found);
+			}
+		}
+	
+		const auto uniqueName = FindDuplicatedActorUniqueName(p_toDuplicate, newActor, *currentScene);
+		newActor.SetName(uniqueName);
+	}
+	
+	if (p_focus)
+		SelectActor(newActor);
+	
+	for (auto& child : p_toDuplicate.GetChildren())
+		DuplicateActor(*child, &newActor, false);
 }
 
 void AmberEngine::Core::EditorAction::SelectActor(ECS::Actor& p_target)
@@ -210,6 +211,64 @@ void AmberEngine::Core::EditorAction::ExecuteDelayedActions()
 	{
 		return p_element.first == 0;
 	}), m_delayedActions.end());
+}
+
+std::string AmberEngine::Core::EditorAction::GetRealPath(const std::string& p_path)
+{
+	std::string result;
+
+	if (p_path[0] == ':') // The path is an engine path
+	{
+		result = m_context.engineAssetsPath + std::string(p_path.data() + 1, p_path.data() + p_path.size());
+	}
+	else // The path is a project path
+	{
+		result = m_context.projectAssetsPath + p_path;
+	}
+
+	return result;
+}
+
+std::string AmberEngine::Core::EditorAction::GetResourcePath(const std::string& p_path, bool p_isFromEngine)
+{
+	std::string result = p_path;
+
+	if (Tools::Utils::String::Replace(result, p_isFromEngine ? m_context.engineAssetsPath : m_context.projectAssetsPath, ""))
+	{
+		if (p_isFromEngine)
+			result = ':' + result;
+	}
+
+	return result;
+}
+
+void AmberEngine::Core::EditorAction::CompileShaders()
+{
+	for (auto shader : m_context.shaderManager.GetResources())
+		Resources::Loaders::ShaderLoader::Recompile(*shader.second, GetRealPath(shader.second->Path));
+}
+
+void AmberEngine::Core::EditorAction::GenerateModelMaterialFiles(const std::string& materialName)
+{
+	std::string finalPath = m_context.projectAssetsPath + "Materials\\" + materialName + ".abmat";
+
+	if (std::filesystem::exists(finalPath))
+		return;
+
+
+	{
+		if (!std::filesystem::exists(m_context.projectAssetsPath + "Materials\\"))
+		{
+			std::filesystem::create_directories(m_context.projectAssetsPath + "Materials\\");
+		}
+
+		std::ofstream outfile(finalPath);
+		outfile << "<root><shader>:Shaders\\Standard.glsl</shader></root>" << std::endl; // Empty standard material content
+	}
+
+	
+
+	EDITOR_CONTEXT(materialManager)[EDITOR_EXEC(GetResourcePath(finalPath))];
 }
 
 std::string AmberEngine::Core::EditorAction::FindDuplicatedActorUniqueName(ECS::Actor& p_duplicated, ECS::Actor& p_newActor, SceneSystem::Scene& p_scene)

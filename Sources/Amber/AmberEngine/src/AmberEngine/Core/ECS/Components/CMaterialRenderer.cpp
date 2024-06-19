@@ -2,9 +2,12 @@
 
 #include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
 
+#include "AmberEngine/Core/EditorAction.h"
 #include "AmberEngine/Core/ECS/Actor.h"
 
 #include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
+#include "AmberEngine/Core/Helpers/Serializer.h"
+#include "AmberEngine/Managers/MaterialManager.h"
 #include "AmberEngine/Managers/ShaderManager.h"
 #include "AmberEngine/Managers/TextureManager.h"
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
@@ -24,29 +27,39 @@ AmberEngine::Core::ECS::Components::CMaterialRenderer::CMaterialRenderer(Actor& 
 	UpdateMaterialList();
 }
 
-void AmberEngine::Core::ECS::Components::CMaterialRenderer::FillTextureData(std::map<int, std::vector<std::tuple<Resources::ETextureType, std::string>>> p_textureData)
+void AmberEngine::Core::ECS::Components::CMaterialRenderer::GenerateModelMaterials()
 {
-	for (uint8_t i = 0; i < m_materials.size(); i++)
+	if (auto modelRenderer = owner.GetComponent<CModelRenderer>(); modelRenderer && modelRenderer->GetModel())
 	{
-		m_materials[i] = new Resources::Material();
+		uint8_t materialIndex = 0;
 
-		m_materials[i]->SetShader(Tools::Global::ServiceLocator::Get<ResourceManagement::ShaderManager>().GetResource(":Shaders\\Standard.glsl"));
-
-		for (auto [type, path] : p_textureData[i])
+		for (const std::string& materialName : modelRenderer->GetModel()->GetMaterialNames())
 		{
-			std::string uniform;
+			if(materialName.empty())
+				continue;
 
-			switch (type)
+			EDITOR_EXEC(GenerateModelMaterialFiles(materialName));
+
+			auto mat = EDITOR_CONTEXT(materialManager)["Materials\\" + materialName + ".abmat"];
+			m_materials[materialIndex] = mat;
+			for (auto[type, path] : modelRenderer->GetModel()->LoadedTextureData[materialIndex])
 			{
-			case Resources::ETextureType::DIFFUSE_MAP:
-				uniform = "u_DiffuseMap";
-				break;
-			case Resources::ETextureType::SPECULAR_MAP:
-				uniform = "u_SpecularMap";
-				break;
+				std::string uniform;
+
+				switch (type)
+				{
+				case Resources::ETextureType::DIFFUSE_MAP:
+					uniform = "u_DiffuseMap";
+					break;
+				case Resources::ETextureType::SPECULAR_MAP:
+					uniform = "u_SpecularMap";
+					break;
+				}
+
+				mat->SetUniform(uniform, Tools::Global::ServiceLocator::Get<ResourceManagement::TextureManager>().GetResource(path));
 			}
 
-			m_materials[i]->SetUniform(uniform, Tools::Global::ServiceLocator::Get<ResourceManagement::TextureManager>().GetResource(path));
+			materialIndex++;
 		}
 	}
 }
@@ -151,6 +164,42 @@ const glm::mat4& AmberEngine::Core::ECS::Components::CMaterialRenderer::GetUserM
 std::string AmberEngine::Core::ECS::Components::CMaterialRenderer::GetName()
 {
 	return "Material Renderer";
+}
+
+void AmberEngine::Core::ECS::Components::CMaterialRenderer::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	tinyxml2::XMLNode* materialsNode = p_doc.NewElement("materials");
+	p_node->InsertEndChild(materialsNode);
+
+	auto modelRenderer = owner.GetComponent<CModelRenderer>();
+	uint8_t elementsToSerialize = modelRenderer->GetModel() ? (uint8_t)std::min(modelRenderer->GetModel()->GetMaterialNames().size(), (size_t)MAX_MATERIAL_COUNT) : 0;
+
+	for (uint8_t i = 0; i < elementsToSerialize; ++i)
+	{
+		Helpers::Serializer::SerializeMaterial(p_doc, materialsNode, "material", m_materials[i]);
+	}
+}
+
+void AmberEngine::Core::ECS::Components::CMaterialRenderer::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+	tinyxml2::XMLNode* materialsRoot = p_node->FirstChildElement("materials");
+	if (materialsRoot)
+	{
+		tinyxml2::XMLElement* currentMaterial = materialsRoot->FirstChildElement("material");
+
+		uint8_t materialIndex = 0;
+
+		while (currentMaterial)
+		{
+			if (auto material = Tools::Global::ServiceLocator::Get<ResourceManagement::MaterialManager>()[currentMaterial->GetText()])
+				m_materials[materialIndex] = material;
+
+			currentMaterial = currentMaterial->NextSiblingElement("material");
+			++materialIndex;
+		}
+	}
+
+	UpdateMaterialList();
 }
 
 std::array<AmberEngine::UI::Widgets::AWidget*, 3> CustomMaterialDrawer(AmberEngine::UI::WidgetContainer& p_root, const std::string& p_name, AmberEngine::Resources::Material*& p_data)

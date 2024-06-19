@@ -35,7 +35,11 @@ namespace AmberEngine::Core::ECS::Components
 
 		void SetQuadratic(float p_quadratic);
 
-		std::string GetName() override;
+		virtual std::string GetName() override;
+
+		virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+
 		virtual void OnInspector(UI::WidgetContainer& p_root) override;
 	};
 }

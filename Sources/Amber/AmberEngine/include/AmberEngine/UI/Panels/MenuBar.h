@@ -28,6 +28,7 @@ namespace AmberEngine::UI::Panels
 		void CreateWindowMenu();
 		void CreateActorsMenu();
 		void CreateLayoutMenu();
+		void CreateResourcesMenu();
 
 		void UpdateToggleableItems();
 		void OpenEveryWindows(bool p_state);

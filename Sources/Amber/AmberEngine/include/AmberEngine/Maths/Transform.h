@@ -32,19 +32,23 @@ namespace AmberEngine::Maths
 		uint64_t AddChildrenCallback(const std::function<void(ETransformState)>& p_callback);
 
 		void SetLocalPosition(glm::vec3 p_newPosition);
-		void SetLocalRotation(glm::vec3 p_newRotation);
+		void SetLocalRotationEuler(glm::vec3 p_newRotation);
+		void SetLocalRotation(glm::quat p_newRotation);
 		void SetLocalScale(glm::vec3 p_newScale);
 
 		void SetWorldPosition(glm::vec3 p_newPosition);
-		void SetWorldRotation(glm::vec3 p_newRotation);
+		void SetWorldRotationEuler(glm::vec3 p_newRotation);
+		void SetWorldRotation(glm::quat p_newRotation);
 		void SetWorldScale(glm::vec3 p_newScale);
 
 		const glm::vec3& GetLocalPosition() const;
 		const glm::vec3& GetLocalRotationEuler() const;
+		const glm::quat& GetLocalRotation() const;
 		const glm::vec3& GetLocalScale() const;
 
 		const glm::vec3& GetWorldPosition() const;
 		const glm::vec3& GetWorldRotationEuler() const;
+		const glm::quat& GetWorldRotation() const;
 		const glm::vec3& GetWorldScale() const;
 
 		glm::vec3 GetWorldForward() const;
@@ -64,18 +68,18 @@ namespace AmberEngine::Maths
 
 	private:
 		glm::vec3 m_localPosition;
-		glm::vec3 m_localRotation;
+		glm::vec3 m_localRotationEuler;
 		glm::vec3 m_localScale;
 
 		glm::vec3 m_worldPosition;
-		glm::vec3 m_worldRotation;
+		glm::vec3 m_worldRotationEuler;
 		glm::vec3 m_worldScale;
 
 		glm::mat4 m_localMatrix;
 		glm::mat4 m_worldMatrix;
 
-		glm::quat m_worldRotationQuat;
-		glm::quat m_localRotationQuat;
+		glm::quat m_worldRotation;
+		glm::quat m_localRotation;
 
 		Transform* m_parent;
 

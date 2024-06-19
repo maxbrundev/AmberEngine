@@ -10,7 +10,8 @@ namespace AmberEngine::Tools::Utils
 			UNKNOWN,
 			MODEL,
 			TEXTURE,
-			SHADER
+			SHADER,
+			MATERIAL
 		};
 
 		PathParser() = delete;

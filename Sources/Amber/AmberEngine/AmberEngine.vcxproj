@@ -362,7 +362,8 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\UI\Widgets\ButtonSmall.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ColorEdit.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Column.h" />
-    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenu.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenuItem.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenuWindow.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DataWidget.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DragingScalar.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DragMultipleScalars.h" />
@@ -488,7 +489,8 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\Core\PanelsManager.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ButtonSmall.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ColorEdit.cpp" />
-    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenu.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenuItem.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenuWindow.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Group.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\GroupCollapsable.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Image.cpp" />

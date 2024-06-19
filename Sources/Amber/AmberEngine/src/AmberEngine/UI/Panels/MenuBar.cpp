@@ -6,7 +6,7 @@
 #include "AmberEngine/Core/EditorAction.h"
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
-#include "AmberEngine/UI/Widgets/ContextualMenu.h"
+#include "AmberEngine/UI/Widgets/ContextualMenuItem.h"
 #include "AmberEngine/UI/Widgets/InputText.h"
 
 #include "AmberEngine/UI/Widgets/Separator.h"
@@ -20,6 +20,7 @@ AmberEngine::UI::Panels::MenuBar::MenuBar()
 	CreateFileMenu();
 	CreateWindowMenu();
 	CreateActorsMenu();
+	CreateResourcesMenu();
 	CreateLayoutMenu();
 }
 
@@ -88,7 +89,7 @@ void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
 					EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::SetLayout, manager, m_layoutsPath + *layoutFileName), 1));
 				};
 
-				auto& contextualMenu = layoutMenuItem.CreateWidget<Widgets::ContextualMenu>();
+				auto& contextualMenu = layoutMenuItem.CreateWidget<Widgets::ContextualMenuItem>();
 				auto& deleteMenuItem = contextualMenu.CreateWidget<Widgets::MenuItem>("Delete");
 
 				deleteMenuItem.ClickedEvent += [this, layoutFileName, &layoutMenuItem]
@@ -123,6 +124,12 @@ void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
 	};
 
 	layoutMenuList.CreateWidget<Widgets::MenuItem>("Reset").ClickedEvent += EDITOR_BIND(ResetToDefaultLayout);
+}
+
+void AmberEngine::UI::Panels::MenuBar::CreateResourcesMenu()
+{
+	auto& resourcesMenu = CreateWidget<Widgets::MenuList>("Resources");
+	resourcesMenu.CreateWidget<Widgets::MenuItem>("Compile shaders").ClickedEvent += EDITOR_BIND(CompileShaders);
 }
 
 void AmberEngine::UI::Panels::MenuBar::UpdateToggleableItems()

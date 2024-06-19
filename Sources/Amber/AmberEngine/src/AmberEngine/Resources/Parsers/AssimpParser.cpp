@@ -119,7 +119,6 @@ void AmberEngine::Resources::Parsers::AssimpParser::ProcessMaterials(const aiSce
 				Tools::Global::ServiceLocator::Get<ResourceManagement::TextureManager>().LoadResource(m_directory + str.C_Str(), false);
 				textureData[i].emplace_back(ETextureType::SPECULAR_MAP, m_directory + str.C_Str());
 			}
-			
 		}
 	}
 }

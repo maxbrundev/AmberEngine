@@ -82,6 +82,7 @@ std::string AmberEngine::Tools::Utils::PathParser::FileTypeToString(EFileType p_
 	case AmberEngine::Tools::Utils::PathParser::EFileType::MODEL:    return "Model";
 	case AmberEngine::Tools::Utils::PathParser::EFileType::TEXTURE:  return "Texture";
 	case AmberEngine::Tools::Utils::PathParser::EFileType::SHADER:   return "Shader";
+	case AmberEngine::Tools::Utils::PathParser::EFileType::MATERIAL:   return "Material";
 	}
 
 	return "Unknown";
@@ -98,6 +99,7 @@ AmberEngine::Tools::Utils::PathParser::EFileType AmberEngine::Tools::Utils::Path
 		return EFileType::TEXTURE;
 	else if (ext == "glsl")
 		return EFileType::SHADER;
+	else if (ext == "abmat")													return EFileType::MATERIAL;
 
 	return EFileType::UNKNOWN;
 }

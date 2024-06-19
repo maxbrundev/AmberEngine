@@ -2,9 +2,12 @@
 
 #include "AmberEngine/UI/Panels/Hierarchy.h"
 
+#include "AmberEngine/Core/ActorCreationMenu.h"
 #include "AmberEngine/Core/Context.h"
 
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
+#include "AmberEngine/UI/Widgets/ContextualMenuWindow.h"
+#include "AmberEngine/UI/Widgets/MenuList.h"
 
 AmberEngine::UI::Panels::Hierarchy::Hierarchy(const std::string& p_title, bool p_opened, PanelSettings p_panelSettings) :
 APanelWindow(p_title, p_opened, p_panelSettings)
@@ -33,6 +36,12 @@ APanelWindow(p_title, p_opened, p_panelSettings)
 
 	m_root = &CreateWidget<Widgets::TreeNode>("Root", true);
 	m_root->Open();
+	m_root->SetActor(nullptr);
+
+	//TODO: Find a workaround to enable right click + ImGuiPopupFlags_NoOpenOverItems
+	//auto& contextualMenu = CreateWidget<Widgets::ContextualMenuWindow>();
+	//auto& createActor = contextualMenu.CreateWidget<Widgets::MenuList>("Create...");
+	//Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, nullptr, std::bind(&Widgets::TreeNode::Open, m_root));
 }
 
 void AmberEngine::UI::Panels::Hierarchy::Clear()
@@ -40,6 +49,9 @@ void AmberEngine::UI::Panels::Hierarchy::Clear()
 	m_root->RemoveAllWidgets();
 
 	m_widgetActorLink.clear();
+
+	m_root->Open();
+	m_root->SetActor(nullptr);
 }
 
 void AmberEngine::UI::Panels::Hierarchy::AttachActorNodeToParentNode(AmberEngine::Core::ECS::Actor& p_actor, AmberEngine::Core::ECS::Actor& p_parentActor)

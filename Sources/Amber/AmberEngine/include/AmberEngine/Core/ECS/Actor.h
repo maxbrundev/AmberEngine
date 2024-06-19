@@ -6,10 +6,12 @@
 
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
 #include "AmberEngine/Core/ECS/Components/CTransform.h"
+#include "AmberEngine/Core/API/ISerializable.h"
+
 
 namespace AmberEngine::Core::ECS
 {
-	class API_AMBERENGINE Actor
+	class API_AMBERENGINE Actor : public API::ISerializable
 	{
 	public:
 		static Eventing::Event<Actor&>         CreatedEvent;
@@ -116,6 +118,8 @@ namespace AmberEngine::Core::ECS
 		bool IsActive() const;
 
 		std::vector<Actor*>& GetChildren();
+		void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
+		void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 
 	private:
 		std::string m_name;
