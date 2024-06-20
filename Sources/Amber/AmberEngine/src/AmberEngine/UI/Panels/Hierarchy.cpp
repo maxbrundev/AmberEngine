@@ -38,10 +38,9 @@ APanelWindow(p_title, p_opened, p_panelSettings)
 	m_root->Open();
 	m_root->SetActor(nullptr);
 
-	//TODO: Find a workaround to enable right click + ImGuiPopupFlags_NoOpenOverItems
-	//auto& contextualMenu = CreateWidget<Widgets::ContextualMenuWindow>();
-	//auto& createActor = contextualMenu.CreateWidget<Widgets::MenuList>("Create...");
-	//Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, nullptr, std::bind(&Widgets::TreeNode::Open, m_root));
+	auto& contextualMenu = CreateWidget<Widgets::ContextualMenuWindow>();
+	auto& createActor = contextualMenu.CreateWidget<Widgets::MenuList>("Create...");
+	Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, nullptr, std::bind(&Widgets::TreeNode::Open, std::ref(m_root)));
 }
 
 void AmberEngine::UI::Panels::Hierarchy::Clear()

@@ -10,7 +10,7 @@ void AmberEngine::UI::Widgets::ContextualMenuWindow::Close()
 
 void AmberEngine::UI::Widgets::ContextualMenuWindow::DrawImplementation()
 {
-	if (ImGui::BeginPopupContextWindow())
+	if (ImGui::BeginPopupContextWindow(m_widgetID.c_str(), ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
 	{
 		DrawWidgets();
 		ImGui::EndPopup();
