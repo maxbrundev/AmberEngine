@@ -55,7 +55,5 @@ namespace AmberEngine::UI::Widgets
 		std::pair<AmberEngine::Core::ECS::Actor*, TreeNode*> m_data;
 
 		ImGuiDragDropFlags target_flags = 0;
-
-		ContextualMenuItem* m_contextualMenu;
 	};
 }

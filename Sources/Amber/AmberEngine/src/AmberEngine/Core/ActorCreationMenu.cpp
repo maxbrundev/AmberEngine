@@ -6,27 +6,27 @@
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
-std::function<void()> Combine(std::function<void()> p_a, std::optional<std::function<void()>> p_b)
+std::function<void()> Combine(std::function<void()> p_function, const std::optional<std::function<void()>>& p_OptionalFunction)
 {
-	if (p_b.has_value())
+	if (p_OptionalFunction.has_value())
 	{
 		return [=]()
 		{
-			p_a();
-			p_b.value()();
+			p_function();
+			p_OptionalFunction.value()();
 		};
 	}
 
-	return p_a;
+	return p_function;
 }
 
 
-std::function<void()> ActorWithModelComponentCreationHandler(AmberEngine::Core::ECS::Actor* p_parent, const std::string& p_modelName, std::optional<std::function<void()>> p_onItemClicked)
+std::function<void()> ActorWithModelComponentCreationHandler(AmberEngine::Core::ECS::Actor* p_parent, const std::string& p_modelName, const std::optional<std::function<void()>>& p_onItemClicked)
 {
 	return Combine(EDITOR_BIND(CreateActorWithModel, ":Models\\" + p_modelName + ".fbx", true, p_parent, p_modelName), p_onItemClicked);
 }
 
-void AmberEngine::Utils::ActorCreationMenu::GenerateActorCreationMenu(AmberEngine::UI::Widgets::MenuList& p_menuList, AmberEngine::Core::ECS::Actor* p_parent, std::optional<std::function<void()>> p_onItemClicked)
+void AmberEngine::Utils::ActorCreationMenu::GenerateActorCreationMenu(AmberEngine::UI::Widgets::MenuList& p_menuList, AmberEngine::Core::ECS::Actor* p_parent, const std::optional<std::function<void()>>& p_onItemClicked)
 {
 	p_menuList.CreateWidget<UI::Widgets::MenuItem>("Create Empty").ClickedEvent += Combine(EDITOR_BIND(CreateEmptyActor, true, p_parent, ""), p_onItemClicked);
 

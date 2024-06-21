@@ -31,6 +31,6 @@ namespace AmberEngine::Utils
 		* @param p_parent
 		* @param p_onItemClicked
 		*/
-		static void GenerateActorCreationMenu(AmberEngine::UI::Widgets::MenuList& p_menuList, AmberEngine::Core::ECS::Actor* p_parent = nullptr, std::optional<std::function<void()>> p_onItemClicked = {});
+		static void GenerateActorCreationMenu(AmberEngine::UI::Widgets::MenuList& p_menuList, AmberEngine::Core::ECS::Actor* p_parent = nullptr, const std::optional<std::function<void()>>& p_onItemClicked = {});
 	};
 }

@@ -54,12 +54,13 @@ void AmberEngine::UI::Widgets::TreeNode::SetActor(AmberEngine::Core::ECS::Actor*
 			if (p_newName.empty())
 				return;
 
-			m_actor->SetName(p_newName);
+			m_actor->SetName(std::move(p_newName));
 		};
 	}
 
 	auto& createActor = contextualMenu.CreateWidget<MenuList>("Create...");
-	Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, m_actor, std::bind(&TreeNode::Open, this));
+	Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, m_actor, [this] { Open(); });
+	
 }
 
 void AmberEngine::UI::Widgets::TreeNode::Update()
