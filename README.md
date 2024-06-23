@@ -1,6 +1,6 @@
 ## AmberEngine
 ![EditorImproved](https://github.com/maxbrundev/AmberEngine/assets/32653095/bbeba826-a6e3-4593-92f6-8ddb4a934851)
-*WIP Asset Browser, Material Editor, QOL Features (Actor Create menu directly from the Hierarchy Panel, Layouts management, Auto generate and apply Materials from models)*
+*WIP Asset Browser, Material Editor, QOL Features (Actor Create menu directly from the Hierarchy Panel, Layouts management, Auto generate and apply Materials from loaded models)*
 
 ## Description
 Personal Game Engine learning Project.
