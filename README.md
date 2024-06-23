@@ -1,11 +1,12 @@
 ## AmberEngine
-![EditorImproved](https://github.com/maxbrundev/AmberEngine/assets/32653095/cff3d99f-d121-4889-b346-8fc96c30a306)
+![EditorImproved](https://github.com/maxbrundev/AmberEngine/assets/32653095/bbeba826-a6e3-4593-92f6-8ddb4a934851)
+*WIP Asset Browser, Material Editor, QOL Features (Actor Create menu directly from the Hierarchy Panel, Layouts management, Auto generate and apply Materials from models)*
 
 ## Description
 Personal Game Engine learning Project.
 
 ## Software
-- Visual Studio 2017
+- Visual Studio 2017 (Premake5 soon)
 
 ## Dependencies
 - OpenGL with GLEW (Graphics API)
