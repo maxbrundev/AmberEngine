@@ -2,7 +2,7 @@
 ![EditorImproved](https://github.com/maxbrundev/AmberEngine/assets/32653095/bbeba826-a6e3-4593-92f6-8ddb4a934851)
 *WIP Asset Browser, Material Editor, QOL Features (Actor Create menu directly from the Hierarchy Panel, Layouts management, Auto generate and apply Materials from loaded models)*
 
-![AmberEngineDemoscene](https://github.com/maxbrundev/AmberEngine/assets/32653095/08987cc6-7ad1-4b29-bf67-439ceab87946)
+![AmberEngineDemoscene](https://github.com/maxbrundev/AmberEngine/assets/32653095/59c19e3e-2b0e-4cdb-92fa-0024cf54c113)
 *Scene Name + Creation menu directly from Hierarchy Panel*
 
 ## Description
