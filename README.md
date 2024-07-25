@@ -1,4 +1,7 @@
 ## AmberEngine
+![AmberEngivev1 0 0](https://github.com/user-attachments/assets/c0ee49e3-aed2-4a64-bfdb-3e1053721bf0)
+*WIP AmberEngine v1.0.0 OverloadEngine features integration 80% + QOL Features*
+
 ![EditorImproved](https://github.com/maxbrundev/AmberEngine/assets/32653095/bbeba826-a6e3-4593-92f6-8ddb4a934851)
 *WIP Asset Browser, Material Editor, QOL Features (Actor Create menu directly from the Hierarchy Panel, Layouts management, Auto generate and apply Materials from loaded models)*
 
