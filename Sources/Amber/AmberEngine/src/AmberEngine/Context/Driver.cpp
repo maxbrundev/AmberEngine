@@ -2,6 +2,8 @@
 
 #include "AmberEngine/Context/Driver.h"
 
+#include "AmberEngine/Debug/Logger.h"
+
 AmberEngine::Context::Driver::Driver(const Settings::DriverSettings& p_driverSettings)
 {
 	InitGlew();
@@ -190,12 +192,13 @@ std::string AmberEngine::Context::Driver::GetString(GLenum p_parameter, uint32_t
 void AmberEngine::Context::Driver::InitGlew()
 {
 	const GLenum error = glewInit();
+
 	if (error != GLEW_OK)
 	{
 		std::string message = "Error Init GLEW: ";
 		std::string glewError = reinterpret_cast<const char*>(glewGetErrorString(error));
 
-		std::cout << message + glewError << std::endl;
+		AB_LOG_INFO(message + glewError);
 	}
 }
 
@@ -243,7 +246,12 @@ void AmberEngine::Context::Driver::GLDebugMessageCallback(uint32_t source, uint3
 	case GL_DEBUG_SEVERITY_LOW:				output += "Severity: Low";				break;
 	case GL_DEBUG_SEVERITY_NOTIFICATION:	output += "Severity: Notification";		break;
 	}
-	output += '\n';
 
-	std::cout << output;
+	switch (severity)
+	{
+	case GL_DEBUG_SEVERITY_HIGH:			AB_LOG_ERROR(output);	break;
+	case GL_DEBUG_SEVERITY_MEDIUM:			AB_LOG_WARNING(output);	break;
+	case GL_DEBUG_SEVERITY_LOW:				AB_LOG_INFO(output);		break;
+	case GL_DEBUG_SEVERITY_NOTIFICATION:	AB_LOG_INFO(output);			break;
+	}
 }

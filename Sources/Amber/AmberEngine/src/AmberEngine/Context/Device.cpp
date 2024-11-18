@@ -59,6 +59,13 @@ float AmberEngine::Context::Device::GetElapsedTime() const
 	return static_cast<float>(glfwGetTime());
 }
 
+std::pair<int16_t, int16_t> AmberEngine::Context::Device::GetMonitorSize() const
+{
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	return std::pair<int16_t, int16_t>(static_cast<int16_t>(mode->width), static_cast<int16_t>(mode->height));
+}
+
 void AmberEngine::Context::Device::BindErrorCallback()
 {
 	auto errorCallback = [](int p_code, const char* p_description)

@@ -2,7 +2,8 @@
 
 #include "AmberEngine/Core/ECS/Components/CDirectionalLight.h"
 
-AmberEngine::Core::ECS::Components::CDirectionalLight::CDirectionalLight(Actor& p_owner) : CLight(p_owner, Rendering::Settings::ELightType::DIRECTIONAL)
+AmberEngine::Core::ECS::Components::CDirectionalLight::CDirectionalLight(Actor& p_owner) :
+CLight(p_owner, Rendering::Settings::ELightType::DIRECTIONAL)
 {
 }
 

@@ -6,6 +6,7 @@
 #include "AmberEngine/Managers/ModelManager.h"
 #include "AmberEngine/Managers/ShaderManager.h"
 #include "AmberEngine/Managers/MaterialManager.h"
+
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
 
 void AmberEngine::Core::Helpers::Serializer::SerializeBoolean(tinyxml2::XMLDocument & p_doc, tinyxml2::XMLNode * p_node, const std::string & p_name, bool p_value)

@@ -3,6 +3,8 @@
 #include "AmberEngine/API/Export.h"
 
 #include <glm/glm.hpp>
+#include <vector>
+#include <unordered_map>
 
 #include "AmberEngine/Resources/UniformInfo.h"
 

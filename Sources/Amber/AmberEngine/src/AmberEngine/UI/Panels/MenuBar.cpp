@@ -13,6 +13,7 @@
 
 #include "AmberEngine/Core/ActorCreationMenu.h"
 #include "AmberEngine/Tools/Utils/String.h"
+#include "AmberEngine/Core/EditorAction.h"
 
 AmberEngine::UI::Panels::MenuBar::MenuBar()
 {
@@ -27,6 +28,9 @@ AmberEngine::UI::Panels::MenuBar::MenuBar()
 void AmberEngine::UI::Panels::MenuBar::CreateFileMenu()
 {
 	auto& fileMenu = CreateWidget<Widgets::MenuList>("File");
+	fileMenu.CreateWidget<Widgets::MenuItem>("New Scene", "CTRL + N").ClickedEvent += EDITOR_BIND(LoadEmptyScene);
+	fileMenu.CreateWidget<Widgets::MenuItem>("Save Scene", "CTRL + S").ClickedEvent += EDITOR_BIND(SaveSceneChanges);
+	fileMenu.CreateWidget<Widgets::MenuItem>("Save Scene As...", "CTRL + SHIFT + S").ClickedEvent += EDITOR_BIND(SaveAs);
 	fileMenu.CreateWidget<Widgets::MenuItem>("Exit", "ALT + F4").ClickedEvent += [] { AmberEngine::Tools::Global::ServiceLocator::Get<AmberEngine::Core::Context>().window->SetShouldClose(true); };
 }
 
@@ -89,7 +93,7 @@ void AmberEngine::UI::Panels::MenuBar::CreateLayoutMenu()
 					EDITOR_EXEC(DelayAction(std::bind(&Core::UIManager::SetLayout, manager, m_layoutsPath + *layoutFileName), 1));
 				};
 
-				auto& contextualMenu = layoutMenuItem.CreateWidget<Widgets::ContextualMenuItem>();
+				auto& contextualMenu = layoutMenuItem.CreateContextualMenu<Widgets::ContextualMenuItem>();
 				auto& deleteMenuItem = contextualMenu.CreateWidget<Widgets::MenuItem>("Delete");
 
 				deleteMenuItem.ClickedEvent += [this, layoutFileName, &layoutMenuItem]

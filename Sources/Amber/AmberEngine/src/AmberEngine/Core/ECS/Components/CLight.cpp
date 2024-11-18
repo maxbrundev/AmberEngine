@@ -4,9 +4,12 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Core/Helpers/Serializer.h"
+
 #include "AmberEngine/UI/GUIDrawer.h"
 
-AmberEngine::Core::ECS::Components::CLight::CLight(Actor& p_owner, Rendering::Settings::ELightType p_type): AComponent(p_owner), m_data(p_owner.transform.GetTransform(), p_type)
+AmberEngine::Core::ECS::Components::CLight::CLight(Actor& p_owner, Rendering::Settings::ELightType p_type) :
+AComponent(p_owner),
+m_data(p_owner.transform.GetTransform(), p_type)
 {
 }
 

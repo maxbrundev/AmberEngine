@@ -16,13 +16,14 @@ m_actorName(name),
 m_actor(nullptr),
 m_isArrowClickToOpen(p_arrowClickToOpen)
 {
+	m_autoExecutePlugins = false;
 }
 
 void AmberEngine::UI::Widgets::TreeNode::SetActor(AmberEngine::Core::ECS::Actor* p_actor)
 {
 	m_actor = p_actor;
 
-	auto& contextualMenu = CreateWidget<ContextualMenuItem>();
+	auto& contextualMenu = CreateContextualMenu<ContextualMenuItem>();
 	
 	if(m_actor)
 	{
@@ -154,9 +155,10 @@ void AmberEngine::UI::Widgets::TreeNode::DrawImplementation()
 	if (m_isArrowClickToOpen) flags |= ImGuiTreeNodeFlags_OpenOnArrow;
 	if (isSelected)			flags |= ImGuiTreeNodeFlags_Selected;
 	if (isLeaf)				flags |= ImGuiTreeNodeFlags_Leaf;
-
+	flags |= ImGuiTreeNodeFlags_AllowItemOverlap;
+	
 	const bool opened = ImGui::TreeNodeEx(name.c_str(), flags);
-
+	
 	if (ImGui::IsItemClicked() && (ImGui::GetMousePos().x - ImGui::GetItemRectMin().x) > ImGui::GetTreeNodeToLabelSpacing())
 	{
 		ClickedEvent.Invoke();
@@ -166,6 +168,7 @@ void AmberEngine::UI::Widgets::TreeNode::DrawImplementation()
 			DoubleClickedEvent.Invoke();
 		}
 	}
+	
 
 	if (opened)
 	{
@@ -175,10 +178,34 @@ void AmberEngine::UI::Widgets::TreeNode::DrawImplementation()
 		m_isOpened = true;
 
 		Update();
+		DrawContextualMenu();
+		ExecutePlugins();
 
+		if(isReorder)
+		{
+			ImGui::SameLine();
+			ImGui::BeginGroup();
+			auto prevPos = ImGui::GetCursorPosX();
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x -50.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
+			if(ImGui::ArrowButton("up", ImGuiDir_Up))
+			{
+				UpEvent.Invoke(this);
+			}
+			ImGui::SameLine();
+			if (ImGui::ArrowButton("down", ImGuiDir_Down))
+			{
+				DownEvent.Invoke(this);
+			}
+			ImGui::PopStyleVar();
+			ImGui::EndGroup();
+			ImGui::SetCursorPosX(prevPos);
+		}
+		
 		DrawWidgets();
 
 		ImGui::TreePop();
+		
 	}
 	else
 	{
@@ -188,5 +215,7 @@ void AmberEngine::UI::Widgets::TreeNode::DrawImplementation()
 		m_isOpened = false;
 
 		Update();
+		DrawContextualMenu();
+		ExecutePlugins();
 	}
 }

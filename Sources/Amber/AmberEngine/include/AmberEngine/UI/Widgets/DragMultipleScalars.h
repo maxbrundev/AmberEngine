@@ -45,6 +45,7 @@ namespace AmberEngine::UI::Widgets
 			if (ImGui::DragScalarN((label + this->m_widgetID).c_str(), m_dataType, values.data(), _Size, speed, &min, &max, format.c_str()))
 			{
 				ValueChangedEvent.Invoke(values);
+				this->NotifyChange();
 			}
 		}
 

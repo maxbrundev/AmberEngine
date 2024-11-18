@@ -2,19 +2,9 @@
 
 #include "AmberEngine/API/Export.h"
 
-
 #include "AmberEngine/Core/ECS/Components/CLight.h"
 
-namespace AmberEngine
-{
-	namespace Core
-	{
-		namespace ECS
-		{
-			class Actor;
-		}
-	}
-}
+namespace AmberEngine::Core::ECS { class Actor; }
 
 namespace AmberEngine::Core::ECS::Components
 {

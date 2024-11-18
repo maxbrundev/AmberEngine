@@ -1,14 +1,21 @@
 #pragma once
 
+#include "AmberEngine/API/Export.h"
+
 #include "AmberEngine/UI/Panels/APanel.h"
 
 namespace AmberEngine::UI
 {
-	class Canvas
+	class API_AMBERENGINE Canvas
 	{
 	public:
 		Canvas() = default;
 		~Canvas();
+
+		Canvas(const Canvas& other) = delete;
+		Canvas(Canvas&& other) = delete;
+		Canvas& operator=(const Canvas& other) = delete;
+		Canvas& operator=(Canvas&& other) = delete;
 
 		void AddPanel(Panels::APanel& p_panel);
 		void RemovePanel(Panels::APanel& p_panel);

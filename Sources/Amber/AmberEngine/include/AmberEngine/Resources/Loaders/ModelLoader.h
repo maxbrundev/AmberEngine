@@ -12,8 +12,8 @@ namespace AmberEngine::Resources::Loaders
 	public:
 		ModelLoader() = delete;
 
-		static Model* Create(const std::string& p_filePath);
-		static void Reload(Model& p_model, const std::string& p_filePath);
+		static Model* Create(const std::string& p_filePath, Parsers::EModelParserFlags p_parserFlags = Parsers::EModelParserFlags::NONE);
+		static void Reload(Model& p_model, const std::string& p_filePath, Parsers::EModelParserFlags p_parserFlags = Parsers::EModelParserFlags::NONE);
 		static bool Destroy(Model*& p_modelInstance);
 
 	private:

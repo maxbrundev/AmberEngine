@@ -3,10 +3,10 @@
 #include "AmberEngine/Core/ECS/Components/CTransform.h"
 
 #include "AmberEngine/Core/Helpers/Serializer.h"
+
 #include "AmberEngine/UI/GUIDrawer.h"
 
-AmberEngine::Core::ECS::Components::CTransform::CTransform(Actor& p_owner, glm::vec3 p_localPosition,
-                                                           glm::vec3 p_localRotation, glm::vec3 p_localScale) : AComponent(p_owner)
+AmberEngine::Core::ECS::Components::CTransform::CTransform(Actor& p_owner, glm::vec3 p_localPosition, glm::vec3 p_localRotation, glm::vec3 p_localScale) : AComponent(p_owner)
 {
 	m_transform.GenerateMatricesLocal(p_localPosition, p_localRotation, p_localScale);
 }
@@ -31,9 +31,14 @@ void AmberEngine::Core::ECS::Components::CTransform::SetLocalPosition(glm::vec3 
 	m_transform.SetLocalPosition(p_newPosition);
 }
 
-void AmberEngine::Core::ECS::Components::CTransform::SetLocalRotation(glm::vec3 p_newRotation)
+void AmberEngine::Core::ECS::Components::CTransform::SetLocalRotationEuler(glm::vec3 p_newRotation)
 {
 	m_transform.SetLocalRotationEuler(p_newRotation);
+}
+
+void AmberEngine::Core::ECS::Components::CTransform::SetLocalRotation(glm::quat p_newRotation)
+{
+	m_transform.SetLocalRotation(p_newRotation);
 }
 
 void AmberEngine::Core::ECS::Components::CTransform::SetLocalScale(glm::vec3 p_newScale)
@@ -46,9 +51,14 @@ void AmberEngine::Core::ECS::Components::CTransform::SetWorldPosition(glm::vec3 
 	m_transform.SetWorldPosition(p_newPosition);
 }
 
-void AmberEngine::Core::ECS::Components::CTransform::SetWorldRotation(glm::vec3 p_newRotation)
+void AmberEngine::Core::ECS::Components::CTransform::SetWorldRotationEuler(glm::vec3 p_newRotation)
 {
 	m_transform.SetWorldRotationEuler(p_newRotation);
+}
+
+void AmberEngine::Core::ECS::Components::CTransform::SetWorldRotation(glm::quat p_newRotation)
+{
+	m_transform.SetLocalRotation(p_newRotation);
 }
 
 void AmberEngine::Core::ECS::Components::CTransform::SetWorldScale(glm::vec3 p_newScale)
@@ -170,13 +180,12 @@ void AmberEngine::Core::ECS::Components::CTransform::OnSerialize(tinyxml2::XMLDo
 
 void AmberEngine::Core::ECS::Components::CTransform::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
-	m_transform.GenerateMatricesLocal(Helpers::Serializer::DeserializeVec3(p_doc, p_node, "position"), glm::degrees(glm::eulerAngles(Helpers::Serializer::DeserializeQuat(p_doc, p_node, "rotation"))), Helpers::Serializer::DeserializeVec3(p_doc, p_node, "scale")
-	);
+	m_transform.GenerateMatricesLocal(Helpers::Serializer::DeserializeVec3(p_doc, p_node, "position"), glm::degrees(glm::eulerAngles(Helpers::Serializer::DeserializeQuat(p_doc, p_node, "rotation"))), Helpers::Serializer::DeserializeVec3(p_doc, p_node, "scale"));
 }
 
 void AmberEngine::Core::ECS::Components::CTransform::OnInspector(AmberEngine::UI::WidgetContainer& p_root)
 {
 	UI::GUIDrawer::DrawVec3(p_root, "Position", std::bind(&CTransform::GetLocalPosition, this), std::bind(&CTransform::SetLocalPosition, this, std::placeholders::_1), 0.05f);
-	UI::GUIDrawer::DrawVec3(p_root, "Rotation", std::bind(&CTransform::GetLocalRotationEuler, this), std::bind(&CTransform::SetLocalRotation, this, std::placeholders::_1), 0.05f);
+	UI::GUIDrawer::DrawVec3(p_root, "Rotation", std::bind(&CTransform::GetLocalRotationEuler, this), std::bind(&CTransform::SetLocalRotationEuler, this, std::placeholders::_1), 0.05f);
 	UI::GUIDrawer::DrawVec3(p_root, "Scale", std::bind(&CTransform::GetLocalScale, this), std::bind(&CTransform::SetLocalScale, this, std::placeholders::_1), 0.05f, 0.0001f);
 }

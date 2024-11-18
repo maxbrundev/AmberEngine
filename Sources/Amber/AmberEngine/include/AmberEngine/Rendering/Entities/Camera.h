@@ -14,7 +14,7 @@ namespace AmberEngine::Rendering::Entities
 
 		void ComputeMatrices(uint16_t p_windowWidth, uint16_t p_windowHeight, const glm::vec3& p_position, const glm::quat& p_rotation);
 
-		void SetProjectionMode(Rendering::Settings::EProjectionMode p_projectionMode);
+		void SetProjectionMode(Settings::EProjectionMode p_projectionMode);
 
 		void SetSize(float p_value);
 		void SetFov(float p_value);
@@ -25,7 +25,10 @@ namespace AmberEngine::Rendering::Entities
 
 		Settings::EProjectionMode GetProjectionMode() const;
 
-		float& GetCameraFov();
+		float GetFov() const;
+		float GetSize() const;
+		float GetNear() const;
+		float GetFar() const;
 
 		const glm::vec3& GetClearColor() const;
 

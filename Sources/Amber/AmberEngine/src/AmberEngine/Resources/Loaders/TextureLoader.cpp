@@ -43,7 +43,7 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader:
 
 		std::string name = Tools::Utils::String::ExtractFileNameFromPath(p_filePath);
 
-		return new Texture(std::move(p_filePath), std::move(name), textureID, textureWidth, textureHeight, bitsPerPixel, p_firstFilter, p_secondFilter, p_textureType, p_generateMipmap);
+		return new Texture(p_filePath, std::move(name), textureID, textureWidth, textureHeight, bitsPerPixel, p_firstFilter, p_secondFilter, p_textureType, p_generateMipmap);
 	}
 	else
 	{
@@ -102,9 +102,11 @@ AmberEngine::Resources::Texture* AmberEngine::Resources::Loaders::TextureLoader:
 	return new Texture("", "", textureID, 1, 1, 32, p_firstFilter, p_secondFilter, ETextureType::DIFFUSE_MAP, p_generateMipmap);
 }
 
-void AmberEngine::Resources::Loaders::TextureLoader::Reload(const Texture& p_texture, const std::string& p_filePath, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)
+void AmberEngine::Resources::Loaders::TextureLoader::Reload(Texture& p_texture, const std::string& p_filePath, ETextureFilteringMode p_firstFilter, ETextureFilteringMode p_secondFilter, ETextureType p_textureType, bool p_flipVertically, bool p_generateMipmap)
 {
-	if (Texture* newTexture = Create(p_filePath, p_firstFilter, p_secondFilter, p_textureType, p_flipVertically, p_generateMipmap))
+	Texture* newTexture = Create(p_filePath, p_firstFilter, p_secondFilter, p_textureType, p_flipVertically, p_generateMipmap);
+
+	if (newTexture)
 	{
 		glDeleteTextures(1, &p_texture.ID);
 

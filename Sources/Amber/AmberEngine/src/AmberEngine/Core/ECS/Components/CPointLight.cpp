@@ -7,6 +7,7 @@
 
 #include "AmberEngine/UI/Widgets/Button.h"
 #include "AmberEngine/UI/Widgets/Group.h"
+#include "AmberEngine/Core/ECS/Actor.h"
 
 AmberEngine::Core::ECS::Components::CPointLight::CPointLight(Actor& p_owner) : CLight(p_owner, Rendering::Settings::ELightType::POINT)
 {

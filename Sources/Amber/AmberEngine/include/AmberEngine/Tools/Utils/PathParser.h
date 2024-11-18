@@ -1,8 +1,10 @@
 #pragma once
 
+#include "AmberEngine/API/Export.h"
+
 namespace AmberEngine::Tools::Utils
 {
-	class PathParser
+	class API_AMBERENGINE PathParser
 	{
 	public:
 		enum class EFileType : uint8_t
@@ -11,7 +13,8 @@ namespace AmberEngine::Tools::Utils
 			MODEL,
 			TEXTURE,
 			SHADER,
-			MATERIAL
+			MATERIAL,
+			SCENE
 		};
 
 		PathParser() = delete;

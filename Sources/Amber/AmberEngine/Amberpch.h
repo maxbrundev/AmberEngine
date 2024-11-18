@@ -19,6 +19,10 @@
 #include <any>
 #include <chrono>
 #include <cmath>
+#include <optional>
+
+#define no_init_all
+#include <Windows.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

@@ -17,8 +17,9 @@ void AmberEngine::UI::Widgets::MenuItem::DrawImplementation()
 	if (checked != previousValue)
 	{
 		ValueChangedEvent.Invoke(checked);
+		NotifyChange();
 	}
 
-	//TODO
+	DrawContextualMenu();
 	DrawWidgets();
 }

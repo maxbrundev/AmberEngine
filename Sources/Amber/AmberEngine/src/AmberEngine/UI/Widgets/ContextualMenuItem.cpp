@@ -2,13 +2,7 @@
 
 #include "AmberEngine/UI/Widgets/ContextualMenuItem.h"
 
-void AmberEngine::UI::Widgets::ContextualMenuItem::Close()
-{
-	if(enabled)
-		ImGui::CloseCurrentPopup();
-}
-
-void AmberEngine::UI::Widgets::ContextualMenuItem::DrawImplementation()
+void AmberEngine::UI::Widgets::ContextualMenuItem::Draw()
 {
 	if (ImGui::BeginPopupContextItem())
 	{

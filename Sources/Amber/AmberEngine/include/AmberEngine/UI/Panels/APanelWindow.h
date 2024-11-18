@@ -2,6 +2,7 @@
 
 #include "AmberEngine/UI/Panels/APanel.h"
 #include "AmberEngine/UI/Panels/PanelSettings.h"
+#include "AmberEngine/UI/Settings/EAlignment.h"
 
 #include "AmberEngine/Eventing/Event.h"
 
@@ -18,16 +19,17 @@ namespace AmberEngine::UI::Panels
 		void CopyImGuiSize();
 		void UpdatePosition();
 		void CopyImGuiPosition();
-
+		void Open();
+		void Close();
 		void SetOpened(bool p_value);
-
+		void Focus();
 		bool IsHovered() const;
 		bool IsFocused() const;
 
 		bool IsOpened() const;
-
+		glm::vec2 CalculatePositionAlignmentOffset(bool p_default = false);
 		std::pair<uint16_t, uint16_t> GetSafeSize() const;
-
+		void SetPosition(const glm::vec2& p_position);
 		void SetSize(const glm::vec2& p_size);
 		const glm::vec2 GetSize() const;
 
@@ -48,8 +50,7 @@ namespace AmberEngine::UI::Panels
 	protected:
 		glm::vec2 m_defaultPosition;
 		glm::vec2 m_defaultSize;
-		//Settings::EHorizontalAlignment m_defaultHorizontalAlignment;
-		//Settings::EVerticalAlignment m_defaultVerticalAlignment;
+		
 		bool m_ignoreConfigFile;
 
 		glm::vec2 m_position = glm::vec2(0.0f, 0.0f);
@@ -57,15 +58,29 @@ namespace AmberEngine::UI::Panels
 
 		bool m_positionChanged = false;
 		bool m_sizeChanged = false;
-
-		//Settings::EHorizontalAlignment m_horizontalAlignment = Settings::EHorizontalAlignment::LEFT;
-		//Settings::EVerticalAlignment m_verticalAlignment = Settings::EVerticalAlignment::TOP;
-
+		EHorizontalAlignment m_defaultHorizontalAlignment;
+		EVerticalAlignment m_defaultVerticalAlignment;
+		EHorizontalAlignment m_horizontalAlignment = EHorizontalAlignment::LEFT;
+		EVerticalAlignment m_verticalAlignment = EVerticalAlignment::TOP;
 		bool m_alignmentChanged = false;
 		bool m_firstFrame = true;
 
 		glm::vec2 m_viewportSize;
 
+		bool resizable = true;
+		bool closable = false;
+		bool movable = true;
+		bool scrollable = true;
+		bool dockable = false;
+		bool hideBackground = false;
+		bool forceHorizontalScrollbar = false;
+		bool forceVerticalScrollbar = false;
+		bool allowHorizontalScrollbar = false;
+		bool bringToFrontOnFocus = true;
+		bool collapsable = false;
+		bool allowInputs = true;
+		bool titleBar = true;
+		bool autoSize = true;
 	private:
 		bool m_opened;
 		bool m_hovered;

@@ -2,10 +2,17 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 
+#include "AmberEngine/Core/ECS/Components/CAmbientBoxLight.h"
+#include "AmberEngine/Core/ECS/Components/CAmbientSphereLight.h"
+#include "AmberEngine/Core/ECS/Components/CCamera.h"
 #include "AmberEngine/Core/ECS/Components/CDirectionalLight.h"
 #include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
 #include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
+#include "AmberEngine/Core/ECS/Components/CPhysicalBox.h"
+#include "AmberEngine/Core/ECS/Components/CPhysicalCapsule.h"
+#include "AmberEngine/Core/ECS/Components/CPhysicalSphere.h"
 #include "AmberEngine/Core/ECS/Components/CPointLight.h"
+#include "AmberEngine/Core/ECS/Components/CSpotLight.h"
 #include "AmberEngine/Core/Helpers/Serializer.h"
 
 AmberEngine::Eventing::Event<AmberEngine::Core::ECS::Actor&> AmberEngine::Core::ECS::Actor::CreatedEvent;
@@ -24,23 +31,30 @@ transform(AddComponent<Components::CTransform>())
 
 AmberEngine::Core::ECS::Actor::~Actor()
 {
+	if (!m_sleeping)
+	{
+		if (IsActive())
+			OnDisable();
+
+		if (m_awaked && m_started)
+			OnDestroy();
+	}
+
 	DestroyEvent.Invoke(*this);
 
 	std::vector<Actor*> toDetach = m_children;
 
-	for (const auto child : toDetach)
+	for (auto child : toDetach)
 	{
 		child->RemoveParent();
 	}
 
 	toDetach.clear();
-	m_children.clear();
 
 	RemoveParent();
 
-	std::for_each(m_components.begin(), m_components.end(), [&](const std::shared_ptr<Components::AComponent>& p_component) { ComponentRemovedEvent.Invoke(*p_component); });
-
-	m_components.clear();
+	std::for_each(m_components.begin(), m_components.end(), [&](std::shared_ptr<Components::AComponent> p_component) { ComponentRemovedEvent.Invoke(*p_component); });
+	std::for_each(m_children.begin(), m_children.end(), [](Actor* p_actor) { delete p_actor; });
 }
 
 bool AmberEngine::Core::ECS::Actor::RemoveComponent(Components::AComponent& p_component)
@@ -49,6 +63,7 @@ bool AmberEngine::Core::ECS::Actor::RemoveComponent(Components::AComponent& p_co
 	{
 		if (it->get() == &p_component)
 		{
+			ComponentRemovedEvent.Invoke(p_component);
 			m_components.erase(it);
 			return true;
 		}
@@ -67,9 +82,14 @@ void AmberEngine::Core::ECS::Actor::SetName(std::string p_name)
 	m_name = std::move(p_name);
 }
 
+void AmberEngine::Core::ECS::Actor::SetTag(const std::string& p_tag)
+{
+	m_tag = p_tag;
+}
+
 void AmberEngine::Core::ECS::Actor::SetID(int64_t p_id)
 {
-	m_parentID = p_id;
+	m_actorID = p_id;
 }
 
 void AmberEngine::Core::ECS::Actor::SetParent(Actor& p_parent)
@@ -90,13 +110,10 @@ void AmberEngine::Core::ECS::Actor::RemoveParent()
 
 	if (m_parent)
 	{
-		auto predicate = [this](const Actor* p_element)
+		m_parent->m_children.erase(std::remove_if(m_parent->m_children.begin(), m_parent->m_children.end(), [this](Actor* p_element)
 		{
 			return p_element == this;
-		};
-
-		m_parent->m_children.erase(std::remove_if(m_parent->m_children.begin(), m_parent->m_children.end(),
-		                                          std::ref(predicate)));
+		}));
 	}
 
 	m_parent = nullptr;
@@ -187,6 +204,70 @@ bool AmberEngine::Core::ECS::Actor::IsActive() const
 	return m_active && (m_parent ? m_parent->IsActive() : true);
 }
 
+void AmberEngine::Core::ECS::Actor::SetSleeping(bool p_sleeping)
+{
+	m_sleeping = p_sleeping;
+}
+
+void AmberEngine::Core::ECS::Actor::OnAwake()
+{
+	m_awaked = true;
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnAwake(); });
+	//std::for_each(m_behaviours.begin(), m_behaviours.end(), [](auto & element) { element.second.OnAwake(); });
+}
+
+void AmberEngine::Core::ECS::Actor::OnStart()
+{
+	m_started = true;
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnStart(); });
+	//std::for_each(m_behaviours.begin(), m_behaviours.end(), [](auto & element) { element.second.OnStart(); });
+}
+
+void AmberEngine::Core::ECS::Actor::OnEnable()
+{
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnEnable(); });
+	//std::for_each(m_behaviours.begin(), m_behaviours.end(), [](auto & element) { element.second.OnEnable(); });
+}
+
+void AmberEngine::Core::ECS::Actor::OnDisable()
+{
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnDisable(); });
+	//std::for_each(m_behaviours.begin(), m_behaviours.end(), [](auto & element) { element.second.OnDisable(); });
+}
+
+void AmberEngine::Core::ECS::Actor::OnDestroy()
+{
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnDestroy(); });
+	//std::for_each(m_behaviours.begin(), m_behaviours.end(), [](auto & element) { element.second.OnDestroy(); });
+}
+
+void AmberEngine::Core::ECS::Actor::OnUpdate(float p_deltaTime)
+{
+	if (IsActive())
+	{
+		std::for_each(m_components.begin(), m_components.end(), [&](auto element) { element->OnUpdate(p_deltaTime); });
+		//std::for_each(m_behaviours.begin(), m_behaviours.end(), [&](auto & element) { element.second.OnUpdate(p_deltaTime); });
+	}
+}
+
+void AmberEngine::Core::ECS::Actor::OnFixedUpdate(float p_deltaTime)
+{
+	if (IsActive())
+	{
+		std::for_each(m_components.begin(), m_components.end(), [&](auto element) { element->OnFixedUpdate(p_deltaTime); });
+		//std::for_each(m_behaviours.begin(), m_behaviours.end(), [&](auto & element) { element.second.OnFixedUpdate(p_deltaTime); });
+	}
+}
+
+void AmberEngine::Core::ECS::Actor::OnLateUpdate(float p_deltaTime)
+{
+	if (IsActive())
+	{
+		std::for_each(m_components.begin(), m_components.end(), [&](auto element) { element->OnLateUpdate(p_deltaTime); });
+		//std::for_each(m_behaviours.begin(), m_behaviours.end(), [&](auto & element) { element.second.OnLateUpdate(p_deltaTime); });
+	}
+}
+
 std::vector<AmberEngine::Core::ECS::Actor*>& AmberEngine::Core::ECS::Actor::GetChildren()
 {
 	return m_children;
@@ -245,11 +326,17 @@ void AmberEngine::Core::ECS::Actor::OnDeserialize(tinyxml2::XMLDocument& p_doc, 
 
 				// TODO: Use component name instead of typeid (unsafe)
 				if (componentType == typeid(Components::CTransform).name())			component = &transform;
+				else if (componentType == typeid(Components::CPhysicalBox).name())			component = &AddComponent<Components::CPhysicalBox>();
 				else if (componentType == typeid(Components::CModelRenderer).name())			component = &AddComponent<ECS::Components::CModelRenderer>();
+				else if (componentType == typeid(Components::CPhysicalSphere).name())		component = &AddComponent<Components::CPhysicalSphere>();
+				else if (componentType == typeid(Components::CPhysicalCapsule).name())		component = &AddComponent<Components::CPhysicalCapsule>();
 				else if (componentType == typeid(Components::CMaterialRenderer).name())		component = &AddComponent<ECS::Components::CMaterialRenderer>();
 				else if (componentType == typeid(Components::CPointLight).name())			component = &AddComponent<ECS::Components::CPointLight>();
 				else if (componentType == typeid(Components::CDirectionalLight).name())		component = &AddComponent<ECS::Components::CDirectionalLight>();
-
+				else if (componentType == typeid(Components::CAmbientBoxLight).name())		component = &AddComponent<ECS::Components::CAmbientBoxLight>();
+				else if (componentType == typeid(Components::CCamera).name())				component = &AddComponent<Components::CCamera>();
+				else if (componentType == typeid(Components::CAmbientSphereLight).name())	component = &AddComponent<Components::CAmbientSphereLight>();
+				else if (componentType == typeid(Components::CSpotLight).name())	component = &AddComponent<Components::CSpotLight>();
 				if (component)
 					component->OnDeserialize(p_doc, currentComponent->FirstChildElement("data"));
 

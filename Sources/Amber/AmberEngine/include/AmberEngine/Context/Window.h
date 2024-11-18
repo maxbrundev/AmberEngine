@@ -21,12 +21,12 @@ namespace AmberEngine::Context
 		Eventing::Event<double, double> CursorPositionEvent;
 		
 		Eventing::Event<uint16_t, uint16_t> ResizeEvent;
-		Eventing::Event<uint16_t, uint16_t> FramebufferResizeEvent;
+		Eventing::Event<uint16_t, uint16_t> FrameBufferResizeEvent;
 		
 	public:
 		static Window* FindInstance(GLFWwindow* p_glfwWindow);
 		
-		Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings);
+		Window(Device& p_device, const Settings::WindowSettings& p_windowSettings);
 		~Window();
 
 		void SetWindowUserPointer();
@@ -43,9 +43,9 @@ namespace AmberEngine::Context
 		void SetViewport(int p_width, int p_height) const;
 
 		void SetSize(uint16_t p_width, uint16_t p_height);
-
+		void SetPosition(int16_t p_x, int16_t p_y);
 		bool ShouldClose() const;
-		bool IsActive()		const;
+		bool IsActive() const;
 		bool isFullscreen() const;
 		
 		GLFWwindow* GetGlfwWindow() const;
@@ -67,7 +67,7 @@ namespace AmberEngine::Context
 		void OnResizeFramebuffer(uint16_t p_width, uint16_t p_height);
 
 	private:
-		static std::unordered_map<GLFWwindow*, Window*> __WINDOWS_MAP;
+		static std::unordered_map<GLFWwindow*, Window*> WINDOWS_MAP;
 
 		GLFWwindow* m_glfwWindow;
 		

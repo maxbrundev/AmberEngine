@@ -7,10 +7,6 @@ namespace AmberEngine::Eventing
 	template<class... ArgTypes>
 	class Event
 	{
-	private:
-		std::unordered_map<uint64_t, std::function<void(ArgTypes...)>>	m_callbacks;
-		uint64_t														m_availableListenerID = 0;
-
 	public:
 		uint64_t AddListener(std::function<void(ArgTypes...)> p_callback);
 		uint64_t operator+=(std::function<void(ArgTypes...)> p_callback);
@@ -23,16 +19,11 @@ namespace AmberEngine::Eventing
 		uint64_t GetListenerCount();
 
 		void Invoke(ArgTypes... p_args);
-	};
 
-	template <typename Func, typename Instance>
-	inline auto QuickBind(Func function, Instance* instance)
-	{
-		return [=](auto&&... args)
-		{
-			return (instance->*function)(std::forward<decltype(args)>(args)...);
-		};
-	}
+	private:
+		std::unordered_map<uint64_t, std::function<void(ArgTypes...)>> m_callbacks;
+		uint64_t m_availableListenerID = 0;
+	};
 }
 
 #include "AmberEngine/Eventing/Event.inl"

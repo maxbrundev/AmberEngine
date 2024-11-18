@@ -6,13 +6,13 @@ AmberEngine::Resources::Parsers::AssimpParser AmberEngine::Resources::Loaders::M
 
 std::string AmberEngine::Resources::Loaders::ModelLoader::__FILE_TRACE;
 
-AmberEngine::Resources::Model* AmberEngine::Resources::Loaders::ModelLoader::Create(const std::string& p_filePath)
+AmberEngine::Resources::Model* AmberEngine::Resources::Loaders::ModelLoader::Create(const std::string& p_filePath, Parsers::EModelParserFlags p_parserFlags)
 {
 	__FILE_TRACE = p_filePath;
 
 	auto model = new Model(p_filePath);
 
-	if(__ASSIMP.LoadModel(p_filePath, model->m_meshes, model->m_materialNames))
+	if(__ASSIMP.LoadModel(p_filePath, model->m_meshes, model->m_materialNames, p_parserFlags))
 	{
 
 		model->LoadedTextureData = std::move(__ASSIMP.textureData);
@@ -24,13 +24,14 @@ AmberEngine::Resources::Model* AmberEngine::Resources::Loaders::ModelLoader::Cre
 	return nullptr;
 }
 
-void AmberEngine::Resources::Loaders::ModelLoader::Reload(Model& p_model, const std::string& p_filePath)
+void AmberEngine::Resources::Loaders::ModelLoader::Reload(Model& p_model, const std::string& p_filePath, Parsers::EModelParserFlags p_parserFlags)
 {
-	Model* newModel = Create(p_filePath);
+	Model* newModel = Create(p_filePath, p_parserFlags);
 
 	if (newModel)
 	{
 		p_model.m_meshes = newModel->m_meshes;
+		p_model.m_materialNames = newModel->m_materialNames;
 		newModel->m_meshes.clear();
 		delete newModel;
 	}

@@ -56,10 +56,21 @@ void AmberEngine::UI::WidgetContainer::DrawWidgets()
 {
 	CollectGarbage();
 
-	for (const auto& widget : m_widgets)
+	if (m_isReversedDrawOrder)
 	{
-		widget->Draw();
+		for (auto it = m_widgets.crbegin(); it != m_widgets.crend(); ++it)
+			it->get()->Draw();
 	}
+	else
+	{
+		for (const auto& widget : m_widgets)
+			widget->Draw();
+	}
+}
+
+void AmberEngine::UI::WidgetContainer::SetReverseDrawOrder(bool p_value)
+{
+	m_isReversedDrawOrder = p_value;
 }
 
 std::vector<std::unique_ptr<AmberEngine::UI::Widgets::AWidget>>& AmberEngine::UI::WidgetContainer::GetWidgets()

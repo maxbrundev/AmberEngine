@@ -6,7 +6,8 @@ namespace AmberEngine::Rendering::Settings
 	{
 		POINT,
 		DIRECTIONAL,
+		AMBIENT_BOX,
+		AMBIENT_SPHERE,
 		SPOT,
-		AMBIENT
 	};
 }

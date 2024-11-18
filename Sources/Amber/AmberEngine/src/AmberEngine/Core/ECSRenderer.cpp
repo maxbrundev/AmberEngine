@@ -3,14 +3,12 @@
 #include "AmberEngine/Core/ECSRenderer.h"
 
 #include "AmberEngine/Resources/Model.h"
-#include "AmberEngine/Resources/Mesh.h"
-
 #include "AmberEngine/Resources/ETextureFilteringMode.h"
 #include "AmberEngine/Resources/Loaders/TextureLoader.h"
 
 #include "AmberEngine/Core/SceneSystem/Scene.h"
-
 #include "AmberEngine/Core/ECS/Actor.h"
+#include "AmberEngine/Core/ECS/Components/CAmbientBoxLight.h"
 #include "AmberEngine/Core/ECS/Components/CLight.h"
 #include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
 #include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
@@ -39,15 +37,15 @@ AmberEngine::Core::ECSRenderer::FindAndSortDrawables(const SceneSystem::Scene& p
 
 	for (const ECS::Components::CModelRenderer* modelRenderer : p_scene.GetFastAccessComponents().modelRenderers)
 	{
-		if (modelRenderer->owner.IsActive())
+		if (modelRenderer->Owner.IsActive())
 		{
 			if (const auto model = modelRenderer->GetModel())
 			{
-				float distanceToActor = glm::distance(modelRenderer->owner.transform.GetWorldPosition(), p_cameraPosition);
+				float distanceToActor = glm::distance(modelRenderer->Owner.transform.GetWorldPosition(), p_cameraPosition);
 
-				if (const auto materialRenderer = modelRenderer->owner.GetComponent<ECS::Components::CMaterialRenderer>())
+				if (const auto materialRenderer = modelRenderer->Owner.GetComponent<ECS::Components::CMaterialRenderer>())
 				{
-					const auto& transform = modelRenderer->owner.transform.GetTransform();
+					const auto& transform = modelRenderer->Owner.transform.GetTransform();
 
 					const ECS::Components::CMaterialRenderer::MaterialList& materials = materialRenderer->GetMaterials();
 
@@ -82,12 +80,30 @@ AmberEngine::Core::ECSRenderer::FindAndSortDrawables(const SceneSystem::Scene& p
 
 void AmberEngine::Core::ECSRenderer::DrawDrawable(const Drawable& p_toDraw)
 {
+	m_userMatrixSender(std::get<3>(p_toDraw));
 	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), &std::get<0>(p_toDraw));
+}
+
+void AmberEngine::Core::ECSRenderer::DrawModelWithSingleMaterial(Resources::Model& p_model, Resources::Material& p_material, glm::mat4 const* p_modelMatrix, Resources::Material* p_defaultMaterial)
+{
+	if (p_modelMatrix)
+		m_modelMatrixSender(*p_modelMatrix);
+
+	for (auto mesh : p_model.GetMeshes())
+	{
+		if (Resources::Material* material = p_material.GetShader() ? &p_material : p_defaultMaterial)
+			DrawMesh(*mesh, *material, nullptr);
+	}
 }
 
 void AmberEngine::Core::ECSRenderer::RegisterModelMatrixSender(std::function<void(glm::mat4)> p_modelMatrixSender)
 {
 	m_modelMatrixSender = std::move(p_modelMatrixSender);
+}
+
+void AmberEngine::Core::ECSRenderer::RegisterUserMatrixSender(std::function<void(glm::mat4)> p_userMatrixSender)
+{
+	m_userMatrixSender = p_userMatrixSender;
 }
 
 void AmberEngine::Core::ECSRenderer::DrawMesh(Resources::Mesh& p_mesh, const Resources::Material& p_material, glm::mat4 const* p_modelMatrix)
@@ -115,9 +131,16 @@ std::vector<glm::mat4> AmberEngine::Core::ECSRenderer::FindLightMatrices(const S
 
 	for (const auto light : fastAccessComponents.lights)
 	{
-		if (light->owner.IsActive())
+		if (light->Owner.IsActive())
 		{
-			result.push_back(light->GetData().GenerateMatrix());
+			if(dynamic_cast<ECS::Components::CAmbientBoxLight*>(light))
+			{
+				result.push_back(light->GetData().GenerateMatrix(true));
+			}
+			else
+			{
+				result.push_back(light->GetData().GenerateMatrix());
+			}
 		}
 	}
 
@@ -133,29 +156,13 @@ void AmberEngine::Core::ECSRenderer::RenderScene(const SceneSystem::Scene& p_sce
 
 	for (const auto&[distance, drawable] : transparentMeshes)
 		DrawDrawable(drawable);
+}
 
-	//for (const ECS::Components::CModelRenderer* modelRenderer : p_scene.GetFastAccessComponents().modelRenderers)
-	//{
-	//	if (modelRenderer->owner.IsActive())
-	//	{
-	//		if (const auto model = modelRenderer->GetModel())
-	//		{
-	//			const auto& transform = modelRenderer->owner.transform.GetTransform();
-	//
-	//			m_modelMatrixSender(transform.GetWorldMatrix());
-	//
-	//			for (const auto mesh : model->GetMeshes())
-	//			{
-	//				auto material = model->GetMaterials()[mesh->GetMaterialIndex()];
-	//
-	//				if (!material || !material->GetShader())
-	//				{
-	//					material = p_defaultMaterial;
-	//				}
-	//
-	//				DrawMesh(*mesh, *material, &transform.GetWorldMatrix());
-	//			}
-	//		}
-	//	}
-	//}
+AmberEngine::Core::ECS::Components::CCamera* AmberEngine::Core::ECSRenderer::FindMainCamera(const SceneSystem::Scene& p_scene)
+{
+	for (ECS::Components::CCamera* camera : p_scene.GetFastAccessComponents().cameras)
+		if (camera->Owner.IsActive())
+			return camera;
+
+	return nullptr;
 }

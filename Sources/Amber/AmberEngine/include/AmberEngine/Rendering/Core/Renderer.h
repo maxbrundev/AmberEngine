@@ -25,7 +25,7 @@ namespace AmberEngine::Core::SceneSystem
 	class Scene;
 }
 
-namespace AmberEngine::Core
+namespace AmberEngine::Rendering::Core
 {
 	class API_AMBERENGINE Renderer
 	{
@@ -48,16 +48,18 @@ namespace AmberEngine::Core
 
 		void SetClearColor(float p_red, float p_green, float p_blue, float p_alpha = 1.0f) const;
 		void Clear(bool p_colorBuffer = true, bool p_depthBuffer = true, bool p_stencilBuffer = true) const;
-		void Clear(Rendering::Entities::Camera& p_camera, bool p_colorBuffer = true, bool p_depthBuffer = true, bool p_stencilBuffer = true) const;
+		void Clear(Entities::Camera& p_camera, bool p_colorBuffer = true, bool p_depthBuffer = true, bool p_stencilBuffer = true) const;
 
 		uint8_t FetchGLState() const;
 		void ApplyStateMask(uint8_t p_mask);
 		void SetState(uint8_t p_state);
 
 		void ClearFrameInfo();
-		const FrameInfo& GetFrameInfo() const;
 
-		void Draw(Resources::IMesh& p_mesh, Rendering::Settings::EPrimitiveMode p_primitiveMode = Rendering::Settings::EPrimitiveMode::TRIANGLES, uint32_t p_instances = 1);
+		void Draw(Resources::IMesh& p_mesh, Settings::EPrimitiveMode p_primitiveMode = Settings::EPrimitiveMode::TRIANGLES, uint32_t p_instances = 1);
+
+		Context::Driver& GetDriver() const;
+		const FrameInfo& GetFrameInfo() const;
 
 	private:
 		Context::Driver& m_driver;

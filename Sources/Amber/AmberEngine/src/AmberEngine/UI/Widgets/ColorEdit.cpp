@@ -23,5 +23,6 @@ void AmberEngine::UI::Widgets::ColorEdit::DrawImplementation()
 	if (valueChanged)
 	{
 		ColorChangedEvent.Invoke(color);
+		NotifyChange();
 	}
 }

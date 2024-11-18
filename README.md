@@ -9,7 +9,7 @@
 *Scene Name + Creation menu directly from Hierarchy Panel*
 
 ## Description
-Personal Game Engine learning Project based on Overload Engine aiming a simpler architecture Editor UI side and providing QOL Features and Global Improvements.   
+Personal Game Engine Project based on Overload Engine aiming a simpler architecture Editor UI side and providing QOL Features and Global Improvements.   
 AmberEngine will provide Lua scripting like Overload does but also C++ programming:
 - Behaviors -> Composed by a Start and Update methods called by the Engine. The goal is to mimic the Lua Behaviors scripts in order to provide a C++ alternative for the users
 - CustomComponents -> Data Containers.

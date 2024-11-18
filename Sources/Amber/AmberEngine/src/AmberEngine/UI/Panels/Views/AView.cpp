@@ -74,6 +74,8 @@ void AmberEngine::UI::Panels::AView::Render()
 	auto[winWidth, winHeight] = GetSafeSize();
 	Tools::Global::ServiceLocator::Get<Context::Window>().SetViewport(winWidth, winHeight);
 
+	EDITOR_CONTEXT(shapeDrawer)->SetViewProjection(m_camera.GetProjectionMatrix() * m_camera.GetViewMatrix());
+
 	RenderImplementation();
 }
 

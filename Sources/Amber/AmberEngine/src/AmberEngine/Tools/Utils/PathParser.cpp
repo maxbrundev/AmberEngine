@@ -79,10 +79,11 @@ std::string AmberEngine::Tools::Utils::PathParser::FileTypeToString(EFileType p_
 {
 	switch (p_fileType)
 	{
-	case AmberEngine::Tools::Utils::PathParser::EFileType::MODEL:    return "Model";
-	case AmberEngine::Tools::Utils::PathParser::EFileType::TEXTURE:  return "Texture";
-	case AmberEngine::Tools::Utils::PathParser::EFileType::SHADER:   return "Shader";
-	case AmberEngine::Tools::Utils::PathParser::EFileType::MATERIAL:   return "Material";
+	case EFileType::MODEL:    return "Model";
+	case EFileType::TEXTURE:  return "Texture";
+	case EFileType::SHADER:   return "Shader";
+	case EFileType::MATERIAL:   return "Material";
+	case PathParser::EFileType::SCENE:		return "Scene";
 	}
 
 	return "Unknown";
@@ -93,13 +94,14 @@ AmberEngine::Tools::Utils::PathParser::EFileType AmberEngine::Tools::Utils::Path
 	std::string ext = GetExtension(p_path);
 	std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-	if (ext == "fbx" || ext == "obj")
+	if (ext == "fbx" || ext == "obj" || ext == "gltf")
 		return EFileType::MODEL;
 	else if (ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "tga")
 		return EFileType::TEXTURE;
 	else if (ext == "glsl")
 		return EFileType::SHADER;
 	else if (ext == "abmat")													return EFileType::MATERIAL;
+	else if (ext == "abscene")													return EFileType::SCENE;
 
 	return EFileType::UNKNOWN;
 }

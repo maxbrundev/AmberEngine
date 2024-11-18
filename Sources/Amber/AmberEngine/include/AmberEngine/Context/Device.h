@@ -26,7 +26,8 @@ namespace AmberEngine::Context
 		bool HasVsync() const;
 		
 		float GetElapsedTime() const;
-		
+		std::pair<int16_t, int16_t> GetMonitorSize() const;
+
 	private:
 		void InitGLFW();
 		void BindErrorCallback();

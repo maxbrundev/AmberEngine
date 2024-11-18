@@ -18,6 +18,7 @@ void AmberEngine::UI::Widgets::InputText::DrawImplementation()
 	if (content != previousContent)
 	{
 		ContentChangedEvent.Invoke(content);
+		NotifyChange();
 	}
 
 	if (enterPressed)

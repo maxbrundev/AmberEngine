@@ -9,7 +9,7 @@ namespace AmberEngine::UI::Panels
 	class FrameInfo : public APanelWindow
 	{
 	public:
-		FrameInfo (const std::string& p_title, bool p_opened, const PanelSettings& p_windowSettings);
+		FrameInfo(const std::string& p_title, bool p_opened, const PanelSettings& p_windowSettings);
 
 		void Update(float p_deltaTime) const;
 

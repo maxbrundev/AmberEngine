@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AmberEngine/API/Export.h"
+
 #include "AmberEngine/ImGUI/imgui.h"
 
 namespace AmberEngine::UI
@@ -9,11 +11,16 @@ namespace AmberEngine::UI
 
 namespace AmberEngine::UI::Core
 {
-	class UIManager
+	class API_AMBERENGINE UIManager
 	{
 	public:
 		UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion = "#version 150");
 		~UIManager();
+
+		UIManager(const UIManager& other) = delete;
+		UIManager(UIManager&& other) = delete;
+		UIManager& operator=(const UIManager& other) = delete;
+		UIManager& operator=(UIManager&& other) = delete;
 
 		bool LoadFont(const std::string& p_id, const std::string& p_path, float p_fontSize);
 		bool UnloadFont(const std::string& p_id);

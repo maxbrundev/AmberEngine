@@ -4,18 +4,22 @@
 
 #include <glm/gtc/quaternion.hpp>
 
-#include "AmberEngine/Maths/ETransformState.h"
+#include "AmberEngine/Maths/TransformNotifier.h"
 
 namespace AmberEngine::Maths
 {
 	class API_AMBERENGINE Transform
 	{
 	public:
-		Transform(const glm::vec3& p_position = glm::vec3 { 0.0f, 0.0f, 0.0f }, const glm::vec3& p_rotation = glm::vec3 { 0.0f, 0.0f, 0.0f },const glm::vec3& p_scale = glm::vec3 { 1.0f, 1.0f, 1.0f });
+		Transform(const glm::vec3& p_localPosition = glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3& p_localRotation = glm::vec3(0.0f, 0.0f, 0.0f),const glm::vec3& p_localScale = glm::vec3(1.0f, 1.0f, 1.0f ));
+		Transform(const Transform& p_other);
+
+		Transform& operator=(const Transform& p_other);
+
 		~Transform();
 
-		void GenerateMatricesWorld(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
-		void GenerateMatricesLocal(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale);
+		void GenerateMatricesWorld(const glm::vec3& p_position, const glm::vec3& p_rotation, const glm::vec3& p_scale);
+		void GenerateMatricesLocal(const glm::vec3& p_position, const glm::vec3& p_rotation, const glm::vec3& p_scale);
 		void UpdateWorldMatrix();
 		void UpdateLocalMatrix();
 
@@ -27,19 +31,17 @@ namespace AmberEngine::Maths
 
 		void SetParent(Transform& p_parent);
 		bool RemoveParent();
-		void HandleParentTransformCallback(ETransformState p_state);
+		void NotificationHandler(TransformNotifier::ENotification p_notification);
 
-		uint64_t AddChildrenCallback(const std::function<void(ETransformState)>& p_callback);
+		void SetLocalPosition(const glm::vec3& p_newPosition);
+		void SetLocalRotationEuler(const glm::vec3& p_newRotation);
+		void SetLocalRotation(const glm::quat& p_newRotation);
+		void SetLocalScale(const glm::vec3& p_newScale);
 
-		void SetLocalPosition(glm::vec3 p_newPosition);
-		void SetLocalRotationEuler(glm::vec3 p_newRotation);
-		void SetLocalRotation(glm::quat p_newRotation);
-		void SetLocalScale(glm::vec3 p_newScale);
-
-		void SetWorldPosition(glm::vec3 p_newPosition);
-		void SetWorldRotationEuler(glm::vec3 p_newRotation);
-		void SetWorldRotation(glm::quat p_newRotation);
-		void SetWorldScale(glm::vec3 p_newScale);
+		void SetWorldPosition(const glm::vec3& p_newPosition);
+		void SetWorldRotationEuler(const glm::vec3& p_newRotation);
+		void SetWorldRotation(const glm::quat& p_newRotation);
+		void SetWorldScale(const glm::vec3& p_newScale);
 
 		const glm::vec3& GetLocalPosition() const;
 		const glm::vec3& GetLocalRotationEuler() const;
@@ -66,6 +68,9 @@ namespace AmberEngine::Maths
 		void PreDecomposeWorldMatrix();
 		void PreDecomposeLocalMatrix();
 
+	public:
+		TransformNotifier Notifier;
+
 	private:
 		glm::vec3 m_localPosition;
 		glm::vec3 m_localRotationEuler;
@@ -83,9 +88,6 @@ namespace AmberEngine::Maths
 
 		Transform* m_parent;
 
-		uint64_t m_childCallbackID  = 0;
-		uint64_t m_parentCallbackID = 0;
-
-		std::unordered_map<uint64_t, std::function<void(ETransformState)>> m_childrenTransformCallbacks;
+		uint64_t m_notificationHandlerID;
 	};
 }

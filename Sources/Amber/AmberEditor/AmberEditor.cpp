@@ -1,45 +1,169 @@
 #include "pch.h"
 
-#include <iostream>
+#include <filesystem>
+#include <fstream>
+
 #include <AmberEngine/Tools/Utils/Defines.h>
-FORCE_DEDICATED_GPU
 
 #include "Core/Application.h"
+#include "AmberEngine/Core/ProjectHub.h"
+#include "AmberEngine/Tools/Utils/String.h"
 
-int main()
+#undef APIENTRY
+#include "Windows.h"
+
+FORCE_DEDICATED_GPU
+
+/*#define EDITOR_CPP
+#define PROJECTS_FILE std::string(std::string(getenv("APPDATA")) + "\\AmberTech\\ABEditor\\projects.ini")
+
+void CreateProject(const std::string& p_path)
 {
-	AmberEngine::Settings::DeviceSettings deviceSettings;
-	deviceSettings.contextVersionMajor = 4;
-	deviceSettings.contextVersionMinor = 3;
-	deviceSettings.debugProfile = true;
-
-	AmberEngine::Settings::WindowSettings windowSettings;
-	windowSettings.title = "AmberEngine v0.5.1";
-	windowSettings.width = 1280;
-	windowSettings.height = 720;
-	windowSettings.resizable = true;
-	windowSettings.vsync = false;
-	windowSettings.samples = 4;
-
-	AmberEngine::Settings::DriverSettings driverSettings;
-	driverSettings.enableDepthTest = true;
-	driverSettings.enableBlend = true;
-	driverSettings.enableBackFaceCulling = true;
-	driverSettings.enableMultisample = true;
-	driverSettings.enableDebugCallback = true;
-
-	const auto listenerId = AmberEngine::Context::Device::ErrorEvent += [](AmberEngine::Context::EDeviceError device_error, std::string error_message)
+	if (!std::filesystem::exists(p_path))
 	{
-		error_message = "AmberEngine requires OpenGL 4.3 or newer.\r\n" + error_message;
-		std::cout << error_message.c_str() << std::endl;
+		std::filesystem::create_directory(p_path);
+		std::filesystem::create_directory(p_path + "Assets\\");
+		std::filesystem::create_directory(p_path + "Scripts\\");
+		std::ofstream projectFile(p_path + '\\' + AmberEngine::Tools::Utils::PathParser::GetElementName(std::string(p_path.data(), p_path.data() + p_path.size() - 1)) + ".abproject");
+	}
+}
+
+void RegisterProject(const std::string& p_path)
+{
+	bool pathAlreadyRegistered = false;
+
+	{
+		std::string line;
+		std::ifstream myfile(PROJECTS_FILE);
+		if (myfile.is_open())
+		{
+			while (getline(myfile, line))
+			{
+				if (line == p_path)
+				{
+					pathAlreadyRegistered = true;
+					break;
+				}
+			}
+			myfile.close();
+		}
+	}
+
+	if (!pathAlreadyRegistered)
+	{
+		std::ofstream projectsFile(PROJECTS_FILE, std::ios::app);
+		projectsFile << p_path << std::endl;
+	}
+}
+
+std::tuple<bool, std::string, std::string> OpenProject(const std::string& p_path)
+{
+	bool isReady = std::filesystem::exists(p_path);
+	std::string path;
+	std::string projectName;
+	if (!isReady)
+	{
+
+		//AmberEngine::Windowing::Dialogs::MessageBox errorMessage("Project not found", "The selected project does not exists", AmberEngine::Windowing::Dialogs::MessageBox::EMessageType::ERROR, AmberEngine::Windowing::Dialogs::MessageBox::EButtonLayout::OK);
+	}
+	else
+	{
+		path = p_path;
+		projectName = AmberEngine::Tools::Utils::PathParser::GetElementName(path);
+	}
+
+	return { isReady, path, projectName };
+
+}*/
+
+void UpdateWorkingDirectory(const std::string& p_executablePath)
+{
+	if (!IsDebuggerPresent())
+	{
+		std::filesystem::current_path(AmberEngine::Tools::Utils::PathParser::GetContainingFolder(p_executablePath));
+	}
+}
+
+int main(int argc, char** argv);
+static void TryRun(const std::string& projectPath, const std::string& projectName);
+
+
+#ifndef _DEBUG
+INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow)
+{
+	main(__argc, __argv);
+}
+#endif
+
+int main(int argc, char** argv)
+{
+	UpdateWorkingDirectory(argv[0]);
+
+	bool ready = false;
+	std::string projectPath;
+	std::string projectName;
+
+	{
+/*#ifdef EDITOR_CPP
+
+		std::string path = "cppTest\\";
+		CreateProject(path);
+		RegisterProject(path);
+		std::tie(ready, projectPath, projectName) = OpenProject(path);
+#else*/
+		AmberEngine::Core::ProjectHub hub;
+
+		if (argc < 2)
+		{
+			// No project file given as argument ==> Open the ProjectHub
+			std::tie(ready, projectPath, projectName) = hub.Run();
+		}
+		else
+		{
+			// Project file given as argument ==> Open the project
+			std::string projectFile = argv[1];
+
+			if (AmberEngine::Tools::Utils::PathParser::GetExtension(projectFile) == "abproject")
+			{
+				ready = true;
+				projectPath = AmberEngine::Tools::Utils::PathParser::GetContainingFolder(projectFile);
+				projectName = AmberEngine::Tools::Utils::PathParser::GetElementName(projectFile);
+				AmberEngine::Tools::Utils::String::Replace(projectName, ".abproject", "");
+			}
+
+			hub.RegisterProject(projectPath);
+		}
+//#endif
+	}
+
+	if (ready)
+		TryRun(projectPath, projectName);
+
+	return EXIT_SUCCESS;
+}
+
+
+static void TryRun(const std::string& projectPath, const std::string& projectName)
+{
+	auto errorEvent = [](AmberEngine::Context::EDeviceError, std::string errMsg)
+	{
+		errMsg = "AmberEngine requires OpenGL 4.3 or newer.\r\n" + errMsg;
+		MessageBox(0, errMsg.c_str(), "Amber", MB_OK | MB_ICONSTOP);
 	};
 
-	const std::unique_ptr<Core::Application> exampleApp = std::make_unique<Core::Application>(deviceSettings, windowSettings, driverSettings);
+	std::unique_ptr<Core::Application> app;
 
-	AmberEngine::Context::Device::ErrorEvent -= listenerId;
+	try
+	{
+		auto listenerId = AmberEngine::Context::Device::ErrorEvent += errorEvent;
+		app = std::make_unique<Core::Application>(projectPath, projectName);
+		AmberEngine::Context::Device::ErrorEvent -= listenerId;
+	}
+	catch (...) {}
 
-	exampleApp->Setup();
-	exampleApp->Run();
-
-	return 0;
+	if (app)
+	{
+		app->Initialize();
+		app->Run();
+	}
 }

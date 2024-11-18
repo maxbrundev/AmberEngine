@@ -24,7 +24,7 @@ namespace AmberEngine::Core::ECS
 
 	public:
 		Actor(int64_t p_actorID, const std::string & p_name, const std::string & p_tag);
-		~Actor();
+		virtual ~Actor() override;
 
 		template<typename T, typename ...Args>
 		inline T& AddComponent(Args&& ...p_args)
@@ -93,6 +93,7 @@ namespace AmberEngine::Core::ECS
 		std::vector<std::shared_ptr<Components::AComponent>>& GetComponents();
 
 		void SetName(std::string p_name);
+		void SetTag(const std::string& p_tag);
 		void SetID(int64_t p_id);
 	
 		void SetParent(Actor& p_parent);
@@ -117,6 +118,16 @@ namespace AmberEngine::Core::ECS
 		bool IsSelfActive() const;
 		bool IsActive() const;
 
+		void SetSleeping(bool p_sleeping);
+		void OnAwake();
+		void OnStart();
+		void OnEnable();
+		void OnDisable();
+		void OnDestroy();
+		void OnUpdate(float p_deltaTime);
+		void OnFixedUpdate(float p_deltaTime);
+		void OnLateUpdate(float p_deltaTime);
+
 		std::vector<Actor*>& GetChildren();
 		void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 		void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
@@ -129,6 +140,9 @@ namespace AmberEngine::Core::ECS
 		bool m_destroyed = false;
 		bool m_active = true;
 		Actor* m_parent = nullptr;
+		bool	m_sleeping = true;
+		bool	m_awaked = false;
+		bool	m_started = false;
 		int64_t	m_parentID = 0;
 		std::vector<Actor*> m_children;
 		std::vector<std::shared_ptr<Components::AComponent>> m_components;

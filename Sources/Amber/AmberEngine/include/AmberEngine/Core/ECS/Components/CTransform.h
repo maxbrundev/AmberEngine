@@ -30,10 +30,12 @@ namespace AmberEngine::Core::ECS::Components
 		bool RemoveParent();
 		bool HasParent() const;
 		void SetLocalPosition(glm::vec3 p_newPosition);
-		void SetLocalRotation(glm::vec3 p_newRotation);
+		void SetLocalRotationEuler(glm::vec3 p_newRotation);
+		void SetLocalRotation(glm::quat	p_newRotation);
 		void SetLocalScale(glm::vec3 p_newScale);
 		void SetWorldPosition(glm::vec3 p_newPosition);
-		void SetWorldRotation(glm::vec3 p_newRotation);
+		void SetWorldRotationEuler(glm::vec3 p_newRotation);
+		void SetWorldRotation(glm::quat p_newRotation);
 		void SetWorldScale(glm::vec3 p_newScale);
 		void TranslateLocal(const glm::vec3& p_translation);
 		void RotateLocal(const glm::vec3& p_rotation);

@@ -8,16 +8,7 @@
 
 constexpr uint8_t MAX_MATERIAL_COUNT = 255;
 
-namespace AmberEngine
-{
-	namespace Core
-	{
-		namespace ECS
-		{
-			class Actor;
-		}
-	}
-}
+namespace AmberEngine::Core::ECS { class Actor; }
 
 namespace AmberEngine::Core::ECS::Components
 {

@@ -49,9 +49,9 @@ namespace AmberEngine::Resources
 		void SetGPUInstances(uint64_t p_instances);
 		void SetName(std::string p_name);
 
-		const Shader* GetShader() const;
+		Shader* GetShader() const;
 		const std::string& GetName();
-		const std::map<std::string, std::any>& GetUniformsData();
+		std::map<std::string, std::any>& GetUniformsData();
 		bool IsBlendable() const;
 		bool HasBackFaceCulling() const;
 		bool HasFrontFaceCulling() const;
@@ -67,7 +67,7 @@ namespace AmberEngine::Resources
 		void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 
 		const std::string path;
-
+		int m_gpuInstances = 1;
 	private:
 		Shader* m_shader         = nullptr;
 
@@ -81,7 +81,7 @@ namespace AmberEngine::Resources
 		bool m_colorWriting     = true;
 		bool hasSpecularMap     = true;
 
-		int m_gpuInstances = 1;
+		
 
 		std::string m_name;
 	};

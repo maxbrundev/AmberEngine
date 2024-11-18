@@ -16,6 +16,8 @@ namespace AmberEngine::Core
 		Resources::Texture* GetTexture(const std::string& p_id);
 		Resources::Shader* GetShader(const std::string& p_id);
 
+		Resources::Texture* GetFileIcon(const std::string& p_filename);
+
 	private:
 		std::unordered_map<std::string, Resources::Model*> m_models;
 		std::unordered_map<std::string, Resources::Texture*> m_textures;

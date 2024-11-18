@@ -29,27 +29,27 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -72,30 +72,30 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(SolutionDir)..\..\Dependencies\bullet3\include;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
-    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(SolutionDir)..\..\Dependencies\bullet3\include;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
-    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(SolutionDir)..\..\Dependencies\bullet3\include;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
-    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)..\..\Bin\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\..\Bin-Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(SolutionDir)..\..\Dependencies\assimp\include\;$(SolutionDir)..\..\Dependencies\glew\include\;$(SolutionDir)..\..\Dependencies\glfw\include\;$(SolutionDir)..\..\Dependencies\glm\include\;$(SolutionDir)..\..\Dependencies\stb_image\include\;$(SolutionDir)..\..\Dependencies\bullet3\include;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)src/;$(SourcePath)</SourcePath>
-    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\assimp\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\;$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -122,16 +122,18 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,16 +161,18 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -187,7 +191,7 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\include"
@@ -203,13 +207,15 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -228,7 +234,7 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;assimp-vc141-mt.lib;Bullet3Collision.lib;Bullet3Common.lib;Bullet3Dynamics.lib;Bullet3Geometry.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>RD /S /Q "$(SolutionDir)..\..\Build\$(ProjectName)\include"
@@ -244,17 +250,27 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\include" "$(SolutionDir)..\..\Build
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glm\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\stb_image\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\include" "$(SolutionDir)..\..\Build\$(ProjectName)\include" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\assimp\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glew\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\bin\$(Platform)\*.dll" "$(SolutionDir)..\..\Build\$(ProjectName)\bin\$(Platform)\$(Configuration)" /e /y /i /r
 
 xcopy "$(SolutionDir)..\..\Dependencies\glfw\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
-xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
+xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r
+xcopy "$(SolutionDir)..\..\Dependencies\bullet3\lib\$(Platform)\$(Configuration)\*.lib" "$(SolutionDir)..\..\Build\$(ProjectName)\lib\$(Platform)\$(Configuration)" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Amberpch.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Hardware\CPUInfo.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Hardware\GPUInfo.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Hardware\HardwareInfo.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Hardware\HardwareReport.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Hardware\RAMInfo.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Profiling\Profiler.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Profiling\ProfilerReport.h" />
+    <ClInclude Include="include\AmberEngine\Analytics\Profiling\ProfilerSpy.h" />
     <ClInclude Include="include\AmberEngine\API\Export.h" />
     <ClInclude Include="include\AmberEngine\Buffers\EAccessSpecifier.h" />
     <ClInclude Include="include\AmberEngine\Buffers\FrameBuffer.h" />
@@ -274,9 +290,17 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\Core\ECSRenderer.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Actor.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\AComponent.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CAmbientBoxLight.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CAmbientSphereLight.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CCamera.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CDirectionalLight.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CMaterialRenderer.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CPhysicalBox.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CPhysicalCapsule.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CPhysicalObject.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CPhysicalSphere.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CPointLight.h" />
+    <ClInclude Include="include\AmberEngine\Core\ECS\Components\CSpotLight.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CTransform.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CModelRenderer.h" />
     <ClInclude Include="include\AmberEngine\Core\ECS\Components\CLight.h" />
@@ -284,10 +308,21 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\Core\EditorAction.h" />
     <ClInclude Include="include\AmberEngine\Core\EditorRenderer.h" />
     <ClInclude Include="include\AmberEngine\Core\EditorResources.h" />
+    <ClInclude Include="include\AmberEngine\Core\GizmoBehaviour.h" />
+    <ClInclude Include="include\AmberEngine\Core\ProjectHub.h" />
     <ClInclude Include="include\AmberEngine\Core\SceneSystem\Scene.h" />
     <ClInclude Include="include\AmberEngine\Core\SceneSystem\SceneManager.h" />
+    <ClInclude Include="include\AmberEngine\Core\ShapeDrawer.h" />
     <ClInclude Include="include\AmberEngine\Data\Color.h" />
     <ClInclude Include="include\AmberEngine\Data\EditorConstants.h" />
+    <ClInclude Include="include\AmberEngine\Debug\Assertion.h" />
+    <ClInclude Include="include\AmberEngine\Debug\ConsoleColor.h" />
+    <ClInclude Include="include\AmberEngine\Debug\ConsoleHandler.h" />
+    <ClInclude Include="include\AmberEngine\Debug\FileHandler.h" />
+    <ClInclude Include="include\AmberEngine\Debug\HandlerHeader.h" />
+    <ClInclude Include="include\AmberEngine\Debug\HistoryHandler.h" />
+    <ClInclude Include="include\AmberEngine\Debug\ILogHandler.h" />
+    <ClInclude Include="include\AmberEngine\Debug\Logger.h" />
     <ClInclude Include="include\AmberEngine\Eventing\Event.h" />
     <ClInclude Include="include\AmberEngine\Geometry\Vertex.h" />
     <ClInclude Include="include\AmberEngine\ImGUI\imconfig.h" />
@@ -303,6 +338,16 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\Inputs\EMouseButton.h" />
     <ClInclude Include="include\AmberEngine\Inputs\EMouseButtonState.h" />
     <ClInclude Include="include\AmberEngine\Managers\MaterialManager.h" />
+    <ClInclude Include="include\AmberEngine\Maths\TransformNotifier.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Core\PhysicsEngine.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Entities\PhysicalBox.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Entities\PhysicalCapsule.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Entities\PhysicalObject.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Entities\PhysicalSphere.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Entities\RaycastHit.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Settings\BodySettings.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Settings\PhysicsSettings.h" />
+    <ClInclude Include="include\AmberEngine\Physics\Tools\Conversion.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Entities\Camera.h" />
     <ClInclude Include="include\AmberEngine\Core\CameraController.h" />
     <ClInclude Include="include\AmberEngine\Inputs\InputManager.h" />
@@ -323,13 +368,19 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\Rendering\Settings\ERasterizationMode.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Settings\ERenderingCapability.h" />
     <ClInclude Include="include\AmberEngine\Resources\Loaders\MaterialLoader.h" />
+    <ClInclude Include="include\AmberEngine\Resources\Parsers\EModelParserFlags.h" />
     <ClInclude Include="include\AmberEngine\Resources\RawTextures.h" />
     <ClInclude Include="include\AmberEngine\Tools\FileSystem\IniFile.h" />
     <ClInclude Include="include\AmberEngine\Tools\FileSystem\tinyxml2.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Time\Date.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\FunctionUtility.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\NumberFormat.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\PathParser.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\SizeConverter.h" />
+    <ClInclude Include="include\AmberEngine\Tools\Utils\SystemCalls.h" />
+    <ClInclude Include="include\AmberEngine\UI\ContextualMenuContainer.h" />
+    <ClInclude Include="include\AmberEngine\UI\Core\IPlugin.h" />
     <ClInclude Include="include\AmberEngine\UI\Core\UIManager.h" />
-    <ClInclude Include="include\AmberEngine\Maths\ETransformState.h" />
     <ClInclude Include="include\AmberEngine\Maths\Transform.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Settings\ELightType.h" />
     <ClInclude Include="include\AmberEngine\Rendering\Entities\Light.h" />
@@ -356,16 +407,32 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\Tools\Utils\Converter.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\Defines.h" />
     <ClInclude Include="include\AmberEngine\Tools\Utils\String.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\AssetBrowser.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\AssetProperties.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Console.h" />
     <ClInclude Include="include\AmberEngine\UI\Panels\FrameInfo.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\HardwareInfoPanel.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\MaterialEditor.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\ProfilerPanel.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\ProjectSettings.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Toolbar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Views\AssetView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Panels\Views\GameView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Settings\EAlignment.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\AButton.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\AContextualMenu.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\APlot.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Button.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ButtonImage.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ButtonSmall.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\CheckBox.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ColorEdit.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Column.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\ComboBox.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenuItem.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\ContextualMenuWindow.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DataWidget.h" />
-    <ClInclude Include="include\AmberEngine\UI\Widgets\DragingScalar.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\DragSingleScalar.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\DragMultipleScalars.h" />
     <ClInclude Include="include\AmberEngine\UI\Panels\DriverInfoPanel.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Group.h" />
@@ -385,13 +452,21 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClInclude Include="include\AmberEngine\UI\Panels\PanelSettings.h" />
     <ClInclude Include="include\AmberEngine\UI\Panels\Views\AView.h" />
     <ClInclude Include="include\AmberEngine\UI\Panels\Views\SceneView.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\NewLine.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\PlotHistogram.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\PlotLines.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Separator.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\Spacing.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\Text.h" />
+    <ClInclude Include="include\AmberEngine\UI\Widgets\TextClickable.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\TextColored.h" />
-    <ClInclude Include="include\AmberEngine\UI\Widgets\TextDropTarget.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\TreeNode.h" />
     <ClInclude Include="include\AmberEngine\UI\WidgetContainer.h" />
     <ClInclude Include="include\AmberEngine\UI\Widgets\AWidget.h" />
+    <ClInclude Include="include\AmberEngine\Windowing\Dialogs\FileDialog.h" />
+    <ClInclude Include="include\AmberEngine\Windowing\Dialogs\MessageBox.h" />
+    <ClInclude Include="include\AmberEngine\Windowing\Dialogs\OpenFileDialog.h" />
+    <ClInclude Include="include\AmberEngine\Windowing\Dialogs\SaveFileDialog.h" />
     <ClInclude Include="include\ImGUI\imconfig.h" />
     <ClInclude Include="include\ImGUI\imgui.h" />
     <ClInclude Include="include\ImGUI\imgui_impl_glfw_gl3.h" />
@@ -416,6 +491,12 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Amberpch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Amberpch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\AmberEngine\Analytics\Hardware\CPUInfo.cpp" />
+    <ClCompile Include="src\AmberEngine\Analytics\Hardware\GPUInfo.cpp" />
+    <ClCompile Include="src\AmberEngine\Analytics\Hardware\HardwareInfo.cpp" />
+    <ClCompile Include="src\AmberEngine\Analytics\Hardware\RAMInfo.cpp" />
+    <ClCompile Include="src\AmberEngine\Analytics\Profiling\Profiler.cpp" />
+    <ClCompile Include="src\AmberEngine\Analytics\Profiling\ProfilerSpy.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\AmberEngine\Buffers\ShaderStorageBuffer.cpp" />
@@ -430,9 +511,17 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\Core\ECSRenderer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Actor.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\AComponent.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CAmbientBoxLight.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CAmbientSphereLight.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CCamera.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CDirectionalLight.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CMaterialRenderer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CPhysicalBox.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CPhysicalCapsule.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CPhysicalObject.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CPhysicalSphere.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CPointLight.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ECS\Components\CSpotLight.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CTransform.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CModelRenderer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\ECS\Components\CLight.cpp" />
@@ -440,10 +529,19 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\Core\EditorAction.cpp" />
     <ClCompile Include="src\AmberEngine\Core\EditorRenderer.cpp" />
     <ClCompile Include="src\AmberEngine\Core\EditorResources.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\GizmoBehaviour.cpp" />
     <ClCompile Include="src\AmberEngine\Core\Helpers\Serializer.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ProjectHub.cpp" />
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\Scene.cpp" />
     <ClCompile Include="src\AmberEngine\Core\SceneSystem\SceneManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Core\ShapeDrawer.cpp" />
     <ClCompile Include="src\AmberEngine\Data\Color.cpp" />
+    <ClCompile Include="src\AmberEngine\Debug\Assertion.cpp" />
+    <ClCompile Include="src\AmberEngine\Debug\ConsoleHandler.cpp" />
+    <ClCompile Include="src\AmberEngine\Debug\FileHandler.cpp" />
+    <ClCompile Include="src\AmberEngine\Debug\HandlerHeader.cpp" />
+    <ClCompile Include="src\AmberEngine\Debug\HistoryHandler.cpp" />
+    <ClCompile Include="src\AmberEngine\Debug\Logger.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_draw.cpp" />
@@ -451,6 +549,13 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\AmberEngine\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="src\AmberEngine\Managers\MaterialManager.cpp" />
+    <ClCompile Include="src\AmberEngine\Maths\TransformNotifier.cpp" />
+    <ClCompile Include="src\AmberEngine\Physics\Core\PhysicsEngine.cpp" />
+    <ClCompile Include="src\AmberEngine\Physics\Entities\PhysicalBox.cpp" />
+    <ClCompile Include="src\AmberEngine\Physics\Entities\PhysicalCapsule.cpp" />
+    <ClCompile Include="src\AmberEngine\Physics\Entities\PhysicalObject.cpp" />
+    <ClCompile Include="src\AmberEngine\Physics\Entities\PhysicalSphere.cpp" />
+    <ClCompile Include="src\AmberEngine\Physics\Tools\Conversion.cpp" />
     <ClCompile Include="src\AmberEngine\Rendering\Entities\Camera.cpp" />
     <ClCompile Include="src\AmberEngine\Core\CameraController.cpp" />
     <ClCompile Include="src\AmberEngine\Inputs\InputManager.cpp" />
@@ -461,8 +566,12 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\Resources\Loaders\MaterialLoader.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\FileSystem\IniFile.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\FileSystem\tinyxml2.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Time\Date.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\NumberFormat.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\PathParser.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\SizeConverter.cpp" />
+    <ClCompile Include="src\AmberEngine\Tools\Utils\SystemCalls.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\ContextualMenuContainer.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Core\UIManager.cpp" />
     <ClCompile Include="src\AmberEngine\Maths\Transform.cpp" />
     <ClCompile Include="src\AmberEngine\Rendering\Entities\Light.cpp" />
@@ -483,12 +592,27 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\Tools\Utils\Maths.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Global\ServiceLocator.cpp" />
     <ClCompile Include="src\AmberEngine\Tools\Utils\String.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\AssetBrowser.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\AssetProperties.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Console.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Panels\FrameInfo.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\HardwareInfoPanel.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\MaterialEditor.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\ProfilerPanel.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\ProjectSettings.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Toolbar.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Views\AssetView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Panels\Views\GameView.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\AContextualMenu.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\APlot.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Button.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Canvas.cpp" />
     <ClCompile Include="src\AmberEngine\Core\PanelsManager.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ButtonImage.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ButtonSmall.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\CheckBox.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ColorEdit.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\ComboBox.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenuItem.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\ContextualMenuWindow.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Group.cpp" />
@@ -507,15 +631,25 @@ xcopy "$(SolutionDir)..\..\Dependencies\glew\lib\$(Platform)\*.lib" "$(SolutionD
     <ClCompile Include="src\AmberEngine\UI\Panels\Views\AView.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Panels\Views\SceneView.cpp" />
     <ClCompile Include="src\AmberEngine\UI\GUIDrawer.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\NewLine.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\PlotHistogram.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\PlotLines.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Separator.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\Spacing.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Text.cpp" />
+    <ClCompile Include="src\AmberEngine\UI\Widgets\TextClickable.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\TextColored.cpp" />
-    <ClCompile Include="src\AmberEngine\UI\Widgets\TextDropTarget.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\TreeNode.cpp" />
     <ClCompile Include="src\AmberEngine\UI\WidgetContainer.cpp" />
     <ClCompile Include="src\AmberEngine\UI\Widgets\Awidget.cpp" />
+    <ClCompile Include="src\AmberEngine\Windowing\Dialogs\FileDialog.cpp" />
+    <ClCompile Include="src\AmberEngine\Windowing\Dialogs\MessageBox.cpp" />
+    <ClCompile Include="src\AmberEngine\Windowing\Dialogs\OpenFileDialog.cpp" />
+    <ClCompile Include="src\AmberEngine\Windowing\Dialogs\SaveFileDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\AmberEngine\Core\EditorAction.inl" />
+    <None Include="include\AmberEngine\Debug\Logger.inl" />
     <None Include="include\AmberEngine\Eventing\Event.inl" />
     <None Include="include\AmberEngine\Managers\AResourceManager.inl" />
     <None Include="include\AmberEngine\Tools\FileSystem\IniFile.inl" />

@@ -7,7 +7,7 @@ m_clearColor(0.1f, 0.1f, 0.1f),
 m_fov(60.0f),
 m_near(0.1f),
 m_far(100.0f),
-m_projectionMode(Rendering::Settings::EProjectionMode::PERSPECTIVE)
+m_projectionMode(Settings::EProjectionMode::PERSPECTIVE)
 {
 }
 
@@ -17,7 +17,7 @@ void AmberEngine::Rendering::Entities::Camera::ComputeMatrices(uint16_t p_window
 	ComputeProjectionMatrix(p_windowWidth, p_windowHeight);
 }
 
-void AmberEngine::Rendering::Entities::Camera::SetProjectionMode(Rendering::Settings::EProjectionMode p_projectionMode)
+void AmberEngine::Rendering::Entities::Camera::SetProjectionMode(Settings::EProjectionMode p_projectionMode)
 {
 	m_projectionMode = p_projectionMode;
 }
@@ -62,9 +62,24 @@ AmberEngine::Rendering::Settings::EProjectionMode AmberEngine::Rendering::Entiti
 	return m_projectionMode;
 }
 
-float& AmberEngine::Rendering::Entities::Camera::GetCameraFov()
+float AmberEngine::Rendering::Entities::Camera::GetFov() const
 {
 	return m_fov;
+}
+
+float AmberEngine::Rendering::Entities::Camera::GetSize() const
+{
+	return m_size;
+}
+
+float AmberEngine::Rendering::Entities::Camera::GetNear() const
+{
+	return m_near;
+}
+
+float AmberEngine::Rendering::Entities::Camera::GetFar() const
+{
+	return m_far;
 }
 
 const glm::vec3& AmberEngine::Rendering::Entities::Camera::GetClearColor() const
@@ -85,11 +100,18 @@ void AmberEngine::Rendering::Entities::Camera::ComputeProjectionMatrix(uint16_t 
 
 	switch (m_projectionMode)
 	{
-	case Rendering::Settings::EProjectionMode::PERSPECTIVE:
+	case Settings::EProjectionMode::PERSPECTIVE:
 		m_projectionMatrix = glm::perspective(glm::radians(m_fov), ratio, m_near, m_far);
 		break;
-	case Rendering::Settings::EProjectionMode::ORTHOGRAPHIC:
-		m_projectionMatrix = glm::ortho(m_size, ratio, m_near, m_far);
+	case Settings::EProjectionMode::ORTHOGRAPHIC:
+		{
+			const auto right = m_size * ratio;
+			const auto left = -right;
+
+			const auto top = m_size;
+			const auto bottom = -top;
+			m_projectionMatrix = glm::ortho(left, right, bottom, top, m_near, m_far);
+		}
 		break;
 	}
 }

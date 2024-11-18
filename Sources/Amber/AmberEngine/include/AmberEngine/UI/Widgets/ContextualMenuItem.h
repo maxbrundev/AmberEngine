@@ -1,18 +1,15 @@
 #pragma once
 
-#include "AmberEngine/UI/WidgetContainer.h"
+#include "AmberEngine/UI/Widgets/AContextualMenu.h"
 
 namespace AmberEngine::UI::Widgets
 {
-	class ContextualMenuItem : public AWidget, public WidgetContainer
+	class ContextualMenuItem : public AContextualMenu
 	{
 	public:
 		ContextualMenuItem() = default;
 		virtual ~ContextualMenuItem() override = default;
 
-		void Close();
-
-	protected:
-		void DrawImplementation() override;
+		void Draw() override;
 	};
 }

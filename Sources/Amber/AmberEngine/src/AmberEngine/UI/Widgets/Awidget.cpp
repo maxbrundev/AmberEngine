@@ -15,6 +15,9 @@ void AmberEngine::UI::Widgets::AWidget::Draw()
 	{
 		DrawImplementation();
 
+		if(m_autoExecutePlugins)
+			ExecutePlugins();
+
 		if (!lineBreak)
 			ImGui::SameLine();
 	}

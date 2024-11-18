@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ContextualMenuItem.h"
+#include "AmberEngine/UI/ContextualMenuContainer.h"
 #include "AmberEngine/UI/Widgets/AWidget.h"
 #include "AmberEngine/UI/WidgetContainer.h"
+#include "AmberEngine/UI/Core/IPlugin.h"
 
-#include "AmberEngine/Eventing/Event.h"
 
 namespace AmberEngine::Core::ECS
 {
@@ -13,7 +13,7 @@ namespace AmberEngine::Core::ECS
 
 namespace AmberEngine::UI::Widgets
 {
-	class TreeNode : public AWidget, public WidgetContainer
+	class TreeNode : public AWidget, public WidgetContainer, public ContextualMenuContainer
 	{
 	public:
 		TreeNode(const std::string& p_name, bool p_arrowClickToOpen = false);
@@ -43,9 +43,11 @@ namespace AmberEngine::UI::Widgets
 		Eventing::Event<> DoubleClickedEvent;
 		Eventing::Event<> OpenedEvent;
 		Eventing::Event<> ClosedEvent;
+		Eventing::Event<TreeNode*> UpEvent;
+		Eventing::Event<TreeNode*> DownEvent;
 
 		AmberEngine::Core::ECS::Actor* m_actor;
-
+		bool isReorder = false;
 	private:
 		bool m_isArrowClickToOpen = false;
 		bool m_isShouldOpen       = false;

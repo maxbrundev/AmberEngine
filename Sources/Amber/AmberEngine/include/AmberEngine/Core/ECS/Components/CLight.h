@@ -4,20 +4,10 @@
 
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
 
+#include "AmberEngine/Rendering/Settings/ELightType.h"
 #include "AmberEngine/Rendering/Entities/Light.h"
 
-#include "AmberEngine/Rendering/Settings/ELightType.h"
-
-namespace AmberEngine
-{
-	namespace Core
-	{
-		namespace ECS
-		{
-			class Actor;
-		}
-	}
-}
+namespace AmberEngine::Core::ECS { class Actor; }
 
 namespace AmberEngine::Core::ECS::Components
 {

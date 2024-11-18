@@ -2,6 +2,9 @@
 
 #include "AmberEngine/UI/GUIDrawer.h"
 
+#include "AmberEngine/UI/WidgetContainer.h"
+
+
 namespace AmberEngine::UI
 {
 	template<typename T>
@@ -33,7 +36,20 @@ namespace AmberEngine::UI
 		static_assert(std::is_scalar_v<T>, "T must be a scalar");
 
 		CreateTitle(p_root, p_title);
-		auto& widget = p_root.CreateWidget<Widgets::DragSingleScalar<T>>(GetDataType<T>(), p_min, p_max, p_data, p_step, "", GetFormat<T>());
-		widget.SetGathererAndProvider([&]() { return p_data; }, [&](T scalar) { p_data = scalar; });
+
+		auto& dragSingleScalar = p_root.CreateWidget<Widgets::DragSingleScalar<T>>(GetDataType<T>(), p_min, p_max, p_data, p_step, "", GetFormat<T>());
+
+		dragSingleScalar.SetGathererAndProvider([&]() { return p_data; }, [&](T scalar) { p_data = scalar; });
+	}
+
+	template <typename T>
+	void GUIDrawer::DrawScalar(WidgetContainer& p_root, const std::string& p_name, std::function<T()> p_gatherer, std::function<void(T)> p_provider, float p_step, T p_min, T p_max)
+	{
+		static_assert(std::is_scalar<T>::value, "T must be a scalar");
+
+		CreateTitle(p_root, p_name);
+		auto& dragSingleScalar = p_root.CreateWidget<Widgets::DragSingleScalar<T>>(GetDataType<T>(), p_min, p_max, static_cast<T>(0), p_step, "", GetFormat<T>());
+
+		dragSingleScalar.SetGathererAndProvider(p_gatherer, p_provider);
 	}
 }

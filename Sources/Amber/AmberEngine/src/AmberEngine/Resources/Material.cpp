@@ -46,11 +46,8 @@ void AmberEngine::Resources::Material::Bind(const Texture* p_emptyTexture) const
 								tex->Bind(textureSlot);
 								m_shader->SetUniformInt(uniformData->name, textureSlot++);
 							}
-							else if (p_emptyTexture)
+							else if (p_emptyTexture && uniformData->name == "u_DiffuseMap")
 							{
-								if (uniformData->name == "u_SpecularMap")
-									continue;
-
 								p_emptyTexture->Bind(textureSlot);
 								m_shader->SetUniformInt(uniformData->name, textureSlot++);
 							}
@@ -66,6 +63,28 @@ void AmberEngine::Resources::Material::Unbind() const
 {
 	if (HasShader())
 	{
+		int textureSlot = 0;
+
+		for (auto&[name, value] : m_uniformsData)
+		{
+			if (const auto uniformData = m_shader->GetUniformInfo(name))
+			{
+				switch (uniformData->type)
+				{
+				case EUniformType::UNIFORM_SAMPLER_2D:
+					{
+						if (value.type() == typeid(Texture*))
+						{
+							if (auto tex = std::any_cast<Texture*>(value); tex)
+							{
+								tex->Unbind();
+							}
+						}
+					}
+				}
+			}
+		}
+
 		m_shader->Unbind();
 	}
 }
@@ -128,7 +147,7 @@ void AmberEngine::Resources::Material::SetName(std::string p_name)
 	m_name = std::move(p_name);
 }
 
-const AmberEngine::Resources::Shader* AmberEngine::Resources::Material::GetShader() const
+AmberEngine::Resources::Shader* AmberEngine::Resources::Material::GetShader() const
 {
 	return m_shader;
 }
@@ -152,7 +171,7 @@ const std::string& AmberEngine::Resources::Material::GetName()
 	return m_name;
 }
 
-const std::map<std::string, std::any>& AmberEngine::Resources::Material::GetUniformsData()
+std::map<std::string, std::any>& AmberEngine::Resources::Material::GetUniformsData()
 {
 	return m_uniformsData;
 }

@@ -46,24 +46,24 @@ void AmberEngine::Resources::Mesh::InitBuffers(const std::vector<Geometry::Verte
 
 	for (const auto& vertex : p_vertices)
 	{
-		vertexData.push_back(vertex.position[0]);
-		vertexData.push_back(vertex.position[1]);
-		vertexData.push_back(vertex.position[2]);
+		vertexData.push_back(vertex.Position[0]);
+		vertexData.push_back(vertex.Position[1]);
+		vertexData.push_back(vertex.Position[2]);
 
-		vertexData.push_back(vertex.texCoords[0]);
-		vertexData.push_back(vertex.texCoords[1]);
+		vertexData.push_back(vertex.TexCoords[0]);
+		vertexData.push_back(vertex.TexCoords[1]);
 
-		vertexData.push_back(vertex.normals[0]);
-		vertexData.push_back(vertex.normals[1]);
-		vertexData.push_back(vertex.normals[2]);
+		vertexData.push_back(vertex.Normals[0]);
+		vertexData.push_back(vertex.Normals[1]);
+		vertexData.push_back(vertex.Normals[2]);
 
-		vertexData.push_back(vertex.tangent[0]);
-		vertexData.push_back(vertex.tangent[1]);
-		vertexData.push_back(vertex.tangent[2]);
+		vertexData.push_back(vertex.Tangent[0]);
+		vertexData.push_back(vertex.Tangent[1]);
+		vertexData.push_back(vertex.Tangent[2]);
 
-		vertexData.push_back(vertex.bitangent[0]);
-		vertexData.push_back(vertex.bitangent[1]);
-		vertexData.push_back(vertex.bitangent[2]);
+		vertexData.push_back(vertex.Bitangent[0]);
+		vertexData.push_back(vertex.Bitangent[1]);
+		vertexData.push_back(vertex.Bitangent[2]);
 	}
 
 	constexpr uint64_t vertexSize = sizeof(Geometry::Vertex);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AmberEngine/UI/Core/IPlugin.h"
+
 namespace AmberEngine::UI
 {
 	class WidgetContainer;
@@ -7,7 +9,7 @@ namespace AmberEngine::UI
 
 namespace AmberEngine::UI::Widgets
 {
-	class AWidget
+	class AWidget : public Pluginable
 	{
 	public:
 		AWidget();

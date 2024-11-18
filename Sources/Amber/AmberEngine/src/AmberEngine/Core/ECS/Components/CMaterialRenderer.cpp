@@ -4,13 +4,15 @@
 
 #include "AmberEngine/Core/EditorAction.h"
 #include "AmberEngine/Core/ECS/Actor.h"
-
 #include "AmberEngine/Core/ECS/Components/CModelRenderer.h"
 #include "AmberEngine/Core/Helpers/Serializer.h"
+
 #include "AmberEngine/Managers/MaterialManager.h"
-#include "AmberEngine/Managers/ShaderManager.h"
 #include "AmberEngine/Managers/TextureManager.h"
+
 #include "AmberEngine/Tools/Global/ServiceLocator.h"
+#include "AmberEngine/Tools/Utils/PathParser.h"
+
 #include "AmberEngine/UI/GUIDrawer.h"
 #include "AmberEngine/UI/Widgets/ButtonSmall.h"
 #include "AmberEngine/UI/Widgets/Group.h"
@@ -29,7 +31,7 @@ AmberEngine::Core::ECS::Components::CMaterialRenderer::CMaterialRenderer(Actor& 
 
 void AmberEngine::Core::ECS::Components::CMaterialRenderer::GenerateModelMaterials()
 {
-	if (auto modelRenderer = owner.GetComponent<CModelRenderer>(); modelRenderer && modelRenderer->GetModel())
+	if (auto modelRenderer = Owner.GetComponent<CModelRenderer>(); modelRenderer && modelRenderer->GetModel())
 	{
 		uint8_t materialIndex = 0;
 
@@ -109,7 +111,7 @@ void AmberEngine::Core::ECS::Components::CMaterialRenderer::RemoveAllMaterials()
 
 void AmberEngine::Core::ECS::Components::CMaterialRenderer::UpdateMaterialList()
 {
-	if (auto modelRenderer = owner.GetComponent<CModelRenderer>(); modelRenderer && modelRenderer->GetModel())
+	if (auto modelRenderer = Owner.GetComponent<CModelRenderer>(); modelRenderer && modelRenderer->GetModel())
 	{
 		uint8_t materialIndex = 0;
 
@@ -171,7 +173,7 @@ void AmberEngine::Core::ECS::Components::CMaterialRenderer::OnSerialize(tinyxml2
 	tinyxml2::XMLNode* materialsNode = p_doc.NewElement("materials");
 	p_node->InsertEndChild(materialsNode);
 
-	auto modelRenderer = owner.GetComponent<CModelRenderer>();
+	auto modelRenderer = Owner.GetComponent<CModelRenderer>();
 	uint8_t elementsToSerialize = modelRenderer->GetModel() ? (uint8_t)std::min(modelRenderer->GetModel()->GetMaterialNames().size(), (size_t)MAX_MATERIAL_COUNT) : 0;
 
 	for (uint8_t i = 0; i < elementsToSerialize; ++i)
@@ -214,6 +216,18 @@ std::array<AmberEngine::UI::Widgets::AWidget*, 3> CustomMaterialDrawer(AmberEngi
 	auto& widget = rightSide.CreateWidget<AmberEngine::UI::Widgets::Text>(displayedText);
 
 	widgets[1] = &widget;
+
+	widget.AddPlugin<DDTarget<std::pair<std::string, AmberEngine::UI::Widgets::Group*>>>("File").DataReceivedEvent += [&widget, &p_data](auto p_receivedData)
+	{
+		if (AmberEngine::Tools::Utils::PathParser::GetFileType(p_receivedData.first) == AmberEngine::Tools::Utils::PathParser::EFileType::MATERIAL)
+		{
+			if (auto resource = AmberEngine::Tools::Global::ServiceLocator::Get<AmberEngine::ResourceManagement::MaterialManager>().GetResource(p_receivedData.first); resource)
+			{
+				p_data = resource;
+				widget.content = p_receivedData.first;
+			}
+		}
+	};
 
 	widget.lineBreak = false;
 

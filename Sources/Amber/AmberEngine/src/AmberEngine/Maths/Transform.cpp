@@ -2,63 +2,69 @@
 
 #include "AmberEngine/Maths/Transform.h"
 
-#include "AmberEngine/Eventing/Event.h"
-
-AmberEngine::Maths::Transform::Transform(const glm::vec3 & p_position, const glm::vec3 & p_rotation, const glm::vec3 & p_scale) : m_parent(nullptr)
+AmberEngine::Maths::Transform::Transform(const glm::vec3& p_localPosition, const glm::vec3& p_localRotation, const glm::vec3& p_localScale) :
+m_notificationHandlerID(-1),
+m_parent(nullptr)
 {
-	GenerateMatricesLocal(p_position, p_rotation, p_scale);
+	GenerateMatricesLocal(p_localPosition, p_localRotation, p_localScale);
+}
+
+AmberEngine::Maths::Transform::Transform(const Transform& p_other) :
+Transform(p_other.m_worldPosition, p_other.m_worldRotationEuler, p_other.m_worldScale)
+{
+}
+
+AmberEngine::Maths::Transform& AmberEngine::Maths::Transform::operator=(const Transform& p_other)
+{
+	GenerateMatricesWorld(p_other.m_worldPosition, p_other.m_worldRotationEuler, p_other.m_worldScale);
+
+	return *this;
 }
 
 AmberEngine::Maths::Transform::~Transform()
 {
-	for (auto& [childID, callback] : m_childrenTransformCallbacks)
-	{
-		callback(ETransformState::DESTROYED);
-		callback = nullptr;
-	}
-
-	m_childrenTransformCallbacks.clear();
+	Notifier.NotifyChildren(TransformNotifier::ENotification::TRANSFORM_DESTROYED);
 }
 
-void AmberEngine::Maths::Transform::GenerateMatricesWorld(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale)
+void AmberEngine::Maths::Transform::GenerateMatricesWorld(const glm::vec3& p_position, const glm::vec3& p_rotation, const glm::vec3& p_scale)
 {
-	glm::mat4 positionMatrix { 1.0f };
-	glm::mat4 rotationMatrix { 1.0f };
-	glm::mat4 scaleMatrix    { 1.0f };
+	glm::mat4 positionMatrix(1.0f);
+	glm::mat4 rotationMatrix(1.0f);
+	glm::mat4 scaleMatrix(1.0f);
 
-	glm::mat4 rotationX{ 1.0f };
+	glm::mat4 rotationX(1.0f);
 	rotationX = glm::rotate(rotationX, glm::radians(p_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	glm::mat4 rotationY{ 1.0f };
+	glm::mat4 rotationY(1.0f);
 	rotationY = glm::rotate(rotationY, glm::radians(p_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	glm::mat4 rotationZ{ 1.0f };
+	glm::mat4 rotationZ(1.0f);
 	rotationZ = glm::rotate(rotationZ, glm::radians(p_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	rotationMatrix = rotationZ * rotationY * rotationX;
 
-	m_worldMatrix =  glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
+	m_worldMatrix = glm::translate(positionMatrix, p_position) * rotationMatrix * glm::scale(scaleMatrix, p_scale);
 	m_worldPosition	= p_position;
 	m_worldRotationEuler = p_rotation;
-	m_worldScale	= p_scale;
+	m_worldScale = p_scale;
 	m_worldRotation = glm::quat_cast(rotationMatrix);
 
 	UpdateLocalMatrix();
 }
 
-void AmberEngine::Maths::Transform::GenerateMatricesLocal(glm::vec3 p_position, glm::vec3 p_rotation, glm::vec3 p_scale)
+void AmberEngine::Maths::Transform::GenerateMatricesLocal(const glm::vec3& p_position, const glm::vec3& p_rotation, const glm::vec3& p_scale)
 {
-	glm::mat4 positionMatrix{ 1.0f };
-	glm::mat4 rotationMatrix{ 1.0f };
-	glm::mat4 scaleMatrix{ 1.0f };
+	glm::mat4 positionMatrix(1.0f);
+	glm::mat4 rotationMatrix(1.0f);
+	glm::mat4 scaleMatrix(1.0f);
 
-	glm::mat4 rotationX{ 1.0f };
+	glm::mat4 rotationX(1.0f);
 	rotationX = glm::rotate(rotationX, glm::radians(p_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	glm::mat4 rotationY{ 1.0f };
+	glm::mat4 rotationY(1.0f);
 	rotationY = glm::rotate(rotationY, glm::radians(p_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	glm::mat4 rotationZ{ 1.0f };
+	glm::mat4 rotationZ(1.0f);
 	rotationZ = glm::rotate(rotationZ, glm::radians(p_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	rotationMatrix = rotationZ * rotationY * rotationX;
@@ -77,10 +83,7 @@ void AmberEngine::Maths::Transform::UpdateWorldMatrix()
 	m_worldMatrix = HasParent() ? m_parent->m_worldMatrix * m_localMatrix : m_localMatrix;
 	PreDecomposeWorldMatrix();
 
-	for (const auto& [childID, callback] : m_childrenTransformCallbacks)
-	{
-		callback(ETransformState::CHANGED);
-	}
+	Notifier.NotifyChildren(TransformNotifier::ENotification::TRANSFORM_CHANGED);
 }
 
 void AmberEngine::Maths::Transform::UpdateLocalMatrix()
@@ -88,10 +91,7 @@ void AmberEngine::Maths::Transform::UpdateLocalMatrix()
 	m_localMatrix = HasParent() ? glm::inverse(m_parent->m_worldMatrix) * m_worldMatrix : m_worldMatrix;
 	PreDecomposeLocalMatrix();
 
-	for (const auto&[childID, callback] : m_childrenTransformCallbacks)
-	{
-		callback(ETransformState::CHANGED);
-	}
+	Notifier.NotifyChildren(TransformNotifier::ENotification::TRANSFORM_CHANGED);
 }
 
 bool AmberEngine::Maths::Transform::HasParent() const
@@ -118,10 +118,7 @@ void AmberEngine::Maths::Transform::SetParent(Transform& p_parent)
 {
 	m_parent = &p_parent;
 
-	m_parentCallbackID = m_parent->AddChildrenCallback([this](auto&& p_state)
-	{
-		HandleParentTransformCallback(std::forward<decltype(p_state)>(p_state));
-	});
+	m_notificationHandlerID = m_parent->Notifier.AddNotificationHandler(std::bind(&Transform::NotificationHandler, this, std::placeholders::_1));
 
 	UpdateWorldMatrix();
 }
@@ -130,7 +127,7 @@ bool AmberEngine::Maths::Transform::RemoveParent()
 {
 	if(m_parent != nullptr)
 	{
-		m_parent->m_childrenTransformCallbacks.erase(m_parentCallbackID);
+		m_parent->Notifier.RemoveNotificationHandler(m_notificationHandlerID);
 		m_parent = nullptr;
 
 		UpdateWorldMatrix();
@@ -141,65 +138,58 @@ bool AmberEngine::Maths::Transform::RemoveParent()
 	return false;
 }
 
-void AmberEngine::Maths::Transform::HandleParentTransformCallback(ETransformState p_state)
+void AmberEngine::Maths::Transform::NotificationHandler(TransformNotifier::ENotification p_notification)
 {
-	switch (p_state)
+	switch (p_notification)
 	{
-	case ETransformState::CHANGED:
+	case TransformNotifier::ENotification::TRANSFORM_CHANGED:
 		UpdateWorldMatrix();
 		break;
 
-	case ETransformState::DESTROYED:
+	case TransformNotifier::ENotification::TRANSFORM_DESTROYED:
+		GenerateMatricesLocal(m_worldPosition, m_worldRotationEuler, m_worldScale);
 		m_parent = nullptr;
 		UpdateWorldMatrix();
 		break;
 	}
 }
 
-uint64_t AmberEngine::Maths::Transform::AddChildrenCallback(const std::function<void(ETransformState)>& p_callback)
-{
-	uint64_t childCallbackID = m_childCallbackID++;
-	m_childrenTransformCallbacks.emplace(childCallbackID, p_callback);
-
-	return childCallbackID;
-}
-
-void AmberEngine::Maths::Transform::SetLocalPosition(glm::vec3 p_newPosition)
+void AmberEngine::Maths::Transform::SetLocalPosition(const glm::vec3& p_newPosition)
 {
 	GenerateMatricesLocal(p_newPosition, m_localRotationEuler, m_localScale);
 }
 
-void AmberEngine::Maths::Transform::SetLocalRotationEuler(glm::vec3 p_newRotation)
+void AmberEngine::Maths::Transform::SetLocalRotationEuler(const glm::vec3& p_newRotation)
 {
 	GenerateMatricesLocal(m_localPosition, p_newRotation, m_localScale);
 }
 
-void AmberEngine::Maths::Transform::SetLocalRotation(glm::quat p_newRotation)
+void AmberEngine::Maths::Transform::SetLocalRotation(const glm::quat& p_newRotation)
 {
 	GenerateMatricesLocal(m_localPosition, glm::degrees(glm::eulerAngles(p_newRotation)), m_localScale);
 }
 
-void AmberEngine::Maths::Transform::SetLocalScale(glm::vec3 p_newScale)
+void AmberEngine::Maths::Transform::SetLocalScale(const glm::vec3& p_newScale)
 {
 	GenerateMatricesLocal(m_localPosition, m_localRotationEuler, p_newScale);
 }
 
-void AmberEngine::Maths::Transform::SetWorldPosition(glm::vec3 p_newPosition)
+void AmberEngine::Maths::Transform::SetWorldPosition(const glm::vec3& p_newPosition)
 {
 	GenerateMatricesWorld(p_newPosition, m_worldRotationEuler, m_worldScale);
 }
 
-void AmberEngine::Maths::Transform::SetWorldRotationEuler(glm::vec3 p_newRotation)
+void AmberEngine::Maths::Transform::SetWorldRotationEuler(const glm::vec3& p_newRotation)
 {
 	GenerateMatricesWorld(m_worldPosition, p_newRotation, m_worldScale);
 }
 
-void AmberEngine::Maths::Transform::SetWorldRotation(glm::quat p_newRotation)
+void AmberEngine::Maths::Transform::SetWorldRotation(const glm::quat& p_newRotation)
 {
 	GenerateMatricesWorld(m_worldPosition, glm::degrees(glm::eulerAngles(p_newRotation)), m_worldScale);
 }
 
-void AmberEngine::Maths::Transform::SetWorldScale(glm::vec3 p_newScale)
+void AmberEngine::Maths::Transform::SetWorldScale(const glm::vec3& p_newScale)
 {
 	GenerateMatricesWorld(m_worldPosition, m_worldRotationEuler, p_newScale);
 }
@@ -303,9 +293,9 @@ void AmberEngine::Maths::Transform::PreDecomposeWorldMatrix()
 	m_worldScale.y = glm::length(scaleY);
 	m_worldScale.z = glm::length(scaleZ);
 
-	glm::vec3 rotationX { 0.0f };
-	glm::vec3 rotationY { 0.0f };
-	glm::vec3 rotationZ { 0.0f };
+	glm::vec3 rotationX(0.0f);
+	glm::vec3 rotationY(0.0f);
+	glm::vec3 rotationZ(0.0f);
 
 	if (m_worldScale.x)
 	{
@@ -320,9 +310,9 @@ void AmberEngine::Maths::Transform::PreDecomposeWorldMatrix()
 		rotationZ = (glm::vec3(m_worldMatrix[2][0], m_worldMatrix[2][1], m_worldMatrix[2][2]) / m_worldScale.z);
 	}
 
-	const glm::mat3 worldRotationMatrix { rotationX.x, rotationX.y, rotationX.z,
-										  rotationY.x, rotationY.y, rotationY.z,
-										  rotationZ.x, rotationZ.y, rotationZ.z };
+	const glm::mat3 worldRotationMatrix(rotationX.x, rotationX.y, rotationX.z, 
+										rotationY.x, rotationY.y, rotationY.z, 
+										rotationZ.x, rotationZ.y, rotationZ.z);
 	
 	m_worldRotation = glm::quat_cast(worldRotationMatrix);
 	
@@ -343,9 +333,9 @@ void AmberEngine::Maths::Transform::PreDecomposeLocalMatrix()
 	m_localScale.y = glm::length(scaleY);
 	m_localScale.z = glm::length(scaleZ);
 
-	glm::vec3 rotationX{ 0.0f };
-	glm::vec3 rotationY{ 0.0f };
-	glm::vec3 rotationZ{ 0.0f };
+	glm::vec3 rotationX(0.0f);
+	glm::vec3 rotationY(0.0f);
+	glm::vec3 rotationZ(0.0f);
 
 	if (m_localScale.x)
 	{
@@ -360,9 +350,9 @@ void AmberEngine::Maths::Transform::PreDecomposeLocalMatrix()
 		rotationZ = (glm::vec3(m_localMatrix[2][0], m_localMatrix[2][1], m_localMatrix[2][2]) / m_localScale.z);
 	}
 
-	const glm::mat3 localRotationMatrix{ rotationX.x, rotationX.y, rotationX.z,
-										  rotationY.x, rotationY.y, rotationY.z,
-										  rotationZ.x, rotationZ.y, rotationZ.z };
+	const glm::mat3 localRotationMatrix(rotationX.x, rotationX.y, rotationX.z, 
+										rotationY.x, rotationY.y, rotationY.z, 
+										rotationZ.x, rotationZ.y, rotationZ.z);
 
 	m_localRotation = glm::quat_cast(localRotationMatrix);
 

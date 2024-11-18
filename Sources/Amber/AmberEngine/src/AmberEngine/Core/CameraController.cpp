@@ -37,8 +37,21 @@ void AmberEngine::Core::CameraController::Update(float p_deltaTime)
 		m_window.SetCursorMode(Context::ECursorMode::NORMAL);
 	}
 
+	if (m_inputManager.IsMouseButtonPressed(Inputs::EMouseButton::MOUSE_BUTTON_3))
+	{
+		m_middleMousePressed = true;
+		m_window.SetCursorMode(Context::ECursorMode::DISABLED);
+	}
+
+	if (m_inputManager.IsMouseButtonReleased(Inputs::EMouseButton::MOUSE_BUTTON_3))
+	{
+		m_isFirstMiddleMouse = true;
+		m_middleMousePressed = false;
+		m_window.SetCursorMode(Context::ECursorMode::NORMAL);
+	}
+
 	auto& io = ImGui::GetIO();
-	io.DisableMouseUpdate = m_rightMousePressed;
+	io.DisableMouseUpdate = m_rightMousePressed || m_middleMousePressed;
 }
 
 void AmberEngine::Core::CameraController::SetPosition(const glm::vec3& p_position) const
@@ -76,6 +89,11 @@ float AmberEngine::Core::CameraController::GetSpeed() const
 const glm::vec3& AmberEngine::Core::CameraController::GetPosition() const
 {
 	return m_position;
+}
+
+bool AmberEngine::Core::CameraController::IsRightMousePressed() const
+{
+	return m_rightMousePressed;
 }
 
 void AmberEngine::Core::CameraController::HandleInputs(float p_deltaTime)
@@ -173,6 +191,36 @@ void AmberEngine::Core::CameraController::HandleMouse()
 		m_eulerRotation.x = std::max(std::min(m_eulerRotation.x, 90.0f), -90.0f);
 
 		m_rotation = glm::qua(glm::radians(m_eulerRotation));
+	}
+
+	if (m_middleMousePressed)
+	{
+		auto[xPos, yPos] = m_inputManager.GetMousePosition();
+
+		if (m_isFirstMiddleMouse)
+		{
+			m_lastMousePosX = xPos;
+			m_lastMousePosY = yPos;
+			m_isFirstMiddleMouse = false;
+		}
+
+		glm::vec2 mouseOffset
+		{
+			static_cast<float>(xPos - m_lastMousePosX),
+			static_cast<float>(m_lastMousePosY - yPos)
+		};
+
+		m_lastMousePosX = xPos;
+		m_lastMousePosY = yPos;
+
+		auto mouseOffsetFinal = mouseOffset * 0.01f;
+
+		glm::vec3 right = m_rotation * glm::vec3(1.0f, 0.0f, 0.0f);
+		glm::vec3 up = m_rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+
+		glm::vec3 movement = (right * mouseOffsetFinal.x + -up * mouseOffsetFinal.y);
+
+		m_position += movement;
 	}
 }
 

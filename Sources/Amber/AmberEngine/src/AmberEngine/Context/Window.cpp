@@ -4,7 +4,7 @@
 
 AmberEngine::Eventing::Event<bool> AmberEngine::Context::Window::CloseEvent;
 
-std::unordered_map<GLFWwindow*, AmberEngine::Context::Window*> AmberEngine::Context::Window::__WINDOWS_MAP;
+std::unordered_map<GLFWwindow*, AmberEngine::Context::Window*> AmberEngine::Context::Window::WINDOWS_MAP;
 
 AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::WindowSettings& p_windowSettings) :
 	m_device(p_device),
@@ -15,6 +15,8 @@ AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::
 {
 	glfwWindowHint(GLFW_RESIZABLE, p_windowSettings.resizable);
 	glfwWindowHint(GLFW_SAMPLES, p_windowSettings.samples);
+	glfwWindowHint(GLFW_DECORATED, p_windowSettings.decorated);
+	glfwWindowHint(GLFW_MAXIMIZED, p_windowSettings.fullScreen);
 	
 	CreateGlfwWindow();
 
@@ -32,7 +34,7 @@ AmberEngine::Context::Window::Window(Context::Device& p_device, const Settings::
 
 	CloseEvent.AddListener(std::bind(&Window::SetShouldClose, this, std::placeholders::_1));
 	ResizeEvent.AddListener(std::bind(&Window::OnResizeWindow, this, std::placeholders::_1, std::placeholders::_2));
-	FramebufferResizeEvent.AddListener(std::bind(&Window::OnResizeFramebuffer, this, std::placeholders::_1, std::placeholders::_2));
+	FrameBufferResizeEvent.AddListener(std::bind(&Window::OnResizeFramebuffer, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 AmberEngine::Context::Window::~Window()
@@ -55,7 +57,7 @@ void AmberEngine::Context::Window::CreateGlfwWindow()
 		throw std::runtime_error("Failed to create GLFW Window");
 	}
 
-	__WINDOWS_MAP[m_glfwWindow] = this;
+	WINDOWS_MAP[m_glfwWindow] = this;
 }
 
 void AmberEngine::Context::Window::SetWindowUserPointer() 
@@ -80,7 +82,7 @@ void AmberEngine::Context::Window::SwapBuffers() const
 
 AmberEngine::Context::Window* AmberEngine::Context::Window::FindInstance(GLFWwindow* p_glfwWindow)
 {
-	return __WINDOWS_MAP.find(p_glfwWindow) != __WINDOWS_MAP.end() ? __WINDOWS_MAP[p_glfwWindow] : nullptr;
+	return WINDOWS_MAP.find(p_glfwWindow) != WINDOWS_MAP.end() ? WINDOWS_MAP[p_glfwWindow] : nullptr;
 }
 
 void AmberEngine::Context::Window::SetCursorMode(ECursorMode p_cursorMode)
@@ -100,6 +102,11 @@ void AmberEngine::Context::Window::SetSize(uint16_t p_width, uint16_t p_height)
 	m_size.second = p_height;
 
 	glfwSetWindowSize(m_glfwWindow, static_cast<int>(m_size.first), static_cast<int>(m_size.second));
+}
+
+void AmberEngine::Context::Window::SetPosition(int16_t p_x, int16_t p_y)
+{
+	glfwSetWindowPos(m_glfwWindow, static_cast<int>(p_x), static_cast<int>(p_y));
 }
 
 void AmberEngine::Context::Window::Restore() const
@@ -241,7 +248,7 @@ void AmberEngine::Context::Window::BindFramebufferResizeCallback() const
 
 		if (windowInstance)
 		{
-			windowInstance->FramebufferResizeEvent.Invoke(static_cast<uint16_t>(p_width), static_cast<uint16_t>(p_height));
+			windowInstance->FrameBufferResizeEvent.Invoke(static_cast<uint16_t>(p_width), static_cast<uint16_t>(p_height));
 		}
 	};
 	

@@ -41,5 +41,11 @@ namespace AmberEngine::UI::Panels
 		Widgets::Image* m_image;
 		Buffers::FrameBuffer m_frameBuffer;
 		AmberEngine::Core::EditorRenderer& m_editorRenderer;
+
+		glm::vec3 m_gridColor = glm::vec3{ 0.176f, 0.176f, 0.176f };
+		float m_div = 10.0f;
+		float m_bias = 0.5f;
+		float m_lwidht = 1.0f;
+		float m_mwidth = 2.0f;
 	};
 }

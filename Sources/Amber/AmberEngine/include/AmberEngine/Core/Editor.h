@@ -22,17 +22,18 @@ namespace AmberEngine::Core
 		Editor& operator=(const Editor& other) = delete;
 		Editor& operator=(Editor&& other)      = delete;
 
-		void PreUpdate() const;
+		void PreUpdate();
 		void Update(float p_deltaTime);
 		void PrepareRendering(float p_deltaTime);
 		void RenderEditorUI(float p_deltaTime);
 		void UpdateEditorPanels(float p_deltaTime);
-		void PostUpdate() const;
+		void PostUpdate();
 		void UpdateCurrentEditorMode(float p_deltaTime);
 		void RenderViews(float p_deltaTime);
 		void PostRenderUI() const;
 		void InitializeUI();
-
+		void UpdatePlayMode(float p_deltaTime);
+		void UpdateEditMode(float p_deltaTime);
 		EditorRenderer& GetRenderer();
 
 	public:
@@ -41,5 +42,7 @@ namespace AmberEngine::Core
 		PanelsManager m_panelsManager;
 		Core::EditorAction	m_editorActions;
 		UI::Canvas m_canvas;
+
+		uint64_t m_elapsedFrames = 0;
 	};
 }

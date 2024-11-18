@@ -4,6 +4,7 @@
 
 #include <GL/glew.h>
 
+#include "AmberEngine/Debug/Logger.h"
 #include "AmberEngine/Tools/Utils/String.h"
 
 std::string AmberEngine::Resources::Loaders::ShaderLoader::__FILE_TRACE;
@@ -58,11 +59,11 @@ void AmberEngine::Resources::Loaders::ShaderLoader::Recompile(Shader& p_shader, 
 
 		p_shader.QueryUniforms();
 
-		std::cout<< "[COMPILE] \"" + __FILE_TRACE + "\": Success!" << std::endl;
+		AB_LOG_INFO("[COMPILE] \"" + __FILE_TRACE + "\": Success!");
 	}
 	else
 	{
-		std::cout << "[COMPILE] \"" + __FILE_TRACE + "\": Failed! Previous shader version keept" << std::endl;
+		AB_LOG_ERROR("[COMPILE] \"" + __FILE_TRACE + "\": Failed! Previous shader version keept");
 	}
 }
 

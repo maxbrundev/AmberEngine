@@ -12,6 +12,7 @@ namespace AmberEngine::Settings
 		bool fullScreen = false;
 		bool resizable	= true;
 		bool vsync		= true;
+		bool decorated = true;
 
 		uint8_t samples = 4;
 	};

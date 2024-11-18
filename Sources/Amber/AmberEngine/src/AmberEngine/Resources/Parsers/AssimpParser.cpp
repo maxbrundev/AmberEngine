@@ -9,13 +9,13 @@
 
 #include "AmberEngine/Tools/Utils/String.h"
 
-bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials)
+bool AmberEngine::Resources::Parsers::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials, EModelParserFlags p_parserFlags)
 {
 	m_directory = Tools::Utils::String::ExtractDirectoryFromPath(p_filePath);
 
 	Assimp::Importer import;
 
-	const aiScene* scene = import.ReadFile(p_filePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals | aiProcess_GlobalScale);
+	const aiScene* scene = import.ReadFile(p_filePath, static_cast<unsigned int>(p_parserFlags));
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{

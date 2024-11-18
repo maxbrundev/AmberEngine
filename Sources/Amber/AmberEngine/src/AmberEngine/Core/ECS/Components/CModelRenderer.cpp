@@ -4,10 +4,10 @@
 
 #include "AmberEngine/Core/ECS/Actor.h"
 #include "AmberEngine/Core/ECS/Components/CMaterialRenderer.h"
+
 #include "AmberEngine/Core/Helpers/Serializer.h"
+
 #include "AmberEngine/Managers/ModelManager.h"
-#include "AmberEngine/Tools/Global/ServiceLocator.h"
-#include "AmberEngine/Tools/Utils/PathParser.h"
 
 #include "AmberEngine/UI/GUIDrawer.h"
 
@@ -16,8 +16,11 @@ AmberEngine::Core::ECS::Components::CModelRenderer::CModelRenderer(Actor& p_owne
 {
 	m_modelChangedEvent += [this]
 	{
-		if (const auto materialRenderer = owner.GetComponent<CMaterialRenderer>())
+		if (const auto materialRenderer = Owner.GetComponent<CMaterialRenderer>())
+		{
+			materialRenderer->GenerateModelMaterials();
 			materialRenderer->UpdateMaterialList();
+		}
 	};
 }
 

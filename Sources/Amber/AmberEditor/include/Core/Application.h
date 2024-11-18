@@ -8,10 +8,10 @@ namespace Core
 	class Application
 	{
 	public:
-		Application(const AmberEngine::Settings::DeviceSettings& p_deviceSettings, const AmberEngine::Settings::WindowSettings& p_windowSettings, const AmberEngine::Settings::DriverSettings& p_driverSettings);
+		Application(const std::string& p_projectPath, const std::string& p_projectName);
 		~Application() = default;
 
-		void Setup();
+		void Initialize();
 		void Run();
 		bool IsRunning() const;
 

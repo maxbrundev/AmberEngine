@@ -8,7 +8,7 @@ AmberEngine::UI::Panels::APanel::APanel()
 
 void AmberEngine::UI::Panels::APanel::Draw()
 {
-	if (enabled)
+	if (Enabled)
 	{
 		m_callbackQueue.Process();
 		DrawImplementation();

@@ -26,7 +26,7 @@ namespace AmberEngine::Core
 		void SetSpeed(float p_value);
 		float GetSpeed() const;
 		const glm::vec3& GetPosition() const;
-
+		bool IsRightMousePressed() const;
 	private:
 		void HandleInputs(float p_deltaTime);
 		void HandleMouse();
@@ -48,7 +48,9 @@ namespace AmberEngine::Core
 		float m_moveSpeed = 15.0f;
 
 		bool m_isFirstMouse = true;
+		bool m_isFirstMiddleMouse = true;
 		bool m_rightMousePressed = false;
+		bool m_middleMousePressed = false;
 
 		glm::vec3 m_targetPosition;
 		glm::vec3 m_currentMovement;

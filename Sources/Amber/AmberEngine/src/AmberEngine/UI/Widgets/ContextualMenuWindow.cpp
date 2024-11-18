@@ -2,17 +2,16 @@
 
 #include "AmberEngine/UI/Widgets/ContextualMenuWindow.h"
 
-void AmberEngine::UI::Widgets::ContextualMenuWindow::Close()
+void AmberEngine::UI::Widgets::ContextualMenuWindow::Draw()
 {
-	if (enabled)
-		ImGui::CloseCurrentPopup();
-}
-
-void AmberEngine::UI::Widgets::ContextualMenuWindow::DrawImplementation()
-{
-	if (ImGui::BeginPopupContextWindow(m_widgetID.c_str(), ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
+	if (ImGui::BeginPopupContextWindow(m_widgetID.c_str(), ImGuiMouseButton_Right, false))
 	{
 		DrawWidgets();
 		ImGui::EndPopup();
 	}
+}
+
+void AmberEngine::UI::Widgets::ContextualMenuWindow::DrawImplementation()
+{
+
 }

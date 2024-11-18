@@ -12,8 +12,10 @@ namespace AmberEngine::Rendering::Entities
 	{
 		Light(Maths::Transform& p_transform, Settings::ELightType p_type);
 
-		glm::mat4 GenerateMatrix() const;
+		glm::mat4 GenerateMatrix(bool isStoringRotation = false) const;
 
+		const Maths::Transform& GetTransform() const;
+		float GetEffectRange() const;
 		Data::Color Color = { 1.0f, 1.0f, 1.0f };
 		float Intensity   = 1.0f;
 		float Constant    = 0.0f;

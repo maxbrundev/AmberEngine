@@ -4,6 +4,7 @@
 
 #include <assimp/scene.h>
 
+#include "EModelParserFlags.h"
 #include "AmberEngine/Geometry/Vertex.h"
 
 #include "AmberEngine/Resources/Model.h"
@@ -14,7 +15,7 @@ namespace AmberEngine::Resources::Parsers
 	class API_AMBERENGINE AssimpParser
 	{
 	public:
-		bool LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials);
+		bool LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials, EModelParserFlags p_parserFlags);
 		std::map<int, std::vector<std::tuple<ETextureType, std::string>>> textureData;
 
 	private:

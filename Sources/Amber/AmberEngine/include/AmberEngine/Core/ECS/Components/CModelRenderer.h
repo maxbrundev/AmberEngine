@@ -3,20 +3,12 @@
 #include "AmberEngine/API/Export.h"
 
 #include "AmberEngine/Core/ECS/Components/AComponent.h"
+
 #include "AmberEngine/Eventing/Event.h"
 
 #include "AmberEngine/Resources/Model.h"
 
-namespace AmberEngine
-{
-	namespace Core
-	{
-		namespace ECS
-		{
-			class Actor;
-		}
-	}
-}
+namespace AmberEngine::Core::ECS { class Actor; }
 
 namespace AmberEngine::Core::ECS::Components
 {
@@ -37,8 +29,7 @@ namespace AmberEngine::Core::ECS::Components
 		virtual void OnInspector(UI::WidgetContainer& p_root) override;
 
 	private:
-		Resources::Model* m_model;
-		std::string_view m_name;
+		Resources::Model* m_model = nullptr;
 		Eventing::Event<> m_modelChangedEvent;
 	};
 }
