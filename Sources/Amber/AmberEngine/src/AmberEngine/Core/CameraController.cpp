@@ -160,51 +160,31 @@ glm::vec3 RemoveRoll(const glm::vec3& p_eulerRotation)
 
 void AmberEngine::Core::CameraController::HandleMouse()
 {
-	if (m_rightMousePressed)
+	if(m_rightMousePressed || m_middleMousePressed)
 	{
-		auto[xPos, yPos] = m_inputManager.GetMousePosition();
+		const auto[xPos, yPos] = m_inputManager.GetMousePosition();
 
 		if (m_isFirstMouse)
 		{
 			m_lastMousePosX = xPos;
 			m_lastMousePosY = yPos;
-			m_isFirstMouse = false;
 
 			m_eulerRotation = glm::degrees(glm::eulerAngles(m_rotation));
 
 			m_eulerRotation = RemoveRoll(m_eulerRotation);
+
+			m_isFirstMouse = false;
 		}
-		
-		glm::vec2 mouseOffset
-		{
-			static_cast<float>(xPos - m_lastMousePosX),
-			static_cast<float>(m_lastMousePosY - yPos)
-		};
-
-		m_lastMousePosX = xPos;
-		m_lastMousePosY = yPos;
-
-		auto mouseOffsetFinal = mouseOffset * m_mouseSensitivity;
-		
-		m_eulerRotation.y -= mouseOffsetFinal.x;
-		m_eulerRotation.x -= mouseOffsetFinal.y;
-		m_eulerRotation.x = std::max(std::min(m_eulerRotation.x, 90.0f), -90.0f);
-
-		m_rotation = glm::qua(glm::radians(m_eulerRotation));
-	}
-
-	if (m_middleMousePressed)
-	{
-		auto[xPos, yPos] = m_inputManager.GetMousePosition();
 
 		if (m_isFirstMiddleMouse)
 		{
 			m_lastMousePosX = xPos;
 			m_lastMousePosY = yPos;
+
 			m_isFirstMiddleMouse = false;
 		}
 
-		glm::vec2 mouseOffset
+		const glm::vec2 mouseOffset
 		{
 			static_cast<float>(xPos - m_lastMousePosX),
 			static_cast<float>(m_lastMousePosY - yPos)
@@ -213,14 +193,28 @@ void AmberEngine::Core::CameraController::HandleMouse()
 		m_lastMousePosX = xPos;
 		m_lastMousePosY = yPos;
 
-		auto mouseOffsetFinal = mouseOffset * 0.01f;
+		if (m_rightMousePressed)
+		{
+			auto mouseDelta = mouseOffset * m_mouseSensitivity;
 
-		glm::vec3 right = m_rotation * glm::vec3(1.0f, 0.0f, 0.0f);
-		glm::vec3 up = m_rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+			m_eulerRotation.y -= mouseDelta.x;
+			m_eulerRotation.x -= mouseDelta.y;
+			m_eulerRotation.x = std::max(std::min(m_eulerRotation.x, 90.0f), -90.0f);
 
-		glm::vec3 movement = (right * mouseOffsetFinal.x + -up * mouseOffsetFinal.y);
+			m_rotation = glm::qua(glm::radians(m_eulerRotation));
+		}
 
-		m_position += movement;
+		if (m_middleMousePressed)
+		{
+			auto mouseDelta = mouseOffset * 0.01f;
+
+			const glm::vec3 right = m_rotation * glm::vec3(1.0f, 0.0f, 0.0f);
+			const glm::vec3 up = m_rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+
+			const glm::vec3 delta = right * mouseDelta.x + -up * mouseDelta.y;
+
+			m_position += delta;
+		}
 	}
 }
 
