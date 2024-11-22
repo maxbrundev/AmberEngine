@@ -9,5 +9,4 @@ namespace AmberEngine::Debug
 		static const std::string WARNING_HEADER;
 		static const std::string ERROR_HEADER;
 	};
-	
 }
