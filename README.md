@@ -16,7 +16,7 @@ AmberEngine will provide Lua scripting like Overload does but also C++ programmi
 - Systems -> Instantiated and Released by the Engine, Systems will query related CustomComponents define the actors behaviors based on the data
 
 ## Software
-- Visual Studio 2017 (Premake5 soon)
+- Visual Studio 2022
 
 ## Dependencies
 - OpenGL with GLEW (Graphics API)
