@@ -30,5 +30,9 @@ AmberEngine will provide Lua scripting like Overload does but also C++ programmi
 AmberEngine requires:
 - GPU: Graphics card supporting OpenGL 4.3
 
+## Compiling sources
+Premake5 is used to generate project files.
+To generate the project, execute `GenerateProject.bat`. By default, `GenerateProject.bat` will generate project files for Visual Studio 2022. If you want to use another version of Visual Studio you can execute `GenerateProject.bat` from the command line with the Visual Studio version as argument. (ex: `.\GeneratedProject.bat vs2019`)
+
 ## Licence
 AmberEngine is licenced under an MIT Licence.
