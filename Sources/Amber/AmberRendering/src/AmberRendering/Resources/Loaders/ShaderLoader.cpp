@@ -1,0 +1,231 @@
+#include "Amberpch.h"
+
+#include "AmberRendering/Resources/Loaders/ShaderLoader.h"
+
+#include <GL/glew.h>
+
+#include "AmberDebug/Logger.h"
+#include "AmberTools/Utils/String.h"
+
+std::string AmberRendering::Resources::Loaders::ShaderLoader::__FILE_TRACE;
+
+AmberRendering::Resources::Shader* AmberRendering::Resources::Loaders::ShaderLoader::Create(std::string p_filePath)
+{
+	__FILE_TRACE = p_filePath;
+
+	const std::pair<std::string, std::string> source = ParseShader(p_filePath);
+
+	const uint32_t programID = CreateShader(source.first, source.second);
+
+	Shader* shader = new Shader(std::move(p_filePath), programID);
+
+	return shader;
+}
+
+AmberRendering::Resources::Shader* AmberRendering::Resources::Loaders::ShaderLoader::CreateFromSource(const std::string& p_vertexShader, const std::string& p_fragmentShader)
+{
+	__FILE_TRACE = AmberTools::Utils::String::ExtractDirectoryFromPath(p_vertexShader) + "/" + AmberTools::Utils::String::ExtractDirectoryFromPath(p_fragmentShader);
+
+	const uint32_t programID = CreateShader(p_vertexShader, p_fragmentShader);
+
+	std::string filePath;
+
+	Shader* shader = new Shader(std::move(filePath), programID);
+
+	return shader;
+}
+
+void AmberRendering::Resources::Loaders::ShaderLoader::Recompile(Shader& p_shader, const std::string& p_filePath)
+{
+	__FILE_TRACE = p_filePath;
+
+	const std::pair<std::string, std::string> source = ParseShader(p_filePath);
+
+	/* Create the new program */
+
+	if (const uint32_t newProgramID = CreateShader(source.first, source.second))
+	{
+		/* Pointer to the shaderID (const data member, tricks to access it) */
+		/* Only work with the first public member of a class */
+		std::uint32_t* shaderID = reinterpret_cast<uint32_t*>(&p_shader) + offsetof(Shader, ID);
+
+		//uint32_t* shaderID = const_cast<uint32_t*>(&p_shader.id);
+
+		/* Deletes the previous program */
+		glDeleteProgram(*shaderID);
+
+		/* Store the new program in the shader */
+		*shaderID = newProgramID;
+
+		p_shader.QueryUniforms();
+
+		AB_LOG_INFO("[COMPILE] \"" + __FILE_TRACE + "\": Success!");
+	}
+	else
+	{
+		AB_LOG_ERROR("[COMPILE] \"" + __FILE_TRACE + "\": Failed! Previous shader version keept");
+	}
+}
+
+bool AmberRendering::Resources::Loaders::ShaderLoader::Destroy(Shader*& p_shaderInstance)
+{
+	if (p_shaderInstance)
+	{
+		delete p_shaderInstance;
+		p_shaderInstance = nullptr;
+
+		return true;
+	}
+
+	return false;
+}
+
+bool AmberRendering::Resources::Loaders::ShaderLoader::Delete(Shader* p_shaderInstance)
+{
+	if (p_shaderInstance)
+	{
+		glDeleteProgram(p_shaderInstance->ID);
+
+		return true;
+	}
+
+	return false;
+}
+
+std::pair<std::string, std::string> AmberRendering::Resources::Loaders::ShaderLoader::ParseShader(const std::string& p_filePath)
+{
+	std::ifstream stream(p_filePath);
+
+	enum class ShaderType
+	{
+		NONE     = -1,
+		VERTEX   = 0,
+		FRAGMENT = 1
+	};
+
+	ShaderType shaderType = ShaderType::NONE;
+
+	std::string currentLine;
+	std::stringstream stringStream[2];
+
+	while (getline(stream, currentLine))
+	{
+		if (currentLine.find("#shader") != std::string::npos)
+		{
+			if (currentLine.find("vertex") != std::string::npos)
+			{
+				shaderType = ShaderType::VERTEX;
+			}
+			else if (currentLine.find("fragment") != std::string::npos)
+			{
+				shaderType = ShaderType::FRAGMENT;
+			}
+		}
+		else
+		{
+			stringStream[static_cast<int>(shaderType)] << currentLine << '\n';
+		}
+	}
+
+	return 
+	{ 
+		stringStream[static_cast<int>(ShaderType::VERTEX)].str(),
+		stringStream[static_cast<int>(ShaderType::FRAGMENT)].str()
+	};
+}
+
+std::string AmberRendering::Resources::Loaders::ShaderLoader::Parse(const std::string& p_filePath)
+{
+	std::ifstream stream(p_filePath);
+	std::string line;
+	std::stringstream stringstream;
+
+	while (getline(stream, line))
+	{
+		stringstream << line << "\n";
+	}
+
+	return stringstream.str();
+}
+
+uint32_t AmberRendering::Resources::Loaders::ShaderLoader::CreateShader(const std::string &p_vertexSources, const std::string& p_fragmentSources)
+{
+	const uint32_t program = glCreateProgram();
+
+	const uint32_t vs = CompileShader(GL_VERTEX_SHADER, p_vertexSources, program);
+	const uint32_t fs = CompileShader(GL_FRAGMENT_SHADER, p_fragmentSources, program);
+
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+
+	glLinkProgram(program);
+
+	GLint linkStatus;
+	glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+
+	if (linkStatus == GL_FALSE)
+	{
+		GLint maxLength;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::string errorLog(maxLength, ' ');
+		glGetProgramInfoLog(program, maxLength, &maxLength, errorLog.data());
+
+		std::cout << "[LINK] \"" + __FILE_TRACE + "\":\n" + errorLog << std::endl;
+
+		glDeleteProgram(program);
+
+		glDetachShader(program, vs);
+		glDetachShader(program, fs);
+
+		glDeleteShader(vs);
+		glDeleteShader(fs);
+
+		return 0;
+	}
+
+	glValidateProgram(program);
+
+	glDetachShader(program, vs);
+	glDetachShader(program, fs);
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
+}
+
+uint32_t AmberRendering::Resources::Loaders::ShaderLoader::CompileShader(uint32_t p_type, const std::string& p_source, uint32_t p_program)
+{
+	uint32_t id = glCreateShader(p_type);
+
+	const char* src = p_source.c_str();
+
+	glShaderSource(id, 1, &src, nullptr);
+
+	glCompileShader(id);
+
+	GLint compileStatus;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &compileStatus);
+
+	if (compileStatus == GL_FALSE)
+	{
+		GLint maxLength;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::string errorLog(maxLength, ' ');
+		glGetShaderInfoLog(id, maxLength, &maxLength, errorLog.data());
+
+		const std::string shaderTypeString = p_type == GL_VERTEX_SHADER ? "VERTEX SHADER" : "FRAGMENT SHADER";
+		const std::string errorHeader = "[" + shaderTypeString + "] \"";
+
+		std::cout << errorHeader + __FILE_TRACE + "\":\n" + errorLog << std::endl;
+
+		glDetachShader(p_program, id);
+		glDeleteShader(id);
+
+		return 0;
+	}
+
+	return id;
+}

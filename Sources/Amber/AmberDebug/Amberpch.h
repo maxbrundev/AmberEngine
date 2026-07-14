@@ -1,0 +1,25 @@
+#pragma once
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <filesystem>
+#include <vector>
+#include <map>
+#include <queue>
+#include <unordered_map>
+#include <algorithm>
+#include <functional>
+#include <memory>
+#include <string_view>
+#include <array>
+#include <any>
+#include <chrono>
+#include <cmath>
+#include <optional>
+
+#define no_init_all
+#include <Windows.h>

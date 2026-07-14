@@ -1,13 +1,13 @@
-#include "pch.h"
+#include "Amberpch.h"
 
 #include <filesystem>
 #include <fstream>
 
-#include <AmberEngine/Tools/Utils/Defines.h>
+#include <AmberTools/Utils/Defines.h>
 
-#include "Core/Application.h"
-#include "AmberEngine/Core/ProjectHub.h"
-#include "AmberEngine/Tools/Utils/String.h"
+#include "AmberEditor/Core/Application.h"
+#include "AmberEditor/Core/ProjectHub.h"
+#include "AmberTools/Utils/String.h"
 
 #undef APIENTRY
 #include "Windows.h"
@@ -24,7 +24,7 @@ void CreateProject(const std::string& p_path)
 		std::filesystem::create_directory(p_path);
 		std::filesystem::create_directory(p_path + "Assets\\");
 		std::filesystem::create_directory(p_path + "Scripts\\");
-		std::ofstream projectFile(p_path + '\\' + AmberEngine::Tools::Utils::PathParser::GetElementName(std::string(p_path.data(), p_path.data() + p_path.size() - 1)) + ".abproject");
+		std::ofstream projectFile(p_path + '\\' + AmberTools::Utils::PathParser::GetElementName(std::string(p_path.data(), p_path.data() + p_path.size() - 1)) + ".abproject");
 	}
 }
 
@@ -64,12 +64,12 @@ std::tuple<bool, std::string, std::string> OpenProject(const std::string& p_path
 	if (!isReady)
 	{
 
-		//AmberEngine::Windowing::Dialogs::MessageBox errorMessage("Project not found", "The selected project does not exists", AmberEngine::Windowing::Dialogs::MessageBox::EMessageType::ERROR, AmberEngine::Windowing::Dialogs::MessageBox::EButtonLayout::OK);
+		//AmberWindowing::Dialogs::MessageBox errorMessage("Project not found", "The selected project does not exists", AmberWindowing::Dialogs::MessageBox::EMessageType::ERROR, AmberWindowing::Dialogs::MessageBox::EButtonLayout::OK);
 	}
 	else
 	{
 		path = p_path;
-		projectName = AmberEngine::Tools::Utils::PathParser::GetElementName(path);
+		projectName = AmberTools::Utils::PathParser::GetElementName(path);
 	}
 
 	return { isReady, path, projectName };
@@ -80,7 +80,7 @@ void UpdateWorkingDirectory(const std::string& p_executablePath)
 {
 	if (!IsDebuggerPresent())
 	{
-		std::filesystem::current_path(AmberEngine::Tools::Utils::PathParser::GetContainingFolder(p_executablePath));
+		std::filesystem::current_path(AmberTools::Utils::PathParser::GetContainingFolder(p_executablePath));
 	}
 }
 
@@ -111,7 +111,7 @@ int main(int argc, char** argv)
 		RegisterProject(path);
 		std::tie(ready, projectPath, projectName) = OpenProject(path);
 #else*/
-		AmberEngine::Core::ProjectHub hub;
+		AmberEditor::Core::ProjectHub hub;
 
 		if (argc < 2)
 		{
@@ -123,12 +123,12 @@ int main(int argc, char** argv)
 			// Project file given as argument ==> Open the project
 			std::string projectFile = argv[1];
 
-			if (AmberEngine::Tools::Utils::PathParser::GetExtension(projectFile) == "abproject")
+			if (AmberTools::Utils::PathParser::GetExtension(projectFile) == "abproject")
 			{
 				ready = true;
-				projectPath = AmberEngine::Tools::Utils::PathParser::GetContainingFolder(projectFile);
-				projectName = AmberEngine::Tools::Utils::PathParser::GetElementName(projectFile);
-				AmberEngine::Tools::Utils::String::Replace(projectName, ".abproject", "");
+				projectPath = AmberTools::Utils::PathParser::GetContainingFolder(projectFile);
+				projectName = AmberTools::Utils::PathParser::GetElementName(projectFile);
+				AmberTools::Utils::String::Replace(projectName, ".abproject", "");
 			}
 
 			hub.RegisterProject(projectPath);
@@ -145,19 +145,19 @@ int main(int argc, char** argv)
 
 static void TryRun(const std::string& projectPath, const std::string& projectName)
 {
-	auto errorEvent = [](AmberEngine::Context::EDeviceError, std::string errMsg)
+	auto errorEvent = [](AmberWindowing::Context::EDeviceError, std::string errMsg)
 	{
 		errMsg = "AmberEngine requires OpenGL 4.3 or newer.\r\n" + errMsg;
 		MessageBox(0, errMsg.c_str(), "Amber", MB_OK | MB_ICONSTOP);
 	};
 
-	std::unique_ptr<Core::Application> app;
+	std::unique_ptr<AmberEditor::Core::Application> app;
 
 	try
 	{
-		auto listenerId = AmberEngine::Context::Device::ErrorEvent += errorEvent;
-		app = std::make_unique<Core::Application>(projectPath, projectName);
-		AmberEngine::Context::Device::ErrorEvent -= listenerId;
+		auto listenerId = AmberWindowing::Context::Device::ErrorEvent += errorEvent;
+		app = std::make_unique<AmberEditor::Core::Application>(projectPath, projectName);
+		AmberWindowing::Context::Device::ErrorEvent -= listenerId;
 	}
 	catch (...) {}
 
