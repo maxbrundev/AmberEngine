@@ -5,12 +5,9 @@
 #include "AmberRendering/Resources/Mesh.h"
 #include "AmberRendering/Resources/Loaders/TextureLoader.h"
 
-#include "AmberTools/Utils/String.h"
 
 bool AmberRendering::Resources::Parsers::AssimpParser::LoadModel(const std::string& p_filePath, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials, EModelParserFlags p_parserFlags)
 {
-	m_directory = AmberTools::Utils::String::ExtractDirectoryFromPath(p_filePath);
-
 	Assimp::Importer import;
 
 	const aiScene* scene = import.ReadFile(p_filePath, static_cast<unsigned int>(p_parserFlags));
@@ -102,18 +99,15 @@ void AmberRendering::Resources::Parsers::AssimpParser::ProcessMaterials(const ai
 			p_materials.push_back(name.C_Str());
 
 			aiString str;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
 
-			if(str.C_Str()[0] != '\0')
+			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &str) == aiReturn_SUCCESS && str.C_Str()[0] != '\0')
 			{
-				textureData[i].emplace_back(ETextureType::DIFFUSE_MAP, m_directory + str.C_Str());
+				textureData[i].emplace_back(ETextureType::DIFFUSE_MAP, str.C_Str());
 			}
 
-			material->GetTexture(aiTextureType_SPECULAR, 0, &str);
-
-			if (str.C_Str()[0] != '\0')
+			if (material->GetTexture(aiTextureType_SPECULAR, 0, &str) == aiReturn_SUCCESS && str.C_Str()[0] != '\0')
 			{
-				textureData[i].emplace_back(ETextureType::SPECULAR_MAP, m_directory + str.C_Str());
+				textureData[i].emplace_back(ETextureType::SPECULAR_MAP, str.C_Str());
 			}
 		}
 	}

@@ -8,5 +8,6 @@ namespace AmberRendering::Resources
 		static std::pair<std::string, std::string> GetGrid();
 		static std::pair<std::string, std::string> GetGizmo();
 		static std::pair<std::string, std::string> GetNormalVisualizer();
+		static std::pair<std::string, std::string> GetBillboard();
 	};
 }

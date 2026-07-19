@@ -6,6 +6,8 @@
 #include "AmberTools/Analytics/Profiling/ProfilerSpy.h"
 #include "AmberEditor/Core/Editor.h"
 #include "AmberEditor/Core/EditorAction.h"
+#include "AmberEditor/Panels/GameView.h"
+#include "AmberEditor/Settings/EditorSettings.h"
 #include "AmberCore/SceneSystem/SceneManager.h"
 #include "AmberCore/SceneSystem/Scene.h"
 
@@ -203,10 +205,19 @@ void AmberEditor::Panels::SceneView::RenderScene(uint8_t p_defaultRenderState)
 	auto& driver = *EDITOR_CONTEXT(driver).get();
 
 	auto& currentScene = *m_sceneManager.GetCurrentScene();
-	m_editorRenderer.UpdateLights(currentScene);
+	auto& gameView = EDITOR_PANEL(AmberEditor::Panels::GameView, "Game View");
+
+	if (auto gameViewFrustum = gameView.GetActiveFrustum(); gameViewFrustum && gameView.GetCamera().HasFrustumLightCulling() && Settings::EditorSettings::ShowLightFrustumCullingInSceneView)
+	{
+		m_editorRenderer.UpdateLightsInFrustum(currentScene, *gameViewFrustum);
+	}
+	else
+	{
+		m_editorRenderer.UpdateLights(currentScene);
+	}
 
 	m_frameBuffer.Bind();
-	
+
 	driver.SetStencilMask(0xFF);
 	baseRenderer.Clear(m_camera);
 	driver.SetStencilMask(0x00);
@@ -214,7 +225,18 @@ void AmberEditor::Panels::SceneView::RenderScene(uint8_t p_defaultRenderState)
 	m_editorRenderer.RenderGrid(m_cameraPosition, m_gridColor, m_div, m_bias, m_lwidht, m_mwidth);
 	m_editorRenderer.RenderCameras();
 
-	m_editorRenderer.RenderScene(m_cameraPosition, m_camera);
+	if (auto gameViewFrustum = gameView.GetActiveFrustum(); gameViewFrustum && gameView.GetCamera().HasFrustumGeometryCulling() && Settings::EditorSettings::ShowGeometryFrustumCullingInSceneView)
+	{
+		m_camera.SetFrustumGeometryCulling(gameView.HasCamera() ? gameView.GetCamera().HasFrustumGeometryCulling() : false);
+		m_editorRenderer.RenderScene(m_cameraPosition, m_camera, gameViewFrustum);
+		m_camera.SetFrustumGeometryCulling(false);
+	}
+	else
+	{
+		m_editorRenderer.RenderScene(m_cameraPosition, m_camera);
+	}
+
+	m_editorRenderer.RenderLights();
 
 	if(!m_selectedActorsData.empty() || m_selectedActorsData.size() > 1)
 	{

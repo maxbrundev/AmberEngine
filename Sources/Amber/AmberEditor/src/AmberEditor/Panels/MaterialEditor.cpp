@@ -13,8 +13,7 @@
 #include "AmberUI/Widgets/GroupCollapsable.h"
 #include "AmberUI/Widgets/Separator.h"
 
-AmberEditor::Panels::MaterialEditor::MaterialEditor(const std::string& p_title, bool p_opened,
-                                                        const AmberUI::Panels::PanelSettings& p_windowSettings): AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings)
+AmberEditor::Panels::MaterialEditor::MaterialEditor(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings)
 {
 	CreateHeaderButtons();
 	CreateWidget<AmberUI::Widgets::Separator>();

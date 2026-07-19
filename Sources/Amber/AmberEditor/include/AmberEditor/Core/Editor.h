@@ -23,6 +23,7 @@ namespace AmberEditor::Core
 
 		void PreUpdate();
 		void Update(float p_deltaTime);
+		void HandleGlobalShortcuts();
 		void PrepareRendering(float p_deltaTime);
 		void RenderEditorUI(float p_deltaTime);
 		void UpdateEditorPanels(float p_deltaTime);

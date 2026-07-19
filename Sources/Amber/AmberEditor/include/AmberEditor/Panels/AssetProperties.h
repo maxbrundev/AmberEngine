@@ -25,20 +25,10 @@ namespace AmberEditor::Panels
 			const AmberUI::Panels::PanelSettings& p_windowSettings
 		);
 
-		/**
-		* Defines the target of the asset settings editor
-		* @param p_path
-		*/
 		void SetTarget(const std::string& p_path);
 
-		/**
-		* Refresh the panel to show the current target settings
-		*/
 		void Refresh();
 
-		/**
-		* Launch the preview of the target asset
-		*/
 		void Preview();
 
 	private:

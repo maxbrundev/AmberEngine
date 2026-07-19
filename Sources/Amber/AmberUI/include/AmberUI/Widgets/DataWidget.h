@@ -34,15 +34,24 @@ namespace AmberUI::Widgets
 		{
 			if (Enabled)
 			{
-				if (m_gatherer != nullptr)
+				if (m_dataPointer != nullptr)
 				{
-					m_data = m_dataPointer ? *m_dataPointer : m_gatherer();
+					m_data = *m_dataPointer;
+				}
+				else if (m_gatherer != nullptr)
+				{
+					m_data = m_gatherer();
 				}
 
 				AWidget::Draw();
 
 				if (m_valueChanged)
 				{
+					if (m_dataPointer != nullptr)
+					{
+						*m_dataPointer = m_data;
+					}
+
 					if (m_provider != nullptr)
 					{
 						m_provider(m_data);

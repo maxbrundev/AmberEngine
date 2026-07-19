@@ -72,7 +72,7 @@ void AmberEditor::Panels::AView::Render()
 	FillEngineUBO();
 
 	auto[winWidth, winHeight] = GetSafeSize();
-	AmberTools::Global::ServiceLocator::Get<AmberWindowing::Context::Window>().SetViewport(winWidth, winHeight);
+	EDITOR_CONTEXT(renderer)->SetViewport(0, 0, winWidth, winHeight);
 
 	EDITOR_CONTEXT(shapeDrawer)->SetViewProjection(m_camera.GetProjectionMatrix() * m_camera.GetViewMatrix());
 
@@ -87,6 +87,11 @@ void AmberEditor::Panels::AView::SetCameraPosition(const glm::vec3& p_position)
 void AmberEditor::Panels::AView::SetCameraRotation(const glm::quat& p_rotation)
 {
 	m_cameraRotation = p_rotation;
+}
+
+void AmberEditor::Panels::AView::SetGridColor(const glm::vec3& p_color)
+{
+	m_gridColor = p_color;
 }
 
 const glm::vec3& AmberEditor::Panels::AView::GetCameraPosition() const

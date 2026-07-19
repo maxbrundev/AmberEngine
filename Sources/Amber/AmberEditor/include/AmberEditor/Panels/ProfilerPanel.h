@@ -12,13 +12,6 @@ namespace AmberEditor::Panels
 	class ProfilerPanel : public AmberUI::Panels::APanelWindow
 	{
 	public:
-		/**
-		* Constructor
-		* @param p_title
-		* @param p_opened
-		* @param p_windowSettings
-		* @param p_frequency
-		*/
 		ProfilerPanel
 		(
 			const std::string& p_title,
@@ -27,21 +20,12 @@ namespace AmberEditor::Panels
 			float p_frequency
 		);
 
-		/**
-		* Update profiling information
-		* @param p_deltaTime
-		*/
 		void Update(float p_deltaTime);
 
-		/**
-		* Enable or disable the profiler
-		* @param p_value
-		* @param p_disableLog
-		*/
 		void Enable(bool p_value, bool p_disableLog = false);
 
 	private:
-	    AmberRendering::Data::Color CalculateActionColor(double p_percentage) const;
+		AmberRendering::Data::Color CalculateActionColor(double p_percentage) const;
 		std::string GenerateActionString(AmberTools::Analytics::Profiling::ProfilerReport::Action& p_action);
 
 	private:

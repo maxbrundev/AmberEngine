@@ -3,6 +3,8 @@
 #include "AmberCore/Rendering/ECSRenderer.h"
 
 #include "AmberRendering/Resources/Model.h"
+
+#include "AmberTools/Analytics/Profiling/ProfilerSpy.h"
 #include "AmberRendering/Resources/ETextureFilteringMode.h"
 #include "AmberRendering/Resources/Loaders/TextureLoader.h"
 
@@ -68,6 +70,80 @@ AmberCore::Rendering::ECSRenderer::FindAndSortDrawables(const SceneSystem::Scene
 								transparentDrawables.emplace(distanceToActor, element);
 							else
 								opaqueDrawables.emplace(distanceToActor, element);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return { opaqueDrawables, transparentDrawables };
+}
+
+std::pair<AmberCore::Rendering::ECSRenderer::OpaqueDrawables, AmberCore::Rendering::ECSRenderer::TransparentDrawables>
+AmberCore::Rendering::ECSRenderer::FindAndSortFrustumCulledDrawables(const SceneSystem::Scene& p_scene, const glm::vec3& p_cameraPosition, const AmberRendering::Data::Frustum& p_frustum, AmberCore::Resources::Material* p_defaultMaterial)
+{
+	OpaqueDrawables opaqueDrawables;
+	TransparentDrawables transparentDrawables;
+
+	for (ECS::Components::CModelRenderer* modelRenderer : p_scene.GetFastAccessComponents().modelRenderers)
+	{
+		auto& owner = modelRenderer->Owner;
+
+		if (owner.IsActive())
+		{
+			if (const auto model = modelRenderer->GetModel())
+			{
+				if (const auto materialRenderer = owner.GetComponent<ECS::Components::CMaterialRenderer>())
+				{
+					auto& transform = owner.transform.GetTransform();
+
+					AmberRendering::Settings::ECullingOptions cullingOptions = AmberRendering::Settings::ECullingOptions::NONE;
+
+					if (modelRenderer->GetFrustumBehaviour() != ECS::Components::CModelRenderer::EFrustumBehaviour::DISABLED)
+					{
+						cullingOptions |= AmberRendering::Settings::ECullingOptions::FRUSTUM_PER_MODEL;
+					}
+
+					if (modelRenderer->GetFrustumBehaviour() == ECS::Components::CModelRenderer::EFrustumBehaviour::CULL_MESHES)
+					{
+						cullingOptions |= AmberRendering::Settings::ECullingOptions::FRUSTUM_PER_MESH;
+					}
+
+					const auto& modelBoundingSphere = modelRenderer->GetFrustumBehaviour() == ECS::Components::CModelRenderer::EFrustumBehaviour::CULL_CUSTOM ? modelRenderer->GetCustomBoundingSphere() : model->GetBoundingSphere();
+
+					std::vector<AmberRendering::Resources::Mesh*> meshes;
+
+					{
+						PROFILER_SPY("Frustum Culling");
+						meshes = GetMeshesInFrustum(*model, modelBoundingSphere, transform, p_frustum, cullingOptions);
+					}
+
+					if (!meshes.empty())
+					{
+						float distanceToActor = glm::distance(transform.GetWorldPosition(), p_cameraPosition);
+						const ECS::Components::CMaterialRenderer::MaterialList& materials = materialRenderer->GetMaterials();
+
+						for (auto mesh : meshes)
+						{
+							AmberCore::Resources::Material* material = nullptr;
+
+							if (mesh->GetMaterialIndex() < MAX_MATERIAL_COUNT)
+							{
+								material = materials.at(mesh->GetMaterialIndex());
+								if (!material || !material->GetShader())
+									material = p_defaultMaterial;
+							}
+
+							if (material)
+							{
+								Drawable element = { transform.GetWorldMatrix(), mesh, material, materialRenderer->GetUserMatrix() };
+
+								if (material->IsBlendable())
+									transparentDrawables.emplace(distanceToActor, element);
+								else
+									opaqueDrawables.emplace(distanceToActor, element);
+							}
 						}
 					}
 				}
@@ -147,9 +223,51 @@ std::vector<glm::mat4> AmberCore::Rendering::ECSRenderer::FindLightMatrices(cons
 	return result;
 }
 
-void AmberCore::Rendering::ECSRenderer::RenderScene(const SceneSystem::Scene& p_scene, const glm::vec3& p_cameraPosition, const  AmberRendering::Entities::Camera& p_camera, AmberCore::Resources::Material* p_defaultMaterial)
+std::vector<glm::mat4> AmberCore::Rendering::ECSRenderer::FindLightMatricesInFrustum(const SceneSystem::Scene& p_scene, const AmberRendering::Data::Frustum& p_frustum)
 {
-	const auto& [opaqueMeshes, transparentMeshes] = FindAndSortDrawables(p_scene, p_cameraPosition, p_defaultMaterial);
+	std::vector<glm::mat4> result;
+
+	const auto& fastAccessComponents = p_scene.GetFastAccessComponents();
+
+	for (const auto light : fastAccessComponents.lights)
+	{
+		if (light->Owner.IsActive())
+		{
+			const auto& lightData = light->GetData();
+			const glm::vec3& position = lightData.GetTransform().GetWorldPosition();
+			float effectRange = lightData.GetEffectRange();
+
+			if (std::isinf(effectRange) || p_frustum.SphereInFrustum(position.x, position.y, position.z, effectRange))
+			{
+				if (dynamic_cast<ECS::Components::CAmbientBoxLight*>(light))
+				{
+					result.push_back(lightData.GenerateMatrix(true));
+				}
+				else
+				{
+					result.push_back(lightData.GenerateMatrix());
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+void AmberCore::Rendering::ECSRenderer::RenderScene(const SceneSystem::Scene& p_scene, const glm::vec3& p_cameraPosition, const AmberRendering::Entities::Camera& p_camera, const AmberRendering::Data::Frustum* p_customFrustum, AmberCore::Resources::Material* p_defaultMaterial)
+{
+	OpaqueDrawables opaqueMeshes;
+	TransparentDrawables transparentMeshes;
+
+	if (p_camera.HasFrustumGeometryCulling())
+	{
+		const auto& frustum = p_customFrustum ? *p_customFrustum : p_camera.GetFrustum();
+		std::tie(opaqueMeshes, transparentMeshes) = FindAndSortFrustumCulledDrawables(p_scene, p_cameraPosition, frustum, p_defaultMaterial);
+	}
+	else
+	{
+		std::tie(opaqueMeshes, transparentMeshes) = FindAndSortDrawables(p_scene, p_cameraPosition, p_defaultMaterial);
+	}
 
 	for (const auto&[distance, drawable] : opaqueMeshes)
 		DrawDrawable(drawable);

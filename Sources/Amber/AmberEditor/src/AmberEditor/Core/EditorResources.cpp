@@ -48,17 +48,47 @@ AmberEditor::Core::EditorResources::EditorResources(const std::string& p_editorA
 	m_models["Arrow_Picking"]   = AmberRendering::Resources::Loaders::ModelLoader::Create(modelsFolder + "Arrow_Picking.fbx", modelParserFlags);
 	m_models["Camera"]          = AmberRendering::Resources::Loaders::ModelLoader::Create(modelsFolder + "Camera.fbx", modelParserFlags);
 
-	const auto gridSource    = AmberRendering::Resources::RawShader::GetGrid();
-	const auto gizmoSource   = AmberRendering::Resources::RawShader::GetGizmo();
-	const auto normalsSource = AmberRendering::Resources::RawShader::GetNormalVisualizer();
+	AmberRendering::Resources::ETextureFilteringMode firstFilterBillboard  = AmberRendering::Resources::ETextureFilteringMode::NEAREST;
+	AmberRendering::Resources::ETextureFilteringMode secondFilterBillboard = AmberRendering::Resources::ETextureFilteringMode::NEAREST;
+
+	const auto gridSource      = AmberRendering::Resources::RawShader::GetGrid();
+	const auto gizmoSource     = AmberRendering::Resources::RawShader::GetGizmo();
+	const auto normalsSource   = AmberRendering::Resources::RawShader::GetNormalVisualizer();
+	const auto billboardSource = AmberRendering::Resources::RawShader::GetBillboard();
 
 	m_shaders["Grid"]          = AmberRendering::Resources::Loaders::ShaderLoader::CreateFromSource(gridSource.first, gridSource.second);
 	m_shaders["Gizmo"]         = AmberRendering::Resources::Loaders::ShaderLoader::CreateFromSource(gizmoSource.first, gizmoSource.second);
 	m_shaders["NormalsColors"] = AmberRendering::Resources::Loaders::ShaderLoader::CreateFromSource(normalsSource.first, normalsSource.second);
+	m_shaders["Billboard"]     = AmberRendering::Resources::Loaders::ShaderLoader::CreateFromSource(billboardSource.first, billboardSource.second);
 
 	std::vector<uint64_t> raw = EMPTY_TEXTURE;
 	m_textures["Empty_Texture"] = AmberRendering::Resources::Loaders::TextureLoader::CreateFromMemory(reinterpret_cast<uint8_t*>(raw.data()), 64, 64, firstFilterEditor, secondFilterEditor, false);
 	AmberCore::Helpers::GUIDrawer::ProvideEmptyTexture(*m_textures["Empty_Texture"]);
+
+	{
+		std::vector<uint64_t> raw = BILL_PLIGHT;
+		m_textures["Bill_Point_Light"] = AmberRendering::Resources::Loaders::TextureLoader::CreateFromMemory(reinterpret_cast<uint8_t*>(raw.data()), 128, 128, firstFilterBillboard, secondFilterBillboard, false);
+	}
+
+	{
+		std::vector<uint64_t> raw = BILL_SLIGHT;
+		m_textures["Bill_Spot_Light"] = AmberRendering::Resources::Loaders::TextureLoader::CreateFromMemory(reinterpret_cast<uint8_t*>(raw.data()), 128, 128, firstFilterBillboard, secondFilterBillboard, false);
+	}
+
+	{
+		std::vector<uint64_t> raw = BILL_DLIGHT;
+		m_textures["Bill_Directional_Light"] = AmberRendering::Resources::Loaders::TextureLoader::CreateFromMemory(reinterpret_cast<uint8_t*>(raw.data()), 128, 128, firstFilterBillboard, secondFilterBillboard, false);
+	}
+
+	{
+		std::vector<uint64_t> raw = BILL_ABLIGHT;
+		m_textures["Bill_Ambient_Box_Light"] = AmberRendering::Resources::Loaders::TextureLoader::CreateFromMemory(reinterpret_cast<uint8_t*>(raw.data()), 128, 128, firstFilterBillboard, secondFilterBillboard, false);
+	}
+
+	{
+		std::vector<uint64_t> raw = BILL_ASLIGHT;
+		m_textures["Bill_Ambient_Sphere_Light"] = AmberRendering::Resources::Loaders::TextureLoader::CreateFromMemory(reinterpret_cast<uint8_t*>(raw.data()), 128, 128, firstFilterBillboard, secondFilterBillboard, false);
+	}
 
 	{
 		std::vector<uint64_t> raw = BUTTON_PLAY;

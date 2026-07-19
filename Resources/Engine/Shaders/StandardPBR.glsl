@@ -154,6 +154,22 @@ bool PointInAABB(vec3 p_Point, vec3 p_AabbCenter, vec3 p_AabbHalfSize)
     );
 }
 
+vec3 RotateByQuaternion(vec3 p_Vector, vec4 p_Quaternion)
+{
+    return p_Vector + 2.0 * cross(p_Quaternion.xyz, cross(p_Quaternion.xyz, p_Vector) + p_Quaternion.w * p_Vector);
+}
+
+bool PointInOBB(vec3 p_Point, vec3 p_ObbCenter, vec3 p_ObbHalfSize, vec4 p_ObbRotation) {
+
+    vec3 localPoint = RotateByQuaternion(p_Point - p_ObbCenter, p_ObbRotation);
+
+    return (
+        localPoint.x >= -p_ObbHalfSize.x && localPoint.x <= p_ObbHalfSize.x &&
+        localPoint.y >= -p_ObbHalfSize.y && localPoint.y <= p_ObbHalfSize.y &&
+        localPoint.z >= -p_ObbHalfSize.z && localPoint.z <= p_ObbHalfSize.z
+    );
+}
+
 float LuminosityFromAttenuation(mat4 p_Light)
 {
     const vec3  lightPosition   = p_Light[0].rgb;
@@ -172,8 +188,9 @@ vec3 CalcAmbientBoxLight(mat4 p_Light)
     const vec3  lightColor      = UnPack(p_Light[2][0]);
     const float intensity       = p_Light[3][3];
     const vec3  size            = vec3(p_Light[0][3], p_Light[1][3], p_Light[2][3]);
+    const vec4  rotation        = vec4(p_Light[1].xyz, p_Light[2][1]);
 
-    return PointInAABB(fs_in.FragPos, lightPosition, size) ? lightColor * intensity : vec3(0.0);
+    return PointInOBB(fs_in.FragPos, lightPosition, size, rotation) ? lightColor * intensity : vec3(0.0);
 }
 
 vec3 CalcAmbientSphereLight(mat4 p_Light)
@@ -220,11 +237,11 @@ void main()
 
     for (int i = 0; i < ssbo_Lights.length(); ++i) 
     {
-        if (int(ssbo_Lights[i][3][0]) == 3)
+        if (int(ssbo_Lights[i][3][0]) == 2)
         {
             ambientSum += CalcAmbientBoxLight(ssbo_Lights[i]);
         }
-        else if (int(ssbo_Lights[i][3][0]) == 4)
+        else if (int(ssbo_Lights[i][3][0]) == 3)
         {
             ambientSum += CalcAmbientSphereLight(ssbo_Lights[i]);
         }
@@ -246,7 +263,7 @@ void main()
                     lightCoeff = ssbo_Lights[i][3][3];
                     break;
 
-                case 2:
+                case 4:
                     const vec3  lightForward    = ssbo_Lights[i][1].rgb;
                     const float cutOff          = cos(radians(ssbo_Lights[i][3][1]));
                     const float outerCutOff     = cos(radians(ssbo_Lights[i][3][1] + ssbo_Lights[i][3][2]));

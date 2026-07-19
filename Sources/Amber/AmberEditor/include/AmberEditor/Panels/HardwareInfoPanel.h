@@ -18,15 +18,8 @@ namespace AmberEditor::Panels
 			size_t p_maxElements
 		);
 
-		/**
-		* Destructor
-		*/
 		~HardwareInfoPanel();
 
-		/**
-		* Update hardware info
-		* @param p_deltaTime
-		*/
 		void Update(float p_deltaTime);
 
 	private:

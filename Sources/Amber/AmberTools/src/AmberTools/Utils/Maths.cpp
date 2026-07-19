@@ -14,10 +14,7 @@ uint32_t AmberTools::Utils::Maths::Pack(uint8_t p_value1, uint8_t p_value2, uint
 
 std::tuple<uint8_t, uint8_t, uint8_t, uint8_t> AmberTools::Utils::Maths::Unpack(uint32_t p_value)
 {
-	return std::make_tuple((p_value >> 24) & 0xff,
-	                           (p_value >> 16) & 0xff,
-		                       (p_value >> 8)  & 0xff,
-		                       (p_value)       & 0xff);
+	return std::make_tuple((p_value >> 24) & 0xff, (p_value >> 16) & 0xff, (p_value >> 8)  & 0xff, (p_value)       & 0xff);
 }
 
 float AmberTools::Utils::Maths::ToDegree(float p_radians)

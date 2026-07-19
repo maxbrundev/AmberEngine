@@ -23,6 +23,12 @@ namespace AmberCore::ECS::Components
 
 		void SetClearColor(const glm::vec3& p_clearColor);
 
+		void SetFrustumGeometryCulling(bool p_enable);
+		void SetFrustumLightCulling(bool p_enable);
+
+		bool HasFrustumGeometryCulling() const;
+		bool HasFrustumLightCulling() const;
+
 		void SetProjectionMode(AmberRendering::Settings::EProjectionMode p_projectionMode);
 
 		float GetFov() const;

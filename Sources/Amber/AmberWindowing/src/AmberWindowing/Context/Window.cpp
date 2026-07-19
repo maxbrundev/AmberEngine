@@ -91,11 +91,6 @@ void AmberWindowing::Context::Window::SetCursorMode(ECursorMode p_cursorMode)
 	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, static_cast<int>(p_cursorMode));
 }
 
-void AmberWindowing::Context::Window::SetViewport(int p_width, int p_height) const
-{
-	glViewport(0, 0, p_width, p_height);
-}
-
 void AmberWindowing::Context::Window::SetSize(uint16_t p_width, uint16_t p_height)
 {
 	m_size.first = p_width;
@@ -266,16 +261,6 @@ void AmberWindowing::Context::Window::OnResizeWindow(uint16_t p_width, uint16_t 
 
 void AmberWindowing::Context::Window::OnResizeFramebuffer(uint16_t p_width, uint16_t p_height)
 {
-	/*
-	 * While the size of a window is measured in screen coordinates,
-	 * OpenGL works with pixels. The size you pass into glViewport,
-	 * for example, should be in pixels. On some machines screen coordinates and pixels are the same,
-	 * but on others they will not be.
-	 * To prevent wrong Window Size get the Window Size in screen coordinates with glfwGetWindowSize before assign the new Width and Height
-	 */
-	
-	SetViewport(p_width, p_height);
-	
 	int width, height;
 	glfwGetWindowSize(m_glfwWindow, &width, &height);
 

@@ -12,8 +12,11 @@
 
 #include "AmberUI/Widgets/Separator.h"
 
+#include "AmberEditor/Panels/AssetView.h"
+#include "AmberEditor/Panels/SceneView.h"
 #include "AmberEditor/Settings/EditorSettings.h"
 #include "AmberEditor/Utils/ActorCreationMenu.h"
+#include "AmberUI/Widgets/ColorEdit.h"
 #include "AmberTools/Utils/String.h"
 #include "AmberEditor/Core/EditorAction.h"
 
@@ -51,6 +54,71 @@ void AmberEditor::Panels::MenuBar::CreateSettingsMenu()
 {
 	auto& settingsMenu = CreateWidget<AmberUI::Widgets::MenuList>("Settings");
 
+	settingsMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Spawn actors at origin", "", true, true).ValueChangedEvent += EDITOR_BIND(SetActorSpawnAtOrigin, std::placeholders::_1);
+	settingsMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Vertical Synchronization", "", true, true).ValueChangedEvent += [](bool p_value) { EDITOR_CONTEXT(device)->SetVsync(p_value); };
+
+	auto& cameraSpeedMenu = settingsMenu.CreateWidget<AmberUI::Widgets::MenuList>("Camera Speed");
+	cameraSpeedMenu.CreateWidget<AmberUI::Widgets::DragSingleScalar<int>>(ImGuiDataType_S32, 1, 20, 5, 1.0f, "Scene View", "%d").ValueChangedEvent += EDITOR_BIND(SetSceneViewCameraSpeed, std::placeholders::_1);
+	cameraSpeedMenu.CreateWidget<AmberUI::Widgets::DragSingleScalar<int>>(ImGuiDataType_S32, 1, 20, 5, 1.0f, "Asset View", "%d").ValueChangedEvent += EDITOR_BIND(SetAssetViewCameraSpeed, std::placeholders::_1);
+
+	auto& cameraPositionMenu = settingsMenu.CreateWidget<AmberUI::Widgets::MenuList>("Reset Camera");
+	cameraPositionMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Scene View").ClickedEvent += EDITOR_BIND(ResetSceneViewCameraPosition);
+	cameraPositionMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Asset View").ClickedEvent += EDITOR_BIND(ResetAssetViewCameraPosition);
+
+	auto& viewColors = settingsMenu.CreateWidget<AmberUI::Widgets::MenuList>("View Colors");
+
+	auto& sceneViewBackground = viewColors.CreateWidget<AmberUI::Widgets::MenuList>("Scene View Background");
+	auto& sceneViewBackgroundPicker = sceneViewBackground.CreateWidget<AmberUI::Widgets::ColorEdit>(false, AmberRendering::Data::Color{ 0.098f, 0.098f, 0.098f });
+	sceneViewBackgroundPicker.ColorChangedEvent += [](AmberRendering::Data::Color& p_color)
+	{
+		EDITOR_PANEL(AmberEditor::Panels::SceneView, "Scene View").GetCamera().SetClearColor({ p_color.r, p_color.g, p_color.b });
+	};
+	sceneViewBackground.CreateWidget<AmberUI::Widgets::MenuItem>("Reset").ClickedEvent += [&sceneViewBackgroundPicker]
+	{
+		EDITOR_PANEL(AmberEditor::Panels::SceneView, "Scene View").GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
+		sceneViewBackgroundPicker.Color = { 0.098f, 0.098f, 0.098f };
+	};
+
+	auto& sceneViewGrid = viewColors.CreateWidget<AmberUI::Widgets::MenuList>("Scene View Grid");
+	auto& sceneViewGridPicker = sceneViewGrid.CreateWidget<AmberUI::Widgets::ColorEdit>(false, AmberRendering::Data::Color{ 0.176f, 0.176f, 0.176f });
+	sceneViewGridPicker.ColorChangedEvent += [](AmberRendering::Data::Color& p_color)
+	{
+		EDITOR_PANEL(AmberEditor::Panels::SceneView, "Scene View").SetGridColor({ p_color.r, p_color.g, p_color.b });
+	};
+	sceneViewGrid.CreateWidget<AmberUI::Widgets::MenuItem>("Reset").ClickedEvent += [&sceneViewGridPicker]
+	{
+		EDITOR_PANEL(AmberEditor::Panels::SceneView, "Scene View").SetGridColor({ 0.176f, 0.176f, 0.176f });
+		sceneViewGridPicker.Color = { 0.176f, 0.176f, 0.176f };
+	};
+
+	auto& assetViewBackground = viewColors.CreateWidget<AmberUI::Widgets::MenuList>("Asset View Background");
+	auto& assetViewBackgroundPicker = assetViewBackground.CreateWidget<AmberUI::Widgets::ColorEdit>(false, AmberRendering::Data::Color{ 0.098f, 0.098f, 0.098f });
+	assetViewBackgroundPicker.ColorChangedEvent += [](AmberRendering::Data::Color& p_color)
+	{
+		EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").GetCamera().SetClearColor({ p_color.r, p_color.g, p_color.b });
+	};
+	assetViewBackground.CreateWidget<AmberUI::Widgets::MenuItem>("Reset").ClickedEvent += [&assetViewBackgroundPicker]
+	{
+		EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").GetCamera().SetClearColor({ 0.098f, 0.098f, 0.098f });
+		assetViewBackgroundPicker.Color = { 0.098f, 0.098f, 0.098f };
+	};
+
+	auto& assetViewGrid = viewColors.CreateWidget<AmberUI::Widgets::MenuList>("Asset View Grid");
+	auto& assetViewGridPicker = assetViewGrid.CreateWidget<AmberUI::Widgets::ColorEdit>(false, AmberRendering::Data::Color{ 0.176f, 0.176f, 0.176f });
+	assetViewGridPicker.ColorChangedEvent += [](AmberRendering::Data::Color& p_color)
+	{
+		EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").SetGridColor({ p_color.r, p_color.g, p_color.b });
+	};
+	assetViewGrid.CreateWidget<AmberUI::Widgets::MenuItem>("Reset").ClickedEvent += [&assetViewGridPicker]
+	{
+		EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").SetGridColor({ 0.176f, 0.176f, 0.176f });
+		assetViewGridPicker.Color = { 0.176f, 0.176f, 0.176f };
+	};
+
+	auto& sceneViewBillboardScaleMenu = settingsMenu.CreateWidget<AmberUI::Widgets::MenuList>("3D Icons Scales");
+	auto& lightBillboardScaleDrag = sceneViewBillboardScaleMenu.CreateWidget<AmberUI::Widgets::DragSingleScalar<int>>(ImGuiDataType_S32, 0, 100, static_cast<int>(Settings::EditorSettings::LightBillboardScale * 100.0f), 1.0f, "Lights", "%d %%");
+	lightBillboardScaleDrag.ValueChangedEvent += [](int p_value) { Settings::EditorSettings::LightBillboardScale = p_value / 100.0f; };
+
 	auto& snappingMenu = settingsMenu.CreateWidget<AmberUI::Widgets::MenuList>("Snapping");
 	snappingMenu.CreateWidget<AmberUI::Widgets::DragSingleScalar<float>>(ImGuiDataType_Float, 0.001f, 999999.0f, Settings::EditorSettings::TranslationSnapUnit, 0.05f, "Translation Unit", "%.3f").ValueChangedEvent += [](float p_value) { Settings::EditorSettings::TranslationSnapUnit = p_value; };
 	snappingMenu.CreateWidget<AmberUI::Widgets::DragSingleScalar<float>>(ImGuiDataType_Float, 0.001f, 999999.0f, Settings::EditorSettings::RotationSnapUnit, 1.0f, "Rotation Unit", "%.3f").ValueChangedEvent += [](float p_value) { Settings::EditorSettings::RotationSnapUnit = p_value; };
@@ -59,6 +127,10 @@ void AmberEditor::Panels::MenuBar::CreateSettingsMenu()
 	auto& debuggingMenu = settingsMenu.CreateWidget<AmberUI::Widgets::MenuList>("Debugging");
 	debuggingMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Show geometry bounds", "", true, Settings::EditorSettings::ShowGeometryBounds).ValueChangedEvent += [](bool p_value) { Settings::EditorSettings::ShowGeometryBounds = p_value; };
 	debuggingMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Show lights bounds", "", true, Settings::EditorSettings::ShowLightBounds).ValueChangedEvent += [](bool p_value) { Settings::EditorSettings::ShowLightBounds = p_value; };
+
+	auto& frustumCullingMenu = debuggingMenu.CreateWidget<AmberUI::Widgets::MenuList>("Frustum culling visualizer...");
+	frustumCullingMenu.CreateWidget<AmberUI::Widgets::MenuItem>("For geometry", "", true, Settings::EditorSettings::ShowGeometryFrustumCullingInSceneView).ValueChangedEvent += [](bool p_value) { Settings::EditorSettings::ShowGeometryFrustumCullingInSceneView = p_value; };
+	frustumCullingMenu.CreateWidget<AmberUI::Widgets::MenuItem>("For lights", "", true, Settings::EditorSettings::ShowLightFrustumCullingInSceneView).ValueChangedEvent += [](bool p_value) { Settings::EditorSettings::ShowLightFrustumCullingInSceneView = p_value; };
 }
 
 void AmberEditor::Panels::MenuBar::CreateWindowMenu()
@@ -161,6 +233,32 @@ void AmberEditor::Panels::MenuBar::CreateResourcesMenu()
 {
 	auto& resourcesMenu = CreateWidget<AmberUI::Widgets::MenuList>("Resources");
 	resourcesMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Compile shaders").ClickedEvent += EDITOR_BIND(CompileShaders);
+	resourcesMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Save materials").ClickedEvent += EDITOR_BIND(SaveMaterials);
+}
+
+void AmberEditor::Panels::MenuBar::HandleShortcuts(float p_deltaTime)
+{
+	auto& inputManager = *EDITOR_CONTEXT(inputManager);
+
+	if (inputManager.GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_CONTROL) == AmberWindowing::Inputs::EKeyState::KEY_DOWN)
+	{
+		if (inputManager.IsKeyPressed(AmberWindowing::Inputs::EKey::KEY_N))
+		{
+			EDITOR_EXEC(LoadEmptyScene());
+		}
+
+		if (inputManager.IsKeyPressed(AmberWindowing::Inputs::EKey::KEY_S))
+		{
+			if (inputManager.GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_SHIFT) == AmberWindowing::Inputs::EKeyState::KEY_UP)
+			{
+				EDITOR_EXEC(SaveSceneChanges());
+			}
+			else
+			{
+				EDITOR_EXEC(SaveAs());
+			}
+		}
+	}
 }
 
 void AmberEditor::Panels::MenuBar::UpdateToggleableItems()

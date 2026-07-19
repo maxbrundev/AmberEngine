@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "AmberRendering/Data/Frustum.h"
 #include "AmberRendering/Settings/EProjectionMode.h"
 
 namespace AmberRendering::Entities
@@ -12,6 +13,7 @@ namespace AmberRendering::Entities
 		~Camera() = default;
 
 		void ComputeMatrices(uint16_t p_windowWidth, uint16_t p_windowHeight, const glm::vec3& p_position, const glm::quat& p_rotation);
+		void ComputeFrustum(const glm::mat4& p_view, const glm::mat4& p_projection);
 
 		void SetProjectionMode(Settings::EProjectionMode p_projectionMode);
 
@@ -21,6 +23,14 @@ namespace AmberRendering::Entities
 		void SetFar(float p_value);
 
 		void SetClearColor(const glm::vec3& p_clearColor);
+
+		void SetFrustumGeometryCulling(bool p_enable);
+		void SetFrustumLightCulling(bool p_enable);
+
+		bool HasFrustumGeometryCulling() const;
+		bool HasFrustumLightCulling() const;
+
+		const Data::Frustum& GetFrustum() const;
 
 		Settings::EProjectionMode GetProjectionMode() const;
 
@@ -39,6 +49,8 @@ namespace AmberRendering::Entities
 		void ComputeProjectionMatrix(uint16_t p_windowWidth, uint16_t p_windowHeight);
 
 	private:
+		Data::Frustum m_frustum;
+
 		glm::mat4 m_viewMatrix;
 		glm::mat4 m_projectionMatrix;
 
@@ -50,5 +62,8 @@ namespace AmberRendering::Entities
 		float m_far;
 
 		Settings::EProjectionMode m_projectionMode;
+
+		bool m_frustumGeometryCulling;
+		bool m_frustumLightCulling;
 	};
 }

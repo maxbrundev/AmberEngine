@@ -7,8 +7,7 @@
 #include "AmberUI/Widgets/PlotLines.h"
 #include "AmberUI/Widgets/Text.h"
 
-AmberEditor::Panels::HardwareInfoPanel::HardwareInfoPanel(const std::string& p_title, bool p_opened,
-                                                    const AmberUI::Panels::PanelSettings& p_windowSettings, float p_logFrequency, size_t p_maxElements) :
+AmberEditor::Panels::HardwareInfoPanel::HardwareInfoPanel(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings, float p_logFrequency, size_t p_maxElements) :
 	AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings),
 	m_logFrequency(p_logFrequency),
 	m_maxElements(p_maxElements),

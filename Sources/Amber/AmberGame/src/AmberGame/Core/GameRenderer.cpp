@@ -41,7 +41,14 @@ void AmberGame::Core::GameRenderer::RenderScene()
 	{
 		if (AmberCore::ECS::Components::CCamera* mainCameraComponent = m_context.renderer->FindMainCamera(*currentScene))
 		{
-			UpdateLights(*currentScene);
+			if (mainCameraComponent->HasFrustumLightCulling())
+			{
+				UpdateLightsInFrustum(*currentScene, mainCameraComponent->GetCamera().GetFrustum());
+			}
+			else
+			{
+				UpdateLights(*currentScene);
+			}
 
 			auto [winWidth, winHeight] = m_context.window->GetSize();
 
@@ -60,7 +67,7 @@ void AmberGame::Core::GameRenderer::RenderScene()
 
 			uint8_t glState = m_context.renderer->FetchGLState();
 			m_context.renderer->ApplyStateMask(glState);
-			m_context.renderer->RenderScene(*currentScene, cameraPosition, camera, &m_emptyMaterial);
+			m_context.renderer->RenderScene(*currentScene, cameraPosition, camera, nullptr, &m_emptyMaterial);
 			m_context.renderer->ApplyStateMask(glState);
 		}
 		else
@@ -85,5 +92,12 @@ void AmberGame::Core::GameRenderer::UpdateLights(AmberCore::SceneSystem::Scene& 
 {
 	PROFILER_SPY("Light SSBO Update");
 	std::vector<glm::mat4> lightMatrices = m_context.renderer->FindLightMatrices(p_scene);
+	m_context.lightSSBO->SendBlocks<glm::mat4>(lightMatrices.data(), lightMatrices.size() * sizeof(glm::mat4));
+}
+
+void AmberGame::Core::GameRenderer::UpdateLightsInFrustum(AmberCore::SceneSystem::Scene& p_scene, const AmberRendering::Data::Frustum& p_frustum)
+{
+	PROFILER_SPY("Light SSBO Update (Frustum culled)");
+	std::vector<glm::mat4> lightMatrices = m_context.renderer->FindLightMatricesInFrustum(p_scene, p_frustum);
 	m_context.lightSSBO->SendBlocks<glm::mat4>(lightMatrices.data(), lightMatrices.size() * sizeof(glm::mat4));
 }

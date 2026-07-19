@@ -10,12 +10,6 @@ namespace AmberEditor::Panels
 	class MaterialEditor : public AmberUI::Panels::APanelWindow
 	{
 	public:
-		/**
-		* Constructor
-		* @param p_title
-		* @param p_opened
-		* @param p_windowSettings
-		*/
 		MaterialEditor
 		(
 			const std::string& p_title,
@@ -23,35 +17,16 @@ namespace AmberEditor::Panels
 			const AmberUI::Panels::PanelSettings& p_windowSettings
 		);
 
-		/**
-		* Refresh the material editor
-		*/
 		void Refresh();
 
-		/**
-		* Defines the target material of the material editor
-		* @param p_newTarget
-		*/
 		void SetTarget(AmberCore::Resources::Material& p_newTarget);
 
-		/**
-		* Returns the target of the material editor
-		*/
 		AmberCore::Resources::Material* GetTarget() const;
 
-		/**
-		* Remove the target of the material editor (Clear the material editor)
-		*/
 		void RemoveTarget();
 
-		/**
-		* Launch the preview of the currently targeted material
-		*/
 		void Preview();
 
-		/**
-		* Reset material
-		*/
 		void Reset();
 
 	private:

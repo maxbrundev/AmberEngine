@@ -5,14 +5,8 @@
 
 namespace AmberTools::Analytics::Profiling
 {
-	/**
-	* Contains profiling data about a running period
-	*/
 	struct ProfilerReport final
 	{
-		/**
-		* Data about an action (Called method)
-		*/
 		struct Action final
 		{
 			std::string name;

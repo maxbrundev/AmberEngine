@@ -4,22 +4,9 @@
 
 namespace AmberUI::Widgets
 {
-	/**
-	* Plot displayed as an histogram
-	*/
 	class PlotHistogram : public APlot
 	{
 	public:
-		/**
-		* Constructor
-		* @param p_data
-		* @param p_minScale
-		* @param p_maxScale
-		* @param p_size
-		* @param p_overlay
-		* @param p_label
-		* @param p_forceHover
-		*/
 		PlotHistogram
 		(
 			const std::vector<float>& p_data = std::vector<float>(),

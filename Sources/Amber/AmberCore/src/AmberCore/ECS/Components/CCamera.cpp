@@ -42,6 +42,26 @@ void AmberCore::ECS::Components::CCamera::SetClearColor(const glm::vec3& p_clear
 	m_camera.SetClearColor(p_clearColor);
 }
 
+void AmberCore::ECS::Components::CCamera::SetFrustumGeometryCulling(bool p_enable)
+{
+	m_camera.SetFrustumGeometryCulling(p_enable);
+}
+
+void AmberCore::ECS::Components::CCamera::SetFrustumLightCulling(bool p_enable)
+{
+	m_camera.SetFrustumLightCulling(p_enable);
+}
+
+bool AmberCore::ECS::Components::CCamera::HasFrustumGeometryCulling() const
+{
+	return m_camera.HasFrustumGeometryCulling();
+}
+
+bool AmberCore::ECS::Components::CCamera::HasFrustumLightCulling() const
+{
+	return m_camera.HasFrustumLightCulling();
+}
+
 void AmberCore::ECS::Components::CCamera::SetProjectionMode(AmberRendering::Settings::EProjectionMode p_projectionMode)
 {
 	m_camera.SetProjectionMode(p_projectionMode);
@@ -99,6 +119,8 @@ void AmberCore::ECS::Components::CCamera::OnInspector(AmberUI::WidgetContainer& 
 	AmberCore::Helpers::GUIDrawer::DrawScalar<float>(p_root, "Near", std::bind(&CCamera::GetNear, this), std::bind(&CCamera::SetNear, this, std::placeholders::_1));
 	AmberCore::Helpers::GUIDrawer::DrawScalar<float>(p_root, "Far", std::bind(&CCamera::GetFar, this), std::bind(&CCamera::SetFar, this, std::placeholders::_1));
 	AmberCore::Helpers::GUIDrawer::DrawColor(p_root, "Clear color", [this]() {return reinterpret_cast<const AmberRendering::Data::Color&>(GetClearColor()); }, [this](AmberRendering::Data::Color p_color) { SetClearColor({ p_color.r, p_color.g, p_color.b }); }, false);
+	AmberCore::Helpers::GUIDrawer::DrawBoolean(p_root, "Frustum Geometry Culling", std::bind(&CCamera::HasFrustumGeometryCulling, this), std::bind(&CCamera::SetFrustumGeometryCulling, this, std::placeholders::_1));
+	AmberCore::Helpers::GUIDrawer::DrawBoolean(p_root, "Frustum Light Culling", std::bind(&CCamera::HasFrustumLightCulling, this), std::bind(&CCamera::SetFrustumLightCulling, this, std::placeholders::_1));
 
 	AmberCore::Helpers::GUIDrawer::CreateTitle(p_root, "Projection Mode");
 	auto& projectionMode = p_root.CreateWidget<AmberUI::Widgets::ComboBox>(static_cast<int>(GetProjectionMode()));
@@ -121,6 +143,8 @@ void AmberCore::ECS::Components::CCamera::OnSerialize(tinyxml2::XMLDocument& p_d
 	Helpers::Serializer::SerializeFloat(p_doc, p_node, "near", m_camera.GetNear());
 	Helpers::Serializer::SerializeFloat(p_doc, p_node, "far", m_camera.GetFar());
 	Helpers::Serializer::SerializeVec3(p_doc, p_node, "clear_color", m_camera.GetClearColor());
+	Helpers::Serializer::SerializeBoolean(p_doc, p_node, "frustum_geometry_culling", m_camera.HasFrustumGeometryCulling());
+	Helpers::Serializer::SerializeBoolean(p_doc, p_node, "frustum_light_culling", m_camera.HasFrustumLightCulling());
 	Helpers::Serializer::SerializeInt(p_doc, p_node, "projection_mode", static_cast<int>(m_camera.GetProjectionMode()));
 }
 
@@ -131,6 +155,8 @@ void AmberCore::ECS::Components::CCamera::OnDeserialize(tinyxml2::XMLDocument& p
 	m_camera.SetNear(Helpers::Serializer::DeserializeFloat(p_doc, p_node, "near"));
 	m_camera.SetFar(Helpers::Serializer::DeserializeFloat(p_doc, p_node, "far"));
 	m_camera.SetClearColor(Helpers::Serializer::DeserializeVec3(p_doc, p_node, "clear_color"));
+	m_camera.SetFrustumGeometryCulling(Helpers::Serializer::DeserializeBoolean(p_doc, p_node, "frustum_geometry_culling"));
+	m_camera.SetFrustumLightCulling(Helpers::Serializer::DeserializeBoolean(p_doc, p_node, "frustum_light_culling"));
 
 	// We have to make sure the "projection_mode" exists in the serialized component, otherwise we do not want to modify the default setting (Perspective).
 	// This is a bad practice to have each components calling setters in `OnDeserialize` even if no XML node hasn't been found for a given property.

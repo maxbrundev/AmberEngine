@@ -21,6 +21,8 @@ namespace AmberEditor::Panels
 		MenuBar();
 		virtual ~MenuBar() override = default;
 
+		void HandleShortcuts(float p_deltaTime);
+
 		void RegisterPanel(const std::string& p_name, AmberUI::Panels::APanelWindow& p_panel);
 
 	private:

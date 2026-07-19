@@ -13,12 +13,6 @@ namespace AmberTools::Utils
 		Format() = delete;
 
 	public:
-		/**
-		* @brief Transfrom a number into a more readable version
-		* by grouping every 3 digits occurences together seperated by commas.
-		* @param number Number to make more readable
-		* @return A std::string representation of the number, more readable.
-		*/
 		static std::string ToReadableNumber(const uint64_t number);
 	};
 }

@@ -10,12 +10,6 @@ namespace AmberEditor::Panels
 	class Console : public AmberUI::Panels::APanelWindow
 	{
 	public:
-		/**
-		* Constructor
-		* @param p_title
-		* @param p_opened
-		* @param p_windowSettings
-		*/
 		Console
 		(
 			const std::string& p_title,
@@ -23,31 +17,14 @@ namespace AmberEditor::Panels
 			const AmberUI::Panels::PanelSettings& p_windowSettings
 		);
 
-		/**
-		* Method called when a log event occured
-		* @param p_logData
-		*/
 		void OnLogIntercepted(const AmberDebug::LogData& p_logData);
 
-		/**
-		* Called when the scene plays. It will clear the console if the "Clear on play" settings is on
-		*/
 		void ClearOnPlay();
 
-		/**
-		* Clear the console
-		*/
 		void Clear();
 
-		/**
-		* Filter logs using defined filters
-		*/
 		void FilterLogs();
 
-		/**
-		* Verify if a given log level is allowed by the current filter
-		* @param p_logLevel
-		*/
 		bool IsAllowedByFilter(AmberDebug::ELogLevel p_logLevel);
 
 	private:

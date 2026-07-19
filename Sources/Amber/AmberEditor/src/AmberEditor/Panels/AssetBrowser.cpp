@@ -910,9 +910,7 @@ public:
 
 ///////////////////////////////////////////////////////////////
 
-AmberEditor::Panels::AssetBrowser::AssetBrowser(const std::string& p_title, bool p_opened,
-                                                    const AmberUI::Panels::PanelSettings& p_windowSettings, const std::string& p_engineAssetFolder,
-                                                    const std::string& p_projectAssetFolder, const std::string& p_projectScriptFolder) :
+AmberEditor::Panels::AssetBrowser::AssetBrowser(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings, const std::string& p_engineAssetFolder, const std::string& p_projectAssetFolder, const std::string& p_projectScriptFolder) :
 	AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings),
 	m_engineAssetFolder(p_engineAssetFolder),
 	m_projectAssetFolder(p_projectAssetFolder),
@@ -958,8 +956,7 @@ void AmberEditor::Panels::AssetBrowser::Refresh()
 	Fill();
 }
 
-void AmberEditor::Panels::AssetBrowser::ParseFolder(AmberUI::Widgets::TreeNode& p_root,
-                                                        const std::filesystem::directory_entry& p_directory, bool p_isEngineItem, bool p_scriptFolder)
+void AmberEditor::Panels::AssetBrowser::ParseFolder(AmberUI::Widgets::TreeNode& p_root, const std::filesystem::directory_entry& p_directory, bool p_isEngineItem, bool p_scriptFolder)
 {
 	/* Iterates another time to display list files */
 	for (auto& item : std::filesystem::directory_iterator(p_directory))

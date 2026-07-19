@@ -26,6 +26,7 @@ namespace AmberEditor::Panels
 
 		void SetCameraPosition(const glm::vec3& p_position);
 		void SetCameraRotation(const glm::quat& p_rotation);
+		void SetGridColor(const glm::vec3& p_color);
 		const glm::vec3& GetCameraPosition() const;
 		const glm::quat& GetCameraRotation() const;
 		AmberRendering::Entities::Camera& GetCamera();

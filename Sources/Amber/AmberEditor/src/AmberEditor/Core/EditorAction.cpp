@@ -6,6 +6,7 @@
 
 #include "AmberCore/ECS/Components/CModelRenderer.h"
 #include "AmberCore/ECS/Components/CMaterialRenderer.h"
+#include "AmberCore/Resources/Loaders/MaterialLoader.h"
 #include "AmberRendering/Resources/Loaders/ShaderLoader.h"
 #include "AmberTools/Global/ServiceLocator.h"
 #include "AmberEditor/Panels/SceneView.h"
@@ -30,9 +31,9 @@ AmberEditor::Core::EditorAction::EditorAction(Context& p_context, EditorRenderer
 {
 	AmberTools::Global::ServiceLocator::Provide<EditorAction>(*this);
 
-	AmberCore::ECS::Components::CMaterialRenderer::MaterialFilesGenerationRequestedEvent += [this](const std::string& p_materialName)
+	AmberCore::ECS::Components::CMaterialRenderer::MaterialFilesGenerationRequestedEvent += [this](const std::string& p_materialPath, const std::string& p_shaderPath)
 	{
-		GenerateModelMaterialFiles(p_materialName);
+		GenerateModelMaterialFiles(p_materialPath, p_shaderPath);
 	};
 }
 
@@ -153,6 +154,21 @@ void AmberEditor::Core::EditorAction::SetSceneViewCameraSpeed(int p_value)
 int AmberEditor::Core::EditorAction::GetSceneViewCameraSpeed()
 {
 	return (int)EDITOR_PANEL(AmberEditor::Panels::SceneView, "Scene View").GetCameraController().GetSpeed();
+}
+
+void AmberEditor::Core::EditorAction::SetAssetViewCameraSpeed(int p_value)
+{
+	EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").GetCameraController().SetSpeed((float)p_value);
+}
+
+int AmberEditor::Core::EditorAction::GetAssetViewCameraSpeed()
+{
+	return (int)EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").GetCameraController().GetSpeed();
+}
+
+void AmberEditor::Core::EditorAction::ResetAssetViewCameraPosition()
+{
+	EDITOR_PANEL(AmberEditor::Panels::AssetView, "Asset View").GetCameraController().SetPosition({ -10.0f, 4.0f, 10.0f });
 }
 
 void AmberEditor::Core::EditorAction::ResetSceneViewCameraPosition()
@@ -343,25 +359,30 @@ void AmberEditor::Core::EditorAction::CompileShaders()
 		AmberRendering::Resources::Loaders::ShaderLoader::Recompile(*shader.second, GetRealPath(shader.second->Path));
 }
 
-void AmberEditor::Core::EditorAction::GenerateModelMaterialFiles(const std::string& materialName)
+void AmberEditor::Core::EditorAction::SaveMaterials()
 {
-	std::string finalPath = m_context.projectAssetsPath + "Materials\\" + materialName + ".abmat";
+	for (auto& [id, material] : m_context.materialManager.GetResources())
+		AmberCore::Resources::Loaders::MaterialLoader::Save(*material, GetRealPath(material->path));
+}
+
+void AmberEditor::Core::EditorAction::GenerateModelMaterialFiles(const std::string& p_materialPath, const std::string& p_shaderPath)
+{
+	std::string finalPath = m_context.projectAssetsPath + p_materialPath;
 
 	if (std::filesystem::exists(finalPath))
 		return;
 
-
 	{
-		if (!std::filesystem::exists(m_context.projectAssetsPath + "Materials\\"))
+		const std::string containingFolder = AmberTools::Utils::PathParser::GetContainingFolder(finalPath);
+
+		if (!std::filesystem::exists(containingFolder))
 		{
-			std::filesystem::create_directories(m_context.projectAssetsPath + "Materials\\");
+			std::filesystem::create_directories(containingFolder);
 		}
 
 		std::ofstream outfile(finalPath);
-		outfile << "<root><shader>:Shaders\\Standard.glsl</shader></root>" << std::endl; // Empty standard material content
+		outfile << "<root><shader>" << p_shaderPath << "</shader></root>" << std::endl;
 	}
-
-	
 
 	EDITOR_CONTEXT(materialManager)[EDITOR_EXEC(GetResourcePath(finalPath))];
 }

@@ -2,15 +2,9 @@
 
 namespace AmberTools::Analytics::Hardware
 {
-	/**
-	* The CPUInfo class will gather informations about the CPU usage
-	*/
 	class CPUInfo final
 	{
 	public:
-		/**
-		* Calculate the CPU load for every process on the machine (%)
-		*/
 		float CalculateCPULoad();
 
 	private:

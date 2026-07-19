@@ -16,7 +16,7 @@ namespace AmberRendering::Resources
 
 	public:
 		std::vector<std::string>& GetMaterialNames();
-		std::vector<Mesh*>& GetMeshes();
+		const std::vector<Mesh*>& GetMeshes() const;
 
 		const AmberRendering::Geometry::BoundingSphere& GetBoundingSphere() const;
 

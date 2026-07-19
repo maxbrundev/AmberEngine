@@ -50,6 +50,10 @@ namespace AmberEditor::Core
 		int GetSceneViewCameraSpeed();
 		void ResetSceneViewCameraPosition();
 
+		void SetAssetViewCameraSpeed(int p_value);
+		int GetAssetViewCameraSpeed();
+		void ResetAssetViewCameraPosition();
+
 		void SetActorSpawnAtOrigin(bool p_value);
 		glm::vec3 ComputeActorSpawnPoint(float p_distanceToCamera);
 
@@ -75,7 +79,9 @@ namespace AmberEditor::Core
 
 		void CompileShaders();
 
-		void GenerateModelMaterialFiles(const std::string& materialName);
+		void SaveMaterials();
+
+		void GenerateModelMaterialFiles(const std::string& p_materialPath, const std::string& p_shaderPath);
 
 		bool ImportAsset(const std::string& p_initialDestinationDirectory);
 
@@ -94,35 +100,16 @@ namespace AmberEditor::Core
 
 		enum class EEditorMode { EDIT, PLAY, PAUSE, FRAME_BY_FRAME };
 
-		/**
-		* Returns the current editor state/mode
-		*/
 		EEditorMode GetCurrentEditorMode() const;
 
-		/**
-		* Defines the editor state/mode
-		* @param p_newEditorMode
-		*/
 		void SetEditorMode(EEditorMode p_newEditorMode);
 
-		/**
-		* Start playing the current scene and update the editor mode
-		*/
 		void StartPlaying();
 
-		/**
-		* Pause the current playing scene and update the editor mode
-		*/
 		void PauseGame();
 
-		/**
-		* Stop platying the current scene and update the editor mode
-		*/
 		void StopPlaying();
 
-		/**
-		* Play the current frame and pause the editor
-		*/
 		void NextFrame();
 
 		Context& GetContext();

@@ -17,11 +17,13 @@ namespace AmberEditor::Core
 		void InitMaterials();
 		void PreparePickingMaterial(AmberCore::ECS::Actor& p_actor, AmberCore::Resources::Material& p_material);
 		void RenderSceneForActorPicking();
-		void RenderScene(const glm::vec3& p_cameraPosition, const AmberRendering::Entities::Camera& p_camera);
+		void RenderScene(const glm::vec3& p_cameraPosition, const AmberRendering::Entities::Camera& p_camera, const AmberRendering::Data::Frustum* p_customFrustum = nullptr);
 		void RenderUI() const;
 		void RenderCameras();
+		void RenderLights();
 		void RenderGrid(const glm::vec3& p_viewPos, const glm::vec3& p_color, float p_div = 10.0f, float p_bias = 0.5f, float p_LineWidth = 1.0f, float p_MajorLineWidth = 2.0f);
 		void UpdateLights(AmberCore::SceneSystem::Scene& p_scene) const;
+		void UpdateLightsInFrustum(AmberCore::SceneSystem::Scene& p_scene, const AmberRendering::Data::Frustum& p_frustum) const;
 
 		void RenderCameraPerspectiveFrustum(std::pair<uint16_t, uint16_t>& p_size, AmberCore::ECS::Components::CCamera& p_camera);
 		void RenderCameraOrthographicFrustum(std::pair<uint16_t, uint16_t>& p_size, AmberCore::ECS::Components::CCamera& p_camera);
@@ -48,6 +50,7 @@ namespace AmberEditor::Core
 		AmberCore::Resources::Material m_defaultMaterial;
 		AmberCore::Resources::Material m_gridMaterial;
 		AmberCore::Resources::Material m_cameraMaterial;
+		AmberCore::Resources::Material m_lightMaterial;
 		AmberCore::Resources::Material m_outlineMaterial;
 		AmberCore::Resources::Material m_stencilFillMaterial;
 		AmberCore::Resources::Material m_textureMaterial;

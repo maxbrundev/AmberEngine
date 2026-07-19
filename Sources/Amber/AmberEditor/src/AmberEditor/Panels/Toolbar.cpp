@@ -5,8 +5,7 @@
 #include "AmberEditor/Core/EditorAction.h"
 #include "AmberUI/Widgets/Spacing.h"
 
-AmberEditor::Panels::Toolbar::Toolbar(const std::string& p_title, bool p_opened,
-                                          const AmberUI::Panels::PanelSettings& p_windowSettings) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings)
+AmberEditor::Panels::Toolbar::Toolbar(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings)
 {
 	std::string iconFolder = ":Textures/Icons/";
 

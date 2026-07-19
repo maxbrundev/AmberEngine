@@ -18,7 +18,7 @@ namespace AmberWindowing::Context
 		AmberTools::Eventing::Event<int> MouseButtonPressedEvent;
 		AmberTools::Eventing::Event<int> MouseButtonReleasedEvent;
 		AmberTools::Eventing::Event<double, double> CursorPositionEvent;
-		
+
 		AmberTools::Eventing::Event<uint16_t, uint16_t> ResizeEvent;
 		AmberTools::Eventing::Event<uint16_t, uint16_t> FrameBufferResizeEvent;
 		
@@ -39,7 +39,6 @@ namespace AmberWindowing::Context
 		void SetShouldClose(bool p_value) const;
 		void SetCursorMode(ECursorMode p_cursorMode);
 		ECursorMode GetCursorMode() const;
-		void SetViewport(int p_width, int p_height) const;
 
 		void SetSize(uint16_t p_width, uint16_t p_height);
 		void SetPosition(int16_t p_x, int16_t p_y);

@@ -22,7 +22,7 @@ std::vector<std::string>& AmberRendering::Resources::Model::GetMaterialNames()
 	return m_materialNames;
 }
 
-std::vector<AmberRendering::Resources::Mesh*>& AmberRendering::Resources::Model::GetMeshes()
+const std::vector<AmberRendering::Resources::Mesh*>& AmberRendering::Resources::Model::GetMeshes() const
 {
 	return m_meshes;
 }

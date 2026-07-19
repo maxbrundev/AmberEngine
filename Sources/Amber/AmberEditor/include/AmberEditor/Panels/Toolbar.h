@@ -7,12 +7,6 @@ namespace AmberEditor::Panels
 	class Toolbar : public AmberUI::Panels::APanelWindow
 	{
 	public:
-		/**
-		* Constructor
-		* @param p_title
-		* @param p_opened
-		* @param p_windowSettings
-		*/
 		Toolbar
 		(
 			const std::string& p_title,
@@ -20,9 +14,6 @@ namespace AmberEditor::Panels
 			const AmberUI::Panels::PanelSettings& p_windowSettings
 		);
 
-		/**
-		* Custom implementation of the draw method
-		*/
 		void DrawImplementation() override;
 
 	private:

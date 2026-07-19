@@ -35,6 +35,11 @@ bool AmberEditor::Panels::GameView::HasCamera() const
 	return m_hasCamera;
 }
 
+const AmberRendering::Data::Frustum* AmberEditor::Panels::GameView::GetActiveFrustum() const
+{
+	return m_hasCamera ? &m_camera.GetFrustum() : nullptr;
+}
+
 void AmberEditor::Panels::GameView::RenderImplementation()
 {
 	auto& baseRenderer = *EDITOR_CONTEXT(renderer).get();
@@ -49,7 +54,14 @@ void AmberEditor::Panels::GameView::RenderImplementation()
 
 	if (m_hasCamera)
 	{
-		m_editorRenderer.UpdateLights(currentScene);
+		if (m_camera.HasFrustumLightCulling())
+		{
+			m_editorRenderer.UpdateLightsInFrustum(currentScene, m_camera.GetFrustum());
+		}
+		else
+		{
+			m_editorRenderer.UpdateLights(currentScene);
+		}
 
 		m_editorRenderer.RenderScene(m_cameraPosition, m_camera);
 	}

@@ -2,9 +2,6 @@
 
 namespace AmberRendering::Resources::Parsers
 {
-	/**
-	* Some flags that can be used for model parsing
-	*/
 	enum class EModelParserFlags : uint32_t
 	{
 		NONE = 0x0,

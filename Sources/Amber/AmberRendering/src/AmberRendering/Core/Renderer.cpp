@@ -3,6 +3,7 @@
 #include "AmberRendering/Core/Renderer.h"
 
 #include "AmberRendering/Entities/Camera.h"
+#include "AmberRendering/Resources/Model.h"
 
 AmberRendering::Core::Renderer::Renderer(AmberRendering::Context::Driver& p_driver) :
 m_driver(p_driver),
@@ -92,6 +93,44 @@ void AmberRendering::Core::Renderer::ApplyStateMask(uint8_t p_mask)
 void AmberRendering::Core::Renderer::SetState(uint8_t p_state)
 {
 	m_state = p_state;
+}
+
+void AmberRendering::Core::Renderer::SetViewport(uint32_t p_x, uint32_t p_y, uint32_t p_width, uint32_t p_height) const
+{
+	glViewport(p_x, p_y, p_width, p_height);
+}
+
+std::vector<AmberRendering::Resources::Mesh*> AmberRendering::Core::Renderer::GetMeshesInFrustum
+(
+	const AmberRendering::Resources::Model& p_model,
+	const AmberRendering::Geometry::BoundingSphere& p_modelBoundingSphere,
+	const AmberMaths::Transform& p_modelTransform,
+	const AmberRendering::Data::Frustum& p_frustum,
+	AmberRendering::Settings::ECullingOptions p_cullingOptions
+)
+{
+	const bool frustumPerModel = AmberRendering::Settings::IsFlagSet(Settings::ECullingOptions::FRUSTUM_PER_MODEL, p_cullingOptions);
+
+	if (!frustumPerModel || p_frustum.BoundingSphereInFrustum(p_modelBoundingSphere, p_modelTransform))
+	{
+		std::vector<AmberRendering::Resources::Mesh*> result;
+
+		const bool frustumPerMesh = AmberRendering::Settings::IsFlagSet(Settings::ECullingOptions::FRUSTUM_PER_MESH, p_cullingOptions);
+
+		const auto& meshes = p_model.GetMeshes();
+
+		for (auto mesh : meshes)
+		{
+			if (meshes.size() == 1 || !frustumPerMesh || p_frustum.BoundingSphereInFrustum(mesh->GetBoundingSphere(), p_modelTransform))
+			{
+				result.push_back(mesh);
+			}
+		}
+
+		return result;
+	}
+
+	return {};
 }
 
 void AmberRendering::Core::Renderer::ClearFrameInfo()

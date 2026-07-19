@@ -6,9 +6,7 @@
 #include "AmberUI/Widgets/CheckBox.h"
 #include "AmberUI/Widgets/Separator.h"
 
-AmberEditor::Panels::ProfilerPanel::ProfilerPanel(const std::string& p_title, bool p_opened,
-                                            const AmberUI::Panels::PanelSettings& p_windowSettings, float p_frequency) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings),
-                                                                                                        m_frequency(p_frequency)
+AmberEditor::Panels::ProfilerPanel::ProfilerPanel(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings, float p_frequency) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings), m_frequency(p_frequency)
 {
 	AllowHorizontalScrollbar = true;
 

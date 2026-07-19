@@ -19,12 +19,12 @@ namespace AmberCore::ECS::Components
 		using MaterialList  = std::array<AmberCore::Resources::Material*, MAX_MATERIAL_COUNT>;
 		using MaterialField = std::array<std::array<AmberUI::Widgets::AWidget*, 3>, MAX_MATERIAL_COUNT>;
 
-		static AmberTools::Eventing::Event<const std::string&> MaterialFilesGenerationRequestedEvent;
+		static AmberTools::Eventing::Event<const std::string&, const std::string&> MaterialFilesGenerationRequestedEvent;
 
 		CMaterialRenderer(Actor& p_owner);
 		virtual ~CMaterialRenderer() override = default;
 
-		void GenerateModelMaterials();
+		void GenerateModelMaterials(const std::string& p_shaderPath);
 		void FillWithMaterial(AmberCore::Resources::Material& p_material);
 		void FillWithMaterials(const MaterialList& p_materialList);
 		void SetMaterialAtIndex(uint8_t p_index, AmberCore::Resources::Material& p_material);

@@ -53,10 +53,20 @@ void AmberCore::Scripting::LuaComponentBinder::BindComponent(sol::state& p_luaSt
 		"GetWorldRight", &ECS::Components::CTransform::GetWorldRight
 		);
 
+	p_luaState.new_enum<ECS::Components::CModelRenderer::EFrustumBehaviour>("FrustumBehaviour",
+		{
+			{"DISABLED", ECS::Components::CModelRenderer::EFrustumBehaviour::DISABLED},
+			{"CULL_MODEL", ECS::Components::CModelRenderer::EFrustumBehaviour::CULL_MODEL},
+			{"CULL_MESHES", ECS::Components::CModelRenderer::EFrustumBehaviour::CULL_MESHES},
+			{"CULL_CUSTOM", ECS::Components::CModelRenderer::EFrustumBehaviour::CULL_CUSTOM}
+		});
+
 	p_luaState.new_usertype<ECS::Components::CModelRenderer>("ModelRenderer",
 		sol::base_classes, sol::bases<ECS::Components::AComponent>(),
 		"GetModel", &ECS::Components::CModelRenderer::GetModel,
-		"SetModel", &ECS::Components::CModelRenderer::SetModel
+		"SetModel", &ECS::Components::CModelRenderer::SetModel,
+		"GetFrustumBehaviour", &ECS::Components::CModelRenderer::GetFrustumBehaviour,
+		"SetFrustumBehaviour", &ECS::Components::CModelRenderer::SetFrustumBehaviour
 		);
 
 	p_luaState.new_usertype<ECS::Components::CMaterialRenderer>("MaterialRenderer",
@@ -127,7 +137,11 @@ void AmberCore::Scripting::LuaComponentBinder::BindComponent(sol::state& p_luaSt
 		"SetFov", &ECS::Components::CCamera::SetFov,
 		"SetNear", &ECS::Components::CCamera::SetNear,
 		"SetFar", &ECS::Components::CCamera::SetFar,
-		"SetClearColor", [](ECS::Components::CCamera& p_this, const glm::vec3& p_color) { p_this.SetClearColor(p_color); }
+		"SetClearColor", [](ECS::Components::CCamera& p_this, const glm::vec3& p_color) { p_this.SetClearColor(p_color); },
+		"HasFrustumGeometryCulling", &ECS::Components::CCamera::HasFrustumGeometryCulling,
+		"HasFrustumLightCulling", &ECS::Components::CCamera::HasFrustumLightCulling,
+		"SetFrustumGeometryCulling", &ECS::Components::CCamera::SetFrustumGeometryCulling,
+		"SetFrustumLightCulling", &ECS::Components::CCamera::SetFrustumLightCulling
 		);
 
 	p_luaState.new_usertype<ECS::Components::CLight>("Light",

@@ -46,7 +46,7 @@ void AmberCore::Resources::Material::Bind(const AmberRendering::Resources::Textu
 								tex->Bind(textureSlot);
 								m_shader->SetUniformInt(uniformData->name, textureSlot++);
 							}
-							else if (p_emptyTexture && uniformData->name == "u_DiffuseMap")
+							else if (p_emptyTexture)
 							{
 								p_emptyTexture->Bind(textureSlot);
 								m_shader->SetUniformInt(uniformData->name, textureSlot++);

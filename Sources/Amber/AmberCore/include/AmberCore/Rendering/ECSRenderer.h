@@ -41,6 +41,14 @@ namespace AmberCore::Rendering
 			AmberCore::Resources::Material* p_defaultMaterial
 		);
 
+		std::pair<OpaqueDrawables, TransparentDrawables> FindAndSortFrustumCulledDrawables
+		(
+			const AmberCore::SceneSystem::Scene& p_scene,
+			const glm::vec3& p_cameraPosition,
+			const AmberRendering::Data::Frustum& p_frustum,
+			AmberCore::Resources::Material* p_defaultMaterial
+		);
+
 		void DrawDrawable(const Drawable& p_toDraw);
 		void DrawModelWithSingleMaterial(AmberRendering::Resources::Model& p_model, AmberCore::Resources::Material& p_material, glm::mat4 const* p_modelMatrix, AmberCore::Resources::Material* p_defaultMaterial = nullptr);
 
@@ -49,8 +57,9 @@ namespace AmberCore::Rendering
 		void DrawMesh(AmberRendering::Resources::Mesh& p_mesh, const AmberCore::Resources::Material& p_material, glm::mat4 const* p_modelMatrix);
 
 		std::vector<glm::mat4> FindLightMatrices(const AmberCore::SceneSystem::Scene& p_scene);
+		std::vector<glm::mat4> FindLightMatricesInFrustum(const AmberCore::SceneSystem::Scene& p_scene, const AmberRendering::Data::Frustum& p_frustum);
 
-		void RenderScene(const AmberCore::SceneSystem::Scene& p_scene, const glm::vec3& p_cameraPosition, const  AmberRendering::Entities::Camera& p_camera, AmberCore::Resources::Material* p_defaultMaterial);
+		void RenderScene(const AmberCore::SceneSystem::Scene& p_scene, const glm::vec3& p_cameraPosition, const AmberRendering::Entities::Camera& p_camera, const AmberRendering::Data::Frustum* p_customFrustum = nullptr, AmberCore::Resources::Material* p_defaultMaterial = nullptr);
 
 		ECS::Components::CCamera* FindMainCamera(const AmberCore::SceneSystem::Scene& p_scene);
 

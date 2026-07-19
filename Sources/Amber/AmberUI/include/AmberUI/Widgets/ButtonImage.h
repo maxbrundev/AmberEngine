@@ -8,11 +8,6 @@ namespace AmberUI::Widgets
 	class ButtonImage : public AButton
 	{
 	public:
-		/**
-		* Constructor
-		* @param p_textureID
-		* @param p_size
-		*/
 		ButtonImage(uint32_t p_textureID, const glm::vec2& p_size);
 
 	protected:

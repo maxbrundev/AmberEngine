@@ -18,7 +18,7 @@
 #include "AmberUI/Widgets/Text.h"
 #include "AmberUI/Widgets/TextColored.h"
 
-AmberTools::Eventing::Event<const std::string&> AmberCore::ECS::Components::CMaterialRenderer::MaterialFilesGenerationRequestedEvent;
+AmberTools::Eventing::Event<const std::string&, const std::string&> AmberCore::ECS::Components::CMaterialRenderer::MaterialFilesGenerationRequestedEvent;
 
 AmberCore::ECS::Components::CMaterialRenderer::CMaterialRenderer(Actor& p_owner) : AComponent(p_owner)
 {
@@ -30,36 +30,48 @@ AmberCore::ECS::Components::CMaterialRenderer::CMaterialRenderer(Actor& p_owner)
 	UpdateMaterialList();
 }
 
-void AmberCore::ECS::Components::CMaterialRenderer::GenerateModelMaterials()
+void AmberCore::ECS::Components::CMaterialRenderer::GenerateModelMaterials(const std::string& p_shaderPath)
 {
 	if (auto modelRenderer = Owner.GetComponent<CModelRenderer>(); modelRenderer && modelRenderer->GetModel())
 	{
 		uint8_t materialIndex = 0;
+
+		std::string modelName = AmberTools::Utils::PathParser::GetElementName(modelRenderer->GetModel()->Path);
+
+		if (const size_t extensionPosition = modelName.find_last_of('.'); extensionPosition != std::string::npos)
+		{
+			modelName = modelName.substr(0, extensionPosition);
+		}
+
+		const std::string materialFolder = "Materials\\" + modelName + "\\";
+		const std::string modelFolder = AmberTools::Utils::PathParser::GetContainingFolder(modelRenderer->GetModel()->Path);
 
 		for (const std::string& materialName : modelRenderer->GetModel()->GetMaterialNames())
 		{
 			if(materialName.empty())
 				continue;
 
-			MaterialFilesGenerationRequestedEvent.Invoke(materialName);
+			const std::string materialPath = materialFolder + materialName + ".abmat";
 
-			auto mat = AmberTools::Global::ServiceLocator::Get<AmberCore::ResourceManagement::MaterialManager>()["Materials\\" + materialName + ".abmat"];
+			MaterialFilesGenerationRequestedEvent.Invoke(materialPath, p_shaderPath);
+
+			auto mat = AmberTools::Global::ServiceLocator::Get<AmberCore::ResourceManagement::MaterialManager>()[materialPath];
 			m_materials[materialIndex] = mat;
+
 			for (auto[type, path] : modelRenderer->GetModel()->LoadedTextureData[materialIndex])
 			{
-				std::string uniform;
+				auto texture = AmberTools::Global::ServiceLocator::Get<AmberCore::ResourceManagement::TextureManager>().GetResource(modelFolder + path);
 
 				switch (type)
 				{
 				case AmberRendering::Resources::ETextureType::DIFFUSE_MAP:
-					uniform = "u_DiffuseMap";
+					mat->SetUniform("u_DiffuseMap", texture);
+					mat->SetUniform("u_AlbedoMap", texture);
 					break;
 				case AmberRendering::Resources::ETextureType::SPECULAR_MAP:
-					uniform = "u_SpecularMap";
+					mat->SetUniform("u_SpecularMap", texture);
 					break;
 				}
-
-				mat->SetUniform(uniform, AmberTools::Global::ServiceLocator::Get<AmberCore::ResourceManagement::TextureManager>().GetResource(path));
 			}
 
 			materialIndex++;

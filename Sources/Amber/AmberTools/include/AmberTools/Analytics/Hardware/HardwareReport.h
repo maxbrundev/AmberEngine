@@ -3,9 +3,6 @@
 
 namespace AmberTools::Analytics::Hardware
 {
-	/**
-	* HardwareReport contains a set of data calculated by HardwareInfo
-	*/
 	struct HardwareReport final
 	{
 		/* CPU load for every process on the machine (%) */

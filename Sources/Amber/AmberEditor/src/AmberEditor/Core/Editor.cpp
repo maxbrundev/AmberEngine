@@ -56,6 +56,7 @@ void AmberEditor::Core::Editor::PreUpdate()
 
 void AmberEditor::Core::Editor::Update(float p_deltaTime)
 {
+	HandleGlobalShortcuts();
 	UpdateCurrentEditorMode(p_deltaTime);
 	PrepareRendering(p_deltaTime);
 	RenderViews(p_deltaTime);
@@ -63,6 +64,17 @@ void AmberEditor::Core::Editor::Update(float p_deltaTime)
 	RenderEditorUI(p_deltaTime);
 
 	m_editorActions.ExecuteDelayedActions();
+}
+
+void AmberEditor::Core::Editor::HandleGlobalShortcuts()
+{
+	auto& sceneView = m_panelsManager.GetPanelAs<AmberEditor::Panels::SceneView>(Data::EditorConstants::EDITOR_PANEL_SCENE_VIEW_TITLE);
+	auto& hierarchy = m_panelsManager.GetPanelAs<AmberEditor::Panels::Hierarchy>(Data::EditorConstants::EDITOR_PANEL_HIERARCHY_TITLE);
+
+	if (m_context.inputManager->IsKeyPressed(AmberWindowing::Inputs::EKey::KEY_DELETE) && m_editorActions.IsAnyActorSelected() && (sceneView.IsFocused() || hierarchy.IsFocused()))
+	{
+		m_editorActions.DestroyActor(m_editorActions.GetSelectedActor());
+	}
 }
 
 void AmberEditor::Core::Editor::PrepareRendering(float p_deltaTime)
@@ -85,6 +97,9 @@ void AmberEditor::Core::Editor::UpdateEditorPanels(float p_deltaTime)
 	auto& profiler = m_panelsManager.GetPanelAs<AmberEditor::Panels::ProfilerPanel>("Profiler");
 
 	auto& sceneView = m_panelsManager.GetPanelAs<AmberEditor::Panels::SceneView>("Scene View");
+	auto& menuBar = m_panelsManager.GetPanelAs<AmberEditor::Panels::MenuBar>(Data::EditorConstants::EDITOR_PANEL_MENU_BAR_TITLE);
+
+	menuBar.HandleShortcuts(p_deltaTime);
 
 	if (m_elapsedFrames == 1) // Let the first frame happen and then make the scene view the first seen view
 		sceneView.Focus();

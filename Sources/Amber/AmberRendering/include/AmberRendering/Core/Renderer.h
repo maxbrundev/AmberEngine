@@ -3,7 +3,9 @@
 
 #include "AmberRendering/Context/Driver.h"
 
+#include "AmberRendering/Data/Frustum.h"
 #include "AmberRendering/Resources/IMesh.h"
+#include "AmberRendering/Settings/ECullingOptions.h"
 #include "AmberRendering/Settings/EPrimitiveMode.h"
 
 namespace AmberRendering::Resources
@@ -48,9 +50,20 @@ namespace AmberRendering::Core
 		void ApplyStateMask(uint8_t p_mask);
 		void SetState(uint8_t p_state);
 
+		void SetViewport(uint32_t p_x, uint32_t p_y, uint32_t p_width, uint32_t p_height) const;
+
 		void ClearFrameInfo();
 
 		void Draw(AmberRendering::Resources::IMesh& p_mesh, Settings::EPrimitiveMode p_primitiveMode = Settings::EPrimitiveMode::TRIANGLES, uint32_t p_instances = 1);
+
+		std::vector<AmberRendering::Resources::Mesh*> GetMeshesInFrustum
+		(
+			const AmberRendering::Resources::Model& p_model,
+			const AmberRendering::Geometry::BoundingSphere& p_modelBoundingSphere,
+			const AmberMaths::Transform& p_modelTransform,
+			const AmberRendering::Data::Frustum& p_frustum,
+			AmberRendering::Settings::ECullingOptions p_cullingOptions
+		);
 
 		AmberRendering::Context::Driver& GetDriver() const;
 		const FrameInfo& GetFrameInfo() const;

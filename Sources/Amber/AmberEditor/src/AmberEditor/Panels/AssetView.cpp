@@ -10,8 +10,7 @@
 #include "AmberCore/ResourceManagement/MaterialManager.h"
 #include "AmberCore/ResourceManagement/TextureManager.h"
 
-AmberEditor::Panels::AssetView::AssetView(const std::string& p_title, bool p_opened,
-                                              const AmberUI::Panels::PanelSettings& p_windowSettings) : AView(p_title, p_opened, p_windowSettings), m_cameraController(m_camera, m_cameraPosition, m_cameraRotation)
+AmberEditor::Panels::AssetView::AssetView(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings) : AView(p_title, p_opened, p_windowSettings), m_cameraController(m_camera, m_cameraPosition, m_cameraRotation)
 {
 	m_camera.SetClearColor({ 0.098f, 0.098f, 0.098f });
 	m_camera.SetFar(5000.0f);
@@ -88,4 +87,9 @@ void AmberEditor::Panels::AssetView::SetResource(ViewableResource p_resource)
 AmberEditor::Panels::AssetView::ViewableResource AmberEditor::Panels::AssetView::GetResource() const
 {
 	return m_resource;
+}
+
+AmberEditor::Core::CameraController& AmberEditor::Panels::AssetView::GetCameraController()
+{
+	return m_cameraController;
 }

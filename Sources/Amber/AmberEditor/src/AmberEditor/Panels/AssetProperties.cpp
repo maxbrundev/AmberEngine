@@ -11,8 +11,7 @@
 #include "AmberUI/Widgets/NewLine.h"
 #include "AmberUI/Widgets/Separator.h"
 
-AmberEditor::Panels::AssetProperties::AssetProperties(const std::string& p_title, bool p_opened,
-                                                          const AmberUI::Panels::PanelSettings& p_windowSettings) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings)
+AmberEditor::Panels::AssetProperties::AssetProperties(const std::string& p_title, bool p_opened, const AmberUI::Panels::PanelSettings& p_windowSettings) : AmberUI::Panels::APanelWindow(p_title, p_opened, p_windowSettings)
 {
 	m_targetChanged += [this]() { SetTarget(m_assetSelector->Content); };
 

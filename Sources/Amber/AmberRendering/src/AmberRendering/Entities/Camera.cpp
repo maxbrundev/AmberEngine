@@ -7,7 +7,9 @@ m_clearColor(0.1f, 0.1f, 0.1f),
 m_fov(60.0f),
 m_near(0.1f),
 m_far(100.0f),
-m_projectionMode(Settings::EProjectionMode::PERSPECTIVE)
+m_projectionMode(Settings::EProjectionMode::PERSPECTIVE),
+m_frustumGeometryCulling(false),
+m_frustumLightCulling(false)
 {
 }
 
@@ -15,6 +17,12 @@ void AmberRendering::Entities::Camera::ComputeMatrices(uint16_t p_windowWidth, u
 {
 	ComputeViewMatrix(p_position, p_rotation);
 	ComputeProjectionMatrix(p_windowWidth, p_windowHeight);
+	ComputeFrustum(m_viewMatrix, m_projectionMatrix);
+}
+
+void AmberRendering::Entities::Camera::ComputeFrustum(const glm::mat4& p_view, const glm::mat4& p_projection)
+{
+	m_frustum.CalculateFrustum(p_projection * p_view);
 }
 
 void AmberRendering::Entities::Camera::SetProjectionMode(Settings::EProjectionMode p_projectionMode)
@@ -55,6 +63,31 @@ void AmberRendering::Entities::Camera::SetFar(float p_value)
 void AmberRendering::Entities::Camera::SetClearColor(const glm::vec3& p_clearColor)
 {
 	m_clearColor = p_clearColor;
+}
+
+void AmberRendering::Entities::Camera::SetFrustumGeometryCulling(bool p_enable)
+{
+	m_frustumGeometryCulling = p_enable;
+}
+
+void AmberRendering::Entities::Camera::SetFrustumLightCulling(bool p_enable)
+{
+	m_frustumLightCulling = p_enable;
+}
+
+bool AmberRendering::Entities::Camera::HasFrustumGeometryCulling() const
+{
+	return m_frustumGeometryCulling;
+}
+
+bool AmberRendering::Entities::Camera::HasFrustumLightCulling() const
+{
+	return m_frustumLightCulling;
+}
+
+const AmberRendering::Data::Frustum& AmberRendering::Entities::Camera::GetFrustum() const
+{
+	return m_frustum;
 }
 
 AmberRendering::Settings::EProjectionMode AmberRendering::Entities::Camera::GetProjectionMode() const

@@ -12,57 +12,25 @@ namespace AmberTools::Analytics::Profiling
 	/* Forward declaration of the profiler spy structure */
 	struct ProfilerSpy;
 
-	/**
-	* The profiler collect data about the running program
-	*/
 	class Profiler final
 	{
 	public:
-		/**
-		* Create the profiler
-		*/
 		Profiler();
 
-		/**
-		* Generate a report containing data about the last profiling session
-		*/
 		ProfilerReport GenerateReport();
 
-		/**
-		* Clear any collected data
-		*/
 		void ClearHistory();
 
-		/**
-		* Update the profiler
-		* @param p_deltaTime
-		*/
 		void Update(float p_deltaTime);
 
-		/**
-		* Save the given spy collected data to the profiler history
-		* @param p_spy (Spy to collect data from)
-		*/
 		static void Save(ProfilerSpy& p_spy);
 
-		/**
-		* Verify if the profiler is currently enabled
-		*/
 		static bool IsEnabled();
 
-		/**
-		* Enable the profiler if it is currently disabled, and vice-versa
-		*/
 		static void ToggleEnable();
 
-		/**
-		* Enable the profiler
-		*/
 		static void Enable();
 
-		/**
-		* Disable the profiler
-		*/
 		static void Disable();
 
 	private:

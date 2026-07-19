@@ -17,10 +17,11 @@ glm::mat4 AmberRendering::Entities::Light::GenerateMatrix(bool isStoringRotation
 
 	if(isStoringRotation)
 	{
-		const auto rotationEuler = m_transform.GetWorldRotationEuler();
-		result[1][0] = rotationEuler.x;
-		result[1][1] = rotationEuler.y;
-		result[1][2] = rotationEuler.z;
+		const glm::quat& rotation = m_transform.GetWorldRotation();
+		result[1][0] = rotation.x;
+		result[1][1] = rotation.y;
+		result[1][2] = rotation.z;
+		result[2][1] = rotation.w;
 	}
 	else
 	{
@@ -51,52 +52,45 @@ const AmberMaths::Transform& AmberRendering::Entities::Light::GetTransform() con
 
 float CalculateLuminosity(float p_constant, float p_linear, float p_quadratic, float p_intensity, float p_distance)
 {
-	auto attenuation = (p_constant + p_linear * p_distance + p_quadratic * (p_distance * p_distance));
+	const float attenuation = (p_constant + p_linear * p_distance + p_quadratic * (p_distance * p_distance));
 	return (1.0f / attenuation) * std::abs(p_intensity);
 }
 
+// Incremental Search
 float CalculatePointLightRadius(float p_constant, float p_linear, float p_quadratic, float p_intensity)
 {
-	constexpr float threshold = 1 / 255.0f;
-	constexpr float step = 1.0f;
+	constexpr float minimumIllumination = 1.0f / 255.0f;
 
 	float distance = 0.0f;
 
-#define TRY_GREATER(value)\
-	else if (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, value) > threshold)\
-	{\
-		distance = value;\
-	}
-
-#define TRY_LESS(value, newValue)\
-	else if (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, value) < threshold)\
-	{\
-		distance = newValue;\
-	}
-
-	// Prevents infinite while true. If a light has a bigger radius than 10000 we ignore it and make it infinite
-	if (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, 1000.0f) > threshold)
+	if (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, 1000.0f) > minimumIllumination)
 	{
 		return std::numeric_limits<float>::infinity();
 	}
-	TRY_LESS(20.0f, 0.0f)
-		TRY_GREATER(750.0f)
-		TRY_LESS(50.0f, 20.0f + step)
-		TRY_LESS(100.0f, 50.0f + step)
-		TRY_GREATER(500.0f)
-		TRY_GREATER(250.0f)
 
-		while (true)
-		{
-			if (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, distance) < threshold) // If the light has a very low luminosity for the given distance, we consider the current distance as the light radius
-			{
-				return distance;
-			}
-			else
-			{
-				distance += step;
-			}
-		}
+	while (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, distance + 100.0f) > minimumIllumination)
+	{
+		distance += 100.0f;
+	}
+
+	while (CalculateLuminosity(p_constant, p_linear, p_quadratic, p_intensity, distance) > minimumIllumination)
+	{
+		distance+= 0.1f;
+	}
+
+	return distance;
+}
+
+// Quadratic Equation
+float CalculatePointLightRadiusQuadratic(float p_constant, float p_linear, float p_quadratic, float p_intensity)
+{
+	constexpr float minimumIllumination = 1.0f / 255.0f;
+
+	// https://learnopengl.com/Advanced-Lighting/Deferred-Shading -> Calculating a light's volume or radius.
+	// std::abs(p_intensity) since we support negative intensity.
+	const float radius = (-p_linear + std::sqrtf(p_linear * p_linear - 4 * p_quadratic * (p_constant - std::abs(p_intensity) / minimumIllumination))) / (2 * p_quadratic);
+
+	return radius;
 }
 
 float CalculateAmbientBoxLightRadius(const glm::vec3& p_position, const  glm::vec3& p_size)
@@ -104,13 +98,12 @@ float CalculateAmbientBoxLightRadius(const glm::vec3& p_position, const  glm::ve
 	return glm::distance(p_position, p_position + p_size);
 }
 
-
 float AmberRendering::Entities::Light::GetEffectRange() const
 {
 	switch (static_cast<Settings::ELightType>(static_cast<int>(Type)))
 	{
 	case Settings::ELightType::POINT:
-	case Settings::ELightType::SPOT:			return CalculatePointLightRadius(Constant, Linear, Quadratic, Intensity);
+	case Settings::ELightType::SPOT:			return CalculatePointLightRadiusQuadratic(Constant, Linear, Quadratic, Intensity);
 	case Settings::ELightType::AMBIENT_BOX:		return CalculateAmbientBoxLightRadius(m_transform.GetWorldPosition(), { Constant, Linear, Quadratic });
 	case Settings::ELightType::AMBIENT_SPHERE:	return Constant;
 	}

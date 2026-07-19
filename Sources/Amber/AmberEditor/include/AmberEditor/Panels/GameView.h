@@ -11,6 +11,7 @@ namespace AmberEditor::Panels
 
 		void Update(float p_deltaTime) override;
 		bool HasCamera() const;
+		const AmberRendering::Data::Frustum* GetActiveFrustum() const;
 
 	protected:
 		void RenderImplementation() override;

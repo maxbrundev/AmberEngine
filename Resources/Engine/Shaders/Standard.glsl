@@ -126,45 +126,14 @@ bool PointInAABB(vec3 p_Point, vec3 p_AabbCenter, vec3 p_AabbHalfSize)
     );
 }
 
-mat3 fromEuler(vec3 euler) {
-    // Convert degrees to radians
-    euler = euler * 3.14159265358979323846 / 180.0;
-
-    float cosX = cos(euler.x);
-    float sinX = sin(euler.x);
-    float cosY = cos(euler.y);
-    float sinY = sin(euler.y);
-    float cosZ = cos(euler.z);
-    float sinZ = sin(euler.z);
-
-    // Define rotation matrices according to the right-hand rule
-    mat3 rotX = mat3(
-        1.0, 0.0, 0.0,
-        0.0, cosX, sinX,
-        0.0, -sinX, cosX
-    );
-
-    mat3 rotY = mat3(
-        cosY, 0.0, -sinY,
-        0.0, 1.0, 0.0,
-        sinY, 0.0, cosY
-    );
-
-    mat3 rotZ = mat3(
-        cosZ, sinZ, 0.0,
-        -sinZ, cosZ, 0.0,
-        0.0, 0.0, 1.0
-    );
-
-    // The combination order of Z, Y, X is typical for many applications
-    // But this can be adjusted if another order is required
-    return rotZ * rotY * rotX;  // Z first, then Y, then X
+vec3 RotateByQuaternion(vec3 p_Vector, vec4 p_Quaternion)
+{
+    return p_Vector + 2.0 * cross(p_Quaternion.xyz, cross(p_Quaternion.xyz, p_Vector) + p_Quaternion.w * p_Vector);
 }
 
-bool PointInOBB(vec3 p_Point, vec3 p_ObbCenter, vec3 p_ObbHalfSize, vec3 p_OBBRotation) {
+bool PointInOBB(vec3 p_Point, vec3 p_ObbCenter, vec3 p_ObbHalfSize, vec4 p_ObbRotation) {
 
-    mat3 rotMatrix = fromEuler(p_OBBRotation);
-    vec3 localPoint = rotMatrix * (p_Point - p_ObbCenter);
+    vec3 localPoint = RotateByQuaternion(p_Point - p_ObbCenter, p_ObbRotation);
 
     return (
         localPoint.x >= -p_ObbHalfSize.x && localPoint.x <= p_ObbHalfSize.x &&
@@ -240,9 +209,9 @@ vec3 CalcAmbientBoxLight(mat4 p_Light)
     const vec3  lightColor      = UnPackColor(p_Light[2][0]);
     const float intensity       = p_Light[3][3];
     const vec3  size            = vec3(p_Light[0][3], p_Light[1][3], p_Light[2][3]);
-    const vec3  rotation            = vec3(p_Light[0][3], p_Light[1][3], p_Light[2][3]);
+    const vec4  rotation        = vec4(p_Light[1].xyz, p_Light[2][1]);
 
-    return PointInOBB(fs_in.FragPos, lightPosition, size, p_Light[1].rgb) ? g_DiffuseTexel.rgb * lightColor * intensity : vec3(0.0);
+    return PointInOBB(fs_in.FragPos, lightPosition, size, rotation) ? g_DiffuseTexel.rgb * lightColor * intensity : vec3(0.0);
 }
 
 vec3 CalcAmbientSphereLight(mat4 p_Light)

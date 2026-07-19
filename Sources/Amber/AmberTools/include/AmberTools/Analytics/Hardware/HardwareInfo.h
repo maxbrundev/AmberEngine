@@ -7,26 +7,13 @@
 
 namespace AmberTools::Analytics::Hardware
 {
-	/**
-	* The hardware info class will gather informations about the hardware in real-time (CPU usage, GPU usage, RAM usage...)
-	*/
 	class HardwareInfo final
 	{
 	public:
-		/**
-		* Constructor of the HardwareInfo class
-		* @param p_timeInterval
-		*/
 		HardwareInfo(double p_timeInterval = 1.0);
 
-		/**
-		* Generate a report containing information about the actual hardware
-		*/
 		HardwareReport GenerateReport();
 
-		/**
-		* Update hardware information (CPU usage, GPU usage, RAM)
-		*/
 		void Tick();
 
 	private:

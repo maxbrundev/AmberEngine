@@ -18,6 +18,8 @@ namespace AmberGame::Core
 
 		void UpdateLights(AmberCore::SceneSystem::Scene& p_scene);
 
+		void UpdateLightsInFrustum(AmberCore::SceneSystem::Scene& p_scene, const AmberRendering::Data::Frustum& p_frustum);
+
 	private:
 		Context& m_context;
 		AmberCore::Resources::Material m_emptyMaterial;

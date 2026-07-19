@@ -74,6 +74,12 @@ void AmberEditor::Core::EditorRenderer::InitMaterials()
 	m_cameraMaterial.SetUniform("u_Diffuse", glm::vec4(0.0f, 0.3f, 0.7f, 1.0f));
 	m_cameraMaterial.SetUniform<AmberRendering::Resources::Texture*>("u_DiffuseMap", nullptr);
 
+	m_lightMaterial.SetShader(m_context.editorResources->GetShader("Billboard"));
+	m_lightMaterial.SetUniform("u_Diffuse", glm::vec4(1.f, 1.f, 0.5f, 0.5f));
+	m_lightMaterial.SetBackFaceCulling(false);
+	m_lightMaterial.SetBlendable(true);
+	m_lightMaterial.SetDepthTest(false);
+
 	m_textureMaterial.SetShader(m_context.shaderManager[":Shaders\\Unlit.glsl"]);
 	m_textureMaterial.SetUniform("u_Diffuse", glm::vec4(1.f, 1.f, 1.f, 1.f));
 	m_textureMaterial.SetBackFaceCulling(false);
@@ -183,12 +189,34 @@ void AmberEditor::Core::EditorRenderer::RenderSceneForActorPicking()
 			m_context.renderer->DrawModelWithSingleMaterial(model, m_actorPickingMaterial, &modelMatrix);
 		}
 	}
+
+	if (Settings::EditorSettings::LightBillboardScale > 0.001f)
+	{
+		m_context.renderer->Clear(false, true, false);
+
+		m_lightMaterial.SetDepthTest(true);
+		m_lightMaterial.SetUniform<float>("u_Scale", Settings::EditorSettings::LightBillboardScale * 0.1f);
+		m_lightMaterial.SetUniform<AmberRendering::Resources::Texture*>("u_DiffuseMap", nullptr);
+
+		for (auto light : m_context.sceneManager.GetCurrentScene()->GetFastAccessComponents().lights)
+		{
+			auto& actor = light->Owner;
+
+			if (actor.IsActive())
+			{
+				PreparePickingMaterial(actor, m_lightMaterial);
+				auto& model = *m_context.editorResources->GetModel("Vertical_Plane");
+				auto modelMatrix = glm::translate(glm::mat4(1.0f), actor.transform.GetWorldPosition());
+				m_context.renderer->DrawModelWithSingleMaterial(model, m_lightMaterial, &modelMatrix);
+			}
+		}
+	}
 }
 
-void AmberEditor::Core::EditorRenderer::RenderScene(const glm::vec3& p_cameraPosition, const AmberRendering::Entities::Camera& p_camera)
+void AmberEditor::Core::EditorRenderer::RenderScene(const glm::vec3& p_cameraPosition, const AmberRendering::Entities::Camera& p_camera, const AmberRendering::Data::Frustum* p_customFrustum)
 {
 	m_context.lightSSBO->Bind(0);
-	m_context.renderer->RenderScene(*m_context.sceneManager.GetCurrentScene(), p_cameraPosition, p_camera, &m_emptyMaterial);
+	m_context.renderer->RenderScene(*m_context.sceneManager.GetCurrentScene(), p_cameraPosition, p_camera, p_customFrustum, &m_emptyMaterial);
 	m_context.lightSSBO->Unbind();
 }
 
@@ -209,6 +237,49 @@ void AmberEditor::Core::EditorRenderer::RenderCameras()
 			auto modelMatrix = CalculateCameraModelMatrix(actor);
 
 			m_context.renderer->DrawModelWithSingleMaterial(model, m_cameraMaterial, &modelMatrix);
+		}
+	}
+}
+
+void AmberEditor::Core::EditorRenderer::RenderLights()
+{
+	m_lightMaterial.SetDepthTest(false);
+	m_lightMaterial.SetUniform<float>("u_Scale", Settings::EditorSettings::LightBillboardScale * 0.1f);
+
+	for (auto light : m_context.sceneManager.GetCurrentScene()->GetFastAccessComponents().lights)
+	{
+		auto& actor = light->Owner;
+
+		if (actor.IsActive())
+		{
+			auto& model = *m_context.editorResources->GetModel("Vertical_Plane");
+			auto modelMatrix = glm::translate(glm::mat4(1.0f), actor.transform.GetWorldPosition());
+
+			AmberRendering::Resources::Texture* texture = nullptr;
+
+			switch (static_cast<AmberRendering::Settings::ELightType>(static_cast<int>(light->GetData().Type)))
+			{
+			case AmberRendering::Settings::ELightType::POINT:
+				texture = m_context.editorResources->GetTexture("Bill_Point_Light");
+				break;
+			case AmberRendering::Settings::ELightType::SPOT:
+				texture = m_context.editorResources->GetTexture("Bill_Spot_Light");
+				break;
+			case AmberRendering::Settings::ELightType::DIRECTIONAL:
+				texture = m_context.editorResources->GetTexture("Bill_Directional_Light");
+				break;
+			case AmberRendering::Settings::ELightType::AMBIENT_BOX:
+				texture = m_context.editorResources->GetTexture("Bill_Ambient_Box_Light");
+				break;
+			case AmberRendering::Settings::ELightType::AMBIENT_SPHERE:
+				texture = m_context.editorResources->GetTexture("Bill_Ambient_Sphere_Light");
+				break;
+			}
+
+			const auto& lightColor = light->GetColor();
+			m_lightMaterial.SetUniform<AmberRendering::Resources::Texture*>("u_DiffuseMap", texture);
+			m_lightMaterial.SetUniform("u_Diffuse", glm::vec4(lightColor.r, lightColor.g, lightColor.b, 0.75f));
+			m_context.renderer->DrawModelWithSingleMaterial(model, m_lightMaterial, &modelMatrix);
 		}
 	}
 }
@@ -234,19 +305,15 @@ void AmberEditor::Core::EditorRenderer::UpdateLights(AmberCore::SceneSystem::Sce
 	m_context.lightSSBO->SendBlocks<glm::mat4>(lightMatrices.data(), lightMatrices.size() * sizeof(glm::mat4));
 }
 
-void DrawFrustumLines(AmberEditor::Core::ShapeDrawer& p_drawer,
-                      const glm::vec3& pos,
-                      const glm::vec3& forward,
-                      float nearr,
-                      const float farr,
-                      const glm::vec3& a,
-                      const glm::vec3& b,
-                      const glm::vec3& c,
-                      const glm::vec3& d,
-                      const glm::vec3& e,
-                      const glm::vec3& f,
-                      const glm::vec3& g,
-                      const glm::vec3& h)
+void AmberEditor::Core::EditorRenderer::UpdateLightsInFrustum(AmberCore::SceneSystem::Scene& p_scene, const AmberRendering::Data::Frustum& p_frustum) const
+{
+	PROFILER_SPY("Light SSBO Update (Frustum culled)");
+
+	auto lightMatrices = m_context.renderer->FindLightMatricesInFrustum(p_scene, p_frustum);
+	m_context.lightSSBO->SendBlocks<glm::mat4>(lightMatrices.data(), lightMatrices.size() * sizeof(glm::mat4));
+}
+
+void DrawFrustumLines(AmberEditor::Core::ShapeDrawer& p_drawer, const glm::vec3& pos, const glm::vec3& forward, float nearr, const float farr, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& d, const glm::vec3& e, const glm::vec3& f, const glm::vec3& g, const glm::vec3& h)
 {
 	// Convenient lambda to draw a frustum line
 	auto draw = [&](const glm::vec3& p_start, const glm::vec3& p_end, const float planeDistance)
@@ -448,8 +515,7 @@ void AmberEditor::Core::EditorRenderer::RenderModelToStencil(const glm::mat4& p_
 	m_context.renderer->GetDriver().SetStencilMask(0x00);
 }
 
-void AmberEditor::Core::EditorRenderer::RenderModelOutline(const glm::mat4& p_worldMatrix, AmberRendering::Resources::Model& p_model,
-                                                           float p_width)
+void AmberEditor::Core::EditorRenderer::RenderModelOutline(const glm::mat4& p_worldMatrix, AmberRendering::Resources::Model& p_model, float p_width)
 {
 	m_context.renderer->GetDriver().SetStencilAlgorithm(AmberRendering::Settings::EComparisonAlgorithm::NOTEQUAL, 1, 0xFF);
 	m_context.renderer->GetDriver().SetRasterizationMode(AmberRendering::Settings::ERasterizationMode::LINE);

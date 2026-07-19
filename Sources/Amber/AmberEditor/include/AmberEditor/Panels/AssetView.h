@@ -26,6 +26,8 @@ namespace AmberEditor::Panels
 
 		ViewableResource GetResource() const;
 
+		AmberEditor::Core::CameraController& GetCameraController();
+
 	private:
 		ViewableResource m_resource;
 		AmberEditor::Core::CameraController m_cameraController;

@@ -2,21 +2,11 @@
 
 namespace AmberTools::Analytics::Hardware
 {
-	/**
-	* The GPUInfo class will gather informations about the GPU usage
-	* Reference: Open Hardware Monitor (http://code.google.com/p/open-hardware-monitor)
-	*/
 	class GPUInfo final
 	{
 	public:
-		/**
-		* Constructor of the GPUInfo class
-		*/
 		GPUInfo();
 
-		/**
-		* Calculate the GPU load for every process on the machine (%)
-		*/
 		float CalculateGPULoad();
 
 	private:
