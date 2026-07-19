@@ -39,6 +39,7 @@ namespace AmberCore::Helpers
 		static void ProvideEmptyTexture(AmberRendering::Resources::Texture& p_emptyTexture);
 
 		static void CreateTitle(AmberUI::WidgetContainer& p_root, const std::string& p_title);
+		static void CreateSectionTitle(AmberUI::WidgetContainer& p_root, const std::string& p_title);
 
 		static void DrawBoolean(AmberUI::WidgetContainer& p_root, const std::string& p_name, bool& p_data);
 		static void DrawVec2(AmberUI::WidgetContainer& p_root, const std::string& p_name, glm::vec2& p_data, float p_step = 1.f, float p_min = MIN_FLOAT, float p_max = MAX_FLOAT);

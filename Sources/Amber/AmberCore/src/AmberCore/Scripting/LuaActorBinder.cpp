@@ -18,6 +18,7 @@
 #include "AmberCore/ECS/Components/CMaterialRenderer.h"
 #include "AmberCore/ECS/Components/CAudioSource.h"
 #include "AmberCore/ECS/Components/CAudioListener.h"
+#include "AmberCore/ECS/Components/CCharacterController.h"
 
 void AmberCore::Scripting::LuaActorBinder::BindActor(sol::state& p_luaState)
 {
@@ -52,6 +53,7 @@ void AmberCore::Scripting::LuaActorBinder::BindActor(sol::state& p_luaState)
 		"GetMaterialRenderer", &ECS::Actor::GetComponent<ECS::Components::CMaterialRenderer>,
 		"GetAudioSource", &ECS::Actor::GetComponent<ECS::Components::CAudioSource>,
 		"GetAudioListener", &ECS::Actor::GetComponent<ECS::Components::CAudioListener>,
+		"GetCharacterController", &ECS::Actor::GetComponent<ECS::Components::CCharacterController>,
 
 		"GetBehaviour", [](ECS::Actor& p_this, const std::string& p_name)
 		{
@@ -81,6 +83,7 @@ void AmberCore::Scripting::LuaActorBinder::BindActor(sol::state& p_luaState)
 		"AddMaterialRenderer", &ECS::Actor::AddComponent<ECS::Components::CMaterialRenderer>,
 		"AddAudioSource", &ECS::Actor::AddComponent<ECS::Components::CAudioSource>,
 		"AddAudioListener", &ECS::Actor::AddComponent<ECS::Components::CAudioListener>,
+		"AddCharacterController", &ECS::Actor::AddComponent<ECS::Components::CCharacterController>,
 
 		"RemoveModelRenderer", &ECS::Actor::RemoveComponent<ECS::Components::CModelRenderer>,
 		"RemovePhysicalBox", &ECS::Actor::RemoveComponent<ECS::Components::CPhysicalBox>,
@@ -95,6 +98,7 @@ void AmberCore::Scripting::LuaActorBinder::BindActor(sol::state& p_luaState)
 		"RemoveMaterialRenderer", &ECS::Actor::RemoveComponent<ECS::Components::CMaterialRenderer>,
 		"RemoveAudioSource", &ECS::Actor::RemoveComponent<ECS::Components::CAudioSource>,
 		"RemoveAudioListener", &ECS::Actor::RemoveComponent<ECS::Components::CAudioListener>,
+		"RemoveCharacterController", &ECS::Actor::RemoveComponent<ECS::Components::CCharacterController>,
 
 		"AddBehaviour", &ECS::Actor::AddBehaviour,
 		"RemoveBehaviour", sol::overload

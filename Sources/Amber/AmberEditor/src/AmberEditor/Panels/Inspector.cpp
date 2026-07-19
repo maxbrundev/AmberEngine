@@ -7,6 +7,7 @@
 #include "AmberCore/ECS/Components/CMaterialRenderer.h"
 #include "AmberCore/ECS/Components/CAudioSource.h"
 #include "AmberCore/ECS/Components/CAudioListener.h"
+#include "AmberCore/ECS/Components/CCharacterController.h"
 #include "AmberCore/ECS/Components/CModelRenderer.h"
 #include "AmberCore/ECS/Components/CPointLight.h"
 
@@ -73,6 +74,7 @@ AmberEditor::Panels::Inspector::Inspector(const std::string& p_title, bool p_ope
 		componentSelectorWidget.Choices.emplace(10, "Material Renderer");
 		componentSelectorWidget.Choices.emplace(11, "Audio Source");
 		componentSelectorWidget.Choices.emplace(12, "Audio Listener");
+		componentSelectorWidget.Choices.emplace(13, "Character Controller");
 
 		auto& addComponentButton = m_inspectorHeader->CreateWidget<AmberUI::Widgets::Button>("Add Component", glm::vec2{ 100.f, 0 });
 		addComponentButton.IdleBackgroundColor = AmberRendering::Data::Color{ 0.7f, 0.5f, 0.f };
@@ -94,6 +96,7 @@ AmberEditor::Panels::Inspector::Inspector(const std::string& p_title, bool p_ope
 			case 10: GetTargetActor()->AddComponent<AmberCore::ECS::Components::CMaterialRenderer>();	break;
 			case 11: GetTargetActor()->AddComponent<AmberCore::ECS::Components::CAudioSource>();		break;
 			case 12: GetTargetActor()->AddComponent<AmberCore::ECS::Components::CAudioListener>();		break;
+			case 13: GetTargetActor()->AddComponent<AmberCore::ECS::Components::CCharacterController>();	break;
 			}
 
 			componentSelectorWidget.ValueChangedEvent.Invoke(componentSelectorWidget.CurrentChoice);
@@ -122,6 +125,7 @@ AmberEditor::Panels::Inspector::Inspector(const std::string& p_title, bool p_ope
 			case 10: defineButtonsStates(GetTargetActor()->GetComponent<AmberCore::ECS::Components::CMaterialRenderer>());	return;
 			case 11: defineButtonsStates(GetTargetActor()->GetComponent<AmberCore::ECS::Components::CAudioSource>());		return;
 			case 12: defineButtonsStates(GetTargetActor()->GetComponent<AmberCore::ECS::Components::CAudioListener>());		return;
+			case 13: defineButtonsStates(GetTargetActor()->GetComponent<AmberCore::ECS::Components::CCharacterController>());	return;
 			}
 		};
 

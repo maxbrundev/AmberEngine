@@ -18,6 +18,7 @@
 #include "AmberCore/ECS/Components/CMaterialRenderer.h"
 #include "AmberCore/ECS/Components/CAudioSource.h"
 #include "AmberCore/ECS/Components/CAudioListener.h"
+#include "AmberCore/ECS/Components/CCharacterController.h"
 
 void AmberCore::Scripting::LuaComponentBinder::BindComponent(sol::state& p_luaState)
 {
@@ -217,5 +218,16 @@ void AmberCore::Scripting::LuaComponentBinder::BindComponent(sol::state& p_luaSt
 
 	p_luaState.new_usertype<ECS::Components::CAudioListener>("AudioListener",
 		sol::base_classes, sol::bases<ECS::Components::AComponent>()
+		);
+
+	p_luaState.new_usertype<ECS::Components::CCharacterController>("CharacterController",
+		sol::base_classes, sol::bases<ECS::Components::CPhysicalCapsule, ECS::Components::CPhysicalObject, ECS::Components::AComponent>(),
+		"GetMouseSensitivity", &ECS::Components::CCharacterController::GetMouseSensitivity,
+		"SetMouseSensitivity", &ECS::Components::CCharacterController::SetMouseSensitivity,
+		"GetFovScale", &ECS::Components::CCharacterController::GetFovScale,
+		"SetFovScale", &ECS::Components::CCharacterController::SetFovScale,
+		"IsGrounded", &ECS::Components::CCharacterController::IsGrounded,
+		"IsRunning", &ECS::Components::CCharacterController::IsRunning,
+		"IsCrouching", &ECS::Components::CCharacterController::IsCrouching
 		);
 }

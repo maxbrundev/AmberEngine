@@ -7,6 +7,7 @@
 #include "AmberCore/ECS/Components/CAudioListener.h"
 #include "AmberCore/ECS/Components/CAudioSource.h"
 #include "AmberCore/ECS/Components/CCamera.h"
+#include "AmberCore/ECS/Components/CCharacterController.h"
 #include "AmberCore/ECS/Components/CDirectionalLight.h"
 #include "AmberCore/ECS/Components/CMaterialRenderer.h"
 #include "AmberCore/ECS/Components/CModelRenderer.h"
@@ -496,6 +497,7 @@ void AmberCore::ECS::Actor::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2
 				else if (componentType == typeid(Components::CSpotLight).name())	component = &AddComponent<Components::CSpotLight>();
 				else if (componentType == typeid(Components::CAudioSource).name())	component = &AddComponent<Components::CAudioSource>();
 				else if (componentType == typeid(Components::CAudioListener).name())	component = &AddComponent<Components::CAudioListener>();
+				else if (componentType == typeid(Components::CCharacterController).name())	component = &AddComponent<Components::CCharacterController>();
 				if (component)
 					component->OnDeserialize(p_doc, currentComponent->FirstChildElement("data"));
 

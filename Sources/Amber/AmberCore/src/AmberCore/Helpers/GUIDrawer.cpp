@@ -21,6 +21,7 @@
 #include "AmberUI/Widgets/DragMultipleScalars.h"
 #include "AmberUI/Widgets/Group.h"
 #include "AmberUI/Widgets/InputText.h"
+#include "AmberUI/Widgets/Separator.h"
 #include "AmberUI/Widgets/TextColored.h"
 
 const AmberRendering::Data::Color AmberCore::Helpers::GUIDrawer::TITLE_COLOR        = { 0.85f, 0.65f, 0.0f };
@@ -39,6 +40,14 @@ void AmberCore::Helpers::GUIDrawer::ProvideEmptyTexture(AmberRendering::Resource
 void AmberCore::Helpers::GUIDrawer::CreateTitle(AmberUI::WidgetContainer& p_root, const std::string& p_title)
 {
 	p_root.CreateWidget<AmberUI::Widgets::TextColored>(p_title, TITLE_COLOR);
+}
+
+void AmberCore::Helpers::GUIDrawer::CreateSectionTitle(AmberUI::WidgetContainer& p_root, const std::string& p_title)
+{
+	p_root.CreateWidget<AmberUI::Widgets::Separator>();
+	p_root.CreateWidget<AmberUI::Widgets::Separator>();
+	p_root.CreateWidget<AmberUI::Widgets::TextColored>(p_title, AmberRendering::Data::Color::White);
+	p_root.CreateWidget<AmberUI::Widgets::Text>("");
 }
 
 void AmberCore::Helpers::GUIDrawer::DrawBoolean(AmberUI::WidgetContainer& p_root, const std::string& p_name, bool& p_data)
