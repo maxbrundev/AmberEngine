@@ -19,6 +19,7 @@ namespace AmberUI::Widgets
 		std::string Name;
 		bool Closable = false;
 		bool Opened = true;
+		bool Collapsed = false;
 		AmberTools::Eventing::Event<> CloseEvent;
 		AmberTools::Eventing::Event<> OpenEvent;
 	};

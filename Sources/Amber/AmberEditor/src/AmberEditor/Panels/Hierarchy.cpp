@@ -241,6 +241,14 @@ AmberUI::Panels::APanelWindow(p_title, p_opened, p_panelSettings)
 	auto& contextualMenu = CreateContextualMenu<AmberUI::Widgets::ContextualMenuWindow>();
 	auto& createActor = contextualMenu.CreateWidget<AmberUI::Widgets::MenuList>("Create...");
 	AmberEditor::Utils::ActorCreationMenu::GenerateActorCreationMenu(createActor, nullptr, std::bind(&AmberUI::Widgets::TreeNode::Open, std::ref(m_root)));
+
+	EDITOR_EVENT(ActorSelectionEvent) += [this]
+	{
+		for (auto& [actor, node] : m_widgetActorLink)
+		{
+			node->IsSelected = EDITOR_EXEC(IsActorInSelection(*actor));
+		}
+	};
 }
 
 AmberEditor::Panels::Hierarchy::~Hierarchy()
@@ -298,7 +306,10 @@ void AmberEditor::Panels::Hierarchy::AddActorByInstance(AmberCore::ECS::Actor& p
 	SetupActorTreeNode(node, &p_actor);
 	m_widgetActorLink[&p_actor] = &node;
 
-	node.ClickedEvent += std::bind(&Hierarchy::SelectActor, this, std::ref(p_actor));
+	node.ClickedEvent += [this, &p_actor]
+	{
+		SelectActor(p_actor);
+	};
 }
 
 void AmberEditor::Panels::Hierarchy::DeleteActorByInstance(AmberCore::ECS::Actor& p_actor)

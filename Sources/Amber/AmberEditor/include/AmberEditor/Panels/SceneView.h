@@ -43,14 +43,12 @@ namespace AmberEditor::Panels
 
 		AmberMaths::Transform m_selectionTransform;
 
-		glm::vec3 m_previousSelectionActorPosition;
-
 		struct SelectedActorData
 		{
-			AmberCore::ECS::Actor* actor;
-			glm::vec3 initialLocalPosition;
-			glm::quat initialLocalRotation;
-			glm::vec3 initialLocalScale;
+			AmberCore::ECS::Actor* Actor;
+			glm::vec3 OffsetPosition;
+			glm::vec3 OffsetScale;
+			glm::quat OffsetRotation;
 		};
 
 		std::vector<SelectedActorData> m_selectedActorsData;

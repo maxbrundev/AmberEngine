@@ -35,6 +35,27 @@ AmberEditor::Core::EditorAction::EditorAction(Context& p_context, EditorRenderer
 	{
 		GenerateModelMaterialFiles(p_materialPath, p_shaderPath);
 	};
+
+	AmberCore::ECS::Actor::DestroyEvent += [this](AmberCore::ECS::Actor& p_actor)
+	{
+		if (m_selectedActors.empty())
+			return;
+
+		std::vector<AmberCore::ECS::Actor*> selection = m_selectedActors;
+
+		selection.erase(std::remove(selection.begin(), selection.end(), &p_actor), selection.end());
+
+		if (!selection.empty())
+			SelectActors(selection);
+		else
+			UnselectActor();
+	};
+
+	m_context.sceneManager.SceneUnloadEvent += [this]
+	{
+		if (!m_selectedActors.empty())
+			UnselectActor();
+	};
 }
 
 AmberEditor::Core::Context& AmberEditor::Core::EditorAction::GetContext()
@@ -227,6 +248,16 @@ bool AmberEditor::Core::EditorAction::DestroyActor(AmberCore::ECS::Actor& p_acto
 	return true;
 }
 
+void AmberEditor::Core::EditorAction::DestroySelectedActors()
+{
+	for (auto m_selected_actor : m_selectedActors)
+	{
+		m_selected_actor->MarkAsDestroy();
+	}
+
+	UnselectActors();
+}
+
 void AmberEditor::Core::EditorAction::DuplicateActor(AmberCore::ECS::Actor& p_toDuplicate, AmberCore::ECS::Actor* p_forcedParent, bool p_focus)
 {
 	tinyxml2::XMLDocument doc;
@@ -266,22 +297,90 @@ void AmberEditor::Core::EditorAction::DuplicateActor(AmberCore::ECS::Actor& p_to
 
 void AmberEditor::Core::EditorAction::SelectActor(AmberCore::ECS::Actor& p_target)
 {
-	EDITOR_PANEL(AmberEditor::Panels::Inspector, "Inspector").FocusActor(p_target);
+	SelectActors({ &p_target });
+}
+
+void AmberEditor::Core::EditorAction::AddActorToSelection(AmberCore::ECS::Actor& p_target)
+{
+	if (std::find(m_selectedActors.begin(), m_selectedActors.end(), &p_target) != m_selectedActors.end())
+	{
+		return;
+	}
+
+	m_selectedActors.push_back(&p_target);
+
+	UpdateActorSelection();
+}
+
+void AmberEditor::Core::EditorAction::RemoveActorFromSelection(AmberCore::ECS::Actor& p_target)
+{
+	if (std::find(m_selectedActors.begin(), m_selectedActors.end(), &p_target) == m_selectedActors.end())
+	{
+		return;
+	}
+
+	m_selectedActors.erase(std::remove(m_selectedActors.begin(), m_selectedActors.end(), &p_target), m_selectedActors.end());
+
+	UpdateActorSelection();
+}
+
+void AmberEditor::Core::EditorAction::ToggleActorSelection(AmberCore::ECS::Actor& p_target)
+{
+	if (IsActorInSelection(p_target))
+	{
+		RemoveActorFromSelection(p_target);
+	}
+	else
+	{
+		AddActorToSelection(p_target);
+	}
+}
+
+bool AmberEditor::Core::EditorAction::IsActorInSelection(AmberCore::ECS::Actor& p_target) const
+{
+	return std::find(m_selectedActors.begin(), m_selectedActors.end(), &p_target) != m_selectedActors.end();
+}
+
+void AmberEditor::Core::EditorAction::SelectActors(const std::vector<AmberCore::ECS::Actor*>& p_targets)
+{
+	if (m_selectedActors == p_targets)
+		return;
+
+	m_selectedActors = p_targets;
+
+	UpdateActorSelection();
 }
 
 void AmberEditor::Core::EditorAction::UnselectActor()
 {
-	EDITOR_PANEL(AmberEditor::Panels::Inspector, "Inspector").UnFocus();
+	UnselectActors();
+}
+
+void AmberEditor::Core::EditorAction::UnselectActors()
+{
+	m_selectedActors.clear();
+
+	UpdateActorSelection();
 }
 
 bool AmberEditor::Core::EditorAction::IsAnyActorSelected() const
 {
-	return EDITOR_PANEL(AmberEditor::Panels::Inspector, "Inspector").GetTargetActor();
+	return !m_selectedActors.empty();
+}
+
+bool AmberEditor::Core::EditorAction::IsManyActorsSelected() const
+{
+	return m_selectedActors.size() > 1;
 }
 
 AmberCore::ECS::Actor& AmberEditor::Core::EditorAction::GetSelectedActor() const
 {
-	return *EDITOR_PANEL(AmberEditor::Panels::Inspector, "Inspector").GetTargetActor();
+	return *m_selectedActors.front();
+}
+
+const std::vector<AmberCore::ECS::Actor*>& AmberEditor::Core::EditorAction::GetSelectedActors() const
+{
+	return m_selectedActors;
 }
 
 void AmberEditor::Core::EditorAction::DelayAction(std::function<void()> p_action, uint32_t p_frames)
@@ -745,6 +844,20 @@ std::string AmberEditor::Core::EditorAction::FindDuplicatedActorUniqueName(Amber
 	};
 
 	return AmberTools::Utils::String::GenerateUnique(p_duplicated.GetName(), availabilityChecker);
+}
+
+void AmberEditor::Core::EditorAction::UpdateActorSelection()
+{
+	if (m_selectedActors.size() == 1)
+	{
+		EDITOR_PANEL(AmberEditor::Panels::Inspector, "Inspector").FocusActor(*m_selectedActors[0]);
+	}
+	else
+	{
+		EDITOR_PANEL(AmberEditor::Panels::Inspector, "Inspector").UnFocus();
+	}
+
+	EDITOR_EVENT(ActorSelectionEvent).Invoke();
 }
 
 std::string AmberEditor::Core::EditorAction::SelectBuildFolder()

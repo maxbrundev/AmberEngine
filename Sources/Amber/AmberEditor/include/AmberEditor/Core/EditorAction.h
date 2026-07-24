@@ -61,11 +61,21 @@ namespace AmberEditor::Core
 		AmberCore::ECS::Actor&	CreateActorWithModel(const std::string& p_path, bool p_focusOnCreation = true, AmberCore::ECS::Actor* p_parent = nullptr, const std::string& p_name = "");
 		template<typename T> AmberCore::ECS::Actor& CreateMonoComponentActor(bool p_focusOnCreation = true, AmberCore::ECS::Actor* p_parent = nullptr);
 		bool DestroyActor(AmberCore::ECS::Actor& p_actor);
+		void DestroySelectedActors();
 		void DuplicateActor(AmberCore::ECS::Actor& p_toDuplicate, AmberCore::ECS::Actor* p_forcedParent = nullptr, bool p_focus = true);
 		void SelectActor(AmberCore::ECS::Actor& p_target);
+		void AddActorToSelection(AmberCore::ECS::Actor& p_target);
+		void RemoveActorFromSelection(AmberCore::ECS::Actor& p_target);
+		void ToggleActorSelection(AmberCore::ECS::Actor& p_target);
+		bool IsActorInSelection(AmberCore::ECS::Actor& p_target) const;
+		void SelectActors(const std::vector<AmberCore::ECS::Actor*>& p_targets);
 		void UnselectActor();
+		void UnselectActors();
 		bool IsAnyActorSelected() const;
+		bool IsManyActorsSelected() const;
 		AmberCore::ECS::Actor& GetSelectedActor() const;
+
+		const std::vector<AmberCore::ECS::Actor*>& GetSelectedActors() const;
 
 		void DelayAction(std::function<void()> p_action, uint32_t p_frames = 1);
 
@@ -119,9 +129,12 @@ namespace AmberEditor::Core
 	private:
 		std::string FindDuplicatedActorUniqueName(AmberCore::ECS::Actor& p_duplicated, AmberCore::ECS::Actor& p_newActor, AmberCore::SceneSystem::Scene& p_scene);
 
+		void UpdateActorSelection();
+
 	public:
 		AmberTools::Eventing::Event<AmberCore::ECS::Actor&> ActorSelectedEvent;
 		AmberTools::Eventing::Event<AmberCore::ECS::Actor&> ActorUnselectedEvent;
+		AmberTools::Eventing::Event<> ActorSelectionEvent;
 		AmberTools::Eventing::Event<EEditorMode> EditorModeChangedEvent;
 		AmberTools::Eventing::Event<> PlayEvent;
 		
@@ -135,6 +148,7 @@ namespace AmberEditor::Core
 		EActorSpawnMode m_actorSpawnMode = EActorSpawnMode::ORIGIN;
 
 		std::vector<std::pair<uint32_t, std::function<void()>>> m_delayedActions;
+		std::vector<AmberCore::ECS::Actor*> m_selectedActors;
 	};
 }
 

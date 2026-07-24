@@ -73,7 +73,7 @@ void AmberEditor::Core::Editor::HandleGlobalShortcuts()
 
 	if (m_context.inputManager->IsKeyPressed(AmberWindowing::Inputs::EKey::KEY_DELETE) && m_editorActions.IsAnyActorSelected() && (sceneView.IsFocused() || hierarchy.IsFocused()))
 	{
-		m_editorActions.DestroyActor(m_editorActions.GetSelectedActor());
+		m_editorActions.DestroySelectedActors();
 	}
 }
 
@@ -223,7 +223,14 @@ void AmberEditor::Core::Editor::InitializeUI()
 	
 	hierarchy.SelectActorEvent += [&](AmberCore::ECS::Actor& actor)
 	{
-		inspector.FocusActor(std::ref(actor));
+		if (EDITOR_CONTEXT(inputManager)->GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_CONTROL) == AmberWindowing::Inputs::EKeyState::KEY_DOWN)
+		{
+			EDITOR_EXEC(ToggleActorSelection(actor));
+		}
+		else
+		{
+			EDITOR_EXEC(SelectActor(actor));
+		}
 	};
 	
 	m_canvas.MakeDockspace(true);

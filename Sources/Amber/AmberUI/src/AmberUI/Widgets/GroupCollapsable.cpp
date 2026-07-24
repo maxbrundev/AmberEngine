@@ -4,15 +4,20 @@
 
 AmberUI::Widgets::GroupCollapsable::GroupCollapsable(const std::string& p_name) : Name(p_name)
 {
-
 }
 
 void AmberUI::Widgets::GroupCollapsable::DrawImplementation()
 {
-	bool previouslyOpened = Opened;
+	const bool previouslyOpened = Opened;
 
-	if (ImGui::CollapsingHeader(Name.c_str(), Closable ? &Opened : nullptr))
+	ImGui::SetNextItemOpen(!Collapsed);
+
+	const bool isOpen = ImGui::CollapsingHeader(Name.c_str(), Closable ? &Opened : nullptr);
+
+	if (isOpen)
 		Group::DrawImplementation();
+
+	Collapsed = !isOpen;
 
 	if (Opened != previouslyOpened)
 	{

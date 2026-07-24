@@ -36,6 +36,42 @@ m_cameraController(m_camera, m_cameraPosition, m_cameraRotation, true)
 			break;
 		}
 	};
+
+	EDITOR_EVENT(ActorSelectionEvent) += [&]()
+	{
+		auto& selectedActors = EDITOR_EXEC(GetSelectedActors());
+
+		const size_t selectedActorsCount = selectedActors.size();
+		
+		m_selectedActorsData.clear();
+
+		if (selectedActorsCount > 1)
+		{
+			glm::vec3 center(0.0f);
+
+			for (auto actor : selectedActors)
+			{
+				center += actor->transform.GetWorldPosition();
+			}
+
+			center /= static_cast<float>(selectedActors.size());
+
+			m_selectionTransform.SetWorldPosition(center);
+			m_selectionTransform.SetWorldScale({1.0f, 1.0f, 1.0f});
+			m_selectionTransform.SetWorldRotation(glm::quat());
+
+			for (auto actor : selectedActors)
+			{
+				SelectedActorData selectedActorData;
+
+				selectedActorData.Actor = actor;
+				selectedActorData.OffsetPosition = actor->transform.GetWorldPosition() - center;
+				selectedActorData.OffsetScale = actor->transform.GetWorldScale();
+				selectedActorData.OffsetRotation = actor->transform.GetWorldRotation();
+				m_selectedActorsData.push_back(selectedActorData);
+			}
+		}
+	};
 }
 
 void AmberEditor::Panels::SceneView::Update(float p_deltaTime)
@@ -85,14 +121,20 @@ void AmberEditor::Panels::SceneView::RenderSceneForActorPicking()
 
 	if (EDITOR_EXEC(IsAnyActorSelected()))
 	{
-		auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
+		auto& selectedActors = EDITOR_EXEC(GetSelectedActors());
+
+		const size_t selectedActorsCount = selectedActors.size();
+
 		baseRenderer.Clear(false, true, false);
-		m_editorRenderer.RenderGizmo(selectedActor.transform.GetWorldPosition(), selectedActor.transform.GetWorldRotation(), m_currentOperation, true);
-	}
-	else if (!m_selectedActorsData.empty())
-	{
-		baseRenderer.Clear(false, true, false);
-		m_editorRenderer.RenderGizmo(m_selectionTransform.GetWorldPosition(), m_selectionTransform.GetWorldRotation(), m_currentOperation, true);
+
+		if (selectedActorsCount == 1)
+		{
+			m_editorRenderer.RenderGizmo(selectedActors.front()->transform.GetWorldPosition(), selectedActors.front()->transform.GetWorldRotation(), m_currentOperation, true);
+		}
+		else if (selectedActorsCount > 1)
+		{
+			m_editorRenderer.RenderGizmo(m_selectionTransform.GetWorldPosition(), m_selectionTransform.GetWorldRotation(), m_currentOperation, true);
+		}
 	}
 
 	m_actorPickingFramebuffer.Unbind();
@@ -138,7 +180,7 @@ void AmberEditor::Panels::SceneView::HandleActorPicking()
 
 		auto actorUnderMouse = EDITOR_CONTEXT(sceneManager).GetCurrentScene()->FindActorByID(actorID);
 
-		auto direction = m_gizmoOperations.IsPicking() ? m_gizmoOperations.GetDirection() : (EDITOR_EXEC(IsAnyActorSelected()) || !m_selectedActorsData.empty()) && pixel[0] == 255 && pixel[1] == 255 && pixel[2] >= 252 && pixel[2] <= 254 ? static_cast<AmberEditor::Core::GizmoBehaviour::EDirection>(pixel[2] - 252) : std::optional<AmberEditor::Core::GizmoBehaviour::EDirection>{};
+		auto direction = m_gizmoOperations.IsPicking() ? m_gizmoOperations.GetDirection() : EDITOR_EXEC(IsAnyActorSelected()) && pixel[0] == 255 && pixel[1] == 255 && pixel[2] >= 252 && pixel[2] <= 254 ? static_cast<AmberEditor::Core::GizmoBehaviour::EDirection>(pixel[2] - 252) : std::optional<AmberEditor::Core::GizmoBehaviour::EDirection>{};
 
 		m_highlightedActor = {};
 		m_highlightedGizmoDirection = {};
@@ -159,20 +201,34 @@ void AmberEditor::Panels::SceneView::HandleActorPicking()
 		{
 			if (direction.has_value())
 			{
-				if(m_selectedActorsData.empty() || m_selectedActorsData.size() == 1)
+				if(EDITOR_EXEC(IsAnyActorSelected()) && !EDITOR_EXEC(IsManyActorsSelected()))
+				{
 					m_gizmoOperations.StartPicking(EDITOR_EXEC(GetSelectedActor()), m_cameraPosition, m_currentOperation, direction.value());
+				}
 				else
+				{
 					m_gizmoOperations.StartPicking(m_selectionTransform, m_cameraPosition, m_currentOperation, direction.value());
+				}
 			}
 			else
 			{
 				if (actorUnderMouse)
 				{
-					EDITOR_EXEC(SelectActor(*actorUnderMouse));
+					if (EDITOR_CONTEXT(inputManager)->GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_CONTROL) == AmberWindowing::Inputs::EKeyState::KEY_DOWN)
+					{
+						EDITOR_EXEC(ToggleActorSelection(*actorUnderMouse));
+					}
+					else
+					{
+						EDITOR_EXEC(SelectActor(*actorUnderMouse));
+					}
 				}
 				else
 				{
-					EDITOR_EXEC(UnselectActor());
+					if (EDITOR_CONTEXT(inputManager)->GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_CONTROL) != AmberWindowing::Inputs::EKeyState::KEY_DOWN)
+					{
+						EDITOR_EXEC(UnselectActor());
+					}
 				}
 			}
 		}
@@ -190,12 +246,6 @@ void AmberEditor::Panels::SceneView::HandleActorPicking()
 
 		m_gizmoOperations.SetCurrentMouse({ static_cast<float>(mousePosition.first - m_position.x), static_cast<float>(mousePosition.second - m_position.y) });
 		m_gizmoOperations.ApplyOperation(m_camera.GetViewMatrix(), m_camera.GetProjectionMatrix(), m_cameraPosition, { static_cast<float>(winWidth), static_cast<float>(winHeight) });
-	}
-
-	if (EDITOR_CONTEXT(inputManager)->IsMouseButtonPressed(AmberWindowing::Inputs::EMouseButton::MOUSE_BUTTON_LEFT) && !m_cameraController.IsRightMousePressed() && !m_gizmoOperations.IsPicking())
-	{
-		if (!m_gizmoOperations.IsPicking())
-			m_selectedActorsData.clear();
 	}
 }
 
@@ -237,34 +287,16 @@ void AmberEditor::Panels::SceneView::RenderScene(uint8_t p_defaultRenderState)
 	}
 
 	m_editorRenderer.RenderLights();
-
-	if(!m_selectedActorsData.empty() || m_selectedActorsData.size() > 1)
-	{
-		//TODO: dirty test, need rework + remove this horrible vector.
-		std::vector<AmberCore::ECS::Actor*> actors;
-		for (auto& actorData : m_selectedActorsData)
-		{
-			actors.push_back(actorData.actor);
-		}
-
-		if(!actors.empty())
-		{
-			m_editorRenderer.RenderActorOutlinePass(actors, true, false);
-			baseRenderer.ApplyStateMask(p_defaultRenderState);
-			m_editorRenderer.RenderActorOutlinePass(actors, false, false);
-		}
-	}
 	
 	if (EDITOR_EXEC(IsAnyActorSelected()))
 	{
-		auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
+		auto& selectedActors = EDITOR_EXEC(GetSelectedActors());
 
-		if (selectedActor.IsActive())
-		{
-			m_editorRenderer.RenderActorOutlinePass(selectedActor, true, true);
-			baseRenderer.ApplyStateMask(p_defaultRenderState);
-			m_editorRenderer.RenderActorOutlinePass(selectedActor, false, true);
-		}
+		const size_t selectedActorsCount = selectedActors.size();
+
+		m_editorRenderer.RenderActorOutlinePass(selectedActors, true, true);
+		baseRenderer.ApplyStateMask(p_defaultRenderState);
+		m_editorRenderer.RenderActorOutlinePass(selectedActors, false, true);
 
 		baseRenderer.ApplyStateMask(p_defaultRenderState);
 		baseRenderer.Clear(false, true, false);
@@ -276,21 +308,14 @@ void AmberEditor::Panels::SceneView::RenderScene(uint8_t p_defaultRenderState)
 			highlightedAxis = static_cast<int>(m_highlightedGizmoDirection.value());
 		}
 
-		m_editorRenderer.RenderGizmo(selectedActor.transform.GetWorldPosition(), selectedActor.transform.GetWorldRotation(), m_currentOperation, false, highlightedAxis);
-	}
-	else if (!m_selectedActorsData.empty() && m_selectedActorsData.size() > 1)
-	{
-		baseRenderer.ApplyStateMask(p_defaultRenderState);
-		baseRenderer.Clear(false, true, false);
-
-		int highlightedAxis = -1;
-
-		if (m_highlightedGizmoDirection.has_value())
+		if (selectedActorsCount == 1)
 		{
-			highlightedAxis = static_cast<int>(m_highlightedGizmoDirection.value());
+			m_editorRenderer.RenderGizmo(selectedActors.front()->transform.GetWorldPosition(), selectedActors.front()->transform.GetWorldRotation(), m_currentOperation, false, highlightedAxis);
 		}
-
-		m_editorRenderer.RenderGizmo(m_selectionTransform.GetWorldPosition(), m_selectionTransform.GetWorldRotation(), m_currentOperation, false, highlightedAxis);
+		else if (selectedActorsCount > 1)
+		{
+			m_editorRenderer.RenderGizmo(m_selectionTransform.GetWorldPosition(), m_selectionTransform.GetWorldRotation(), m_currentOperation, false, highlightedAxis);
+		}
 	}
 
 	if (m_highlightedActor.has_value())
@@ -351,8 +376,15 @@ void AmberEditor::Panels::SceneView::RenderImplementation()
 
 void AmberEditor::Panels::SceneView::HandleRectangleSelectInputs()
 {
-	PROFILER_SPY("HandleRectangleSelectInputs"); 
-	if (EDITOR_CONTEXT(inputManager)->GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_CONTROL) == AmberWindowing::Inputs::EKeyState::KEY_DOWN && EDITOR_CONTEXT(inputManager)->IsMouseButtonPressed(AmberWindowing::Inputs::EMouseButton::MOUSE_BUTTON_LEFT) && !m_cameraController.IsRightMousePressed() && !m_gizmoOperations.IsPicking() && IsHovered())
+	PROFILER_SPY("HandleRectangleSelectInputs");
+
+	if (m_gizmoOperations.IsPicking())
+	{
+		m_isSelecting = false;
+		return;
+	}
+
+	if (EDITOR_CONTEXT(inputManager)->GetKey(AmberWindowing::Inputs::EKey::KEY_LEFT_CONTROL) == AmberWindowing::Inputs::EKeyState::KEY_DOWN && EDITOR_CONTEXT(inputManager)->IsMouseButtonPressed(AmberWindowing::Inputs::EMouseButton::MOUSE_BUTTON_LEFT) && !m_cameraController.IsRightMousePressed() && !m_highlightedGizmoDirection.has_value() && IsHovered())
 	{
 		auto[mouseX, mouseY] = EDITOR_CONTEXT(inputManager)->GetMousePosition();
 		mouseX -= m_position.x;
@@ -372,7 +404,8 @@ void AmberEditor::Panels::SceneView::HandleRectangleSelectInputs()
 
 		m_selectionEndPosition = glm::vec2(mouseX, mouseY);
 
-		HandleRectangleSelect();
+		if (m_selectionEndPosition != m_selectionStartPosition)
+			HandleRectangleSelect();
 	}
 
 	if (EDITOR_CONTEXT(inputManager)->IsMouseButtonReleased(AmberWindowing::Inputs::EMouseButton::MOUSE_BUTTON_LEFT) && m_isSelecting)
@@ -394,7 +427,7 @@ void AmberEditor::Panels::SceneView::HandleRectangleSelect()
 
 	glm::vec2 windowSize = glm::vec2(GetSafeSize().first, GetSafeSize().second);
 
-	m_selectedActorsData.clear();
+	std::vector<AmberCore::ECS::Actor*> selectedActors;
 
 	for (auto actor : actors)
 	{
@@ -411,59 +444,34 @@ void AmberEditor::Panels::SceneView::HandleRectangleSelect()
 
 		if (screenPosition.x >= minX && screenPosition.x <= maxX && screenPosition.y >= minY && screenPosition.y <= maxY)
 		{
-			SelectedActorData data;
-			data.actor = actor;
-			m_selectedActorsData.push_back(data);
+			selectedActors.push_back(actor);
 		}
 	}
 
-	if (m_selectedActorsData.size() == 1)
+	if (!selectedActors.empty())
 	{
-		auto* selectedActor = &EDITOR_EXEC(GetSelectedActor());
-
-		if(selectedActor == nullptr || selectedActor != m_selectedActorsData[0].actor)
-			EDITOR_EXEC(SelectActor(*m_selectedActorsData[0].actor));
-	}
-	else if (m_selectedActorsData.size() > 1)
-	{
-		EDITOR_EXEC(UnselectActor());
-
-		m_selectionTransform.SetWorldPosition({ 0,0,0 });
-		glm::vec3 center(0.0f);
-		for (const auto& data : m_selectedActorsData)
-		{
-			center += data.actor->transform.GetWorldPosition();
-		}
-		center /= static_cast<float>(m_selectedActorsData.size());
-
-		m_selectionTransform.SetWorldPosition(center);
-
-		for (auto& data : m_selectedActorsData)
-		{
-			data.initialLocalPosition = data.actor->transform.GetWorldPosition() - m_selectionTransform.GetWorldPosition();
-		}
+		EDITOR_EXEC(SelectActors(selectedActors));
 	}
 	else
 	{
-		EDITOR_EXEC(UnselectActor());
+		EDITOR_EXEC(UnselectActors());
 	}
 }
 
 void AmberEditor::Panels::SceneView::UpdateSelectedActorsTransform()
 {
-	if (m_selectedActorsData.empty() || m_selectedActorsData.size() == 1)
+	if (!m_gizmoOperations.IsPicking() || m_selectedActorsData.size() == 1)
 		return;
 
 	const glm::vec3& selectionActorPosition = m_selectionTransform.GetWorldPosition();
+	const glm::vec3& selectionActorScale = m_selectionTransform.GetWorldScale();
+	const glm::quat& selectionActorRotation = m_selectionTransform.GetWorldRotation();
 
-	if (m_previousSelectionActorPosition != selectionActorPosition)
+	for (auto& data : m_selectedActorsData)
 	{
-		for (auto& data : m_selectedActorsData)
-		{
-			data.actor->transform.SetWorldPosition(data.initialLocalPosition + selectionActorPosition);
-		}
-
-		m_previousSelectionActorPosition = selectionActorPosition;
+		data.Actor->transform.SetWorldPosition(selectionActorPosition + selectionActorRotation * (data.OffsetPosition * selectionActorScale));
+		data.Actor->transform.SetWorldScale(selectionActorScale * data.OffsetScale);
+		data.Actor->transform.SetWorldRotation(selectionActorRotation * data.OffsetRotation);
 	}
 }
 
