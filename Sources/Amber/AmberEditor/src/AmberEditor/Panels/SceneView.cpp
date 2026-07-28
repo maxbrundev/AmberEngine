@@ -39,38 +39,7 @@ m_cameraController(m_camera, m_cameraPosition, m_cameraRotation, true)
 
 	EDITOR_EVENT(ActorSelectionEvent) += [&]()
 	{
-		auto& selectedActors = EDITOR_EXEC(GetSelectedActors());
-
-		const size_t selectedActorsCount = selectedActors.size();
-		
-		m_selectedActorsData.clear();
-
-		if (selectedActorsCount > 1)
-		{
-			glm::vec3 center(0.0f);
-
-			for (auto actor : selectedActors)
-			{
-				center += actor->transform.GetWorldPosition();
-			}
-
-			center /= static_cast<float>(selectedActors.size());
-
-			m_selectionTransform.SetWorldPosition(center);
-			m_selectionTransform.SetWorldScale({1.0f, 1.0f, 1.0f});
-			m_selectionTransform.SetWorldRotation(glm::quat());
-
-			for (auto actor : selectedActors)
-			{
-				SelectedActorData selectedActorData;
-
-				selectedActorData.Actor = actor;
-				selectedActorData.OffsetPosition = actor->transform.GetWorldPosition() - center;
-				selectedActorData.OffsetScale = actor->transform.GetWorldScale();
-				selectedActorData.OffsetRotation = actor->transform.GetWorldRotation();
-				m_selectedActorsData.push_back(selectedActorData);
-			}
-		}
+		RebuildSelectedActorsData();
 	};
 }
 
@@ -460,8 +429,14 @@ void AmberEditor::Panels::SceneView::HandleRectangleSelect()
 
 void AmberEditor::Panels::SceneView::UpdateSelectedActorsTransform()
 {
-	if (!m_gizmoOperations.IsPicking() || m_selectedActorsData.size() == 1)
+	if (m_selectedActorsData.size() <= 1)
 		return;
+
+	if (!m_gizmoOperations.IsPicking())
+	{
+		RebuildSelectedActorsData();
+		return;
+	}
 
 	const glm::vec3& selectionActorPosition = m_selectionTransform.GetWorldPosition();
 	const glm::vec3& selectionActorScale = m_selectionTransform.GetWorldScale();
@@ -472,6 +447,42 @@ void AmberEditor::Panels::SceneView::UpdateSelectedActorsTransform()
 		data.Actor->transform.SetWorldPosition(selectionActorPosition + selectionActorRotation * (data.OffsetPosition * selectionActorScale));
 		data.Actor->transform.SetWorldScale(selectionActorScale * data.OffsetScale);
 		data.Actor->transform.SetWorldRotation(selectionActorRotation * data.OffsetRotation);
+	}
+}
+
+void AmberEditor::Panels::SceneView::RebuildSelectedActorsData()
+{
+	auto& selectedActors = EDITOR_EXEC(GetSelectedActors());
+
+	const size_t selectedActorsCount = selectedActors.size();
+
+	m_selectedActorsData.clear();
+
+	if (selectedActorsCount > 1)
+	{
+		glm::vec3 center(0.0f);
+
+		for (auto actor : selectedActors)
+		{
+			center += actor->transform.GetWorldPosition();
+		}
+
+		center /= static_cast<float>(selectedActors.size());
+
+		m_selectionTransform.SetWorldPosition(center);
+		m_selectionTransform.SetWorldScale({ 1.0f, 1.0f, 1.0f });
+		m_selectionTransform.SetWorldRotation(glm::quat());
+
+		for (auto actor : selectedActors)
+		{
+			SelectedActorData selectedActorData;
+
+			selectedActorData.Actor = actor;
+			selectedActorData.OffsetPosition = actor->transform.GetWorldPosition() - center;
+			selectedActorData.OffsetScale = actor->transform.GetWorldScale();
+			selectedActorData.OffsetRotation = actor->transform.GetWorldRotation();
+			m_selectedActorsData.push_back(selectedActorData);
+		}
 	}
 }
 

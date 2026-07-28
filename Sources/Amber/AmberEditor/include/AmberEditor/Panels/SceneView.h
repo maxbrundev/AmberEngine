@@ -27,6 +27,7 @@ namespace AmberEditor::Panels
 		void HandleRectangleSelect();
 		void UpdateSelectedActorsTransform();
 
+		void RebuildSelectedActorsData();
 	private:
 		AmberCore::SceneSystem::SceneManager& m_sceneManager;
 		AmberEditor::Core::CameraController m_cameraController;
