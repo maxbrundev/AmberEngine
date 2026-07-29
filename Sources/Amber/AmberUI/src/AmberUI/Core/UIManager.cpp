@@ -4,7 +4,7 @@
 
 #include "AmberUI/Canvas.h"
 
-AmberUI::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion) : m_dockingState(false), m_defaultLayout("Config\\layout.ini"), m_layoutsPath(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\")
+AmberUI::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string& p_glslVersion) : m_dockingState(false), m_defaultLayout("Config\\layout.ini"), m_layoutsPath(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\Layouts\\"), m_defaultLayoutSaveFilename(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\layout.ini")
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -18,6 +18,8 @@ AmberUI::Core::UIManager::UIManager(GLFWwindow* p_glfwWindow, const std::string&
 
 	ImGui_ImplGlfw_InitForOpenGL(p_glfwWindow, true);
 	ImGui_ImplOpenGL3_Init(p_glslVersion.c_str());
+
+	std::filesystem::create_directories(m_layoutsPath);
 }
 
 AmberUI::Core::UIManager::~UIManager()
@@ -145,9 +147,9 @@ float AmberUI::Core::UIManager::GetEditorLayoutAutosaveFrequency()
 	return ImGui::GetIO().IniSavingRate; 
 }
 
-void AmberUI::Core::UIManager::LoadLayout(const std::string& p_fileName)
+void AmberUI::Core::UIManager::LoadConfigLayoutSettings() const
 {
-	ImGui::LoadIniSettingsFromDisk(p_fileName.c_str());
+	ImGui::LoadIniSettingsFromDisk(m_defaultLayout.c_str());
 }
 
 void AmberUI::Core::UIManager::SaveLayout(const std::string& p_fileName)
@@ -161,10 +163,33 @@ void AmberUI::Core::UIManager::SaveCurrentLayout()
 {
 	if(!std::filesystem::exists(m_layoutSaveFilename))
 	{
-		m_layoutSaveFilename = m_layoutsPath + "layout.ini";
-		SetEditorLayoutSaveFilename(m_layoutSaveFilename);
+		SetEditorLayoutSaveFilename(m_defaultLayoutSaveFilename);
 	}
 	ImGui::SaveIniSettingsToDisk(m_layoutSaveFilename.c_str());
+}
+
+void AmberUI::Core::UIManager::SetDefaultLayout()
+{
+	SetEditorLayoutSaveFilename(m_defaultLayoutSaveFilename);
+
+	if (std::filesystem::exists(m_defaultLayoutSaveFilename))
+	{
+		ImGui::LoadIniSettingsFromDisk(m_defaultLayoutSaveFilename.c_str());
+	}
+	else
+	{
+		LoadConfigLayoutSettings();
+	}
+}
+
+void AmberUI::Core::UIManager::SetIniLayout(const std::string& p_fileName)
+{
+	const std::string iniLayoutPath = m_layoutsPath + p_fileName + ".ini";
+
+	if(std::filesystem::exists(iniLayoutPath))
+	{
+		SetLayout(iniLayoutPath);
+	}
 }
 
 void AmberUI::Core::UIManager::SetLayout(const std::string& p_fileName)
@@ -177,6 +202,11 @@ void AmberUI::Core::UIManager::SetLayout(const std::string& p_fileName)
 void AmberUI::Core::UIManager::DeleteLayout(const std::string& p_fileName)
 {
 	std::filesystem::remove(p_fileName);
+
+	if(m_layoutSaveFilename == p_fileName)
+	{
+		SetEditorLayoutSaveFilename(m_defaultLayoutSaveFilename);
+	}
 }
 
 void AmberUI::Core::UIManager::RenameLayout(const std::string& p_fileName, const std::string& p_newFileName)
@@ -187,6 +217,11 @@ void AmberUI::Core::UIManager::RenameLayout(const std::string& p_fileName, const
 	{
 		SetEditorLayoutSaveFilename(p_newFileName);
 	}
+}
+
+const std::string& AmberUI::Core::UIManager::GetLayoutsPath() const
+{
+	return m_layoutsPath;
 }
 
 void AmberUI::Core::UIManager::ApplyStyle()

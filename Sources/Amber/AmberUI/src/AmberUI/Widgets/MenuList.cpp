@@ -2,9 +2,21 @@
 
 #include "AmberUI/Widgets/MenuList.h"
 
+#include "imgui_internal.h"
+
 AmberUI::Widgets::MenuList::MenuList(const std::string& p_name, bool p_locked) :
 Name(p_name), Locked(p_locked)
 {
+}
+
+void AmberUI::Widgets::MenuList::Close()
+{
+	ImGuiContext& context = *ImGui::GetCurrentContext();
+
+	if (context.OpenPopupStack.Size > 0)
+	{
+		ImGui::ClosePopupToLevel(context.OpenPopupStack.Size - 1, true);
+	}
 }
 
 void AmberUI::Widgets::MenuList::DrawImplementation()

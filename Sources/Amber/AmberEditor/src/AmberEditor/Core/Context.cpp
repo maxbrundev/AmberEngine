@@ -39,8 +39,8 @@ AmberEditor::Core::Context::Context(const std::string& p_projectPath, const std:
 
 	AmberWindowing::Settings::WindowSettings windowSettings;
 	windowSettings.title = "Amber Editor";
-	windowSettings.width = 1600;
-	windowSettings.height = 900;
+	windowSettings.width = 1920;
+	windowSettings.height = 1080;
 	windowSettings.resizable = true;
 	windowSettings.vsync = false;
 	windowSettings.samples = 4;
@@ -72,8 +72,6 @@ AmberEditor::Core::Context::Context(const std::string& p_projectPath, const std:
 	renderer = std::make_unique<AmberCore::Rendering::ECSRenderer>(*driver);
 	shapeDrawer = std::make_unique<ShapeDrawer>(*renderer);
 
-	std::filesystem::create_directories(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\");
-
 	uiManager = std::make_unique<AmberUI::Core::UIManager>(window->GetGlfwWindow());
 	uiManager->LoadFont("Ruda_Small", Data::EditorConstants::EDITOR_FONT_PATH, Data::EditorConstants::EDITOR_FONT_SIZE_SMALL);
 	uiManager->LoadFont("Ruda_Medium", Data::EditorConstants::EDITOR_FONT_PATH, Data::EditorConstants::EDITOR_FONT_SIZE_MEDIUM);
@@ -85,7 +83,9 @@ AmberEditor::Core::Context::Context(const std::string& p_projectPath, const std:
 	uiManager->EnableDocking(true);
 
 	if (!std::filesystem::exists(std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\layout.ini"))
-		uiManager->LoadLayout("Config\\layout.ini");
+	{
+		uiManager->SetDefaultLayout();
+	}
 
 	editorResources = std::make_unique<EditorResources>(editorAssetsPath);
 

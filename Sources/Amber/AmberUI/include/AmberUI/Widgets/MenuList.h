@@ -11,6 +11,9 @@ namespace AmberUI::Widgets
 	public:
 		MenuList(const std::string& p_name, bool p_locked = false);
 		virtual ~MenuList() override = default;
+
+		void Close();
+
 	protected:
 		virtual void DrawImplementation() override;
 
@@ -20,7 +23,7 @@ namespace AmberUI::Widgets
 		AmberTools::Eventing::Event<> ClickedEvent;
 
 	private:
-		bool m_opened;
+		bool m_opened = false;
 	};
 
 }

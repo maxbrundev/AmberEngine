@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "AmberTools/Eventing/Event.h"
 
 namespace AmberEditor::Settings
@@ -43,6 +45,9 @@ namespace AmberEditor::Settings
 
 		EditorSettings() = delete;
 
+		static void Save();
+		static void Load();
+
 		inline static Property<bool> ShowGeometryBounds = { false };
 		inline static Property<bool> ShowLightBounds = { false };
 		inline static Property<bool> ShowGeometryFrustumCullingInSceneView = { false };
@@ -51,5 +56,6 @@ namespace AmberEditor::Settings
 		inline static Property<float> TranslationSnapUnit = { 1.0f };
 		inline static Property<float> RotationSnapUnit = { 15.0f };
 		inline static Property<float> ScalingSnapUnit = { 1.0f };
+		inline static Property<std::string> LatestLayout = { "" };
 	};
 }

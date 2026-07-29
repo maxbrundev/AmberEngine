@@ -3,7 +3,6 @@
 
 #include <map>
 
-#include "AmberUI/Core/UIManager.h"
 #include "AmberUI/Panels/PanelMenuBar.h"
 #include "AmberUI/Panels/APanelWindow.h"
 #include "AmberUI/Widgets/Button.h"
@@ -41,7 +40,5 @@ namespace AmberEditor::Panels
 		PanelMap m_panels;
 		std::vector<AmberUI::Widgets::MenuList*> m_lists;
 		AmberUI::Widgets::MenuList* m_windowMenu = nullptr;
-		AmberUI::Core::UIManager* manager;
-		std::string m_layoutsPath;
 	};
 }

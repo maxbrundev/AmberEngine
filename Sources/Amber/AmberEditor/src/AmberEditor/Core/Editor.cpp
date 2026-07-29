@@ -25,6 +25,7 @@
 #include "AmberEditor/Panels/AssetView.h"
 #include "AmberEditor/Panels/GameView.h"
 #include "AmberEditor/Panels/HelpWindow.h"
+#include "AmberEditor/Settings/EditorSettings.h"
 
 AmberEditor::Core::Editor::Editor(Context& p_context) :
 m_context(p_context),
@@ -34,6 +35,8 @@ m_editorActions(m_context, m_editorRenderer, m_panelsManager)
 {
 	AmberTools::Global::ServiceLocator::Provide(*this);
 
+	Settings::EditorSettings::Load();
+
 	InitializeUI();
 
 	m_context.sceneManager.LoadEmptyLightedScene();
@@ -41,6 +44,8 @@ m_editorActions(m_context, m_editorRenderer, m_panelsManager)
 
 AmberEditor::Core::Editor::~Editor()
 {
+	Settings::EditorSettings::Save();
+
 	m_context.sceneManager.UnloadCurrentScene();
 }
 
@@ -235,6 +240,11 @@ void AmberEditor::Core::Editor::InitializeUI()
 	
 	m_canvas.MakeDockspace(true);
 	m_context.uiManager->SetCanvas(m_canvas);
+
+	if (!Settings::EditorSettings::LatestLayout.Get().empty())
+	{
+		m_context.uiManager->SetIniLayout(Settings::EditorSettings::LatestLayout.Get());
+	}
 }
 
 void AmberEditor::Core::Editor::UpdatePlayMode(float p_deltaTime)

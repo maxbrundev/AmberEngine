@@ -37,12 +37,16 @@ namespace AmberUI::Core
 		void SetEditorLayoutAutosaveFrequency(float p_frequency);
 		float GetEditorLayoutAutosaveFrequency();
 
-		void LoadLayout(const std::string & p_fileName);
+		void LoadConfigLayoutSettings() const;
 		void SaveLayout(const std::string & p_fileName);
 		void SaveCurrentLayout();
+		void SetDefaultLayout();
+		void SetIniLayout(const std::string & p_fileName);
 		void SetLayout(const std::string & p_fileName);
 		void DeleteLayout(const std::string & p_fileName);
 		void RenameLayout(const std::string& p_fileName, const std::string& p_newFileName);
+
+		const std::string& GetLayoutsPath() const;
 
 	private:
 		void ApplyStyle();
@@ -54,5 +58,6 @@ namespace AmberUI::Core
 		std::string m_layoutSaveFilename = "imgui.ini";
 		const std::string m_defaultLayout;
 		const std::string m_layoutsPath;
+		const std::string m_defaultLayoutSaveFilename;
 	};
 }

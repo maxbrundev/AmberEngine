@@ -17,12 +17,9 @@
 #include "AmberEditor/Settings/EditorSettings.h"
 #include "AmberEditor/Utils/ActorCreationMenu.h"
 #include "AmberUI/Widgets/ColorEdit.h"
-#include "AmberTools/Utils/String.h"
-#include "AmberEditor/Core/EditorAction.h"
 
 AmberEditor::Panels::MenuBar::MenuBar()
 {
-	manager = &AmberTools::Global::ServiceLocator::Get<AmberUI::Core::UIManager>();
 	CreateFileMenu();
 	CreateBuildMenu();
 	CreateWindowMenu();
@@ -152,10 +149,6 @@ void AmberEditor::Panels::MenuBar::CreateActorsMenu()
 
 void AmberEditor::Panels::MenuBar::CreateLayoutMenu()
 {
-	std::filesystem::path dirPath = std::string(getenv("APPDATA")) + "\\AmberEngine\\Editor\\";
-
-	m_layoutsPath = dirPath.string();
-
 	auto& layoutMenuList = CreateWidget<AmberUI::Widgets::MenuList>("Layout");
 
 	auto& saveMenuItem = layoutMenuList.CreateWidget<AmberUI::Widgets::MenuItem>("Save");
@@ -164,60 +157,79 @@ void AmberEditor::Panels::MenuBar::CreateLayoutMenu()
 	auto& saveNewMenuList = layoutMenuList.CreateWidget<AmberUI::Widgets::MenuList>("Save New");
 	auto& layoutInputText = saveNewMenuList.CreateWidget<AmberUI::Widgets::InputText>("Layout Name");
 	layoutInputText.SelectAllOnClick = true;
-	layoutInputText.EnterPressedEvent += [this](std::string basic_string)
+	layoutInputText.EnterPressedEvent += [&saveNewMenuList, &layoutInputText](std::string p_input)
 	{
-		if (basic_string.empty())
+		if (p_input.empty())
 			return;
 
-		EDITOR_EXEC(DelayAction(std::bind(&AmberUI::Core::UIManager::SaveLayout, manager, m_layoutsPath + basic_string + ".ini"), 1));
+		EDITOR_EXEC(SaveLayout(EDITOR_CONTEXT(uiManager)->GetLayoutsPath() + p_input + ".ini"));
+
+		layoutInputText.Content = "";
+		saveNewMenuList.Close();
+	};
+
+	layoutMenuList.ClickedEvent += [&saveMenuItem]
+	{
+		if (Settings::EditorSettings::LatestLayout.Get().empty())
+		{
+			saveMenuItem.Clickable = false;
+		}
+		else
+		{
+			saveMenuItem.Clickable = true;
+		}
 	};
 
 	auto& loadMenuList = layoutMenuList.CreateWidget<AmberUI::Widgets::MenuList>("Load");
 
-	loadMenuList.ClickedEvent += [&]
+	loadMenuList.ClickedEvent += [&loadMenuList]
 	{
-		loadMenuList.m_widgets.clear();
+		loadMenuList.RemoveAllWidgets();
 
-		for (const auto& entry : std::filesystem::directory_iterator(m_layoutsPath))
+		auto& defaultMenuItem = loadMenuList.CreateWidget<AmberUI::Widgets::MenuItem>("Default", "", true, Settings::EditorSettings::LatestLayout.Get().empty());
+		defaultMenuItem.ClickedEvent += EDITOR_BIND(SetDefaultLayout);
+		
+		for (const auto& entry : std::filesystem::directory_iterator(EDITOR_CONTEXT(uiManager)->GetLayoutsPath()))
 		{
 			if (entry.is_regular_file() && entry.path().extension() == ".ini")
 			{
 				std::shared_ptr<std::string> layoutFileName = std::make_shared<std::string>(entry.path().filename().string());
 
-				auto& layoutMenuItem = loadMenuList.CreateWidget<AmberUI::Widgets::MenuItem>(*layoutFileName);
-				layoutMenuItem.Name = AmberTools::Utils::String::RemoveExtensionFromFileName(*layoutFileName);
+				std::string layoutName = entry.path().stem().string();
 
-				layoutMenuItem.ClickedEvent += [this, layoutFileName]
+				auto& layoutMenuItem = loadMenuList.CreateWidget<AmberUI::Widgets::MenuItem>(layoutName, "", true, Settings::EditorSettings::LatestLayout.Get() == layoutName);
+
+				layoutMenuItem.ClickedEvent += [layoutFileName]
 				{
-					EDITOR_EXEC(DelayAction(std::bind(&AmberUI::Core::UIManager::SetLayout, manager, m_layoutsPath + *layoutFileName), 1));
+					EDITOR_EXEC(SetLayout(EDITOR_CONTEXT(uiManager)->GetLayoutsPath() + *layoutFileName));
 				};
 
 				auto& contextualMenu = layoutMenuItem.CreateContextualMenu<AmberUI::Widgets::ContextualMenuItem>();
 				auto& deleteMenuItem = contextualMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Delete");
 
-				deleteMenuItem.ClickedEvent += [this, layoutFileName, &layoutMenuItem]
+				deleteMenuItem.ClickedEvent += [layoutFileName, &layoutMenuItem, &defaultMenuItem]
 				{
-					//EDITOR_EXEC(ResetToDefaultLayout);
-					EDITOR_EXEC(DelayAction(std::bind(&AmberUI::Core::UIManager::DeleteLayout, manager, m_layoutsPath + *layoutFileName), 1));
+					EDITOR_EXEC(DeleteLayout(EDITOR_CONTEXT(uiManager)->GetLayoutsPath() + *layoutFileName));
+
+					defaultMenuItem.Checked = Settings::EditorSettings::LatestLayout.Get().empty();
 					layoutMenuItem.Enabled = false;
-					
 				};
+
 				auto& renameToMenuList = contextualMenu.CreateWidget<AmberUI::Widgets::MenuList>("Rename to...");
 
 				auto& renameInputText = renameToMenuList.CreateWidget<AmberUI::Widgets::InputText>("");
-				renameInputText.Content = AmberTools::Utils::String::RemoveExtensionFromFileName(*layoutFileName);
+				renameInputText.Content = layoutName;
 				renameInputText.SelectAllOnClick = true;
 
-				renameInputText.EnterPressedEvent += [this, layoutFileName, &contextualMenu, &layoutMenuItem](std::string p_newName)
+				renameInputText.EnterPressedEvent += [layoutFileName, &contextualMenu, &layoutMenuItem](std::string p_newName)
 				{
 					if (p_newName.empty())
 						return;
 
 					layoutMenuItem.Name = p_newName;
-					//EDITOR_EXEC(ResetToDefaultLayout);
-					std::string oldFileName = m_layoutsPath + *layoutFileName;
-					std::string newFileName = m_layoutsPath + p_newName + ".ini";
-					EDITOR_EXEC(DelayAction(std::bind(&AmberUI::Core::UIManager::RenameLayout, manager, oldFileName, newFileName), 1));
+
+					const std::string& layoutsPath = EDITOR_CONTEXT(uiManager)->GetLayoutsPath();
+					EDITOR_EXEC(RenameLayout(layoutsPath + *layoutFileName, layoutsPath + p_newName + ".ini"));
 
 					*layoutFileName = p_newName + ".ini";
 					contextualMenu.Close();
@@ -226,7 +238,12 @@ void AmberEditor::Panels::MenuBar::CreateLayoutMenu()
 		}
 	};
 
-	layoutMenuList.CreateWidget<AmberUI::Widgets::MenuItem>("Reset").ClickedEvent += EDITOR_BIND(ResetToDefaultLayout);
+
+	auto& resetMenuItem = layoutMenuList.CreateWidget<AmberUI::Widgets::MenuItem>("Reset");
+	resetMenuItem.ClickedEvent += []
+	{
+		EDITOR_EXEC(LoadConfigLayoutSettings());
+	};
 }
 
 void AmberEditor::Panels::MenuBar::CreateResourcesMenu()

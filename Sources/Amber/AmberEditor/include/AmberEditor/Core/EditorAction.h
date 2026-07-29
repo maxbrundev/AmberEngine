@@ -41,10 +41,13 @@ namespace AmberEditor::Core
 		void Build(bool p_autoRun = false, bool p_tempFolder = false);
 		void BuildAtLocation(const std::string& p_configuration, const std::string p_buildPath, bool p_autoRun = false);
 		void SetActorSpawnMode(EActorSpawnMode p_value);
-		void ResetToDefaultLayout();
+		void LoadConfigLayoutSettings();
 		void SaveLayout(const std::string& p_fileName);
 		void SaveCurrentLayout();
+		void SetDefaultLayout();
 		void SetLayout(const std::string& p_fileName);
+		void DeleteLayout(const std::string& p_fileName);
+		void RenameLayout(const std::string& p_fileName, const std::string& p_newFileName);
 
 		void SetSceneViewCameraSpeed(int p_value);
 		int GetSceneViewCameraSpeed();

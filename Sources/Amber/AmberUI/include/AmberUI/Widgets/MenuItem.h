@@ -21,6 +21,7 @@ namespace AmberUI::Widgets
 		std::string Shortcut;
 		bool Checkable;
 		bool Checked;
+		bool Clickable;
 		AmberTools::Eventing::Event<> ClickedEvent;
 
 	private:

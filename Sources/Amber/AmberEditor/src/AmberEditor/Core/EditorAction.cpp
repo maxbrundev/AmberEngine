@@ -15,6 +15,7 @@
 #include "AmberTools/Utils/String.h"
 #include "AmberEditor/Panels/Inspector.h"
 #include "AmberEditor/Panels/MaterialEditor.h"
+#include "AmberEditor/Settings/EditorSettings.h"
 #include "AmberEditor/Panels/AssetView.h"
 #include "AmberEditor/Panels/GameView.h"
 #include "AmberWindowing/Dialogs/OpenFileDialog.h"
@@ -147,24 +148,55 @@ void AmberEditor::Core::EditorAction::SetActorSpawnMode(EActorSpawnMode p_value)
 	m_actorSpawnMode = p_value;
 }
 
-void AmberEditor::Core::EditorAction::ResetToDefaultLayout()
+void AmberEditor::Core::EditorAction::LoadConfigLayoutSettings()
 {
-	DelayAction([this]() {m_context.uiManager->LoadLayout("Config\\layout.ini"); });
+	DelayAction([this]() {m_context.uiManager->LoadConfigLayoutSettings(); });
 }
 
 void AmberEditor::Core::EditorAction::SaveLayout(const std::string& p_fileName)
 {
-	DelayAction([&]() {m_context.uiManager->SaveLayout(std::ref(p_fileName)); });
+	DelayAction([this, p_fileName]() {m_context.uiManager->SaveLayout(p_fileName); });
+
+	Settings::EditorSettings::LatestLayout = std::filesystem::path(p_fileName).stem().string();
 }
 
 void AmberEditor::Core::EditorAction::SaveCurrentLayout()
 {
-	DelayAction([&]() {m_context.uiManager->SaveCurrentLayout(); });
+	DelayAction([this]() {m_context.uiManager->SaveCurrentLayout(); });
+}
+
+void AmberEditor::Core::EditorAction::SetDefaultLayout()
+{
+	DelayAction([this]() {m_context.uiManager->SetDefaultLayout(); });
+
+	Settings::EditorSettings::LatestLayout = "";
 }
 
 void AmberEditor::Core::EditorAction::SetLayout(const std::string& p_fileName)
 {
-	DelayAction([&]() {m_context.uiManager->SetLayout(std::ref(p_fileName)); });
+	DelayAction([this, p_fileName]() {m_context.uiManager->SetLayout(p_fileName); });
+
+	Settings::EditorSettings::LatestLayout = std::filesystem::path(p_fileName).stem().string();
+}
+
+void AmberEditor::Core::EditorAction::DeleteLayout(const std::string& p_fileName)
+{
+	DelayAction([this, p_fileName]() {m_context.uiManager->DeleteLayout(p_fileName); });
+
+	if (Settings::EditorSettings::LatestLayout.Get() == std::filesystem::path(p_fileName).stem().string())
+	{
+		Settings::EditorSettings::LatestLayout = "";
+	}
+}
+
+void AmberEditor::Core::EditorAction::RenameLayout(const std::string& p_fileName, const std::string& p_newFileName)
+{
+	DelayAction([this, p_fileName, p_newFileName]() {m_context.uiManager->RenameLayout(p_fileName, p_newFileName); });
+
+	if (Settings::EditorSettings::LatestLayout.Get() == std::filesystem::path(p_fileName).stem().string())
+	{
+		Settings::EditorSettings::LatestLayout = std::filesystem::path(p_newFileName).stem().string();
+	}
 }
 
 void AmberEditor::Core::EditorAction::SetSceneViewCameraSpeed(int p_value)
