@@ -27,6 +27,10 @@ namespace AmberWindowing::Context
 		float GetElapsedTime() const;
 		std::pair<int16_t, int16_t> GetMonitorSize() const;
 
+		/* Area of the primary monitor left free by the taskbar and other permanent UI */
+		std::pair<int16_t, int16_t> GetMonitorWorkAreaPosition() const;
+		std::pair<int16_t, int16_t> GetMonitorWorkAreaSize() const;
+
 	private:
 		void InitGLFW();
 		void BindErrorCallback();

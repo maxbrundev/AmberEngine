@@ -39,8 +39,8 @@ AmberEditor::Core::Context::Context(const std::string& p_projectPath, const std:
 
 	AmberWindowing::Settings::WindowSettings windowSettings;
 	windowSettings.title = "Amber Editor";
-	windowSettings.width = 1920;
-	windowSettings.height = 1080;
+	windowSettings.width = 1600;
+	windowSettings.height = 900;
 	windowSettings.resizable = true;
 	windowSettings.vsync = false;
 	windowSettings.samples = 4;
@@ -55,9 +55,7 @@ AmberEditor::Core::Context::Context(const std::string& p_projectPath, const std:
 
 	window->SetIconFromMemory(reinterpret_cast<uint8_t*>(iconRaw.data()), 120, 120);
 
-	auto[monWidth, monHeight] = device->GetMonitorSize();
-	auto[winWidth, winHeight] = window->GetSize();
-	window->SetPosition(monWidth / 2 - winWidth / 2, monHeight / 2 - winHeight / 2);
+	window->FitToMonitorWorkArea();
 
 	inputManager = std::make_unique<AmberWindowing::Inputs::InputManager>(*window);
 

@@ -42,6 +42,9 @@ namespace AmberWindowing::Context
 
 		void SetSize(uint16_t p_width, uint16_t p_height);
 		void SetPosition(int16_t p_x, int16_t p_y);
+
+		void FitToMonitorWorkArea();
+
 		bool ShouldClose() const;
 		bool IsActive() const;
 		bool isFullscreen() const;

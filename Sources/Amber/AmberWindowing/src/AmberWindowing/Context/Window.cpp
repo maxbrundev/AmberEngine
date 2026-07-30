@@ -104,6 +104,22 @@ void AmberWindowing::Context::Window::SetPosition(int16_t p_x, int16_t p_y)
 	glfwSetWindowPos(m_glfwWindow, static_cast<int>(p_x), static_cast<int>(p_y));
 }
 
+void AmberWindowing::Context::Window::FitToMonitorWorkArea()
+{
+	const auto [workAreaX, workAreaY] = m_device.GetMonitorWorkAreaPosition();
+	const auto [workAreaWidth, workAreaHeight] = m_device.GetMonitorWorkAreaSize();
+
+	int frameLeft;
+	int frameTop;
+	int frameRight;
+	int frameBottom;
+
+	glfwGetWindowFrameSize(m_glfwWindow, &frameLeft, &frameTop, &frameRight, &frameBottom);
+
+	SetSize(static_cast<uint16_t>(workAreaWidth - frameLeft - frameRight), static_cast<uint16_t>(workAreaHeight - frameTop - frameBottom));
+	SetPosition(static_cast<int16_t>(workAreaX + frameLeft), static_cast<int16_t>(workAreaY + frameTop));
+}
+
 void AmberWindowing::Context::Window::Restore() const
 {
 	glfwRestoreWindow(m_glfwWindow);

@@ -66,6 +66,22 @@ std::pair<int16_t, int16_t> AmberWindowing::Context::Device::GetMonitorSize() co
 	return std::pair<int16_t, int16_t>(static_cast<int16_t>(mode->width), static_cast<int16_t>(mode->height));
 }
 
+std::pair<int16_t, int16_t> AmberWindowing::Context::Device::GetMonitorWorkAreaPosition() const
+{
+	int x, y, width, height;
+	glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &x, &y, &width, &height);
+
+	return std::pair<int16_t, int16_t>(static_cast<int16_t>(x), static_cast<int16_t>(y));
+}
+
+std::pair<int16_t, int16_t> AmberWindowing::Context::Device::GetMonitorWorkAreaSize() const
+{
+	int x, y, width, height;
+	glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), &x, &y, &width, &height);
+
+	return std::pair<int16_t, int16_t>(static_cast<int16_t>(width), static_cast<int16_t>(height));
+}
+
 void AmberWindowing::Context::Device::BindErrorCallback()
 {
 	auto errorCallback = [](int p_code, const char* p_description)
