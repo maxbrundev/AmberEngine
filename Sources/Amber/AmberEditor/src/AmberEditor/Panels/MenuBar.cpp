@@ -157,13 +157,14 @@ void AmberEditor::Panels::MenuBar::CreateLayoutMenu()
 	auto& saveNewMenuList = layoutMenuList.CreateWidget<AmberUI::Widgets::MenuList>("Save New");
 	auto& layoutInputText = saveNewMenuList.CreateWidget<AmberUI::Widgets::InputText>("Layout Name");
 	layoutInputText.SelectAllOnClick = true;
-	layoutInputText.EnterPressedEvent += [&saveNewMenuList, &layoutInputText](std::string p_input)
+	layoutInputText.EnterPressedEvent += [&saveNewMenuList, &layoutInputText, &saveMenuItem](std::string p_input)
 	{
 		if (p_input.empty())
 			return;
 
 		EDITOR_EXEC(SaveLayout(EDITOR_CONTEXT(uiManager)->GetLayoutsPath() + p_input + ".ini"));
 
+		saveMenuItem.Clickable = !Settings::EditorSettings::LatestLayout.Get().empty();
 		layoutInputText.Content = "";
 		saveNewMenuList.Close();
 	};
@@ -182,7 +183,7 @@ void AmberEditor::Panels::MenuBar::CreateLayoutMenu()
 
 	auto& loadMenuList = layoutMenuList.CreateWidget<AmberUI::Widgets::MenuList>("Load");
 
-	loadMenuList.ClickedEvent += [&loadMenuList]
+	loadMenuList.ClickedEvent += [&loadMenuList, &saveMenuItem]
 	{
 		loadMenuList.RemoveAllWidgets();
 
@@ -207,11 +208,12 @@ void AmberEditor::Panels::MenuBar::CreateLayoutMenu()
 				auto& contextualMenu = layoutMenuItem.CreateContextualMenu<AmberUI::Widgets::ContextualMenuItem>();
 				auto& deleteMenuItem = contextualMenu.CreateWidget<AmberUI::Widgets::MenuItem>("Delete");
 
-				deleteMenuItem.ClickedEvent += [layoutFileName, &layoutMenuItem, &defaultMenuItem]
+				deleteMenuItem.ClickedEvent += [layoutFileName, &layoutMenuItem, &defaultMenuItem, &saveMenuItem]
 				{
 					EDITOR_EXEC(DeleteLayout(EDITOR_CONTEXT(uiManager)->GetLayoutsPath() + *layoutFileName));
 
 					defaultMenuItem.Checked = Settings::EditorSettings::LatestLayout.Get().empty();
+					saveMenuItem.Clickable = !Settings::EditorSettings::LatestLayout.Get().empty();
 					layoutMenuItem.Enabled = false;
 				};
 
