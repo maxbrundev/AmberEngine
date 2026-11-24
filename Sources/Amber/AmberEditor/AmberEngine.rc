@@ -1,0 +1,2 @@
+// Windows icon for the executable (Explorer, taskbar, Alt+Tab).
+IDI_ICON1 ICON "AmberEngine.ico"

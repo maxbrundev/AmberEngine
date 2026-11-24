@@ -3,7 +3,7 @@ language "C++"
 cppdialect "C++17"
 pchheader "Amberpch.h"
 pchsource "Amberpch.cpp"
-files {"**.h", "**.inl", "**.cpp"}
+files {"**.h", "**.inl", "**.cpp", "**.rc"}
 includedirs {".", "include", "%{wks.location}/AmberDebug/include", "%{wks.location}/AmberMaths/include", "%{wks.location}/AmberTools/include", "%{wks.location}/AmberWindowing/include", "%{wks.location}/AmberRendering/include", "%{wks.location}/AmberPhysics/include", "%{wks.location}/AmberAudio/include", "%{wks.location}/AmberCore/include", "%{wks.location}/AmberUI/include", dependdir .. "ImGui/include", dependdir .. "tinyxml2/include", dependdir .. "glfw/include", dependdir .. "glm/include", dependdir .. "stb_image/include", dependdir .. "assimp/include", dependdir .. "bullet3/include", dependdir .. "glew/include", dependdir .. "irrklang/include", dependdir .. "lua/include"}
 libdirs {dependdir .. "glfw/lib/%{cfg.platform}", dependdir .. "bullet3/lib/%{cfg.platform}/%{cfg.buildcfg}", dependdir .. "glew/lib/%{cfg.platform}", dependdir .. "assimp/lib/%{cfg.platform}", dependdir .. "irrklang/lib", dependdir .. "lua/lib"}
 links {"AmberDebug", "AmberMaths", "AmberTools", "AmberWindowing", "AmberRendering", "AmberPhysics", "AmberAudio", "AmberCore", "AmberUI", "ImGui", "tinyxml2", "assimp-vc141-mt", "Bullet3Collision", "Bullet3Common", "Bullet3Dynamics", "Bullet3Geometry", "BulletCollision", "BulletDynamics", "BulletSoftBody", "LinearMath", "glew32", "glfw3dll", "opengl32", "irrKlang", "lua53"}
